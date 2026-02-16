@@ -1,6 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import PageSEO from "@/components/PageSEO";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { productCategories } from "@/data/products";
@@ -33,6 +34,19 @@ const ProductDetail = () => {
 
   return (
     <div className="min-h-screen">
+      <PageSEO
+        title={product.title}
+        description={product.description}
+        path={`/products/${product.slug}`}
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "Product",
+          name: product.title,
+          description: product.description,
+          brand: { "@type": "Brand", name: "Alkota" },
+          manufacturer: { "@type": "Organization", name: "Alkota Cleaning Systems" },
+        }}
+      />
       <Navigation />
 
       {/* Hero */}

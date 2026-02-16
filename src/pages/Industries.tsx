@@ -1,5 +1,6 @@
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import PageSEO from "@/components/PageSEO";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import {
@@ -91,6 +92,11 @@ const industries = [
 const Industries = () => {
   return (
     <div className="min-h-screen">
+      <PageSEO
+        title="Industries We Serve"
+        description="Alkota pressure washers serve agriculture, oil & gas, food processing, construction, fleet maintenance, and more. Find the right cleaning solution for your industry."
+        path="/industries"
+      />
       <Navigation />
 
       {/* Hero */}

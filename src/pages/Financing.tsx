@@ -1,5 +1,6 @@
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import PageSEO from "@/components/PageSEO";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import {
@@ -31,6 +32,11 @@ const termPayments = [
 const Financing = () => {
   return (
     <div className="min-h-screen">
+      <PageSEO
+        title="Equipment Financing"
+        description="Finance your Alkota pressure washer with 0% interest for 12 months or flexible term options. Get industrial cleaning equipment with affordable monthly payments."
+        path="/financing"
+      />
       <Navigation />
 
       {/* Hero */}

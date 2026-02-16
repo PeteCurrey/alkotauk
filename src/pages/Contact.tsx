@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import PageSEO from "@/components/PageSEO";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -101,6 +102,17 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen">
+      <PageSEO
+        title="Contact Us"
+        description="Get a quote on Alkota pressure washers or connect with your local distributor. Call 1-800-255-6823 or fill out our contact form."
+        path="/contact"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "ContactPage",
+          name: "Contact Alkota Cleaning Systems",
+          telephone: "+1-800-255-6823",
+        }}
+      />
       <Navigation />
 
       {/* Hero */}

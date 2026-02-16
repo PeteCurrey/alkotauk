@@ -1,5 +1,6 @@
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import PageSEO from "@/components/PageSEO";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import {
@@ -110,6 +111,11 @@ const supportResources = [
 const Resources = () => {
   return (
     <div className="min-h-screen">
+      <PageSEO
+        title="Resources & Knowledge Base"
+        description="Pressure washing tips, maintenance guides, technical support, and product catalogs. Everything you need to get the most from your Alkota cleaning equipment."
+        path="/resources"
+      />
       <Navigation />
 
       {/* Hero */}

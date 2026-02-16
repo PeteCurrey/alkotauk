@@ -14,7 +14,9 @@ const milestones = [
   { year: "1990s", event: "Expanded product lines to include hot and cold water pressure washers, parts washers, and trailer units." },
   { year: "2000s", event: "Pioneered industry-standard practices in electric motors, improved coils, and pump designs." },
   { year: "2010s", event: "Partnered with Wayne Combustion for more efficient, user-friendly oil burners." },
-  { year: "Today", event: "A worldwide distributor network, diverse product line, and crew with decades of combined experience." },
+  { year: "2016", event: "Alkota UK established, bringing American-made industrial cleaning power to the United Kingdom market." },
+  { year: "2020s", event: "Alkota UK expands operations across Europe, the UAE, and the wider Middle East — delivering Alkota's proven quality to new industries and territories." },
+  { year: "Today", event: "A worldwide distributor network spanning the UK, Europe, and Middle East, with a diverse product line and decades of combined expertise." },
 ];
 
 const About = () => {

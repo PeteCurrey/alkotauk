@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import PageSEO from "@/components/PageSEO";
@@ -48,10 +48,32 @@ const internationalRegions = [
   { region: "Australia & New Zealand", note: "Authorized partners for mining and agriculture" },
 ];
 
+interface DistributorEntry {
+  id: string;
+  name: string;
+  country: string;
+  region: string | null;
+  city: string | null;
+  address: string | null;
+  phone: string | null;
+  email: string | null;
+  website: string | null;
+  description: string | null;
+}
+
 const Distributors = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
+  const [dbDistributors, setDbDistributors] = useState<DistributorEntry[]>([]);
+
+  useEffect(() => {
+    const fetchDistributors = async () => {
+      const { data } = await supabase.from("distributors").select("*").order("sort_order");
+      if (data) setDbDistributors(data);
+    };
+    fetchDistributors();
+  }, []);
 
   const {
     register,
@@ -163,6 +185,48 @@ const Distributors = () => {
               </div>
             ))}
           </div>
+
+          {/* Authorized Distributors from DB */}
+          {dbDistributors.length > 0 && (
+            <div className="mb-16">
+              <h2 className="text-2xl font-light tracking-tight mb-6">
+                Authorized Distributors
+              </h2>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {dbDistributors.map((d) => (
+                  <div key={d.id} className="border border-border p-6 hover:border-primary/30 transition-colors">
+                    <h3 className="text-lg font-light tracking-tight mb-2">{d.name}</h3>
+                    {(d.city || d.region || d.country) && (
+                      <p className="text-xs text-muted-foreground font-light flex items-center gap-1 mb-2">
+                        <MapPin size={12} strokeWidth={1} />
+                        {[d.city, d.region, d.country].filter(Boolean).join(", ")}
+                      </p>
+                    )}
+                    {d.description && (
+                      <p className="text-sm text-muted-foreground font-light leading-relaxed mb-3">{d.description}</p>
+                    )}
+                    <div className="space-y-1">
+                      {d.phone && (
+                        <a href={`tel:${d.phone}`} className="text-xs font-light text-primary flex items-center gap-1">
+                          <Phone size={12} strokeWidth={1} /> {d.phone}
+                        </a>
+                      )}
+                      {d.email && (
+                        <a href={`mailto:${d.email}`} className="text-xs font-light text-primary flex items-center gap-1">
+                          <Mail size={12} strokeWidth={1} /> {d.email}
+                        </a>
+                      )}
+                      {d.website && (
+                        <a href={d.website} target="_blank" rel="noopener noreferrer" className="text-xs font-light text-primary flex items-center gap-1">
+                          <Globe size={12} strokeWidth={1} /> {d.website}
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* International */}
           <div className="border border-border p-8 mb-16">

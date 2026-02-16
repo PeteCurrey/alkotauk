@@ -15,9 +15,9 @@ const Footer = () => {
               Handcrafted pressure washers since 1964. Made in Alcester, South Dakota.
             </p>
             <a
-              href="tel:1-800-255-6823"
-              className="flex items-center gap-2 text-sm font-light text-primary hover:text-primary/80 transition-colors"
-            >
+
+              className="flex items-center gap-2 text-sm font-light text-primary hover:text-primary/80 transition-colors" href="tel:+447912506738">
+
               <Phone size={14} strokeWidth={1} />
               1-800-255-6823
             </a>
@@ -27,23 +27,23 @@ const Footer = () => {
             <h4 className="text-sm font-light tracking-wide mb-4">Products</h4>
             <ul className="space-y-2">
               {[
-                { label: "Hot Water Pressure Washers", slug: "hot-water-pressure-washers" },
-                { label: "Cold Water Pressure Washers", slug: "cold-water-pressure-washers" },
-                { label: "Steam Cleaners", slug: "steam-cleaners" },
-                { label: "Pressure Washer Trailers", slug: "pressure-washer-trailers" },
-                { label: "Parts Washers", slug: "parts-washers" },
-                { label: "Space Heaters", slug: "space-heaters" },
-                { label: "Water Treatment", slug: "water-treatment" },
-              ].map((item) => (
-                <li key={item.slug}>
+              { label: "Hot Water Pressure Washers", slug: "hot-water-pressure-washers" },
+              { label: "Cold Water Pressure Washers", slug: "cold-water-pressure-washers" },
+              { label: "Steam Cleaners", slug: "steam-cleaners" },
+              { label: "Pressure Washer Trailers", slug: "pressure-washer-trailers" },
+              { label: "Parts Washers", slug: "parts-washers" },
+              { label: "Space Heaters", slug: "space-heaters" },
+              { label: "Water Treatment", slug: "water-treatment" }].
+              map((item) =>
+              <li key={item.slug}>
                   <Link
-                    to={`/products/${item.slug}`}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors font-light"
-                  >
+                  to={`/products/${item.slug}`}
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors font-light">
+
                     {item.label}
                   </Link>
                 </li>
-              ))}
+              )}
             </ul>
           </div>
 
@@ -51,22 +51,22 @@ const Footer = () => {
             <h4 className="text-sm font-light tracking-wide mb-4">Company</h4>
             <ul className="space-y-2">
               {[
-                { label: "About Us", to: "/about" },
-                { label: "Industries", to: "/industries" },
-                { label: "Find a Distributor", to: "/distributors" },
-                { label: "Resources & Blog", to: "/resources" },
-                { label: "Financing", to: "/financing" },
-                { label: "Contact", to: "/contact" },
-              ].map((item) => (
-                <li key={item.to}>
+              { label: "About Us", to: "/about" },
+              { label: "Industries", to: "/industries" },
+              { label: "Find a Distributor", to: "/distributors" },
+              { label: "Resources & Blog", to: "/resources" },
+              { label: "Financing", to: "/financing" },
+              { label: "Contact", to: "/contact" }].
+              map((item) =>
+              <li key={item.to}>
                   <Link
-                    to={item.to}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors font-light"
-                  >
+                  to={item.to}
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors font-light">
+
                     {item.label}
                   </Link>
                 </li>
-              ))}
+              )}
             </ul>
           </div>
 
@@ -74,16 +74,16 @@ const Footer = () => {
             <h4 className="text-sm font-light tracking-wide mb-4">Industries Served</h4>
             <ul className="space-y-2">
               {["Agriculture", "Oil & Gas", "Fleet Maintenance", "Industrial Operations", "Food Processing", "Construction"].map(
-                (item) => (
-                  <li key={item}>
+                (item) =>
+                <li key={item}>
                     <Link
-                      to="/industries"
-                      className="text-sm text-muted-foreground hover:text-foreground transition-colors font-light"
-                    >
+                    to="/industries"
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors font-light">
+
                       {item}
                     </Link>
                   </li>
-                )
+
               )}
             </ul>
           </div>
@@ -95,8 +95,8 @@ const Footer = () => {
           </p>
         </div>
       </div>
-    </footer>
-  );
+    </footer>);
+
 };
 
 export default Footer;

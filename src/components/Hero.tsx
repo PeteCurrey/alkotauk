@@ -40,12 +40,12 @@ const Hero = () => {
           </ScrollReveal>
           <ScrollReveal animation="fade-up" delay="1000ms">
             <div className="flex flex-wrap gap-4">
-              <Button variant="outline" size="sm" className="font-light tracking-wide border-white/30 text-white hover:bg-white/10">
-                Get a Quote
-              </Button>
-              <Button variant="outline" size="sm" className="font-light tracking-wide border-white/30 text-white hover:bg-white/10">
-                Find a Distributor
-              </Button>
+            <Button variant="hero" size="sm" className="font-light tracking-wide transition-all duration-500">
+              Get a Quote
+            </Button>
+            <Button variant="hero" size="sm" className="font-light tracking-wide transition-all duration-500">
+              Find a Distributor
+            </Button>
             </div>
           </ScrollReveal>
         </div>

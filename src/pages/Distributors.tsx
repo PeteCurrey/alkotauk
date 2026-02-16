@@ -1,23 +1,103 @@
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
-import { Phone, MapPin, Wrench, BookOpen, FileText } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { Phone, MapPin, Wrench, BookOpen, FileText, Mail, Building2, Globe } from "lucide-react";
 
-const usStates = [
-  "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado",
-  "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho",
-  "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana",
-  "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota",
-  "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada",
-  "New Hampshire", "New Jersey", "New Mexico", "New York",
-  "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon",
-  "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota",
-  "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington",
-  "West Virginia", "Wisconsin", "Wyoming",
+const contactSchema = z.object({
+  name: z.string().trim().min(1, "Name is required").max(100),
+  email: z.string().trim().email("Invalid email address").max(255),
+  phone: z.string().trim().max(30).optional().or(z.literal("")),
+  company: z.string().trim().max(200).optional().or(z.literal("")),
+  message: z.string().trim().min(1, "Message is required").max(2000),
+  preferred_location: z.string().optional().or(z.literal("")),
+});
+
+type DistributorFormData = z.infer<typeof contactSchema>;
+
+const usRegions = [
+  { name: "Northeast", states: ["Connecticut", "Delaware", "Maine", "Maryland", "Massachusetts", "New Hampshire", "New Jersey", "New York", "Pennsylvania", "Rhode Island", "Vermont"] },
+  { name: "Southeast", states: ["Alabama", "Arkansas", "Florida", "Georgia", "Kentucky", "Louisiana", "Mississippi", "North Carolina", "South Carolina", "Tennessee", "Virginia", "West Virginia"] },
+  { name: "Midwest", states: ["Illinois", "Indiana", "Iowa", "Kansas", "Michigan", "Minnesota", "Missouri", "Nebraska", "North Dakota", "Ohio", "South Dakota", "Wisconsin"] },
+  { name: "Southwest", states: ["Arizona", "New Mexico", "Oklahoma", "Texas"] },
+  { name: "Mountain West", states: ["Colorado", "Idaho", "Montana", "Nevada", "Utah", "Wyoming"] },
+  { name: "Pacific", states: ["Alaska", "California", "Hawaii", "Oregon", "Washington"] },
+];
+
+const internationalRegions = [
+  { region: "Canada", note: "Full distributor coverage across all provinces" },
+  { region: "Mexico & Central America", note: "Growing network of authorized partners" },
+  { region: "Europe", note: "Select distributors in UK, Germany, and Scandinavia" },
+  { region: "Middle East", note: "Oil & gas focused distribution in UAE and Saudi Arabia" },
+  { region: "Australia & New Zealand", note: "Authorized partners for mining and agriculture" },
 ];
 
 const Distributors = () => {
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm<DistributorFormData>({
+    resolver: zodResolver(contactSchema),
+  });
+
+  const handleStateClick = (state: string) => {
+    setSelectedRegion(state);
+    setValue("preferred_location", state);
+    document.getElementById("distributor-form")?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const onSubmit = async (data: DistributorFormData) => {
+    setIsSubmitting(true);
+    try {
+      const { error } = await supabase.from("enquiries").insert({
+        name: data.name,
+        email: data.email,
+        phone: data.phone || null,
+        company: data.company || null,
+        message: data.message,
+        product_interest: "Find a Distributor",
+        preferred_location: data.preferred_location || null,
+      });
+      if (error) throw error;
+      toast({
+        title: "Request Submitted",
+        description: "We'll connect you with your nearest Alkota distributor shortly.",
+      });
+      reset();
+      setSelectedRegion(null);
+    } catch {
+      toast({
+        title: "Submission Failed",
+        description: "Please try again or call us at 1-800-255-6823.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen">
       <Navigation />
@@ -30,133 +110,225 @@ const Distributors = () => {
               Find a Distributor
             </p>
             <h1 className="text-4xl md:text-5xl font-light tracking-tight mb-6">
-              Alkota Distributors
+              Alkota Distributor Network
             </h1>
             <p className="text-muted-foreground font-light leading-relaxed">
-              Find an Alkota Distributor near you. Our distributors are ready to
-              help you find the perfect pressure washing equipment and keep you
-              running with full machine maintenance, service, and support.
+              Alkota has distributors across the United States and internationally.
+              Our authorized distributors provide sales, service, parts, and ongoing
+              support for all Alkota cleaning equipment. Select your region below
+              or fill out the form to get connected.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Distributor Finder */}
+      {/* Regional Map */}
       <section className="py-20 bg-background">
         <div className="container mx-auto px-6">
-          <div className="grid lg:grid-cols-3 gap-16">
-            {/* State Grid */}
-            <div className="lg:col-span-2">
-              <h2 className="text-2xl font-light tracking-tight mb-2">
-                Select Your State
-              </h2>
-              <p className="text-sm text-muted-foreground font-light mb-8">
-                Click your state or a neighboring state to find Alkota
-                distributors in your area.
-              </p>
-              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
-                {usStates.map((state) => (
-                  <Link
-                    key={state}
-                    to="/contact"
-                    className="text-xs font-light text-center py-3 px-2 border border-border hover:border-primary/50 hover:text-primary transition-colors"
-                  >
-                    {state}
-                  </Link>
-                ))}
-              </div>
+          <h2 className="text-2xl font-light tracking-tight mb-2">
+            Browse by Region
+          </h2>
+          <p className="text-sm text-muted-foreground font-light mb-10">
+            Click any state to auto-fill the contact form below and we'll connect you with distributors in your area.
+          </p>
 
-              <div className="mt-8 p-6 border border-border">
-                <div className="flex items-center gap-3 mb-3">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            {usRegions.map((region) => (
+              <div key={region.name} className="border border-border p-6">
+                <h3 className="text-lg font-light tracking-tight mb-4 flex items-center gap-2">
                   <MapPin size={16} className="text-primary" strokeWidth={1} />
-                  <h3 className="text-lg font-light tracking-tight">
-                    International Distributors
-                  </h3>
+                  {region.name}
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {region.states.map((state) => (
+                    <button
+                      key={state}
+                      onClick={() => handleStateClick(state)}
+                      className={`text-xs font-light py-2 px-3 border transition-colors ${
+                        selectedRegion === state
+                          ? "border-primary bg-primary/10 text-primary"
+                          : "border-border hover:border-primary/50 hover:text-primary"
+                      }`}
+                    >
+                      {state}
+                    </button>
+                  ))}
                 </div>
-                <p className="text-sm text-muted-foreground font-light mb-4">
-                  Alkota has a worldwide distributor network. Contact us for
-                  international distributor information.
+              </div>
+            ))}
+          </div>
+
+          {/* International */}
+          <div className="border border-border p-8 mb-16">
+            <div className="flex items-center gap-3 mb-6">
+              <Globe size={18} className="text-primary" strokeWidth={1} />
+              <h2 className="text-2xl font-light tracking-tight">
+                International Distributors
+              </h2>
+            </div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {internationalRegions.map((item) => (
+                <div key={item.region} className="space-y-1">
+                  <p className="text-sm font-light">{item.region}</p>
+                  <p className="text-xs text-muted-foreground font-light">{item.note}</p>
+                </div>
+              ))}
+              <div className="space-y-1">
+                <p className="text-sm font-light">Other Regions</p>
+                <p className="text-xs text-muted-foreground font-light">
+                  Contact us for distributor info in your country
                 </p>
-                <Link to="/contact">
-                  <Button variant="outline" size="sm" className="font-light text-xs tracking-wide">
-                    Contact for International
-                  </Button>
-                </Link>
               </div>
             </div>
+          </div>
 
-            {/* Sidebar */}
-            <div className="space-y-8">
+          {/* Contact Form + Info */}
+          <div className="grid lg:grid-cols-3 gap-16" id="distributor-form">
+            {/* Sidebar Info */}
+            <div className="space-y-8 order-2 lg:order-1">
               <div className="p-6 border border-border">
                 <div className="flex items-center gap-3 mb-4">
-                  <Phone size={16} className="text-primary" strokeWidth={1} />
-                  <h3 className="text-lg font-light tracking-tight">
-                    Need Help?
-                  </h3>
+                  <Building2 size={16} className="text-primary" strokeWidth={1} />
+                  <h3 className="text-lg font-light tracking-tight">Headquarters</h3>
                 </div>
-                <p className="text-sm text-muted-foreground font-light mb-4">
-                  Can't find a distributor? Give us a call and we'll connect you
-                  with the right representative.
-                </p>
-                <a
-                  href="tel:1-800-255-6823"
-                  className="text-sm text-primary font-light"
-                >
-                  1-800-255-6823
-                </a>
+                <div className="space-y-3 text-sm font-light">
+                  <p className="text-foreground">Alkota Cleaning Systems</p>
+                  <p className="text-muted-foreground">
+                    Alcester, South Dakota<br />
+                    United States
+                  </p>
+                  <div className="pt-2 space-y-2">
+                    <a href="tel:1-800-255-6823" className="flex items-center gap-2 text-primary">
+                      <Phone size={14} strokeWidth={1} />
+                      1-800-255-6823
+                    </a>
+                    <a href="tel:605-934-2222" className="flex items-center gap-2 text-muted-foreground">
+                      <Phone size={14} strokeWidth={1} />
+                      605-934-2222 (Local)
+                    </a>
+                  </div>
+                </div>
               </div>
 
               <div className="p-6 border border-border">
                 <h3 className="text-lg font-light tracking-tight mb-4">
-                  Support & Resources
+                  What Distributors Offer
                 </h3>
                 <div className="space-y-4">
                   <div className="flex items-start gap-3">
                     <Wrench size={14} className="text-primary mt-1" strokeWidth={1} />
                     <div>
-                      <p className="text-sm font-light mb-1">Replacement Parts</p>
+                      <p className="text-sm font-light mb-1">Sales & Service</p>
                       <p className="text-xs text-muted-foreground font-light">
-                        Find parts for your Alkota equipment
+                        Equipment demos, installation, and ongoing maintenance
                       </p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
                     <BookOpen size={14} className="text-primary mt-1" strokeWidth={1} />
                     <div>
-                      <p className="text-sm font-light mb-1">Request a Manual</p>
+                      <p className="text-sm font-light mb-1">Parts & Support</p>
                       <p className="text-xs text-muted-foreground font-light">
-                        Get the manual for your specific model
+                        OEM replacement parts and technical assistance
                       </p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
                     <FileText size={14} className="text-primary mt-1" strokeWidth={1} />
                     <div>
-                      <p className="text-sm font-light mb-1">
-                        Warranty Registration
-                      </p>
+                      <p className="text-sm font-light mb-1">Warranty Service</p>
                       <p className="text-xs text-muted-foreground font-light">
-                        Register your equipment for warranty coverage
+                        Authorized warranty repair and registration
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <Mail size={14} className="text-primary mt-1" strokeWidth={1} />
+                    <div>
+                      <p className="text-sm font-light mb-1">Training</p>
+                      <p className="text-xs text-muted-foreground font-light">
+                        Operator training and best practices guidance
                       </p>
                     </div>
                   </div>
                 </div>
               </div>
+            </div>
 
-              <div className="p-6 border border-primary/30 bg-primary/5">
-                <h3 className="text-lg font-light tracking-tight mb-3">
-                  Ready to Get a Quote?
-                </h3>
-                <p className="text-sm text-muted-foreground font-light mb-4">
-                  Our American-made pressure washers are ready to tackle your
-                  toughest jobs.
-                </p>
-                <Link to="/contact">
-                  <Button variant="outline" size="sm" className="font-light text-xs tracking-wide">
-                    Get a Quote
-                  </Button>
-                </Link>
-              </div>
+            {/* Form */}
+            <div className="lg:col-span-2 order-1 lg:order-2">
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="space-y-6 border border-border p-8"
+              >
+                <div>
+                  <h2 className="text-2xl font-light tracking-tight mb-2">
+                    Find Your Distributor
+                  </h2>
+                  <p className="text-sm text-muted-foreground font-light">
+                    Fill out the form below and we'll connect you with an authorized Alkota distributor in your area.
+                  </p>
+                </div>
+
+                <div className="grid sm:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="name" className="text-sm font-light">Name *</Label>
+                    <Input id="name" {...register("name")} placeholder="Your name" className="font-light" />
+                    {errors.name && <p className="text-xs text-destructive">{errors.name.message}</p>}
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="email" className="text-sm font-light">Email *</Label>
+                    <Input id="email" type="email" {...register("email")} placeholder="your@email.com" className="font-light" />
+                    {errors.email && <p className="text-xs text-destructive">{errors.email.message}</p>}
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="phone" className="text-sm font-light">Phone</Label>
+                    <Input id="phone" type="tel" {...register("phone")} placeholder="(555) 123-4567" className="font-light" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="company" className="text-sm font-light">Company</Label>
+                    <Input id="company" {...register("company")} placeholder="Your company" className="font-light" />
+                  </div>
+                  <div className="space-y-2 sm:col-span-2">
+                    <Label className="text-sm font-light">Your Location / State</Label>
+                    <Select
+                      value={selectedRegion || undefined}
+                      onValueChange={(val) => {
+                        setSelectedRegion(val);
+                        setValue("preferred_location", val);
+                      }}
+                    >
+                      <SelectTrigger className="font-light">
+                        <SelectValue placeholder="Select your state or region" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {usRegions.flatMap((r) => r.states).map((state) => (
+                          <SelectItem key={state} value={state} className="font-light">
+                            {state}
+                          </SelectItem>
+                        ))}
+                        <SelectItem value="Canada" className="font-light">Canada</SelectItem>
+                        <SelectItem value="International" className="font-light">International</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="message" className="text-sm font-light">Message *</Label>
+                  <Textarea
+                    id="message"
+                    {...register("message")}
+                    placeholder="Tell us what equipment you're looking for or any questions you have..."
+                    className="font-light min-h-[120px]"
+                  />
+                  {errors.message && <p className="text-xs text-destructive">{errors.message.message}</p>}
+                </div>
+
+                <Button type="submit" disabled={isSubmitting} variant="outline" className="font-light tracking-wide">
+                  {isSubmitting ? "Submitting..." : "Find My Distributor"}
+                </Button>
+              </form>
             </div>
           </div>
         </div>

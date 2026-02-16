@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Menu, X, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { NavLink } from "@/components/NavLink";
+import { Link } from "react-router-dom";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -50,13 +51,15 @@ const Navigation = () => {
               <Phone size={14} strokeWidth={1} />
               1-800-255-6823
             </a>
-            <Button
-              variant="outline"
-              size="sm"
-              className="text-sm font-light tracking-wide"
-            >
-              Get a Quote
-            </Button>
+            <Link to="/contact">
+              <Button
+                variant="outline"
+                size="sm"
+                className="text-sm font-light tracking-wide"
+              >
+                Get a Quote
+              </Button>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -80,9 +83,11 @@ const Navigation = () => {
               <Phone size={14} strokeWidth={1} />
               1-800-255-6823
             </a>
-            <Button variant="outline" size="sm" className="text-sm font-light tracking-wide w-full">
-              Get a Quote
-            </Button>
+            <Link to="/contact">
+              <Button variant="outline" size="sm" className="text-sm font-light tracking-wide w-full">
+                Get a Quote
+              </Button>
+            </Link>
           </div>
         )}
       </div>

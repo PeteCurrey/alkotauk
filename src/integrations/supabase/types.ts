@@ -14,6 +14,57 @@ export type Database = {
   }
   public: {
     Tables: {
+      distributors: {
+        Row: {
+          address: string | null
+          city: string | null
+          country: string
+          created_at: string
+          description: string | null
+          email: string | null
+          id: string
+          is_active: boolean
+          name: string
+          phone: string | null
+          region: string | null
+          sort_order: number
+          updated_at: string
+          website: string | null
+        }
+        Insert: {
+          address?: string | null
+          city?: string | null
+          country?: string
+          created_at?: string
+          description?: string | null
+          email?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          phone?: string | null
+          region?: string | null
+          sort_order?: number
+          updated_at?: string
+          website?: string | null
+        }
+        Update: {
+          address?: string | null
+          city?: string | null
+          country?: string
+          created_at?: string
+          description?: string | null
+          email?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          phone?: string | null
+          region?: string | null
+          sort_order?: number
+          updated_at?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
       enquiries: {
         Row: {
           company: string | null
@@ -52,6 +103,51 @@ export type Database = {
           preferred_location?: string | null
           product_interest?: string | null
           status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      products: {
+        Row: {
+          created_at: string
+          description: string | null
+          extended_description: string | null
+          hero_image_url: string | null
+          id: string
+          is_active: boolean
+          series_data: Json | null
+          slug: string
+          sort_order: number
+          subtitle: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          extended_description?: string | null
+          hero_image_url?: string | null
+          id?: string
+          is_active?: boolean
+          series_data?: Json | null
+          slug: string
+          sort_order?: number
+          subtitle?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          extended_description?: string | null
+          hero_image_url?: string | null
+          id?: string
+          is_active?: boolean
+          series_data?: Json | null
+          slug?: string
+          sort_order?: number
+          subtitle?: string | null
+          title?: string
           updated_at?: string
         }
         Relationships: []

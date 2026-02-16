@@ -1,4 +1,6 @@
 import { Settings, Award, Wrench, Users, Gauge, Phone } from "lucide-react";
+import ScrollReveal from "@/components/ScrollReveal";
+import { getStaggerDelay } from "@/hooks/useScrollAnimation";
 
 const Features = () => {
   const features = [
@@ -43,30 +45,32 @@ const Features = () => {
   return (
     <section className="py-24 bg-background">
       <div className="container mx-auto px-6">
-        <div className="text-center mb-16">
+        <ScrollReveal className="text-center mb-16">
           <p className="text-primary text-sm font-light tracking-[0.3em] uppercase mb-4">
             Why Alkota
           </p>
           <h2 className="text-4xl md:text-5xl font-light tracking-tight">
             The Alkota Difference
           </h2>
-        </div>
+        </ScrollReveal>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
           {features.map((feature, index) => (
-            <div key={index} className="text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 mb-6 border border-border">
-                <feature.icon
-                  className="w-7 h-7 text-primary"
-                  strokeWidth={1}
-                />
+            <ScrollReveal key={index} delay={getStaggerDelay(index, 100)}>
+              <div className="text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 mb-6 border border-border">
+                  <feature.icon
+                    className="w-7 h-7 text-primary"
+                    strokeWidth={1}
+                  />
+                </div>
+                <h3 className="text-xl font-light tracking-tight mb-3">
+                  {feature.title}
+                </h3>
+                <p className="text-muted-foreground font-light leading-relaxed">
+                  {feature.description}
+                </p>
               </div>
-              <h3 className="text-xl font-light tracking-tight mb-3">
-                {feature.title}
-              </h3>
-              <p className="text-muted-foreground font-light leading-relaxed">
-                {feature.description}
-              </p>
-            </div>
+            </ScrollReveal>
           ))}
         </div>
       </div>

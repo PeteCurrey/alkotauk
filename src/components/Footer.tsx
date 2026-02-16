@@ -91,7 +91,7 @@ const Footer = () => {
 
         <div className="pt-8 border-t border-border">
           <p className="text-center text-sm text-muted-foreground font-light">
-            © {new Date().getFullYear()} Alkota Cleaning Systems. All rights reserved. Made in Alcester, South Dakota, USA.
+            © {new Date().getFullYear()} Alkota. All rights reserved. Made in South Dakota, USA.
           </p>
         </div>
       </div>

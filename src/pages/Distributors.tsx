@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import PageSEO from "@/components/PageSEO";
 import { z } from "zod";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -100,6 +101,11 @@ const Distributors = () => {
 
   return (
     <div className="min-h-screen">
+      <PageSEO
+        title="Find a Distributor"
+        description="Locate an authorized Alkota distributor near you for sales, service, parts, and support. Coverage across all 50 states and international markets."
+        path="/distributors"
+      />
       <Navigation />
 
       {/* Hero */}

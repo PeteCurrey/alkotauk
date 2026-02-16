@@ -1,5 +1,6 @@
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import PageSEO from "@/components/PageSEO";
 import aboutCleaning from "@/assets/about-cleaning-loader.png";
 import aboutCoil from "@/assets/about-coil.png";
 import aboutCleaningAction from "@/assets/about-cleaning.png";
@@ -19,6 +20,17 @@ const milestones = [
 const About = () => {
   return (
     <div className="min-h-screen">
+      <PageSEO
+        title="About Alkota"
+        description="Since 1964, Alkota has handcrafted industrial pressure washers in Alcester, South Dakota. Learn about our heritage, engineering philosophy, and American-made quality."
+        path="/about"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "AboutPage",
+          name: "About Alkota Cleaning Systems",
+          description: "American-made industrial pressure washers since 1964.",
+        }}
+      />
       <Navigation />
 
       {/* Hero */}

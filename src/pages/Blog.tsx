@@ -1,10 +1,36 @@
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import PageSEO from "@/components/PageSEO";
-import { blogPosts } from "@/data/blogPosts";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+
+interface BlogPost {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  image_url: string | null;
+  category: string;
+}
 
 const Blog = () => {
+  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const { data } = await supabase
+        .from("blog_posts")
+        .select("id, slug, title, excerpt, image_url, category")
+        .eq("is_published", true)
+        .order("published_at", { ascending: false });
+      setPosts(data || []);
+      setLoading(false);
+    };
+    fetchPosts();
+  }, []);
+
   return (
     <div className="min-h-screen">
       <PageSEO
@@ -33,70 +59,82 @@ const Blog = () => {
         </div>
       </section>
 
-      {/* Featured Post */}
       <section className="py-16 bg-background">
         <div className="container mx-auto px-6">
-          <Link
-            to={`/blog/${blogPosts[0].slug}`}
-            className="group block mb-16"
-          >
-            <div className="grid md:grid-cols-2 gap-8 items-center">
-              <div className="overflow-hidden">
-                <img
-                  src={blogPosts[0].imageUrl}
-                  alt={blogPosts[0].title}
-                  className="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-              <div>
-                <span className="text-primary text-xs font-light tracking-[0.2em] uppercase">
-                  {blogPosts[0].category}
-                </span>
-                <h2 className="text-2xl md:text-3xl font-light tracking-tight mt-2 mb-4 group-hover:text-primary transition-colors">
-                  {blogPosts[0].title}
-                </h2>
-                <p className="text-muted-foreground font-light leading-relaxed">
-                  {blogPosts[0].excerpt}
-                </p>
-                <span className="inline-block mt-4 text-sm text-primary font-light tracking-wide">
-                  Read More →
-                </span>
-              </div>
-            </div>
-          </Link>
-
-          {/* Grid */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogPosts.slice(1).map((post) => (
+          {loading ? (
+            <p className="text-sm text-muted-foreground font-light">Loading...</p>
+          ) : posts.length === 0 ? (
+            <p className="text-sm text-muted-foreground font-light text-center py-12">No posts yet. Check back soon!</p>
+          ) : (
+            <>
+              {/* Featured Post */}
               <Link
-                key={post.slug}
-                to={`/blog/${post.slug}`}
-                className="group border border-border hover:border-primary/30 transition-colors"
+                to={`/blog/${posts[0].slug}`}
+                className="group block mb-16"
               >
-                <div className="overflow-hidden">
-                  <img
-                    src={post.imageUrl}
-                    alt={post.title}
-                    className="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-                <div className="p-6">
-                  <span className="text-primary text-xs font-light tracking-[0.2em] uppercase">
-                    {post.category}
-                  </span>
-                  <h3 className="text-lg font-light tracking-tight mt-2 mb-3 group-hover:text-primary transition-colors line-clamp-2">
-                    {post.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground font-light leading-relaxed line-clamp-3">
-                    {post.excerpt}
-                  </p>
-                  <span className="inline-block mt-4 text-sm text-primary font-light tracking-wide">
-                    Read More →
-                  </span>
+                <div className="grid md:grid-cols-2 gap-8 items-center">
+                  <div className="overflow-hidden">
+                    {posts[0].image_url && (
+                      <img
+                        src={posts[0].image_url}
+                        alt={posts[0].title}
+                        className="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    )}
+                  </div>
+                  <div>
+                    <span className="text-primary text-xs font-light tracking-[0.2em] uppercase">
+                      {posts[0].category}
+                    </span>
+                    <h2 className="text-2xl md:text-3xl font-light tracking-tight mt-2 mb-4 group-hover:text-primary transition-colors">
+                      {posts[0].title}
+                    </h2>
+                    <p className="text-muted-foreground font-light leading-relaxed">
+                      {posts[0].excerpt}
+                    </p>
+                    <span className="inline-block mt-4 text-sm text-primary font-light tracking-wide">
+                      Read More →
+                    </span>
+                  </div>
                 </div>
               </Link>
-            ))}
-          </div>
+
+              {/* Grid */}
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                {posts.slice(1).map((post) => (
+                  <Link
+                    key={post.id}
+                    to={`/blog/${post.slug}`}
+                    className="group border border-border hover:border-primary/30 transition-colors"
+                  >
+                    <div className="overflow-hidden">
+                      {post.image_url && (
+                        <img
+                          src={post.image_url}
+                          alt={post.title}
+                          className="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                      )}
+                    </div>
+                    <div className="p-6">
+                      <span className="text-primary text-xs font-light tracking-[0.2em] uppercase">
+                        {post.category}
+                      </span>
+                      <h3 className="text-lg font-light tracking-tight mt-2 mb-3 group-hover:text-primary transition-colors line-clamp-2">
+                        {post.title}
+                      </h3>
+                      <p className="text-sm text-muted-foreground font-light leading-relaxed line-clamp-3">
+                        {post.excerpt}
+                      </p>
+                      <span className="inline-block mt-4 text-sm text-primary font-light tracking-wide">
+                        Read More →
+                      </span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </>
+          )}
         </div>
       </section>
 

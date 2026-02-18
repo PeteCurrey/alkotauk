@@ -7,6 +7,7 @@ import { LogOut } from "lucide-react";
 import AdminEnquiries from "@/components/admin/AdminEnquiries";
 import AdminDistributors from "@/components/admin/AdminDistributors";
 import AdminProducts from "@/components/admin/AdminProducts";
+import AdminBlog from "@/components/admin/AdminBlog";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -49,6 +50,7 @@ const AdminDashboard = () => {
             <TabsTrigger value="enquiries" className="font-light text-xs">Enquiries</TabsTrigger>
             <TabsTrigger value="distributors" className="font-light text-xs">Distributors</TabsTrigger>
             <TabsTrigger value="products" className="font-light text-xs">Products</TabsTrigger>
+            <TabsTrigger value="blog" className="font-light text-xs">Blog</TabsTrigger>
           </TabsList>
           <TabsContent value="enquiries" className="min-h-[calc(100vh-180px)]">
             <AdminEnquiries />
@@ -58,6 +60,9 @@ const AdminDashboard = () => {
           </TabsContent>
           <TabsContent value="products">
             <AdminProducts />
+          </TabsContent>
+          <TabsContent value="blog">
+            <AdminBlog />
           </TabsContent>
         </Tabs>
       </div>

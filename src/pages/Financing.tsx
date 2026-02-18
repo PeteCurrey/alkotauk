@@ -11,22 +11,22 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { DollarSign, Percent, Calendar } from "lucide-react";
+import { PoundSterling, Percent, Calendar } from "lucide-react";
 
 const zeroInterestPayments = [
-  { amount: "$5,000", payment: "$416.66" },
-  { amount: "$7,500", payment: "$625.00" },
-  { amount: "$10,000", payment: "$833.33" },
-  { amount: "$12,500", payment: "$1,041.66" },
-  { amount: "$15,000", payment: "$1,250.00" },
+  { amount: "£5,000", payment: "£416.66" },
+  { amount: "£7,500", payment: "£625.00" },
+  { amount: "£10,000", payment: "£833.33" },
+  { amount: "£12,500", payment: "£1,041.66" },
+  { amount: "£15,000", payment: "£1,250.00" },
 ];
 
 const termPayments = [
-  { term: "12 Mo.", p5k: "$441.10", p7k: "$661.61", p10k: "$882.20", p15k: "$1,323.30" },
-  { term: "24 Mo.", p5k: "$227.45", p7k: "$341.18", p10k: "$454.90", p15k: "$682.35" },
-  { term: "36 Mo.", p5k: "$157.95", p7k: "$236.92", p10k: "$315.90", p15k: "$473.85" },
-  { term: "48 Mo.", p5k: "$122.65", p7k: "$183.98", p10k: "$245.30", p15k: "$367.95" },
-  { term: "60 Mo.", p5k: "$102.65", p7k: "$153.00", p10k: "$204.00", p15k: "$306.00" },
+  { term: "12 Mo.", p5k: "£441", p7k: "£662", p10k: "£882", p15k: "£1,323" },
+  { term: "24 Mo.", p5k: "£227", p7k: "£341", p10k: "£455", p15k: "£682" },
+  { term: "36 Mo.", p5k: "£158", p7k: "£237", p10k: "£316", p15k: "£474" },
+  { term: "48 Mo.", p5k: "£123", p7k: "£184", p10k: "£245", p15k: "£368" },
+  { term: "60 Mo.", p5k: "£103", p7k: "£153", p10k: "£204", p15k: "£306" },
 ];
 
 const Financing = () => {
@@ -34,7 +34,7 @@ const Financing = () => {
     <div className="min-h-screen">
       <PageSEO
         title="Equipment Financing"
-        description="Finance your Alkota pressure washer with 0% interest for 12 months or flexible term options. Get industrial cleaning equipment with affordable monthly payments."
+        description="Finance your Alkota pressure washer with 0% interest for 12 months or flexible term options. Get industrial cleaning equipment with affordable monthly payments in the UK."
         path="/financing"
       />
       <Navigation />
@@ -47,7 +47,7 @@ const Financing = () => {
               Equipment Financing
             </p>
             <h1 className="text-4xl md:text-5xl font-light tracking-tight mb-6">
-              Financing with Alkota
+              Financing with Alkota UK
             </h1>
             <p className="text-muted-foreground font-light leading-relaxed">
               Get the equipment that works as hard as you do. Choose from two
@@ -92,7 +92,7 @@ const Financing = () => {
                 </div>
                 <div className="flex items-center gap-2 text-sm font-light">
                   <span className="w-1.5 h-1.5 bg-primary rounded-full" />
-                  Minimum $5,000 finance amount
+                  Minimum £5,000 finance amount
                 </div>
                 <div className="flex items-center gap-2 text-sm font-light">
                   <span className="w-1.5 h-1.5 bg-primary rounded-full" />
@@ -123,7 +123,7 @@ const Financing = () => {
               </div>
 
               <p className="text-xs text-muted-foreground font-light mt-4 leading-relaxed">
-                First payment due at contract signing. U.S.A. only. Subject to
+                First payment due at contract signing. UK only. Subject to
                 credit approval.
               </p>
             </div>
@@ -136,7 +136,7 @@ const Financing = () => {
                 </div>
                 <div>
                   <h2 className="text-2xl font-light tracking-tight">
-                    $0 Down
+                    £0 Down
                   </h2>
                   <p className="text-sm text-muted-foreground font-light">
                     12–60 Months
@@ -145,7 +145,7 @@ const Financing = () => {
               </div>
 
               <p className="text-muted-foreground font-light leading-relaxed mb-6">
-                You choose: 12 to 60 month options with $0 down to get you
+                You choose: 12 to 60 month options with £0 down to get you
                 cleaning like a pro today. Enjoy competitive rates and terms.
               </p>
 
@@ -164,7 +164,7 @@ const Financing = () => {
                 </div>
                 <div className="flex items-center gap-2 text-sm font-light">
                   <span className="w-1.5 h-1.5 bg-primary rounded-full" />
-                  Minimum $5,000 / 2 years in business
+                  Minimum £5,000 / 2 years in business
                 </div>
               </div>
 
@@ -176,10 +176,10 @@ const Financing = () => {
                   <TableHeader>
                     <TableRow>
                       <TableHead className="text-xs font-light">Term</TableHead>
-                      <TableHead className="text-xs font-light text-right">$5K</TableHead>
-                      <TableHead className="text-xs font-light text-right">$7.5K</TableHead>
-                      <TableHead className="text-xs font-light text-right">$10K</TableHead>
-                      <TableHead className="text-xs font-light text-right">$15K</TableHead>
+                      <TableHead className="text-xs font-light text-right">£5K</TableHead>
+                      <TableHead className="text-xs font-light text-right">£7.5K</TableHead>
+                      <TableHead className="text-xs font-light text-right">£10K</TableHead>
+                      <TableHead className="text-xs font-light text-right">£15K</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -197,8 +197,8 @@ const Financing = () => {
               </div>
 
               <p className="text-xs text-muted-foreground font-light mt-4 leading-relaxed">
-                *Rates based on term and credit score. Minimum 675 credit score.
-                Early payoff before 12 months adds 5% fee. U.S.A. only.
+                *Rates based on term and credit history. Early payoff before 12
+                months adds 5% fee. UK only. Subject to credit approval.
               </p>
             </div>
           </div>
@@ -209,16 +209,13 @@ const Financing = () => {
               Financing Partners
             </h2>
             <p className="text-muted-foreground font-light leading-relaxed mb-4">
-              Alkota has partnered with Western Equipment Finance and ClickLease
-              to make it easier than ever to afford the best cleaning equipment
-              in the industry.
+              Alkota UK works with trusted finance partners to make it easier
+              than ever to afford the best cleaning equipment in the industry.
             </p>
             <p className="text-muted-foreground font-light leading-relaxed mb-8">
-              <strong className="font-normal text-foreground">Western Equipment Finance</strong>{" "}
-              offers flexible terms and great rates with quick approval
-              decisions. <strong className="font-normal text-foreground">ClickLease</strong>{" "}
-              lets you apply in minutes with real approval in seconds — no
-              hard credit pull, no documents needed.
+              Contact us or your local distributor to discuss financing options
+              tailored to your business needs. Quick approvals and flexible
+              terms available.
             </p>
             <Link to="/distributors">
               <Button variant="outline" size="sm" className="font-light tracking-wide">

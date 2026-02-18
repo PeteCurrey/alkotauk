@@ -40,16 +40,17 @@ const About = () => {
         <div className="container mx-auto px-6">
           <div className="max-w-3xl">
             <p className="text-primary text-sm font-light tracking-[0.3em] uppercase mb-4">
-              About Alkota
+              About Alkota UK
             </p>
             <h1 className="text-4xl md:text-5xl font-light tracking-tight mb-6">
-              Pressure Washer Manufacturer Since 1964
+              Official UK & International Distributor
             </h1>
             <p className="text-muted-foreground font-light leading-relaxed">
-              Top-quality power washers and industrial cleaning equipment are the
-              specialty of made-in-America Alkota Cleaning Systems. With over 60
-              years of experience, we are committed to delivering exceptional
-              customer service and tailored cleaning solutions.
+              Alkota UK is the authorised distributor of American-made Alkota
+              Cleaning Systems across the United Kingdom, Europe, the UAE, and
+              the wider Middle East. Backed by over 60 years of Alkota's
+              heritage in industrial cleaning, we deliver exceptional service
+              and tailored solutions to our customers.
             </p>
           </div>
         </div>
@@ -67,22 +68,22 @@ const About = () => {
               <p className="text-muted-foreground font-light leading-relaxed mb-4">
                 Alkota got its start all the way back in 1964 building steam
                 cleaners in a converted creamery in Alcester, South Dakota —
-                the small rural town we still call home. Our very name is an
-                homage to our hometown: Al- for Alcester and -kota for South
-                Dakota.
+                a small rural town whose name lives on in the brand: Al- for
+                Alcester and -kota for South Dakota.
               </p>
               <p className="text-muted-foreground font-light leading-relaxed mb-4">
-                When a competing pressure washer company in Vermillion sold to
-                an outside bidder in 1983, seven of its key employees came
-                together to purchase Alkota Manufacturing. The investors had a
-                common business philosophy: treat your customers right, treat
-                your employees right, and the rest will follow. That philosophy
-                still guides us today.
+                In 1983, seven key employees came together to purchase Alkota
+                Manufacturing with a common philosophy: treat your customers
+                right, treat your employees right, and the rest will follow.
+                That philosophy still guides every machine that leaves the
+                factory today.
               </p>
               <p className="text-muted-foreground font-light leading-relaxed">
-                While several of the original owners have passed on or retired,
-                two of the seven remain involved to this day — a testament to
-                the enduring commitment that defines Alkota.
+                In 2016, Alkota UK was established to bring this American-made
+                quality to the United Kingdom — and has since expanded across
+                Europe, the UAE, and the wider Middle East, providing the same
+                expert support and robust equipment Alkota is known for
+                worldwide.
               </p>
             </div>
             <div className="space-y-4">

@@ -13,7 +13,8 @@ const Navigation = () => {
   { label: "About", to: "/about" },
   { label: "Resources", to: "/resources" },
   { label: "Financing", to: "/financing" },
-  { label: "Distributors", to: "/distributors" }];
+   { label: "Distributors", to: "/distributors" },
+   { label: "Become a Distributor", to: "/become-distributor" }];
 
 
   return (

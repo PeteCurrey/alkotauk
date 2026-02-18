@@ -11,7 +11,8 @@ const Navigation = () => {
   { label: "Products", to: "/#products" },
   { label: "Industries", to: "/industries" },
   { label: "About", to: "/about" },
-  { label: "Resources", to: "/resources" },
+   { label: "Resources", to: "/resources" },
+   { label: "Blog", to: "/blog" },
   { label: "Financing", to: "/financing" },
    { label: "Distributors", to: "/distributors" },
    { label: "Become a Distributor", to: "/become-distributor" }];

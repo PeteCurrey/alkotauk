@@ -3,7 +3,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import PageSEO from "@/components/PageSEO";
 import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { productCategories } from "@/data/products";
 import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
@@ -77,12 +77,16 @@ const ProductDetail = () => {
                 </p>
               )}
               <div className="mt-8 flex gap-4">
-                <Button variant="outline" size="sm" className="font-light tracking-wide">
-                  Get a Quote
-                </Button>
-                <Button variant="outline" size="sm" className="font-light tracking-wide">
-                  Find a Distributor
-                </Button>
+                <Link to="/contact">
+                  <Button variant="outline" size="sm" className="font-light tracking-wide">
+                    Get a Quote
+                  </Button>
+                </Link>
+                <Link to="/distributors">
+                  <Button variant="outline" size="sm" className="font-light tracking-wide">
+                    Find a Distributor
+                  </Button>
+                </Link>
               </div>
             </div>
             <div className="flex items-center justify-center bg-background rounded-sm p-8">
@@ -166,17 +170,82 @@ const ProductDetail = () => {
               </div>
 
               <div className="mt-8">
-                <Button variant="outline" size="sm" className="font-light tracking-wide">
-                  Request a Quote
-                </Button>
+                <Link to="/contact">
+                  <Button variant="outline" size="sm" className="font-light tracking-wide">
+                    Request a Quote
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
         </div>
       </section>
 
+      {/* Individual Models (if available) */}
+      {activeSeries.models && activeSeries.models.length > 0 && (
+        <section className="py-16 bg-muted/20">
+          <div className="container mx-auto px-6">
+            <h2 className="text-3xl font-light tracking-tight mb-4 text-center">
+              {activeSeries.name} — Models
+            </h2>
+            <p className="text-sm text-muted-foreground font-light text-center mb-10">
+              {activeSeries.models.length} models available. Contact us for pricing and availability.
+            </p>
+
+            <div className="max-w-5xl mx-auto border border-border">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="font-light text-xs">Model</TableHead>
+                    <TableHead className="font-light text-xs text-center">GPM</TableHead>
+                    <TableHead className="font-light text-xs text-center">PSI</TableHead>
+                    <TableHead className="font-light text-xs text-center hidden sm:table-cell">Power Source</TableHead>
+                    {activeSeries.models[0].heatingFuel && (
+                      <TableHead className="font-light text-xs text-center hidden md:table-cell">Heating Fuel</TableHead>
+                    )}
+                    <TableHead className="font-light text-xs text-center hidden lg:table-cell">Configuration</TableHead>
+                    <TableHead className="font-light text-xs w-[100px]"></TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {activeSeries.models.map((model, i) => (
+                    <TableRow key={i}>
+                      <TableCell className="text-sm font-light">{model.name}</TableCell>
+                      <TableCell className="text-sm font-light text-center">
+                        <span className="text-primary font-normal">{model.gpm}</span>
+                      </TableCell>
+                      <TableCell className="text-sm font-light text-center">
+                        <span className="text-primary font-normal">{model.psi}</span>
+                      </TableCell>
+                      <TableCell className="text-xs font-light text-center text-muted-foreground hidden sm:table-cell">
+                        {model.powerSource}
+                      </TableCell>
+                      {model.heatingFuel && (
+                        <TableCell className="text-xs font-light text-center text-muted-foreground hidden md:table-cell">
+                          {model.heatingFuel}
+                        </TableCell>
+                      )}
+                      <TableCell className="text-xs font-light text-center text-muted-foreground hidden lg:table-cell">
+                        {model.configuration}
+                      </TableCell>
+                      <TableCell>
+                        <Link to="/contact">
+                          <Button variant="outline" size="sm" className="font-light text-xs h-7 px-3">
+                            Quote
+                          </Button>
+                        </Link>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* All Series Grid */}
-      <section className="py-16 bg-muted/20">
+      <section className="py-16 bg-background">
         <div className="container mx-auto px-6">
           <h2 className="text-3xl font-light tracking-tight mb-10 text-center">
             All {product.title}
@@ -201,7 +270,7 @@ const ProductDetail = () => {
                 <h3 className="text-lg font-light tracking-tight mb-2">
                   {series.name}
                 </h3>
-                <div className="flex flex-wrap gap-1">
+                <div className="flex flex-wrap gap-1 mb-2">
                   {series.highlights.map((h, i) => (
                     <span
                       key={i}
@@ -212,6 +281,11 @@ const ProductDetail = () => {
                     </span>
                   ))}
                 </div>
+                {series.models && (
+                  <p className="text-xs text-primary font-light">
+                    {series.models.length} models available
+                  </p>
+                )}
               </button>
             ))}
           </div>

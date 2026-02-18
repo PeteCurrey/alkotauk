@@ -23,11 +23,21 @@ import waterTreatment from "@/assets/products/water-treatment.png";
 import waterMediaFiltration from "@/assets/products/water-media-filtration.png";
 import waterEvaporator from "@/assets/products/water-evaporator.png";
 
+export interface ProductModel {
+  name: string;
+  gpm: string;
+  psi: string;
+  powerSource: string;
+  heatingFuel?: string;
+  configuration: string;
+}
+
 export interface ProductSeries {
   name: string;
   image: string;
   specs: Record<string, string>;
   highlights: string[];
+  models?: ProductModel[];
 }
 
 export interface ProductCategory {
@@ -52,76 +62,133 @@ export const productCategories: ProductCategory[] = [
       "Explore our complete range of hot water pressure washers — from compact electric-driven units to heavy-duty gas engine models. Every Alkota hot water pressure washer is built with serviceability and longevity in mind.",
     series: [
       {
+        name: "Gas Fired Series",
+        image: hwGasFiredStationary,
+        specs: {
+          "GPM": "3–8",
+          "PSI": "1,800–5,000",
+          "Power Source": "230V Electric",
+          "Heating Fuel": "Gas (LP or NG)",
+          "Configuration": "Stationary",
+        },
+        highlights: ["Clean burning LP or NG", "Stationary installation", "High output range"],
+        models: [
+          { name: "Gas Fired 8251", gpm: "8", psi: "2,500", powerSource: "230V", heatingFuel: "Gas (LP or NG)", configuration: "Stationary" },
+          { name: "Gas Fired 7301", gpm: "7", psi: "3,000", powerSource: "230V", heatingFuel: "Gas (LP or NG)", configuration: "Stationary" },
+          { name: "Gas Fired 5501", gpm: "5", psi: "5,000", powerSource: "230V", heatingFuel: "Gas (LP or NG)", configuration: "Stationary" },
+          { name: "Gas Fired 5401", gpm: "5", psi: "4,000", powerSource: "230V", heatingFuel: "Gas (LP or NG)", configuration: "Stationary" },
+          { name: "Gas Fired 5231", gpm: "5", psi: "2,300", powerSource: "230V", heatingFuel: "Gas (LP or NG)", configuration: "Stationary" },
+          { name: "Gas Fired 5181", gpm: "5", psi: "1,800", powerSource: "230V", heatingFuel: "Gas (LP or NG)", configuration: "Stationary" },
+          { name: "Gas Fired 4231", gpm: "4", psi: "2,300", powerSource: "230V", heatingFuel: "Gas (LP or NG)", configuration: "Stationary" },
+          { name: "Gas Fired 4181", gpm: "4", psi: "1,800", powerSource: "230V", heatingFuel: "Gas (LP or NG)", configuration: "Stationary" },
+          { name: "Gas Fired 3301", gpm: "3", psi: "3,000", powerSource: "230V", heatingFuel: "Gas (LP or NG)", configuration: "Stationary" },
+          { name: "Gas Fired 3241", gpm: "3", psi: "2,400", powerSource: "230V", heatingFuel: "Gas (LP or NG)", configuration: "Stationary" },
+        ],
+      },
+      {
+        name: "Gas Fired X4 Series",
+        image: hwGasFiredX4,
+        specs: {
+          "GPM": "2–3.5",
+          "PSI": "1,000–3,000",
+          "Power Source": "115V or 230V",
+          "Heating Fuel": "Gas (LP or NG)",
+          "Configuration": "Portable",
+        },
+        highlights: ["Clean burning LP or NG", "Electric motor driven", "Portable frame"],
+        models: [
+          { name: "Gas Fired X4 3301", gpm: "3", psi: "3,000", powerSource: "230V", heatingFuel: "Gas (LP or NG)", configuration: "Portable" },
+          { name: "Gas Fired X4 3241", gpm: "3", psi: "2,400", powerSource: "230V", heatingFuel: "Gas (LP or NG)", configuration: "Portable" },
+          { name: "Gas Fired X4 3201", gpm: "3", psi: "2,000", powerSource: "115V", heatingFuel: "Gas (LP or NG)", configuration: "Portable" },
+          { name: "Gas Fired X4 2241", gpm: "2", psi: "2,400", powerSource: "115V", heatingFuel: "Gas (LP or NG)", configuration: "Portable" },
+          { name: "Gas Fired X4 2201", gpm: "2", psi: "2,000", powerSource: "115V", heatingFuel: "Gas (LP or NG)", configuration: "Portable" },
+          { name: "Gas Fired X4 2101", gpm: "2", psi: "1,000", powerSource: "115V", heatingFuel: "Gas (LP or NG)", configuration: "Portable" },
+        ],
+      },
+      {
         name: "AX4 Belt Drive Series",
         image: hwAx4,
         specs: {
           "GPM": "2–3.5",
-          "PSI": "Up to 2,400",
+          "PSI": "1,000–2,400",
           "Power Source": "115V or 230V",
           "Heating Fuel": "Oil (Diesel / Kerosene)",
           "Configuration": "Portable",
         },
         highlights: ["Compact electric driven", "Oil fired heat", "Belt drive pump"],
+        models: [
+          { name: "AX4 3524", gpm: "3.5", psi: "2,400", powerSource: "230V", heatingFuel: "Oil", configuration: "Portable" },
+          { name: "AX4 3520", gpm: "3.5", psi: "2,000", powerSource: "230V", heatingFuel: "Oil", configuration: "Portable" },
+          { name: "AX4 3024", gpm: "3", psi: "2,400", powerSource: "230V", heatingFuel: "Oil", configuration: "Portable" },
+          { name: "AX4 3020", gpm: "3", psi: "2,000", powerSource: "115V", heatingFuel: "Oil", configuration: "Portable" },
+          { name: "AX4 2424", gpm: "2.1", psi: "2,400", powerSource: "115V", heatingFuel: "Oil", configuration: "Portable" },
+          { name: "AX4 2015", gpm: "2", psi: "1,500", powerSource: "115V", heatingFuel: "Oil", configuration: "Portable" },
+          { name: "AX4 2010", gpm: "2", psi: "1,000", powerSource: "115V", heatingFuel: "Oil", configuration: "Portable" },
+        ],
       },
       {
         name: "X4 Belt Drive Series",
         image: hwX4,
         specs: {
           "GPM": "2–4.8",
-          "PSI": "Up to 3,000",
-          "Power Source": "115V or 230V",
+          "PSI": "1,000–3,500",
+          "Power Source": "230V or 230–460V",
           "Heating Fuel": "Oil (Diesel / Kerosene)",
           "Configuration": "Portable",
         },
         highlights: ["Electric driven", "Oil fired heat", "Heavy-duty belt drive"],
+        models: [
+          { name: "X4 4835", gpm: "4.8", psi: "3,500", powerSource: "230–460V", heatingFuel: "Oil", configuration: "Portable" },
+          { name: "X4 4530", gpm: "4.5", psi: "3,000", powerSource: "230–460V", heatingFuel: "Oil", configuration: "Portable" },
+          { name: "X4 4030", gpm: "4", psi: "3,000", powerSource: "230V", heatingFuel: "Oil", configuration: "Portable" },
+          { name: "X4 4025", gpm: "4", psi: "2,500", powerSource: "230V", heatingFuel: "Oil", configuration: "Portable" },
+          { name: "X4 3530", gpm: "3.5", psi: "3,000", powerSource: "230V", heatingFuel: "Oil", configuration: "Portable" },
+          { name: "X4 3525", gpm: "3.5", psi: "2,500", powerSource: "230V", heatingFuel: "Oil", configuration: "Portable" },
+          { name: "X4 3030", gpm: "3", psi: "3,000", powerSource: "230V", heatingFuel: "Oil", configuration: "Portable" },
+          { name: "X4 3025", gpm: "3", psi: "2,500", powerSource: "230V", heatingFuel: "Oil", configuration: "Portable" },
+          { name: "X4 2020", gpm: "2", psi: "2,000", powerSource: "115V", heatingFuel: "Oil", configuration: "Portable" },
+          { name: "X4 2010", gpm: "2", psi: "1,000", powerSource: "115V", heatingFuel: "Oil", configuration: "Portable" },
+        ],
       },
       {
         name: "XD4 Direct Drive Series",
         image: hwXd4,
         specs: {
           "GPM": "3–4",
-          "PSI": "Up to 4,000",
-          "Power Source": "Gas Driven",
+          "PSI": "2,500–4,000",
+          "Power Source": "Gas Engine (Honda)",
           "Heating Fuel": "Oil (Diesel / Kerosene)",
           "Configuration": "Portable",
         },
         highlights: ["Honda powered", "Oil fired heat", "Direct drive pump"],
+        models: [
+          { name: "XD4 4040", gpm: "4", psi: "4,000", powerSource: "Gas Engine", heatingFuel: "Oil", configuration: "Portable" },
+          { name: "XD4 4035", gpm: "4", psi: "3,500", powerSource: "Gas Engine", heatingFuel: "Oil", configuration: "Portable" },
+          { name: "XD4 4030", gpm: "4", psi: "3,000", powerSource: "Gas Engine", heatingFuel: "Oil", configuration: "Portable" },
+          { name: "XD4 3530", gpm: "3.5", psi: "3,000", powerSource: "Gas Engine", heatingFuel: "Oil", configuration: "Portable" },
+          { name: "XD4 3525", gpm: "3.5", psi: "2,500", powerSource: "Gas Engine", heatingFuel: "Oil", configuration: "Portable" },
+          { name: "XD4 3030", gpm: "3", psi: "3,000", powerSource: "Gas Engine", heatingFuel: "Oil", configuration: "Portable" },
+        ],
       },
       {
-        name: "Gas Fired X4 Series",
-        image: hwGasFiredX4,
-        specs: {
-          "GPM": "2–3",
-          "PSI": "Up to 3,000",
-          "Power Source": "Electric",
-          "Heating Fuel": "Gas (LP or NG)",
-          "Configuration": "Portable",
-        },
-        highlights: ["Clean burning LP or NG", "Electric motor driven", "Portable frame"],
-      },
-      {
-        name: "Gas Fired Stationary Series",
-        image: hwGasFiredStationary,
-        specs: {
-          "GPM": "2.1–10",
-          "PSI": "Up to 5,000",
-          "Power Source": "Electric",
-          "Heating Fuel": "Gas (LP or NG)",
-          "Configuration": "Stationary",
-        },
-        highlights: ["High volume output", "Stationary installation", "Natural gas or LP"],
-      },
-      {
-        name: "GED-EN Series Extra Narrow",
+        name: "GED-EN Extra Narrow Series",
         image: hwGedNarrow,
         specs: {
           "GPM": "4–9.5",
-          "PSI": "Up to 4,000",
-          "Power Source": "Gas Driven",
+          "PSI": "2,000–4,000",
+          "Power Source": "Gas Engine",
           "Heating Fuel": "Oil (Diesel / Kerosene)",
           "Configuration": "Portable or Stationary",
         },
         highlights: ["Extra narrow frame", "Gas engine driven", "High GPM output"],
+        models: [
+          { name: "GED-EN 5040", gpm: "5", psi: "4,000", powerSource: "Gas Engine", heatingFuel: "Oil", configuration: "Portable" },
+          { name: "GED-EN 5035", gpm: "5", psi: "3,500", powerSource: "Gas Engine", heatingFuel: "Oil", configuration: "Portable" },
+          { name: "GED-EN 5030", gpm: "5", psi: "3,000", powerSource: "Gas Engine", heatingFuel: "Oil", configuration: "Portable" },
+          { name: "GED-EN 4530", gpm: "4.5", psi: "3,000", powerSource: "Gas Engine", heatingFuel: "Oil", configuration: "Portable" },
+          { name: "GED-EN 4030", gpm: "4", psi: "3,000", powerSource: "Gas Engine", heatingFuel: "Oil", configuration: "Portable" },
+          { name: "GED-EN 4020", gpm: "4", psi: "2,000", powerSource: "Gas Engine", heatingFuel: "Oil", configuration: "Portable" },
+        ],
       },
     ],
   },

@@ -45,7 +45,7 @@ const Navigation = () => {
               className="flex items-center gap-2 text-sm font-light tracking-wide text-primary hover:text-primary/80 transition-colors" href="tel:+447912506738">
 
               <Phone size={14} strokeWidth={1} />
-              1-800-255-6823
+              07912 506738
             </a>
             <Link to="/contact">
               <Button
@@ -81,9 +81,9 @@ const Navigation = () => {
                 {item.label}
               </NavLink>
           )}
-            <a href="tel:1-800-255-6823" className="flex items-center gap-2 text-sm font-light text-primary">
+            <a href="tel:+447912506738" className="flex items-center gap-2 text-sm font-light text-primary">
               <Phone size={14} strokeWidth={1} />
-              1-800-255-6823
+              07912 506738
             </a>
             <Link to="/contact" onClick={() => setIsOpen(false)}>
               <Button variant="outline" size="sm" className="text-sm font-light tracking-wide w-full">

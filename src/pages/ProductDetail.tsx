@@ -2,16 +2,52 @@ import { useParams, Link } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import PageSEO from "@/components/PageSEO";
+import ProductCompare from "@/components/ProductCompare";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { productCategories } from "@/data/products";
-import { ArrowLeft } from "lucide-react";
-import { useState } from "react";
+import { productCategories, ProductModel } from "@/data/products";
+import { ArrowLeft, Scale } from "lucide-react";
+import { useState, useCallback } from "react";
+
+interface CompareEntry {
+  name: string;
+  seriesName: string;
+  gpm: string;
+  psi: string;
+  powerSource: string;
+  heatingFuel?: string;
+  configuration: string;
+}
+
+const MAX_COMPARE = 3;
 
 const ProductDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const product = productCategories.find((p) => p.slug === slug);
   const [selectedSeries, setSelectedSeries] = useState(0);
+  const [compareModels, setCompareModels] = useState<CompareEntry[]>([]);
+  const [showCompare, setShowCompare] = useState(false);
+
+  const toggleCompare = useCallback(
+    (model: ProductModel, seriesName: string) => {
+      setCompareModels((prev) => {
+        const exists = prev.find((m) => m.name === model.name && m.seriesName === seriesName);
+        if (exists) {
+          return prev.filter((m) => !(m.name === model.name && m.seriesName === seriesName));
+        }
+        if (prev.length >= MAX_COMPARE) return prev;
+        return [...prev, { ...model, seriesName }];
+      });
+    },
+    []
+  );
+
+  const isSelected = useCallback(
+    (modelName: string, seriesName: string) =>
+      compareModels.some((m) => m.name === modelName && m.seriesName === seriesName),
+    [compareModels]
+  );
 
   if (!product) {
     return (
@@ -189,13 +225,16 @@ const ProductDetail = () => {
               {activeSeries.name} — Models
             </h2>
             <p className="text-sm text-muted-foreground font-light text-center mb-10">
-              {activeSeries.models.length} models available. Contact us for pricing and availability.
+              {activeSeries.models.length} models available. Select up to 3 to compare side by side.
             </p>
 
             <div className="max-w-5xl mx-auto border border-border">
               <Table>
                 <TableHeader>
                   <TableRow>
+                    <TableHead className="font-light text-xs w-[50px] text-center">
+                      <Scale size={14} strokeWidth={1} className="mx-auto text-muted-foreground" />
+                    </TableHead>
                     <TableHead className="font-light text-xs">Model</TableHead>
                     <TableHead className="font-light text-xs text-center">GPM</TableHead>
                     <TableHead className="font-light text-xs text-center">PSI</TableHead>
@@ -208,35 +247,49 @@ const ProductDetail = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {activeSeries.models.map((model, i) => (
-                    <TableRow key={i}>
-                      <TableCell className="text-sm font-light">{model.name}</TableCell>
-                      <TableCell className="text-sm font-light text-center">
-                        <span className="text-primary font-normal">{model.gpm}</span>
-                      </TableCell>
-                      <TableCell className="text-sm font-light text-center">
-                        <span className="text-primary font-normal">{model.psi}</span>
-                      </TableCell>
-                      <TableCell className="text-xs font-light text-center text-muted-foreground hidden sm:table-cell">
-                        {model.powerSource}
-                      </TableCell>
-                      {model.heatingFuel && (
-                        <TableCell className="text-xs font-light text-center text-muted-foreground hidden md:table-cell">
-                          {model.heatingFuel}
+                  {activeSeries.models.map((model, i) => {
+                    const selected = isSelected(model.name, activeSeries.name);
+                    return (
+                      <TableRow
+                        key={i}
+                        className={selected ? "bg-primary/5" : ""}
+                      >
+                        <TableCell className="text-center">
+                          <Checkbox
+                            checked={selected}
+                            disabled={!selected && compareModels.length >= MAX_COMPARE}
+                            onCheckedChange={() => toggleCompare(model, activeSeries.name)}
+                            aria-label={`Compare ${model.name}`}
+                          />
                         </TableCell>
-                      )}
-                      <TableCell className="text-xs font-light text-center text-muted-foreground hidden lg:table-cell">
-                        {model.configuration}
-                      </TableCell>
-                      <TableCell>
-                        <Link to="/contact">
-                          <Button variant="outline" size="sm" className="font-light text-xs h-7 px-3">
-                            Quote
-                          </Button>
-                        </Link>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                        <TableCell className="text-sm font-light">{model.name}</TableCell>
+                        <TableCell className="text-sm font-light text-center">
+                          <span className="text-primary font-normal">{model.gpm}</span>
+                        </TableCell>
+                        <TableCell className="text-sm font-light text-center">
+                          <span className="text-primary font-normal">{model.psi}</span>
+                        </TableCell>
+                        <TableCell className="text-xs font-light text-center text-muted-foreground hidden sm:table-cell">
+                          {model.powerSource}
+                        </TableCell>
+                        {model.heatingFuel && (
+                          <TableCell className="text-xs font-light text-center text-muted-foreground hidden md:table-cell">
+                            {model.heatingFuel}
+                          </TableCell>
+                        )}
+                        <TableCell className="text-xs font-light text-center text-muted-foreground hidden lg:table-cell">
+                          {model.configuration}
+                        </TableCell>
+                        <TableCell>
+                          <Link to="/contact">
+                            <Button variant="outline" size="sm" className="font-light text-xs h-7 px-3">
+                              Quote
+                            </Button>
+                          </Link>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
                 </TableBody>
               </Table>
             </div>
@@ -291,6 +344,63 @@ const ProductDetail = () => {
           </div>
         </div>
       </section>
+
+      {/* Floating Compare Bar */}
+      {compareModels.length >= 2 && (
+        <div className="fixed bottom-0 left-0 right-0 z-40 bg-background border-t border-border shadow-lg">
+          <div className="container mx-auto px-6 py-3 flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Scale size={18} strokeWidth={1} className="text-primary" />
+              <span className="text-sm font-light">
+                <span className="font-normal">{compareModels.length}</span> models selected
+                {compareModels.length < MAX_COMPARE && (
+                  <span className="text-muted-foreground ml-1">(max {MAX_COMPARE})</span>
+                )}
+              </span>
+              <div className="hidden sm:flex items-center gap-2">
+                {compareModels.map((m) => (
+                  <span
+                    key={`${m.seriesName}-${m.name}`}
+                    className="text-xs px-2 py-1 border border-border text-muted-foreground font-light"
+                  >
+                    {m.name}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setCompareModels([])}
+                className="text-xs text-muted-foreground hover:text-foreground font-light transition-colors"
+              >
+                Clear
+              </button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="font-light tracking-wide"
+                onClick={() => setShowCompare(true)}
+              >
+                <Scale size={14} strokeWidth={1} className="mr-2" />
+                Compare
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Compare Modal */}
+      {showCompare && (
+        <ProductCompare
+          models={compareModels}
+          onRemove={(name) => {
+            const updated = compareModels.filter((m) => m.name !== name);
+            setCompareModels(updated);
+            if (updated.length < 2) setShowCompare(false);
+          }}
+          onClose={() => setShowCompare(false)}
+        />
+      )}
 
       <Footer />
     </div>

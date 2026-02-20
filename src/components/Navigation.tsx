@@ -11,11 +11,11 @@ const Navigation = () => {
   { label: "Products", to: "/#products" },
   { label: "Industries", to: "/industries" },
   { label: "About", to: "/about" },
-   { label: "Resources", to: "/resources" },
-   { label: "Blog", to: "/blog" },
+  { label: "Resources", to: "/resources" },
+  { label: "Blog", to: "/blog" },
   { label: "Financing", to: "/financing" },
-   { label: "Distributors", to: "/distributors" },
-   { label: "Become a Distributor", to: "/become-distributor" }];
+  { label: "Distributors", to: "/distributors" },
+  { label: "Become a Distributor", to: "/become-distributor" }];
 
 
   return (
@@ -23,9 +23,9 @@ const Navigation = () => {
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <NavLink to="/" className="flex items-center">
-            <span className="text-2xl font-bold tracking-tight">ALKOTA</span>
+            <span className="text-2xl tracking-tight text-primary font-light">A L K O T A</span>
             <span className="hidden sm:inline text-xs text-muted-foreground font-light tracking-wider ml-3 border-l border-border pl-3">
-              CLEANING SYSTEMS
+              C L E A N I N G  S Y S T E M S
             </span>
           </NavLink>
 

@@ -22,20 +22,20 @@ const Hero = () => {
             </p>
           </ScrollReveal>
           <ScrollReveal animation="fade-up" delay="400ms">
-            <h1 className="text-5xl font-light text-white mb-4 tracking-tight leading-tight md:text-6xl">
+            <h1 className="text-5xl font-light text-white mb-4 tracking-tight leading-tight md:text-5xl">
               Handcrafted To Perform.
             </h1>
           </ScrollReveal>
           <ScrollReveal animation="fade-up" delay="600ms">
-            <h2 className="text-4xl md:text-6xl font-light text-white/90 tracking-tight leading-tight mb-8">
+            <h2 className="text-5xl font-light text-white/90 tracking-tight leading-tight mb-8 md:text-5xl">
               Engineered To Last.
             </h2>
           </ScrollReveal>
           <ScrollReveal animation="fade-up" delay="800ms">
             <p className="text-white/60 max-w-xl mb-10 leading-relaxed text-base font-extralight">
-              High performance standard and customized hot or cold pressure
-              washers, steam cleaners, parts washers, self-contained trailer
-              units, and accessories — all made in the USA.
+              High performance standard & customised hot or cold pressure washers, steam cleaners, parts washers, self-contained trailer units and accessories — all made in the USA.
+            
+
             </p>
           </ScrollReveal>
           <ScrollReveal animation="fade-up" delay="1000ms">

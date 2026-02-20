@@ -18,14 +18,14 @@ const organizationSchema = {
     "@type": "PostalAddress",
     addressLocality: "Alcester",
     addressRegion: "SD",
-    addressCountry: "US",
+    addressCountry: "US"
   },
   contactPoint: {
     "@type": "ContactPoint",
     telephone: "+1-800-255-6823",
-    contactType: "sales",
+    contactType: "sales"
   },
-  sameAs: [],
+  sameAs: []
 };
 
 const Index = () => {
@@ -35,17 +35,17 @@ const Index = () => {
         title="Alkota Cleaning Systems — Industrial Pressure Washers Since 1964"
         description="American-made industrial pressure washers, steam cleaners, and cleaning systems. Precision-engineered equipment built to last since 1964. Get a quote today."
         path="/"
-        structuredData={organizationSchema}
-      />
-      <Navigation />
+        structuredData={organizationSchema} />
+
+      <Navigation className="bg-[#878282]/[0.56]" />
       <Hero />
       <ProductShowcase />
       <CustomBuild />
       <Heritage />
       <Features />
       <Footer />
-    </div>
-  );
+    </div>);
+
 };
 
 export default Index;

@@ -4,32 +4,49 @@ import { Button } from "@/components/ui/button";
 import { NavLink } from "@/components/NavLink";
 import { Link } from "react-router-dom";
 import MegaMenu from "@/components/MegaMenu";
+import ResourcesMegaMenu from "@/components/ResourcesMegaMenu";
 import { productCategories } from "@/data/products";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [megaMenuOpen, setMegaMenuOpen] = useState(false);
+  const [resourcesMenuOpen, setResourcesMenuOpen] = useState(false);
   const [mobileProductsOpen, setMobileProductsOpen] = useState(false);
+  const [mobileResourcesOpen, setMobileResourcesOpen] = useState(false);
   const productsTriggerRef = useRef<HTMLButtonElement>(null);
+  const resourcesTriggerRef = useRef<HTMLButtonElement>(null);
   let megaMenuTimeout: ReturnType<typeof setTimeout>;
+  let resourcesMenuTimeout: ReturnType<typeof setTimeout>;
 
   const navItems = [
     { label: "Industries", to: "/industries" },
-    { label: "About", to: "/about" },
-    { label: "Resources", to: "/resources" },
+    { label: "Distributors", to: "/distributors" },
+  ];
+
+  const mobileResourceLinks = [
+    { label: "About Alkota", to: "/about" },
+    { label: "Resource Library", to: "/resources" },
     { label: "Blog", to: "/blog" },
     { label: "Financing", to: "/financing" },
-    { label: "Distributors", to: "/distributors" },
     { label: "Become a Distributor", to: "/become-distributor" },
   ];
 
   const handleProductsEnter = () => {
     clearTimeout(megaMenuTimeout);
+    setResourcesMenuOpen(false);
     setMegaMenuOpen(true);
   };
-
   const handleProductsLeave = () => {
     megaMenuTimeout = setTimeout(() => setMegaMenuOpen(false), 150);
+  };
+
+  const handleResourcesEnter = () => {
+    clearTimeout(resourcesMenuTimeout);
+    setMegaMenuOpen(false);
+    setResourcesMenuOpen(true);
+  };
+  const handleResourcesLeave = () => {
+    resourcesMenuTimeout = setTimeout(() => setResourcesMenuOpen(false), 150);
   };
 
   return (
@@ -45,23 +62,15 @@ const Navigation = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center gap-6">
-            {/* Products with mega menu */}
-            <div
-              onMouseEnter={handleProductsEnter}
-              onMouseLeave={handleProductsLeave}
-              className="relative"
-            >
+            {/* Products mega menu trigger */}
+            <div onMouseEnter={handleProductsEnter} onMouseLeave={handleProductsLeave} className="relative">
               <button
                 ref={productsTriggerRef}
                 className="flex items-center gap-1 text-sm font-light tracking-wide text-foreground/80 hover:text-foreground transition-colors"
                 onClick={() => setMegaMenuOpen(!megaMenuOpen)}
               >
                 Products
-                <ChevronDown
-                  size={14}
-                  strokeWidth={1.5}
-                  className={`transition-transform duration-200 ${megaMenuOpen ? "rotate-180" : ""}`}
-                />
+                <ChevronDown size={14} strokeWidth={1.5} className={`transition-transform duration-200 ${megaMenuOpen ? "rotate-180" : ""}`} />
               </button>
             </div>
 
@@ -74,6 +83,19 @@ const Navigation = () => {
                 {item.label}
               </NavLink>
             ))}
+
+            {/* Resources mega menu trigger */}
+            <div onMouseEnter={handleResourcesEnter} onMouseLeave={handleResourcesLeave} className="relative">
+              <button
+                ref={resourcesTriggerRef}
+                className="flex items-center gap-1 text-sm font-light tracking-wide text-foreground/80 hover:text-foreground transition-colors"
+                onClick={() => setResourcesMenuOpen(!resourcesMenuOpen)}
+              >
+                Resources
+                <ChevronDown size={14} strokeWidth={1.5} className={`transition-transform duration-200 ${resourcesMenuOpen ? "rotate-180" : ""}`} />
+              </button>
+            </div>
+
             <a
               className="flex items-center gap-2 text-sm font-light tracking-wide text-primary hover:text-primary/80 transition-colors"
               href="tel:+447912506738"
@@ -89,11 +111,7 @@ const Navigation = () => {
           </div>
 
           {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="lg:hidden"
-            aria-label="Toggle menu"
-          >
+          <button onClick={() => setIsOpen(!isOpen)} className="lg:hidden" aria-label="Toggle menu">
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
@@ -107,11 +125,7 @@ const Navigation = () => {
               className="flex items-center justify-between w-full text-sm font-light tracking-wide text-foreground/80 px-2 py-2.5"
             >
               Products
-              <ChevronDown
-                size={16}
-                strokeWidth={1.5}
-                className={`transition-transform duration-200 ${mobileProductsOpen ? "rotate-180" : ""}`}
-              />
+              <ChevronDown size={16} strokeWidth={1.5} className={`transition-transform duration-200 ${mobileProductsOpen ? "rotate-180" : ""}`} />
             </button>
             {mobileProductsOpen && (
               <div className="pl-4 space-y-1 pb-2">
@@ -143,10 +157,31 @@ const Navigation = () => {
                 {item.label}
               </NavLink>
             ))}
-            <a
-              href="tel:+447912506738"
-              className="flex items-center gap-2 text-sm font-light text-primary px-2 py-2.5"
+
+            {/* Mobile Resources Accordion */}
+            <button
+              onClick={() => setMobileResourcesOpen(!mobileResourcesOpen)}
+              className="flex items-center justify-between w-full text-sm font-light tracking-wide text-foreground/80 px-2 py-2.5"
             >
+              Resources
+              <ChevronDown size={16} strokeWidth={1.5} className={`transition-transform duration-200 ${mobileResourcesOpen ? "rotate-180" : ""}`} />
+            </button>
+            {mobileResourcesOpen && (
+              <div className="pl-4 space-y-1 pb-2">
+                {mobileResourceLinks.map((item) => (
+                  <Link
+                    key={item.to}
+                    to={item.to}
+                    onClick={() => setIsOpen(false)}
+                    className="block text-sm font-light text-foreground/70 hover:text-foreground py-2 px-2 rounded-sm hover:bg-muted/50 transition-colors"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+            )}
+
+            <a href="tel:+447912506738" className="flex items-center gap-2 text-sm font-light text-primary px-2 py-2.5">
               <Phone size={14} strokeWidth={1} />
               07912 506738
             </a>
@@ -159,12 +194,9 @@ const Navigation = () => {
         )}
       </div>
 
-      {/* Desktop Mega Menu */}
-      <MegaMenu
-        isOpen={megaMenuOpen}
-        onClose={() => setMegaMenuOpen(false)}
-        triggerRef={productsTriggerRef as React.RefObject<HTMLElement>}
-      />
+      {/* Desktop Mega Menus */}
+      <MegaMenu isOpen={megaMenuOpen} onClose={() => setMegaMenuOpen(false)} triggerRef={productsTriggerRef as React.RefObject<HTMLElement>} />
+      <ResourcesMegaMenu isOpen={resourcesMenuOpen} onClose={() => setResourcesMenuOpen(false)} triggerRef={resourcesTriggerRef as React.RefObject<HTMLElement>} />
     </nav>
   );
 };

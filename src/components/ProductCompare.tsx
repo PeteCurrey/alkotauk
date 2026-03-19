@@ -15,7 +15,7 @@ interface CompareModel {
 
 interface ProductCompareProps {
   models: CompareModel[];
-  onRemove: (modelName: string) => void;
+  onRemove: (modelName: string, seriesName: string) => void;
   onClose: () => void;
 }
 
@@ -62,8 +62,9 @@ const ProductCompare = ({ models, onRemove, onClose }: ProductCompareProps) => {
                     <TableHead key={model.name} className="font-light text-xs text-center">
                       <div className="flex flex-col items-center gap-1">
                         <span className="text-sm font-normal text-foreground">{model.name}</span>
+                        <span className="text-[10px] text-muted-foreground">{model.seriesName}</span>
                         <button
-                          onClick={() => onRemove(model.name)}
+                          onClick={() => onRemove(model.name, model.seriesName)}
                           className="text-xs text-muted-foreground hover:text-destructive transition-colors"
                         >
                           Remove

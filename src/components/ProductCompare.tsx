@@ -15,7 +15,7 @@ interface CompareModel {
 
 interface ProductCompareProps {
   models: CompareModel[];
-  onRemove: (modelName: string) => void;
+  onRemove: (modelName: string, seriesName: string) => void;
   onClose: () => void;
 }
 

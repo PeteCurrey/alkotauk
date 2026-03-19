@@ -27,7 +27,7 @@ const App = () =>
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Index />} className="bg-black/0" />
+          <Route path="/" element={<Index />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/products/:slug" element={<ProductDetail />} />

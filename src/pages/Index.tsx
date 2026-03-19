@@ -37,7 +37,7 @@ const Index = () => {
         path="/"
         structuredData={organizationSchema} />
 
-      <Navigation className="bg-zinc-50/[0.28]" />
+      <Navigation />
       <Hero />
       <ProductShowcase />
       <CustomBuild />

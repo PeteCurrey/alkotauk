@@ -409,8 +409,8 @@ const ProductDetail = () => {
       {showCompare && (
         <ProductCompare
           models={compareModels}
-          onRemove={(name) => {
-            const updated = compareModels.filter((m) => m.name !== name);
+          onRemove={(name, seriesName) => {
+            const updated = compareModels.filter((m) => !(m.name === name && m.seriesName === seriesName));
             setCompareModels(updated);
             if (updated.length < 2) setShowCompare(false);
           }}

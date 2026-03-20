@@ -1,4 +1,4 @@
-import { Phone } from "lucide-react";
+import { Mail } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
@@ -15,11 +15,11 @@ const Footer = () => {
               Handcrafted pressure washers since 1964. Made in Alcester, South Dakota.
             </p>
             <a
-
-              className="flex items-center gap-2 text-sm font-light text-primary hover:text-primary/80 transition-colors" href="tel:+447912506738">
-
-              <Phone size={14} strokeWidth={1} />
-              07912 506738
+              className="flex items-center gap-2 text-sm font-light text-primary hover:text-primary/80 transition-colors"
+              href="mailto:sales@alkota.co.uk"
+            >
+              <Mail size={14} strokeWidth={1} />
+              sales@alkota.co.uk
             </a>
           </div>
 

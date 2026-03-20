@@ -58,12 +58,12 @@ const Navigation = () => {
   };
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${scrolled ? "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm" : "bg-transparent"}`}>
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm" : "bg-transparent text-white"}`}>
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <NavLink to="/" className="flex items-center">
-            <span className="text-2xl tracking-tight text-primary font-light">A L K O T A</span>
-            <span className="hidden sm:inline text-xs text-muted-foreground font-light tracking-wider ml-3 border-l border-border pl-3">
+            <span className={`text-2xl tracking-tight font-light ${scrolled ? "text-primary" : "text-white"}`}>A L K O T A</span>
+            <span className={`hidden sm:inline text-xs font-light tracking-wider ml-3 border-l pl-3 ${scrolled ? "text-muted-foreground border-border" : "text-white/70 border-white/30"}`}>
               C L E A N I N G  S Y S T E M S
             </span>
           </NavLink>
@@ -74,7 +74,7 @@ const Navigation = () => {
             <div onMouseEnter={handleProductsEnter} onMouseLeave={handleProductsLeave} className="relative">
               <button
                 ref={productsTriggerRef}
-                className="flex items-center gap-1 text-sm font-light tracking-wide text-foreground/80 hover:text-foreground transition-colors"
+                className={`flex items-center gap-1 text-sm font-light tracking-wide transition-colors ${scrolled ? "text-foreground/80 hover:text-foreground" : "text-white/80 hover:text-white"}`}
                 onClick={() => setMegaMenuOpen(!megaMenuOpen)}
               >
                 Products
@@ -86,7 +86,7 @@ const Navigation = () => {
               <NavLink
                 key={item.label}
                 to={item.to}
-                className="text-sm font-light tracking-wide text-foreground/80 hover:text-foreground transition-colors"
+                className={`text-sm font-light tracking-wide transition-colors ${scrolled ? "text-foreground/80 hover:text-foreground" : "text-white/80 hover:text-white"}`}
               >
                 {item.label}
               </NavLink>
@@ -96,7 +96,7 @@ const Navigation = () => {
             <div onMouseEnter={handleResourcesEnter} onMouseLeave={handleResourcesLeave} className="relative">
               <button
                 ref={resourcesTriggerRef}
-                className="flex items-center gap-1 text-sm font-light tracking-wide text-foreground/80 hover:text-foreground transition-colors"
+                className={`flex items-center gap-1 text-sm font-light tracking-wide transition-colors ${scrolled ? "text-foreground/80 hover:text-foreground" : "text-white/80 hover:text-white"}`}
                 onClick={() => setResourcesMenuOpen(!resourcesMenuOpen)}
               >
                 Resources
@@ -105,21 +105,21 @@ const Navigation = () => {
             </div>
 
             <a
-              className="flex items-center gap-2 text-sm font-light tracking-wide text-primary hover:text-primary/80 transition-colors"
+              className={`flex items-center gap-2 text-sm font-light tracking-wide transition-colors ${scrolled ? "text-primary hover:text-primary/80" : "text-white/80 hover:text-white"}`}
               href="mailto:sales@alkota.co.uk"
             >
               <Mail size={14} strokeWidth={1} />
               sales@alkota.co.uk
             </a>
             <Link to="/contact">
-              <Button variant="outline" size="sm" className="text-sm font-light tracking-wide">
+              <Button variant="outline" size="sm" className={`text-sm font-light tracking-wide ${scrolled ? "" : "border-white/40 text-white hover:bg-white/10 hover:text-white"}`}>
                 Get a Quote
               </Button>
             </Link>
           </div>
 
           {/* Mobile Menu Button */}
-          <button onClick={() => setIsOpen(!isOpen)} className="lg:hidden" aria-label="Toggle menu">
+          <button onClick={() => setIsOpen(!isOpen)} className={`lg:hidden ${scrolled ? "" : "text-white"}`} aria-label="Toggle menu">
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>

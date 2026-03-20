@@ -15,8 +15,16 @@ const Navigation = () => {
   const [mobileResourcesOpen, setMobileResourcesOpen] = useState(false);
   const productsTriggerRef = useRef<HTMLButtonElement>(null);
   const resourcesTriggerRef = useRef<HTMLButtonElement>(null);
+  const [scrolled, setScrolled] = useState(false);
   let megaMenuTimeout: ReturnType<typeof setTimeout>;
   let resourcesMenuTimeout: ReturnType<typeof setTimeout>;
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const navItems = [
     { label: "Industries", to: "/industries" },

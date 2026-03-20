@@ -112,7 +112,7 @@ const Navigation = () => {
               sales@alkota.co.uk
             </a>
             <Link to="/contact">
-              <Button variant="outline" size="sm" className="text-sm font-light tracking-wide">
+              <Button variant="outline" size="sm" className={`text-sm font-light tracking-wide ${scrolled ? "" : "border-white/40 text-white hover:bg-white/10 hover:text-white"}`}>
                 Get a Quote
               </Button>
             </Link>

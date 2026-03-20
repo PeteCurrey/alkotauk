@@ -7,8 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { productCategories, ProductModel } from "@/data/products";
-import { ArrowLeft, Scale } from "lucide-react";
-import { useState, useCallback } from "react";
+import { ArrowLeft, Scale, Search, X } from "lucide-react";
+import { useState, useCallback, useMemo } from "react";
+import { Input } from "@/components/ui/input";
 
 interface CompareEntry {
   name: string;
@@ -28,6 +29,29 @@ const ProductDetail = () => {
   const [selectedSeries, setSelectedSeries] = useState(0);
   const [compareModels, setCompareModels] = useState<CompareEntry[]>([]);
   const [showCompare, setShowCompare] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredSeries = useMemo(() => {
+    if (!product) return [];
+    const q = searchQuery.toLowerCase().trim();
+    if (!q) return product.series;
+    return product.series
+      .map((series) => {
+        if (!series.models || series.models.length === 0) return null;
+        const filtered = series.models.filter(
+          (m) =>
+            m.name.toLowerCase().includes(q) ||
+            m.gpm.toLowerCase().includes(q) ||
+            m.psi.toLowerCase().includes(q) ||
+            m.powerSource.toLowerCase().includes(q) ||
+            (m.heatingFuel && m.heatingFuel.toLowerCase().includes(q)) ||
+            m.configuration.toLowerCase().includes(q)
+        );
+        if (filtered.length === 0) return null;
+        return { ...series, models: filtered };
+      })
+      .filter(Boolean) as typeof product.series;
+  }, [product, searchQuery]);
 
   const toggleCompare = useCallback(
     (model: ProductModel, seriesName: string) => {
@@ -224,12 +248,37 @@ const ProductDetail = () => {
             <h2 className="text-3xl font-light tracking-tight mb-4 text-center">
               All {product.title} Models
             </h2>
-            <p className="text-sm text-muted-foreground font-light text-center mb-10">
+            <p className="text-sm text-muted-foreground font-light text-center mb-8">
               Select up to 3 models from any series to compare side by side.
             </p>
 
+            {/* Search Bar */}
+            <div className="max-w-md mx-auto mb-10 relative">
+              <Search size={16} strokeWidth={1.5} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                placeholder="Search by model name, GPM, PSI, power source…"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 pr-10 h-10 font-light text-sm border-border"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <X size={14} strokeWidth={1.5} />
+                </button>
+              )}
+            </div>
+
+            {filteredSeries.length === 0 && (
+              <p className="text-sm text-muted-foreground font-light text-center py-8">
+                No models match "{searchQuery}"
+              </p>
+            )}
+
             <div className="space-y-12 max-w-5xl mx-auto">
-              {product.series.map((series) => {
+              {filteredSeries.map((series) => {
                 if (!series.models || series.models.length === 0) return null;
                 const hasHeatingFuel = series.models.some((m) => m.heatingFuel);
                 return (

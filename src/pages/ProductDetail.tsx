@@ -29,6 +29,29 @@ const ProductDetail = () => {
   const [selectedSeries, setSelectedSeries] = useState(0);
   const [compareModels, setCompareModels] = useState<CompareEntry[]>([]);
   const [showCompare, setShowCompare] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredSeries = useMemo(() => {
+    if (!product) return [];
+    const q = searchQuery.toLowerCase().trim();
+    if (!q) return product.series;
+    return product.series
+      .map((series) => {
+        if (!series.models || series.models.length === 0) return null;
+        const filtered = series.models.filter(
+          (m) =>
+            m.name.toLowerCase().includes(q) ||
+            m.gpm.toLowerCase().includes(q) ||
+            m.psi.toLowerCase().includes(q) ||
+            m.powerSource.toLowerCase().includes(q) ||
+            (m.heatingFuel && m.heatingFuel.toLowerCase().includes(q)) ||
+            m.configuration.toLowerCase().includes(q)
+        );
+        if (filtered.length === 0) return null;
+        return { ...series, models: filtered };
+      })
+      .filter(Boolean) as typeof product.series;
+  }, [product, searchQuery]);
 
   const toggleCompare = useCallback(
     (model: ProductModel, seriesName: string) => {

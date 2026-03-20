@@ -7,8 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { productCategories, ProductModel } from "@/data/products";
-import { ArrowLeft, Scale } from "lucide-react";
-import { useState, useCallback } from "react";
+import { ArrowLeft, Scale, Search, X } from "lucide-react";
+import { useState, useCallback, useMemo } from "react";
+import { Input } from "@/components/ui/input";
 
 interface CompareEntry {
   name: string;

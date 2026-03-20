@@ -106,10 +106,10 @@ const Navigation = () => {
 
             <a
               className="flex items-center gap-2 text-sm font-light tracking-wide text-primary hover:text-primary/80 transition-colors"
-              href="tel:+447912506738"
+              href="mailto:sales@alkota.co.uk"
             >
-              <Phone size={14} strokeWidth={1} />
-              07912 506738
+              <Mail size={14} strokeWidth={1} />
+              sales@alkota.co.uk
             </a>
             <Link to="/contact">
               <Button variant="outline" size="sm" className="text-sm font-light tracking-wide">

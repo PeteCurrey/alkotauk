@@ -189,9 +189,9 @@ const Navigation = () => {
               </div>
             )}
 
-            <a href="tel:+447912506738" className="flex items-center gap-2 text-sm font-light text-primary px-2 py-2.5">
-              <Phone size={14} strokeWidth={1} />
-              07912 506738
+            <a href="mailto:sales@alkota.co.uk" className="flex items-center gap-2 text-sm font-light text-primary px-2 py-2.5">
+              <Mail size={14} strokeWidth={1} />
+              sales@alkota.co.uk
             </a>
             <Link to="/contact" onClick={() => setIsOpen(false)}>
               <Button variant="outline" size="sm" className="text-sm font-light tracking-wide w-full mt-2">

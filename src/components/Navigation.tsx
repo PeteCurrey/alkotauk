@@ -86,7 +86,7 @@ const Navigation = () => {
               <NavLink
                 key={item.label}
                 to={item.to}
-                className="text-sm font-light tracking-wide text-foreground/80 hover:text-foreground transition-colors"
+                className={`text-sm font-light tracking-wide transition-colors ${scrolled ? "text-foreground/80 hover:text-foreground" : "text-white/80 hover:text-white"}`}
               >
                 {item.label}
               </NavLink>

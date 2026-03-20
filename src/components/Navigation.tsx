@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Menu, X, Phone, ChevronDown, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { NavLink } from "@/components/NavLink";
@@ -15,8 +15,16 @@ const Navigation = () => {
   const [mobileResourcesOpen, setMobileResourcesOpen] = useState(false);
   const productsTriggerRef = useRef<HTMLButtonElement>(null);
   const resourcesTriggerRef = useRef<HTMLButtonElement>(null);
+  const [scrolled, setScrolled] = useState(false);
   let megaMenuTimeout: ReturnType<typeof setTimeout>;
   let resourcesMenuTimeout: ReturnType<typeof setTimeout>;
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const navItems = [
     { label: "Industries", to: "/industries" },
@@ -50,7 +58,7 @@ const Navigation = () => {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${scrolled ? "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm" : "bg-transparent"}`}>
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <NavLink to="/" className="flex items-center">

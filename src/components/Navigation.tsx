@@ -104,13 +104,12 @@ const Navigation = () => {
               </button>
             </div>
 
-            <a
-              className={`flex items-center gap-2 text-sm font-light tracking-wide transition-colors ${scrolled ? "text-primary hover:text-primary/80" : "text-white/80 hover:text-white"}`}
-              href="mailto:sales@alkota.co.uk"
+            <NavLink
+              to="/contact"
+              className={`text-sm font-light tracking-wide transition-colors ${scrolled ? "text-foreground/80 hover:text-foreground" : "text-white/80 hover:text-white"}`}
             >
-              <Mail size={14} strokeWidth={1} />
-              sales@alkota.co.uk
-            </a>
+              Contact Us
+            </NavLink>
           </div>
 
           {/* Mobile Menu Button */}

@@ -24,7 +24,6 @@ const Navigation = () => {
 
   // On non-home pages, always use the "scrolled" (solid) style
   const useLight = scrolled || !isHome;
-  const resourcesMenuTimeout = useRef<ReturnType<typeof setTimeout>>();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);

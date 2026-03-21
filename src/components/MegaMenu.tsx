@@ -37,10 +37,12 @@ const categoryIcons: Record<string, React.ReactNode> = {
 interface MegaMenuProps {
   isOpen: boolean;
   onClose: () => void;
+  onMouseEnter: () => void;
+  onMouseLeave: () => void;
   triggerRef: React.RefObject<HTMLElement>;
 }
 
-const MegaMenu = ({ isOpen, onClose, triggerRef }: MegaMenuProps) => {
+const MegaMenu = ({ isOpen, onClose, onMouseEnter, onMouseLeave, triggerRef }: MegaMenuProps) => {
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -77,7 +79,8 @@ const MegaMenu = ({ isOpen, onClose, triggerRef }: MegaMenuProps) => {
     <div
       ref={menuRef}
       className="absolute top-full left-0 right-0 bg-background border-b border-border shadow-xl z-50"
-      onMouseLeave={onClose}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
     >
       <div className="container mx-auto px-6 py-8">
         <div className="grid grid-cols-12 gap-8">

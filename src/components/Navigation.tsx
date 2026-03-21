@@ -16,8 +16,8 @@ const Navigation = () => {
   const productsTriggerRef = useRef<HTMLButtonElement>(null);
   const resourcesTriggerRef = useRef<HTMLButtonElement>(null);
   const [scrolled, setScrolled] = useState(false);
-  let megaMenuTimeout: ReturnType<typeof setTimeout>;
-  let resourcesMenuTimeout: ReturnType<typeof setTimeout>;
+  const megaMenuTimeout = useRef<ReturnType<typeof setTimeout>>();
+  const resourcesMenuTimeout = useRef<ReturnType<typeof setTimeout>>();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -40,21 +40,21 @@ const Navigation = () => {
   ];
 
   const handleProductsEnter = () => {
-    clearTimeout(megaMenuTimeout);
+    clearTimeout(megaMenuTimeout.current);
     setResourcesMenuOpen(false);
     setMegaMenuOpen(true);
   };
   const handleProductsLeave = () => {
-    megaMenuTimeout = setTimeout(() => setMegaMenuOpen(false), 150);
+    megaMenuTimeout.current = setTimeout(() => setMegaMenuOpen(false), 200);
   };
 
   const handleResourcesEnter = () => {
-    clearTimeout(resourcesMenuTimeout);
+    clearTimeout(resourcesMenuTimeout.current);
     setMegaMenuOpen(false);
     setResourcesMenuOpen(true);
   };
   const handleResourcesLeave = () => {
-    resourcesMenuTimeout = setTimeout(() => setResourcesMenuOpen(false), 150);
+    resourcesMenuTimeout.current = setTimeout(() => setResourcesMenuOpen(false), 200);
   };
 
   return (
@@ -195,8 +195,8 @@ const Navigation = () => {
       </div>
 
       {/* Desktop Mega Menus */}
-      <MegaMenu isOpen={megaMenuOpen} onClose={() => setMegaMenuOpen(false)} triggerRef={productsTriggerRef as React.RefObject<HTMLElement>} />
-      <ResourcesMegaMenu isOpen={resourcesMenuOpen} onClose={() => setResourcesMenuOpen(false)} triggerRef={resourcesTriggerRef as React.RefObject<HTMLElement>} />
+      <MegaMenu isOpen={megaMenuOpen} onClose={() => setMegaMenuOpen(false)} onMouseEnter={handleProductsEnter} onMouseLeave={handleProductsLeave} triggerRef={productsTriggerRef as React.RefObject<HTMLElement>} />
+      <ResourcesMegaMenu isOpen={resourcesMenuOpen} onClose={() => setResourcesMenuOpen(false)} onMouseEnter={handleResourcesEnter} onMouseLeave={handleResourcesLeave} triggerRef={resourcesTriggerRef as React.RefObject<HTMLElement>} />
     </nav>
   );
 };

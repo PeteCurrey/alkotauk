@@ -9,6 +9,8 @@ import ResourcesMegaMenu from "@/components/ResourcesMegaMenu";
 import { productCategories } from "@/data/products";
 
 const Navigation = () => {
+  const location = useLocation();
+  const isHome = location.pathname === "/";
   const [isOpen, setIsOpen] = useState(false);
   const [megaMenuOpen, setMegaMenuOpen] = useState(false);
   const [resourcesMenuOpen, setResourcesMenuOpen] = useState(false);
@@ -18,6 +20,10 @@ const Navigation = () => {
   const resourcesTriggerRef = useRef<HTMLButtonElement>(null);
   const [scrolled, setScrolled] = useState(false);
   const megaMenuTimeout = useRef<ReturnType<typeof setTimeout>>();
+  const resourcesMenuTimeout = useRef<ReturnType<typeof setTimeout>>();
+
+  // On non-home pages, always use the "scrolled" (solid) style
+  const useLight = scrolled || !isHome;
   const resourcesMenuTimeout = useRef<ReturnType<typeof setTimeout>>();
 
   useEffect(() => {

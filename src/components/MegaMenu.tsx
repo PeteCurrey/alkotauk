@@ -42,7 +42,7 @@ interface MegaMenuProps {
   triggerRef: React.RefObject<HTMLElement>;
 }
 
-const MegaMenu = ({ isOpen, onClose, triggerRef }: MegaMenuProps) => {
+const MegaMenu = ({ isOpen, onClose, onMouseEnter, onMouseLeave, triggerRef }: MegaMenuProps) => {
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
 

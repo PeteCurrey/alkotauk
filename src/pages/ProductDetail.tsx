@@ -95,7 +95,7 @@ const ProductDetail = () => {
     );
   }
 
-  const activeSeries = product.series[selectedSeries];
+  const activeSeries = product.series[selectedSeries] ?? product.series[0];
 
   return (
     <div className="min-h-screen">

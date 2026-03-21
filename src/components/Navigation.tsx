@@ -119,7 +119,7 @@ const Navigation = () => {
           </div>
 
           {/* Mobile Menu Button */}
-          <button onClick={() => setIsOpen(!isOpen)} className={`lg:hidden ${scrolled ? "" : "text-white"}`} aria-label="Toggle menu">
+          <button onClick={() => setIsOpen(!isOpen)} className={`lg:hidden ${useLight ? "" : "text-white"}`} aria-label="Toggle menu">
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>

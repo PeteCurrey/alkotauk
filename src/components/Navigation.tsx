@@ -40,21 +40,21 @@ const Navigation = () => {
   ];
 
   const handleProductsEnter = () => {
-    clearTimeout(megaMenuTimeout);
+    clearTimeout(megaMenuTimeout.current);
     setResourcesMenuOpen(false);
     setMegaMenuOpen(true);
   };
   const handleProductsLeave = () => {
-    megaMenuTimeout = setTimeout(() => setMegaMenuOpen(false), 150);
+    megaMenuTimeout.current = setTimeout(() => setMegaMenuOpen(false), 200);
   };
 
   const handleResourcesEnter = () => {
-    clearTimeout(resourcesMenuTimeout);
+    clearTimeout(resourcesMenuTimeout.current);
     setMegaMenuOpen(false);
     setResourcesMenuOpen(true);
   };
   const handleResourcesLeave = () => {
-    resourcesMenuTimeout = setTimeout(() => setResourcesMenuOpen(false), 150);
+    resourcesMenuTimeout.current = setTimeout(() => setResourcesMenuOpen(false), 200);
   };
 
   return (

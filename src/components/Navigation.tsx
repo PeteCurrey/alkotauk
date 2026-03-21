@@ -80,7 +80,7 @@ const Navigation = () => {
             <div onMouseEnter={handleProductsEnter} onMouseLeave={handleProductsLeave} className="relative">
               <button
                 ref={productsTriggerRef}
-                className={`flex items-center gap-1 text-sm font-light tracking-wide transition-colors ${scrolled ? "text-foreground/80 hover:text-foreground" : "text-white/80 hover:text-white"}`}
+                className={`flex items-center gap-1 text-sm font-light tracking-wide transition-colors ${useLight ? "text-foreground/80 hover:text-foreground" : "text-white/80 hover:text-white"}`}
                 onClick={() => setMegaMenuOpen(!megaMenuOpen)}
               >
                 Products

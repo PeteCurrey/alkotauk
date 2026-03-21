@@ -37,6 +37,8 @@ const categoryIcons: Record<string, React.ReactNode> = {
 interface MegaMenuProps {
   isOpen: boolean;
   onClose: () => void;
+  onMouseEnter: () => void;
+  onMouseLeave: () => void;
   triggerRef: React.RefObject<HTMLElement>;
 }
 

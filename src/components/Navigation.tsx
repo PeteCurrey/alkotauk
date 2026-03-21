@@ -68,8 +68,8 @@ const Navigation = () => {
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <NavLink to="/" className="flex items-center">
-            <span className={`text-2xl tracking-tight font-light ${scrolled ? "text-primary" : "text-white"}`}>A L K O T A</span>
-            <span className={`hidden sm:inline text-xs font-light tracking-wider ml-3 border-l pl-3 ${scrolled ? "text-muted-foreground border-border" : "text-white/70 border-white/30"}`}>
+            <span className={`text-2xl tracking-tight font-light ${useLight ? "text-primary" : "text-white"}`}>A L K O T A</span>
+            <span className={`hidden sm:inline text-xs font-light tracking-wider ml-3 border-l pl-3 ${useLight ? "text-muted-foreground border-border" : "text-white/70 border-white/30"}`}>
               C L E A N I N G  S Y S T E M S
             </span>
           </NavLink>

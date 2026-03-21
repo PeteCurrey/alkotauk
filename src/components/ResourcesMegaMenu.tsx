@@ -38,6 +38,8 @@ const resourceLinks = [
 interface ResourcesMegaMenuProps {
   isOpen: boolean;
   onClose: () => void;
+  onMouseEnter: () => void;
+  onMouseLeave: () => void;
   triggerRef: React.RefObject<HTMLElement>;
 }
 

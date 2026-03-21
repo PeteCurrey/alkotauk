@@ -69,7 +69,8 @@ const ResourcesMegaMenu = ({ isOpen, onClose, onMouseEnter, onMouseLeave, trigge
     <div
       ref={menuRef}
       className="absolute top-full left-0 right-0 bg-background border-b border-border shadow-xl z-50"
-      onMouseLeave={onClose}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
     >
       <div className="container mx-auto px-6 py-8">
         <div className="grid grid-cols-12 gap-8">

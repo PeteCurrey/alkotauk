@@ -195,8 +195,8 @@ const Navigation = () => {
       </div>
 
       {/* Desktop Mega Menus */}
-      <MegaMenu isOpen={megaMenuOpen} onClose={() => setMegaMenuOpen(false)} triggerRef={productsTriggerRef as React.RefObject<HTMLElement>} />
-      <ResourcesMegaMenu isOpen={resourcesMenuOpen} onClose={() => setResourcesMenuOpen(false)} triggerRef={resourcesTriggerRef as React.RefObject<HTMLElement>} />
+      <MegaMenu isOpen={megaMenuOpen} onClose={() => setMegaMenuOpen(false)} onMouseEnter={handleProductsEnter} onMouseLeave={handleProductsLeave} triggerRef={productsTriggerRef as React.RefObject<HTMLElement>} />
+      <ResourcesMegaMenu isOpen={resourcesMenuOpen} onClose={() => setResourcesMenuOpen(false)} onMouseEnter={handleResourcesEnter} onMouseLeave={handleResourcesLeave} triggerRef={resourcesTriggerRef as React.RefObject<HTMLElement>} />
     </nav>
   );
 };

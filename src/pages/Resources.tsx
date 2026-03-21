@@ -98,7 +98,7 @@ const supportResources = [
     icon: HelpCircle,
     title: "Technical Support",
     description:
-      "Our team of experienced engineers and technicians is ready to help troubleshoot any issues. Call 1-800-255-6823 for support.",
+      "Our team of experienced engineers and technicians is ready to help troubleshoot any issues. Email sales@alkota.co.uk for support.",
   },
   {
     icon: FileText,

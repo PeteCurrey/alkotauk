@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Phone, Mail, MapPin } from "lucide-react";
+import { Mail, MapPin } from "lucide-react";
 
 const contactSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100),
@@ -92,7 +92,7 @@ const Contact = () => {
     } catch {
       toast({
         title: "Submission Failed",
-        description: "Please try again or call us at 1-800-255-6823.",
+        description: "Please try again or email us at sales@alkota.co.uk.",
         variant: "destructive",
       });
     } finally {
@@ -104,13 +104,12 @@ const Contact = () => {
     <div className="min-h-screen">
       <PageSEO
         title="Contact Us"
-        description="Get a quote on Alkota pressure washers or connect with your local distributor. Call 1-800-255-6823 or fill out our contact form."
+        description="Get a quote on Alkota pressure washers or email us at sales@alkota.co.uk. Fill out our contact form for a fast response."
         path="/contact"
         structuredData={{
           "@context": "https://schema.org",
           "@type": "ContactPage",
           name: "Contact Alkota Cleaning Systems",
-          telephone: "+1-800-255-6823",
         }}
       />
       <Navigation />
@@ -145,22 +144,6 @@ const Contact = () => {
                 </h2>
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
-                    <Phone
-                      size={18}
-                      strokeWidth={1}
-                      className="text-primary mt-1"
-                    />
-                    <div>
-                      <p className="text-sm font-light mb-1">Call Us</p>
-                      <a
-                        href="tel:1-800-255-6823"
-                        className="text-sm text-primary font-light"
-                      >
-                        1-800-255-6823
-                      </a>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-4">
                     <Mail
                       size={18}
                       strokeWidth={1}
@@ -168,9 +151,12 @@ const Contact = () => {
                     />
                     <div>
                       <p className="text-sm font-light mb-1">Email</p>
-                      <p className="text-sm text-muted-foreground font-light">
-                        Contact your local distributor
-                      </p>
+                      <a
+                        href="mailto:sales@alkota.co.uk"
+                        className="text-sm text-primary font-light"
+                      >
+                        sales@alkota.co.uk
+                      </a>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
@@ -180,11 +166,13 @@ const Contact = () => {
                       className="text-primary mt-1"
                     />
                     <div>
-                      <p className="text-sm font-light mb-1">Headquarters</p>
+                      <p className="text-sm font-light mb-1">UK Office</p>
                       <p className="text-sm text-muted-foreground font-light">
-                        Alcester, South Dakota
+                        Unit 2 Old Brick Works Lane
                         <br />
-                        United States
+                        Chesterfield S41 7JD
+                        <br />
+                        United Kingdom
                       </p>
                     </div>
                   </div>
@@ -259,7 +247,7 @@ const Contact = () => {
                       id="phone"
                       type="tel"
                       {...register("phone")}
-                      placeholder="(555) 123-4567"
+                      placeholder="+44 1234 567890"
                       className="font-light"
                     />
                   </div>

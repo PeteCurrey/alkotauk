@@ -113,7 +113,7 @@ const Distributors = () => {
     } catch {
       toast({
         title: "Submission Failed",
-        description: "Please try again or call us at 1-800-255-6823.",
+        description: "Please try again or email us at sales@alkota.co.uk.",
         variant: "destructive",
       });
     } finally {

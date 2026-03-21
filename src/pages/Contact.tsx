@@ -104,13 +104,12 @@ const Contact = () => {
     <div className="min-h-screen">
       <PageSEO
         title="Contact Us"
-        description="Get a quote on Alkota pressure washers or connect with your local distributor. Call 1-800-255-6823 or fill out our contact form."
+        description="Get a quote on Alkota pressure washers or email us at sales@alkota.co.uk. Fill out our contact form for a fast response."
         path="/contact"
         structuredData={{
           "@context": "https://schema.org",
           "@type": "ContactPage",
           name: "Contact Alkota Cleaning Systems",
-          telephone: "+1-800-255-6823",
         }}
       />
       <Navigation />

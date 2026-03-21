@@ -102,7 +102,7 @@ const Navigation = () => {
             <div onMouseEnter={handleResourcesEnter} onMouseLeave={handleResourcesLeave} className="relative">
               <button
                 ref={resourcesTriggerRef}
-                className={`flex items-center gap-1 text-sm font-light tracking-wide transition-colors ${scrolled ? "text-foreground/80 hover:text-foreground" : "text-white/80 hover:text-white"}`}
+                className={`flex items-center gap-1 text-sm font-light tracking-wide transition-colors ${useLight ? "text-foreground/80 hover:text-foreground" : "text-white/80 hover:text-white"}`}
                 onClick={() => setResourcesMenuOpen(!resourcesMenuOpen)}
               >
                 Resources

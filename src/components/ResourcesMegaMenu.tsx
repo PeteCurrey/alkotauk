@@ -43,7 +43,7 @@ interface ResourcesMegaMenuProps {
   triggerRef: React.RefObject<HTMLElement>;
 }
 
-const ResourcesMegaMenu = ({ isOpen, onClose, triggerRef }: ResourcesMegaMenuProps) => {
+const ResourcesMegaMenu = ({ isOpen, onClose, onMouseEnter, onMouseLeave, triggerRef }: ResourcesMegaMenuProps) => {
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

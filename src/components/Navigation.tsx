@@ -16,8 +16,8 @@ const Navigation = () => {
   const productsTriggerRef = useRef<HTMLButtonElement>(null);
   const resourcesTriggerRef = useRef<HTMLButtonElement>(null);
   const [scrolled, setScrolled] = useState(false);
-  let megaMenuTimeout: ReturnType<typeof setTimeout>;
-  let resourcesMenuTimeout: ReturnType<typeof setTimeout>;
+  const megaMenuTimeout = useRef<ReturnType<typeof setTimeout>>();
+  const resourcesMenuTimeout = useRef<ReturnType<typeof setTimeout>>();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);

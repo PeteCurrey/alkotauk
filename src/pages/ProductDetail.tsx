@@ -31,6 +31,11 @@ const ProductDetail = () => {
   const [showCompare, setShowCompare] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
+  // Reset selectedSeries when product changes
+  const seriesCount = product?.series?.length ?? 0;
+  if (selectedSeries >= seriesCount && seriesCount > 0) {
+    setSelectedSeries(0);
+  }
   const filteredSeries = useMemo(() => {
     if (!product) return [];
     const q = searchQuery.toLowerCase().trim();

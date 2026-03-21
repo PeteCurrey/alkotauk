@@ -144,22 +144,6 @@ const Contact = () => {
                 </h2>
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
-                    <Phone
-                      size={18}
-                      strokeWidth={1}
-                      className="text-primary mt-1"
-                    />
-                    <div>
-                      <p className="text-sm font-light mb-1">Call Us</p>
-                      <a
-                        href="tel:1-800-255-6823"
-                        className="text-sm text-primary font-light"
-                      >
-                        1-800-255-6823
-                      </a>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-4">
                     <Mail
                       size={18}
                       strokeWidth={1}
@@ -167,9 +151,12 @@ const Contact = () => {
                     />
                     <div>
                       <p className="text-sm font-light mb-1">Email</p>
-                      <p className="text-sm text-muted-foreground font-light">
-                        Contact your local distributor
-                      </p>
+                      <a
+                        href="mailto:sales@alkota.co.uk"
+                        className="text-sm text-primary font-light"
+                      >
+                        sales@alkota.co.uk
+                      </a>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
@@ -179,11 +166,13 @@ const Contact = () => {
                       className="text-primary mt-1"
                     />
                     <div>
-                      <p className="text-sm font-light mb-1">Headquarters</p>
+                      <p className="text-sm font-light mb-1">UK Office</p>
                       <p className="text-sm text-muted-foreground font-light">
-                        Alcester, South Dakota
+                        Unit 2 Old Brick Works Lane
                         <br />
-                        United States
+                        Chesterfield S41 7JD
+                        <br />
+                        United Kingdom
                       </p>
                     </div>
                   </div>

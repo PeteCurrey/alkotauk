@@ -16,13 +16,13 @@ const organizationSchema = {
   foundingDate: "1964",
   address: {
     "@type": "PostalAddress",
-    addressLocality: "Alcester",
-    addressRegion: "SD",
-    addressCountry: "US"
+    addressLocality: "Chesterfield",
+    addressRegion: "Derbyshire",
+    addressCountry: "GB"
   },
   contactPoint: {
     "@type": "ContactPoint",
-    telephone: "+1-800-255-6823",
+    email: "sales@alkota.co.uk",
     contactType: "sales"
   },
   sameAs: []

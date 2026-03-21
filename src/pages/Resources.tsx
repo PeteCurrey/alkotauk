@@ -215,7 +215,7 @@ const Resources = () => {
           <p className="text-muted-foreground font-light max-w-2xl mx-auto mb-8">
             Our team is here to help. Whether you need technical support, want
             to explore financing options, or are ready to get a quote — we're
-            just a call away.
+            just an email away.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link to="/contact">
@@ -223,9 +223,9 @@ const Resources = () => {
                 Contact Us
               </Button>
             </Link>
-            <a href="tel:1-800-255-6823">
+            <a href="mailto:sales@alkota.co.uk">
               <Button variant="outline" size="sm" className="font-light tracking-wide">
-                Call 1-800-255-6823
+                Email sales@alkota.co.uk
               </Button>
             </a>
           </div>

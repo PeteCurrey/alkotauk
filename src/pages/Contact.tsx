@@ -247,7 +247,7 @@ const Contact = () => {
                       id="phone"
                       type="tel"
                       {...register("phone")}
-                      placeholder="(555) 123-4567"
+                      placeholder="+44 1234 567890"
                       className="font-light"
                     />
                   </div>

@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Menu, X, Mail, ChevronDown, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { NavLink } from "@/components/NavLink";
@@ -8,6 +9,8 @@ import ResourcesMegaMenu from "@/components/ResourcesMegaMenu";
 import { productCategories } from "@/data/products";
 
 const Navigation = () => {
+  const location = useLocation();
+  const isHome = location.pathname === "/";
   const [isOpen, setIsOpen] = useState(false);
   const [megaMenuOpen, setMegaMenuOpen] = useState(false);
   const [resourcesMenuOpen, setResourcesMenuOpen] = useState(false);
@@ -18,6 +21,9 @@ const Navigation = () => {
   const [scrolled, setScrolled] = useState(false);
   const megaMenuTimeout = useRef<ReturnType<typeof setTimeout>>();
   const resourcesMenuTimeout = useRef<ReturnType<typeof setTimeout>>();
+
+  // On non-home pages, always use the "scrolled" (solid) style
+  const useLight = scrolled || !isHome;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -58,12 +64,12 @@ const Navigation = () => {
   };
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm" : "bg-transparent text-white"}`}>
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${useLight ? "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm" : "bg-transparent text-white"}`}>
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <NavLink to="/" className="flex items-center">
-            <span className={`text-2xl tracking-tight font-light ${scrolled ? "text-primary" : "text-white"}`}>A L K O T A</span>
-            <span className={`hidden sm:inline text-xs font-light tracking-wider ml-3 border-l pl-3 ${scrolled ? "text-muted-foreground border-border" : "text-white/70 border-white/30"}`}>
+            <span className={`text-2xl tracking-tight font-light ${useLight ? "text-primary" : "text-white"}`}>A L K O T A</span>
+            <span className={`hidden sm:inline text-xs font-light tracking-wider ml-3 border-l pl-3 ${useLight ? "text-muted-foreground border-border" : "text-white/70 border-white/30"}`}>
               C L E A N I N G  S Y S T E M S
             </span>
           </NavLink>
@@ -74,7 +80,7 @@ const Navigation = () => {
             <div onMouseEnter={handleProductsEnter} onMouseLeave={handleProductsLeave} className="relative">
               <button
                 ref={productsTriggerRef}
-                className={`flex items-center gap-1 text-sm font-light tracking-wide transition-colors ${scrolled ? "text-foreground/80 hover:text-foreground" : "text-white/80 hover:text-white"}`}
+                className={`flex items-center gap-1 text-sm font-light tracking-wide transition-colors ${useLight ? "text-foreground/80 hover:text-foreground" : "text-white/80 hover:text-white"}`}
                 onClick={() => setMegaMenuOpen(!megaMenuOpen)}
               >
                 Products
@@ -86,7 +92,7 @@ const Navigation = () => {
               <NavLink
                 key={item.label}
                 to={item.to}
-                className={`text-sm font-light tracking-wide transition-colors ${scrolled ? "text-foreground/80 hover:text-foreground" : "text-white/80 hover:text-white"}`}
+                className={`text-sm font-light tracking-wide transition-colors ${useLight ? "text-foreground/80 hover:text-foreground" : "text-white/80 hover:text-white"}`}
               >
                 {item.label}
               </NavLink>
@@ -96,7 +102,7 @@ const Navigation = () => {
             <div onMouseEnter={handleResourcesEnter} onMouseLeave={handleResourcesLeave} className="relative">
               <button
                 ref={resourcesTriggerRef}
-                className={`flex items-center gap-1 text-sm font-light tracking-wide transition-colors ${scrolled ? "text-foreground/80 hover:text-foreground" : "text-white/80 hover:text-white"}`}
+                className={`flex items-center gap-1 text-sm font-light tracking-wide transition-colors ${useLight ? "text-foreground/80 hover:text-foreground" : "text-white/80 hover:text-white"}`}
                 onClick={() => setResourcesMenuOpen(!resourcesMenuOpen)}
               >
                 Resources
@@ -106,14 +112,14 @@ const Navigation = () => {
 
             <NavLink
               to="/contact"
-              className={`text-sm font-light tracking-wide transition-colors ${scrolled ? "text-foreground/80 hover:text-foreground" : "text-white/80 hover:text-white"}`}
+              className={`text-sm font-light tracking-wide transition-colors ${useLight ? "text-foreground/80 hover:text-foreground" : "text-white/80 hover:text-white"}`}
             >
               Contact Us
             </NavLink>
           </div>
 
           {/* Mobile Menu Button */}
-          <button onClick={() => setIsOpen(!isOpen)} className={`lg:hidden ${scrolled ? "" : "text-white"}`} aria-label="Toggle menu">
+          <button onClick={() => setIsOpen(!isOpen)} className={`lg:hidden ${useLight ? "" : "text-white"}`} aria-label="Toggle menu">
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>

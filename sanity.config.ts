@@ -8,8 +8,8 @@ export default defineConfig({
   name: 'default',
   title: 'Alkota UK',
 
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'your-project-id',
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+  projectId: 'pa54q49w',
+  dataset: 'production',
 
   basePath: '/studio',
 

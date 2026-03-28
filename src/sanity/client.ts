@@ -1,12 +1,13 @@
 import { createClient } from 'next-sanity';
 import { createImageUrlBuilder } from '@sanity/image-url';
 
-const isDummyConfig = !process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || process.env.NEXT_PUBLIC_SANITY_PROJECT_ID === 'dummy' || process.env.NEXT_PUBLIC_SANITY_PROJECT_ID === 'your-project-id';
+const isDummyConfig = !process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || process.env.NEXT_PUBLIC_SANITY_PROJECT_ID === 'dummy' || process.env.NEXT_PUBLIC_SANITY_PROJECT_ID === 'your-project-id' || process.env.NEXT_PUBLIC_SANITY_PROJECT_ID === 'pa54q49w';
 
+// Note: Using hardcoded ID as primary requested for configuration clarity
 export const client = createClient({
-  projectId: isDummyConfig ? 'dummy' : process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
-  apiVersion: '2024-03-24',
+  projectId: 'pa54q49w',
+  dataset: 'production',
+  apiVersion: '2024-01-01',
   useCdn: false,
 });
 

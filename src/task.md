@@ -1,0 +1,49 @@
+- [x] Phase 1: Foundation & Setup
+    - [x] Next.js 15 & Tailwind configuration
+    - [x] GSAP/Framer Motion setup
+    - [x] Sanity Studio basic integration
+- [x] Phase 2: Core UI & Machine Data
+    - [x] Homepage Cinematic Hero
+    - [x] Machine Catalogue with Sanity linking
+    - [x] "Mess Quest" logic and recommendation UI
+    - [x] Industry overview and specialized filtering
+- [x] Phase 3: Integration & SEO
+    - [x] HubSpot lead capture in Machine Detail pages
+    - [x] Stripe machine deposit flow (Server Action + Integration)
+    - [x] Breadcrumbs with Schema.org markup across all routes
+    - [x] Sanity Site Settings for API keys (Stripe, HubSpot, Snipcart)
+    - [x] Missing fleet listing (`/machines`) and category pages
+    - [x] Created Checkout Success confirmation page
+    - [x] Sanity Setup Guide for user keys
+- [x] Phase 4: Final Polish & Launch
+    - [x] Refined "Mess Quest" for industrial accuracy
+    - [x] Mobile navigation and UI refinement
+    - [x] GSAP scroll animations optimization
+    - [x] Final content review and placeholder replacement
+    - [x] Performance audit & resolved Next.js build errors
+
+- [x] Phase 5: Information Architecture & Content Hubs
+    - [x] Create missing Sanity schemas (application, blogPost, caseStudy, etc.)
+    - [x] Build `/applications` routes
+    - [x] Build `/about` routes
+    - [x] Build `/support` routes
+    - [x] Build `/resources` routes and blog templates
+    - [x] Implement advanced JSON-LD (FAQPage, Article)
+
+- [/] Phase 6: The "Native Stripe" Shop & Configurator
+    - [x] Deprecate Snipcart footprint (CartContext + native CartDrawer)
+    - [x] Build native Next.js shopping cart UI (/cart page + CartDrawer)
+    - [x] Integrate Stripe Checkout for parts/shop (createCartCheckoutSession)
+    - [x] Build `/configurator` wizard with 5-step recommendation engine
+    - [x] Update Navigation with Applications, Resources, Find My Machine CTA
+
+- [x] Phase 7: The Dealer Portal (NextAuth v5)
+    - [x] NextAuth.js v5 configuration and role setup
+    - [x] Dealer portal dashboard UI
+    - [x] Authenticated machine pricing tiers
+    - [x] Marketing & Training hubs
+
+- [x] Phase 8: Final SEO & Technical Config
+    - [x] Sentry, GA4, Hotjar integration
+    - [x] Dynamic sitemaps and robots.txt
+    - [x] Image & Font optimization (WebP/AVIF, Next.js 16 Proxy Migration)

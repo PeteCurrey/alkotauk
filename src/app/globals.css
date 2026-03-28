@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+@theme {
+  --color-alkota-black: #121212;
+  --color-alkota-steel: #E5E7EB;
+  --color-alkota-iron: #D1D5DB;
+  --color-alkota-silver: #6B7280;
+  --color-alkota-white: #FFFFFF;
+  --color-alkota-bg: #EBEBEB;
+  --color-alkota-orange: #FF6900;
+  --color-alkota-orange-hover: #E55D00;
+  --color-alkota-amber: #C97E12;
+  --color-alkota-smoke: #9CA3AF;
+  --color-alkota-surface: rgba(0,0,0,0.03);
+  --color-alkota-gold: #D4A843;
+  --color-alkota-blue: #1E40AF;
+  --color-alkota-green: #16A34A;
+
+  --font-inter: var(--font-inter);
+  --font-barlow-condensed: var(--font-barlow-condensed);
+  --font-ibm-plex-mono: var(--font-ibm-plex-mono);
+
+  --animate-spin-slow: spin 3s linear infinite;
+}
+
+@layer base {
+  :root {
+    --background: #EBEBEB;
+    --foreground: #121212;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    @apply antialiased selection:bg-alkota-orange/30;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-barlow-condensed);
+    @apply uppercase tracking-tight;
+  }
+
+  h1 {
+    letter-spacing: 0.02em;
+  }
+}

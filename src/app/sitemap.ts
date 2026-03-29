@@ -18,8 +18,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }`);
 
   const machineUrls = machines.map((m: any) => ({
-    url: `${baseUrl}/machines/${m.category}/${m.slug}`,
-    lastModified: new Date(m._updatedAt),
+    url: `${baseUrl}/machines/${m.category || 'hot-water'}/${m.slug}`,
+    lastModified: m._updatedAt ? new Date(m._updatedAt) : new Date(),
     changeFrequency: 'weekly' as const,
     priority: 0.8,
   }));
@@ -33,7 +33,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const industryUrls = industries.map((i: any) => ({
     url: `${baseUrl}/industries/${i.slug}`,
-    lastModified: new Date(i._updatedAt),
+    lastModified: i._updatedAt ? new Date(i._updatedAt) : new Date(),
     changeFrequency: 'monthly' as const,
     priority: 0.6,
   }));

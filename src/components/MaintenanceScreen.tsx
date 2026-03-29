@@ -276,7 +276,7 @@ export default function MaintenanceScreen({
       {/* ADMIN BYPASS (HIDDEN CLICK AREA) */}
       <div 
         onClick={() => setShowAdminLogin(true)}
-        className="fixed bottom-0 right-0 w-10 h-10 cursor-pointer z-[10000] group flex items-end justify-end p-1"
+        className="fixed bottom-0 right-0 w-20 h-20 cursor-help z-[10000] group flex items-end justify-end p-1"
         title="Admin Access Control"
       >
         <div className="w-1 h-1 bg-alkota-orange/20 opacity-0 group-hover:opacity-100 transition-opacity" />

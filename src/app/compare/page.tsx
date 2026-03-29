@@ -138,7 +138,7 @@ export default function ComparePage({ searchParams }: CompareProps) {
                  className="w-full bg-alkota-black border border-alkota-iron p-3 text-white text-[11px] font-black uppercase tracking-widest focus:outline-none focus:border-alkota-orange appearance-none cursor-pointer"
                >
                  <option value="">-- Choose Machine --</option>
-                 {Object.entries(groupedMachines).map(([type, machines]) => (
+                 {(Object.entries(groupedMachines) as [string, any[]][]).map(([type, machines]) => (
                    <optgroup key={type} label={type.replace('-', ' ').toUpperCase()} className="bg-alkota-steel text-alkota-silver text-[9px] uppercase">
                      {machines.map(m => (
                        <option key={m._id} value={m._id} className="text-white text-[11px] bg-alkota-black uppercase">{m.name}</option>

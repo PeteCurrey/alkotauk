@@ -108,7 +108,7 @@ export default function Navigation() {
               <span className={`absolute -bottom-1 left-0 h-[2px] bg-alkota-orange transition-all duration-300 ${activeMenu === link.name ? 'w-full' : 'w-0 group-hover/nav:w-full'}`} />
 
               <AnimatePresence>
-                {link.hasMega && activeMenu === link.name && link.data.length > 0 && (
+                {link.hasMega && activeMenu === link.name && (link.data?.length ?? 0) > 0 && (
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}

@@ -5,7 +5,7 @@ import { NextResponse } from 'next/server';
  * Next.js 16.2.1 Proxy (Renamed from Middleware)
  * Handles protected route logic for the Dealer Portal.
  */
-const proxyHandler = auth((req) => {
+export const proxy = auth((req) => {
   const { pathname } = req.nextUrl;
   const requestHeaders = new Headers(req.headers);
   
@@ -28,7 +28,7 @@ const proxyHandler = auth((req) => {
   });
 });
 
-export default proxyHandler;
+export default proxy;
 
 export const config = {
   matcher: [

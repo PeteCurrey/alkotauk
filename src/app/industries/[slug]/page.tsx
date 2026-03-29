@@ -1,27 +1,41 @@
-'use client';
-
-import { useParams } from 'next/navigation';
+import { client } from '@/sanity/client';
 import Navigation from '@/components/Navigation';
 import MachineCard from '@/components/MachineCard';
-import { getMockIndustries, getMockMachines } from '@/sanity/client';
-import { motion } from 'framer-motion';
-import { ArrowLeft, Zap, ShieldCheck } from 'lucide-react';
+import { ShieldCheck, Zap } from 'lucide-react';
 import Link from 'next/link';
 import Breadcrumbs from '@/components/Breadcrumbs';
 
-export default function IndustryDetailPage() {
-  const params = useParams();
-  const slug = params.slug as string;
+interface IndustryDetailPageProps {
+  params: {
+    slug: string;
+  };
+}
+
+export default async function IndustryDetailPage({ params }: IndustryDetailPageProps) {
+  const slug = params.slug;
   
-  const industries = getMockIndustries();
-  const industry = industries.find(i => i.slug.current === slug);
-  const machines = getMockMachines(); // In real app, filter by industry reference
+  // Fetch real industry data from Sanity
+  const industry = await client.fetch(`*[_type == "industry" && slug.current == $slug][0]`, { slug });
+
+  // Fetch machines related to this industry (for now, fetching first 6 machines as fallback)
+  const machines = await client.fetch(`*[_type == "machine"][0...6] {
+    _id,
+    name,
+    modelCode,
+    "slug": slug.current,
+    tagline,
+    category,
+    "series": series->name,
+    "isEliteSeries": series->isEliteSeries,
+    heroImage,
+    specs
+  }`);
 
   if (!industry) {
     return (
       <main className="min-h-screen bg-alkota-black pt-32 text-center text-white">
-        <h1 className="text-4xl">Industry not found</h1>
-        <Link href="/industries" className="mt-8 inline-block text-alkota-orange underline">Back to all industries</Link>
+        <h1 className="text-4xl uppercase font-barlow-condensed italic font-black">Industry not found</h1>
+        <Link href="/" className="mt-8 inline-block text-alkota-orange underline uppercase tracking-widest text-xs">Back to Home</Link>
       </main>
     );
   }
@@ -40,88 +54,85 @@ export default function IndustryDetailPage() {
   };
 
   return (
-    <main className="min-h-screen bg-alkota-black pt-32 pb-24">
+    <main className="min-h-screen bg-alkota-black pt-32 pb-24 relative overflow-hidden">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <Navigation />
       
-      <div className="mx-auto max-w-7xl px-6">
+      {/* Background Watermark */}
+      <div className="absolute top-40 right-0 pointer-events-none select-none opacity-[0.02] z-0">
+        <span className="font-barlow-condensed text-[50vw] font-black uppercase italic leading-none text-white whitespace-nowrap">
+          {industry.name.split(' ')[0]}
+        </span>
+      </div>
+
+      <div className="mx-auto max-w-7xl px-6 relative z-10">
         <Breadcrumbs items={[
-          { label: 'Industries', href: '/industries' },
+          { label: 'Industries', href: '/' },
           { label: industry.name }
         ]} />
 
         {/* Hero Section */}
-        <section className="mb-24 grid grid-cols-1 gap-12 lg:grid-cols-2 lg:items-center">
+        <section className="mb-24 mt-12 grid grid-cols-1 gap-12 lg:grid-cols-2 lg:items-center">
           <div>
-            <motion.span 
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="mb-4 inline-block text-xs font-bold uppercase tracking-[0.2em] text-alkota-orange"
-            >
-              Industry Specialist
-            </motion.span>
-            <motion.h1 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="mb-8 text-5xl font-bold text-white md:text-7xl lg:text-8xl italic uppercase tracking-tighter"
-            >
+            <span className="mb-4 inline-block text-[10px] font-black uppercase tracking-[0.4em] text-alkota-orange">
+              Industry Technical Specification
+            </span>
+            <h1 className="mb-8 text-6xl font-black text-white md:text-8xl lg:text-9xl italic uppercase tracking-tighter leading-[0.8] font-barlow-condensed">
               {industry.name} <br />
               <span className="text-alkota-orange">SOLUTIONS.</span>
-            </motion.h1>
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="mb-12 text-xl text-alkota-silver leading-relaxed max-w-xl"
-            >
-              {industry.description} Alkota provides the industrial-grade power required for the most demanding cleaning tasks in this sector.
-            </motion.p>
+            </h1>
+            <p className="mb-12 text-lg text-alkota-silver leading-relaxed uppercase tracking-wider max-w-xl font-inter">
+              {industry.description} Alkota provides the industrial-grade power required for the most demanding cleaning tasks in the {industry.name} sector.
+            </p>
             
-            <div className="grid grid-cols-2 gap-8 border-y border-alkota-iron py-8">
+            <div className="grid grid-cols-2 gap-8 border-y border-alkota-iron py-10">
               <div className="flex gap-4">
-                <ShieldCheck className="h-6 w-6 text-alkota-gold shrink-0" />
+                <ShieldCheck className="h-6 w-6 text-alkota-orange shrink-0" />
                 <div>
-                  <h4 className="text-xs font-bold uppercase tracking-widest text-white mb-1">Safety Certified</h4>
-                  <p className="text-[10px] text-alkota-steel uppercase">Built to EN Standards</p>
+                  <h4 className="text-[10px] font-black uppercase tracking-widest text-white mb-2">Safety Certified</h4>
+                  <p className="text-[8px] text-alkota-silver uppercase tracking-[0.2em] font-ibm-plex-mono">Built to UL-1776 Standards</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <Zap className="h-6 w-6 text-alkota-gold shrink-0" />
+                <Zap className="h-6 w-6 text-alkota-orange shrink-0" />
                 <div>
-                  <h4 className="text-xs font-bold uppercase tracking-widest text-white mb-1">Elite Power</h4>
-                  <p className="text-[10px] text-alkota-steel uppercase">Up to 4000+ PSI</p>
+                  <h4 className="text-[10px] font-black uppercase tracking-widest text-white mb-2">Elite Power</h4>
+                  <p className="text-[8px] text-alkota-silver uppercase tracking-[0.2em] font-ibm-plex-mono">Up to 40,000 cleaning units</p>
                 </div>
               </div>
             </div>
           </div>
           
-          <div className="relative aspect-video overflow-hidden border border-alkota-iron bg-alkota-steel/50 lg:aspect-square">
+          <div className="relative aspect-video overflow-hidden border border-alkota-iron bg-alkota-steel/50 lg:aspect-square group">
             <img 
-              src="https://images.unsplash.com/photo-1541888941259-7727ebe1476e?q=80&w=2070&auto=format&fit=crop" 
+              src={industry.image || "https://images.unsplash.com/photo-1541888941259-7727ebe1476e?q=80&w=2070&auto=format&fit=crop"} 
               alt={industry.name}
-              className="h-full w-full object-cover opacity-60 grayscale" 
+              className="h-full w-full object-cover opacity-60 grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000" 
             />
             <div className="absolute inset-0 bg-gradient-to-t from-alkota-black via-transparent to-transparent" />
+            <div className="absolute bottom-6 left-6 flex items-center gap-3">
+               <div className="h-2 w-2 rounded-full bg-alkota-orange animate-pulse" />
+               <span className="font-ibm-plex-mono text-[8px] font-bold text-white uppercase tracking-widest leading-none">Sector Context // Verified</span>
+            </div>
           </div>
         </section>
 
         {/* Featured Machines for this Industry */}
-        <section>
-          <div className="mb-12 flex items-end justify-between border-b border-alkota-iron pb-8">
-            <h2 className="text-3xl font-bold text-white uppercase italic tracking-tighter">
-              FEATURED <span className="text-alkota-orange">FLEET.</span>
+        <section className="mt-40">
+          <div className="mb-12 flex items-end justify-between border-b border-alkota-iron pb-12">
+            <h2 className="font-barlow-condensed text-5xl font-black text-white uppercase italic tracking-tighter md:text-7xl">
+              SECTOR <span className="text-alkota-orange">FLEET.</span>
             </h2>
-            <Link href="/machines" className="text-xs font-bold uppercase tracking-widest text-alkota-steel hover:text-white">
-              View All Machines
+            <Link href="/machines" className="text-[10px] font-black uppercase tracking-widest text-alkota-silver hover:text-white transition-colors">
+              Full Inventory →
             </Link>
           </div>
           
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {machines.map((machine, i) => (
+          <div className="grid grid-cols-1 gap-px bg-alkota-iron border border-alkota-iron md:grid-cols-2 lg:grid-cols-3">
+            {machines.map((machine: any, i: number) => (
               <MachineCard key={machine._id} machine={machine} index={i} />
             ))}
           </div>

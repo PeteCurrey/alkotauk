@@ -1,30 +1,21 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
-import { client, urlFor, getMockMachines } from '@/sanity/client';
+import { client, urlFor } from '@/sanity/client';
 import Navigation from '@/components/Navigation';
-import DepositButton from '@/components/DepositButton';
 import HubSpotForm from '@/components/HubSpotForm';
 import { generateSeo } from '@/lib/seo';
 import { 
   Droplets, 
-  BarChart3, 
-  Zap, 
   ShieldCheck, 
-  ArrowLeft, 
-  Info, 
-  Download, 
+  Zap, 
   Phone,
   Settings,
-  Scaling,
-  Truck,
   Trophy,
-  ShoppingCart,
   ArrowRight,
-  ChevronRight,
   Thermometer,
-  Gauge
+  Gauge,
+  Truck
 } from "lucide-react";
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { auth } from '@/auth';
@@ -33,31 +24,18 @@ import { calculateDealerPrice, formatCurrency } from '@/lib/pricing';
 export const dynamic = 'force-dynamic';
 
 async function getMachine(slug: string) {
-  // Try fetching from Sanity first
-  try {
-    const machine = await client.fetch(`*[_type == "machine" && slug.current == $slug][0] {
-      _id,
-      name,
-      tagline,
-      description,
-      image,
-      heroImage,
-      specs,
-      price,
-      depositAmount,
-      "category": category->title,
-      "categorySlug": category->slug.current,
-      "series": series->name,
-      "isEliteSeries": series->isElite
-    }`, { slug });
-    
-    if (machine) return machine;
-  } catch (e) {
-    console.warn("Sanity fetch failed, falling back to mock data");
-  }
-
-  // Fallback to mock data
-  return getMockMachines().find(m => m.slug === slug || m._id === slug);
+  return await client.fetch(`*[_type == "machine" && slug.current == $slug][0] {
+    _id,
+    name,
+    tagline,
+    description,
+    heroImage,
+    specs,
+    ecommerce,
+    category,
+    "series": series->name,
+    "isEliteSeries": series->isEliteSeries
+  }`, { slug });
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
@@ -66,7 +44,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
   return generateSeo({
     title: `Alkota ${machine.name} | Industrial Specification`,
-    description: machine.tagline || machine.description,
+    description: machine.tagline || 'Industrial pressure washing equipment.',
     image: machine.heroImage ? urlFor(machine.heroImage).width(1200).height(630).url() : undefined,
   });
 }
@@ -82,11 +60,11 @@ export default async function MachineDetailPage({ params }: { params: { category
     notFound();
   }
 
-  const dealerPrice = isDealer ? calculateDealerPrice(machine.price || 5000, user.tier) : null;
+  const dealerPrice = isDealer ? calculateDealerPrice(machine.ecommerce?.price || 5000, user.tier) : null;
   const hubspotPortalId = siteSettings?.hubspotGroup?.hubspotPortalId;
   const hubspotQuoteFormId = siteSettings?.hubspotGroup?.hubspotQuoteFormId;
 
-  const imageUrl = machine.heroImage?.asset?.url || machine.image?.asset?.url || 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?q=80&w=2070&auto=format&fit=crop';
+  const imageUrl = machine.heroImage ? urlFor(machine.heroImage).url() : 'https://alkota.co.uk/assets/hot-water-pressure-washer-DHE0Q-_H.png';
 
   return (
     <main className="min-h-screen bg-alkota-bg pt-32 pb-0 overflow-x-hidden relative">
@@ -104,7 +82,7 @@ export default async function MachineDetailPage({ params }: { params: { category
           <Breadcrumbs 
             items={[
               { label: 'Machines', href: '/machines' },
-              { label: machine.category || 'Standard', href: `/machines/${machine.categorySlug || machine.category?.toLowerCase()}` },
+              { label: machine.category?.replace('-', ' ') || 'Industrial', href: `/machines/${machine.category}` },
               { label: machine.name }
             ]} 
           />
@@ -129,10 +107,10 @@ export default async function MachineDetailPage({ params }: { params: { category
             {/* Feature Tags */}
             <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
-                  { label: 'COIL', value: '7YR WARRANTY', icon: ShieldCheck },
+                  { label: 'COIL', value: `${machine.specs?.coilWarrantyYears || 7}YR WARRANTY`, icon: ShieldCheck },
                   { label: 'BUILD', value: 'FORGED STEEL', icon: Settings },
                   { label: 'ORIGIN', value: 'HANDCRAFTED USA', icon: Trophy },
-                  { label: 'SPEC', value: 'UK CERIFIED', icon: Zap },
+                  { label: 'SPEC', value: 'UK CERTIFIED', icon: Zap },
               ].map((tag, i) => (
                 <div key={i} className="border border-alkota-iron bg-white p-4 flex flex-col gap-2 shadow-sm">
                   <tag.icon className="h-4 w-4 text-alkota-orange" />
@@ -147,7 +125,7 @@ export default async function MachineDetailPage({ params }: { params: { category
           <div className="lg:col-span-5 lg:sticky lg:top-40">
             <div className="mb-6 flex items-center gap-3">
               <span className="font-ibm-plex-mono text-[10px] font-black uppercase tracking-[0.4em] text-alkota-orange">
-                {machine.category || 'High Pressure Systems'}
+                {machine.series || machine.category?.replace('-', ' ')}
               </span>
               {machine.isEliteSeries && (
                 <div className="h-1 w-12 bg-alkota-iron" />
@@ -159,12 +137,12 @@ export default async function MachineDetailPage({ params }: { params: { category
             </h1>
             
             <p className="font-inter mb-12 text-lg text-alkota-silver leading-relaxed uppercase tracking-wider">
-              {machine.tagline || machine.description}
+              {machine.tagline}
             </p>
 
             {/* Price / Status */}
             <div className="mb-12 border-y border-alkota-iron py-8">
-              {isDealer ? (
+              {isDealer && machine.ecommerce?.price ? (
                 <div>
                   <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-alkota-orange mb-3">
                     <Trophy className="h-3 w-3" />
@@ -175,7 +153,7 @@ export default async function MachineDetailPage({ params }: { params: { category
                       {formatCurrency(dealerPrice || 0)}
                     </span>
                     <span className="font-ibm-plex-mono text-sm text-alkota-silver line-through">
-                      RRP {formatCurrency(machine.price || 5000)}
+                      RRP {formatCurrency(machine.ecommerce.price)}
                     </span>
                   </div>
                 </div>
@@ -201,15 +179,6 @@ export default async function MachineDetailPage({ params }: { params: { category
                 Request a Quote
                 <ArrowRight className="h-4 w-4 transform group-hover:translate-x-2 transition-transform" />
               </a>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <button className="border border-alkota-iron p-5 flex items-center justify-center gap-3 text-[10px] font-black uppercase tracking-widest text-alkota-black hover:bg-alkota-iron transition-all">
-                  <Download className="h-3 w-3" /> PDF Spec
-                </button>
-                <button className="border border-alkota-iron p-5 flex items-center justify-center gap-3 text-[10px] font-black uppercase tracking-widest text-alkota-black hover:bg-alkota-iron transition-all">
-                  <Settings className="h-3 w-3" /> Configurator
-                </button>
-              </div>
             </div>
           </div>
         </div>
@@ -225,10 +194,10 @@ export default async function MachineDetailPage({ params }: { params: { category
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-alkota-iron border border-alkota-iron">
             {[
-              { label: 'WATER FLOW', value: `${machine.specs?.flowRateLPM || '15'} LPM`, unit: 'LPM', icon: Droplets },
-              { label: 'PRESSURE', value: `${machine.specs?.pressureBAR || '200'} BAR`, unit: 'Pressure', icon: Gauge },
-              { label: 'TEMPERATURE', value: machine.category?.includes('hot') ? '98°C' : 'Ambient', unit: 'Temperature', icon: Thermometer },
-              { label: 'POWER', value: machine.specs?.powerSource || '440V / 3PH', unit: 'Power Source', icon: Zap }
+              { label: 'WATER FLOW', value: `${machine.specs?.flowRateLPM || '15'} LPM`, unit: 'Liters Per Minute', icon: Droplets },
+              { label: 'PRESSURE', value: `${machine.specs?.pressureBar || '200'} BAR`, unit: 'Operational Pressure', icon: Gauge },
+              { label: 'TEMPERATURE', value: machine.category === 'hot-water' ? '98°C / 200°F' : 'Ambient', unit: 'Cleaning Temp', icon: Thermometer },
+              { label: 'POWER', value: machine.specs?.powerSource || 'Industrial', unit: 'Primary Power', icon: Zap }
             ].map((spec, i) => (
               <div key={i} className="bg-white p-12 transition-all hover:bg-alkota-steel/40 group">
                 <spec.icon className="h-8 w-8 text-alkota-orange mb-8 transition-transform group-hover:scale-110" />
@@ -240,62 +209,15 @@ export default async function MachineDetailPage({ params }: { params: { category
               </div>
             ))}
           </div>
-
-          {/* Full Table Grid */}
-          <div className="mt-12 bg-white border border-alkota-iron overflow-hidden">
-             <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-alkota-iron">
-                <div className="p-10">
-                   <h4 className="font-barlow-condensed text-2xl font-black text-alkota-black uppercase italic mb-8 flex items-center gap-3">
-                     <Settings className="h-5 w-5 text-alkota-orange" /> Engineering Specs
-                   </h4>
-                   <div className="space-y-4">
-                      {[
-                        { k: 'Engine/Motor', v: machine.specs?.powerSource || 'Balder Industrial' },
-                        { k: 'Drive System', v: 'Belt Drive (Double-Cog)' },
-                        { k: 'Pump Brand', v: 'Alkota Triplex' },
-                        { k: 'Dimensions', v: '1200mm x 800mm x 900mm' },
-                        { k: 'Weight', v: '145kg (Dry)' },
-                      ].map((item, i) => (
-                        <div key={i} className="flex justify-between items-center border-b border-alkota-iron/30 pb-4">
-                          <span className="font-ibm-plex-mono text-[10px] text-alkota-silver uppercase">{item.k}</span>
-                          <span className="font-ibm-plex-mono text-[10px] text-alkota-black font-bold">{item.v}</span>
-                        </div>
-                      ))}
-                   </div>
-                </div>
-                <div className="p-10">
-                   <h4 className="font-barlow-condensed text-2xl font-black text-alkota-black uppercase italic mb-8 flex items-center gap-3">
-                     <ShieldCheck className="h-5 w-5 text-alkota-orange" /> Protection Index
-                   </h4>
-                   <div className="space-y-4">
-                      {[
-                        { k: 'Warranty (Coil)', v: '7 Years Pro-Rata' },
-                        { k: 'Warranty (Parts)', v: '12 Months' },
-                        { k: 'Safety Certification', v: 'CE / UKCA Certified' },
-                        { k: 'Automatic Shutdown', v: 'Thermal Overload' },
-                        { k: 'Frame Treatment', v: 'Powder Coated Steel' },
-                      ].map((item, i) => (
-                        <div key={i} className="flex justify-between items-center border-b border-alkota-iron/30 pb-4">
-                          <span className="font-ibm-plex-mono text-[10px] text-alkota-silver uppercase">{item.k}</span>
-                          <span className="font-ibm-plex-mono text-[10px] text-alkota-black font-bold">{item.v}</span>
-                        </div>
-                      ))}
-                   </div>
-                </div>
-             </div>
-          </div>
         </section>
 
         {/* Quote Architecture */}
         <section id="quote" className="mt-60 py-40 border-t border-alkota-iron relative">
-           {/* Background Graphic */}
            <div className="absolute top-0 right-0 w-1/2 h-full bg-alkota-orange/5 skew-x-12 transform translate-x-1/2" />
            
            <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-24">
               <div>
-                <div 
-                   className="mb-8 flex items-center gap-4"
-                >
+                <div className="mb-8 flex items-center gap-4">
                   <div className="h-[2px] w-12 bg-alkota-orange" />
                   <span className="text-[10px] font-black uppercase tracking-[0.4em] text-alkota-orange">Acquisition Channel</span>
                 </div>
@@ -333,12 +255,9 @@ export default async function MachineDetailPage({ params }: { params: { category
                       formId={hubspotQuoteFormId} 
                     />
                   ) : (
-                    <div className="py-24 text-center border border-dashed border-alkota-iron">
-                      <p className="font-ibm-plex-mono text-[9px] text-alkota-silver uppercase tracking-widest mb-6">Quote Service Standby</p>
-                      <p className="font-inter text-[10px] text-alkota-silver uppercase tracking-widest mb-6 max-w-xs mx-auto">
-                        Machines are priced to your specification. Request a quote and we'll come back to you within 1 working day.
-                      </p>
-                      <button className="bg-alkota-orange px-10 py-5 text-[10px] font-black uppercase tracking-[0.3em] text-white">Call 01708 834567</button>
+                    <div className="py-12 text-center">
+                       <p className="text-alkota-silver uppercase tracking-widest text-[10px] mb-4">Live Quote System Pending</p>
+                       <button className="bg-alkota-black text-white px-8 py-4 uppercase tracking-widest font-black text-[10px]">Call for Specifications</button>
                     </div>
                   )}
                 </div>
@@ -346,7 +265,6 @@ export default async function MachineDetailPage({ params }: { params: { category
            </div>
         </section>
       </div>
-
     </main>
   );
 }

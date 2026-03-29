@@ -1,20 +1,29 @@
-'use client';
-
+import { client } from '@/sanity/client';
 import Navigation from '@/components/Navigation';
 import Breadcrumbs from '@/components/Breadcrumbs';
-import { getMockMachines } from '@/sanity/client';
 import MachineCard from '@/components/MachineCard';
-import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
-export default function MachinesPage() {
-  const machines = getMockMachines();
+export default async function MachinesPage() {
+  // Fetch all machines from Sanity
+  const machines = await client.fetch(`*[_type == "machine"] {
+    _id,
+    name,
+    modelCode,
+    "slug": slug.current,
+    tagline,
+    category,
+    "series": series->name,
+    "isEliteSeries": series->isEliteSeries,
+    heroImage,
+    specs
+  }`);
   
-  // Unique categories from mock data
-  const categories = Array.from(new Set(machines.map(m => m.category))).map(cat => ({
-    name: cat.replace('-', ' '),
-    slug: cat
+  // Unique categories from real data
+  const categories = Array.from(new Set(machines.map((m: any) => m.category))).map(cat => ({
+    name: (cat as string).replace('-', ' '),
+    slug: cat as string
   }));
 
   return (
@@ -33,33 +42,19 @@ export default function MachinesPage() {
           <Breadcrumbs items={[{ label: 'Fleet' }]} />
           
           <header className="mb-24 mt-12 max-w-4xl">
-            <motion.div 
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="mb-8 flex items-center gap-4"
-            >
+            <div className="mb-8 flex items-center gap-4">
               <div className="h-[2px] w-12 bg-alkota-orange" />
               <span className="text-[10px] font-black uppercase tracking-[0.4em] text-alkota-orange">
                 Industrial Performance Fleet
               </span>
-            </motion.div>
-            <motion.h1 
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1, duration: 0.8 }}
-              className="font-barlow-condensed mb-10 text-7xl font-black text-alkota-black md:text-9xl uppercase italic leading-[0.8] tracking-tighter"
-            >
+            </div>
+            <h1 className="font-barlow-condensed mb-10 text-7xl font-black text-alkota-black md:text-9xl uppercase italic leading-[0.8] tracking-tighter">
               INDUSTRIAL <br />
               <span className="text-alkota-orange [text-stroke:1px_rgba(0,0,0,0.1)]">COMMAND.</span>
-            </motion.h1>
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="font-inter max-w-2xl text-lg text-alkota-silver leading-relaxed uppercase tracking-wider"
-            >
+            </h1>
+            <p className="font-inter max-w-2xl text-lg text-alkota-silver leading-relaxed uppercase tracking-wider">
               The definitive standard in industrial cleaning. From extreme-volume hot water systems to precision-engineered stationary units.
-            </motion.p>
+            </p>
           </header>
 
           {/* Categories Horizontal Strip */}
@@ -100,13 +95,13 @@ export default function MachinesPage() {
               <h2 className="font-barlow-condensed text-5xl font-black text-alkota-black uppercase italic tracking-tighter md:text-7xl">
                 FULL <span className="text-alkota-orange">INVENTORY.</span>
               </h2>
-              <span className="font-ibm-plex-mono text-[10px] text-alkota-silver hidden md:block">
+              <span className="font-ibm-plex-mono text-[10px] text-alkota-silver hidden md:block uppercase tracking-widest">
                 TOTAL_REPL: {machines.length} UNITS
               </span>
             </div>
             
             <div className="grid grid-cols-1 gap-px bg-alkota-iron border border-alkota-iron md:grid-cols-2 lg:grid-cols-3">
-              {machines.map((machine, i) => (
+              {machines.map((machine: any, i: number) => (
                 <MachineCard key={machine._id} machine={machine} index={i} />
               ))}
             </div>

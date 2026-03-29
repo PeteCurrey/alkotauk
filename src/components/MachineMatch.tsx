@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronRight, ChevronLeft, Target, Factory, Zap, Cloud, Loader2, CheckCircle2, ArrowRight } from 'lucide-react';
-import { urlFor, getMockMachines } from '@/sanity/client';
+import { ChevronLeft, Target, Factory, Zap, Cloud, Loader2, ArrowRight } from 'lucide-react';
+import { client } from '@/sanity/client';
 import Link from 'next/link';
 
 interface Option {
@@ -69,19 +69,25 @@ export default function MachineMatch() {
 
   const triggerMatch = async (finalAnswers: Record<string, string>) => {
     setIsMatching(true);
+    // Add artificial delay for "calculating" feel
     await new Promise(resolve => setTimeout(resolve, 1800));
 
     try {
-      const allMachines = getMockMachines();
-      let filtered = allMachines;
-
-      if (['agriculture', 'manufacturing'].includes(finalAnswers.industry)) {
-        filtered = filtered.filter(m => m.category === 'hot-water');
-      }
-
-      setResults(filtered.slice(0, 3));
+      // Query Sanity for machines matching the selected industry/category
+      // For now, we use a simple industry map or generic hot-water as best matches
+      const query = `*[_type == "machine" && (category == $industry || category == "hot-water")] [0...3] {
+        _id,
+        name,
+        "slug": slug.current,
+        tagline,
+        category,
+        heroImage
+      }`;
+      const matched = await client.fetch(query, { industry: finalAnswers.industry });
+      setResults(matched);
     } catch (error) {
-      setResults(getMockMachines().slice(0, 3));
+      console.error('Match error:', error);
+      setResults([]);
     } finally {
       setIsMatching(false);
       setIsFinished(true);
@@ -187,18 +193,18 @@ export default function MachineMatch() {
                     THE MATCH.
                   </h2>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-alkota-iron border border-alkota-iron w-full mb-16">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-alkota-iron border border-alkota-iron w-full mb-16 text-left">
                       {results.map((machine) => (
                           <Link 
                               key={machine._id} 
                               href={`/machines/${machine.category}/${machine.slug}`}
-                              className="group flex flex-col bg-white p-6 transition-all hover:bg-alkota-steel/40"
+                              className="group flex flex-col bg-white p-6 transition-all hover:bg-alkota-steel/40 no-underline"
                           >
                               <div className="relative aspect-[16/10] overflow-hidden mb-6 bg-alkota-bg">
                                   <img 
                                       src={machine.heroImage?.asset?.url || 'https://alkota.co.uk/assets/hot-water-pressure-washer-DHE0Q-_H.png'}
                                       alt={machine.name}
-                                      className="h-full w-full object-cover grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700"
+                                      className="h-full w-full object-cover grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 font-barlow-condensed"
                                   />
                                   <div className="absolute inset-0 bg-gradient-to-t from-white/80 to-transparent" />
                                   <div className="absolute bottom-4 left-4">
@@ -212,12 +218,18 @@ export default function MachineMatch() {
                               </div>
                           </Link>
                       ))}
+                      {results.length === 0 && (
+                        <div className="col-span-full py-20 text-center bg-white">
+                           <p className="font-ibm-plex-mono text-[10px] text-alkota-silver uppercase tracking-widest">No exact match found for this criteria. Please consult an engineer.</p>
+                           <Link href="/contact" className="mt-8 inline-block text-[11px] font-black uppercase text-alkota-orange">Contact Engineer →</Link>
+                        </div>
+                      )}
                   </div>
 
                   <div className="flex flex-col gap-6 sm:flex-row w-full justify-center">
                     <Link
                       href="/machines"
-                      className="border border-alkota-orange bg-alkota-orange/10 px-12 py-5 text-[11px] font-black uppercase tracking-[0.3em] text-alkota-orange hover:bg-alkota-orange hover:text-white transition-all text-center"
+                      className="border border-alkota-orange bg-alkota-orange/10 px-12 py-5 text-[11px] font-black uppercase tracking-[0.3em] text-alkota-orange hover:bg-alkota-orange hover:text-white transition-all text-center no-underline"
                     >
                       Browse All Fleet
                     </Link>

@@ -2,38 +2,47 @@ import { NextRequest, NextResponse } from 'next/server';
 import { client } from '@/sanity/client';
 import { MACHINES } from '@/lib/machines';
 
-const DEFAULT_SYSTEM_PROMPT = `
+export async function POST(req: NextRequest) {
+  try {
+    const { messages } = await req.json();
+
+    // Fetch all machines from Sanity to provide context to the AI
+    const machines = await client.fetch(`*[_type == "machine"] {
+      name,
+      modelCode,
+      tagline,
+      category,
+      "series": series->name,
+      specs,
+      eliteFeatures
+    }`);
+
+    const productContext = JSON.stringify(machines.map((m: any) => ({
+      name: m.name,
+      id: m.modelCode,
+      series: m.series,
+      category: m.category,
+      specs: m.specs,
+      highlights: m.eliteFeatures
+    })), null, 2);
+
+    const DEFAULT_SYSTEM_PROMPT = `
 You are the Alkota UK Technical Advisor — an expert in 
 industrial pressure washing and high-pressure cleaning systems.
 
 You have deep knowledge of the full Alkota product range. 
-USE THE FOLLOWING PRODUCT CATALOGUE DATA TO PROVIDE PRECISE TECHNICAL ANSWERS:
-${JSON.stringify(MACHINES.map(m => ({ name: m.name, series: m.series, specs: m.specs, highlights: m.highlights })), null, 2)}
+USE THE FOLLOWING LIVE PRODUCT CATALOGUE DATA FROM SANITY STUDIO TO PROVIDE PRECISE TECHNICAL ANSWERS:
+${productContext}
 
 You help visitors:
-- Select the right machine for their specific application
-- Understand hot vs cold water, steam, PSI vs flow rate (GPM/LPM)
-- Choose the correct chemical and dilution ratios
-- Troubleshoot common faults before booking a service call
-- Understand COSHH and trade effluent basics
-- Request a quote for machines (quote-only, no public pricing)
-  or purchase chemicals and accessories directly
+- Select the right machine for their specific application (Hot Water, Cold Water, Steam, Parts Washers)
+- Explain the hierarchy: Category (e.g. Hot Water) -> Series (e.g. X4) -> Model (e.g. 420X4)
+- Understand technical specs like PSI vs flow rate (GPM/LPM)
+- Troubleshoot common faults and recommend service calls
+- Request a quote for equipment (no public pricing)
 
-You are authoritative, technical, and confident — never 
-condescending. You treat every enquiry as coming from a 
-professional who needs a precise answer, not a sales pitch. 
-Alkota machines are premium, hand-built, industrial-grade 
-equipment — best in class. Appropriate competitor references 
-are Hotsy, Landa, and Aaladin. Never compare to Kärcher 
-consumer or semi-professional lines.
-
-When a question requires a quote, site survey, or service 
-booking, guide them clearly toward the appropriate CTA.
+You are authoritative, technical, and confident. Alkota machines are premium, hand-built, industrial-grade equipment — best in class.
 `;
-
-export async function POST(req: NextRequest) {
-  try {
-    const { messages } = await req.json();
 
     // Fetch AI settings from Sanity (server-side only)
     const settings = await client.fetch(`*[_type == "siteSettings"][0].aiChatGroup`);

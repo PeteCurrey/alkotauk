@@ -1,12 +1,29 @@
 'use client';
 
-import { getMockMachines } from '@/sanity/client';
+import { useEffect, useState } from 'react';
+import { client } from '@/sanity/client';
 import MachineCard from './MachineCard';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 
 export default function MachineCatalogue() {
-  const machines = getMockMachines();
+  const [machines, setMachines] = useState<any[]>([]);
+
+  useEffect(() => {
+    client.fetch(`*[_type == "machine"][0...6] {
+      _id,
+      name,
+      modelCode,
+      "slug": slug.current,
+      tagline,
+      category,
+      "series": series->name,
+      "isEliteSeries": series->isEliteSeries,
+      heroImage,
+      specs
+    }`).then(setMachines);
+  }, []);
 
   return (
     <section className="bg-alkota-steel py-40 px-6 relative overflow-hidden">
@@ -41,17 +58,25 @@ export default function MachineCatalogue() {
         </div>
 
         <div className="grid grid-cols-1 gap-px bg-alkota-iron border border-alkota-iron md:grid-cols-2 lg:grid-cols-3">
-          {machines.slice(0, 6).map((machine, i) => (
+          {machines.map((machine, i) => (
             <MachineCard key={machine._id} machine={machine} index={i} />
           ))}
+          {machines.length === 0 && (
+            <div className="col-span-full py-20 text-center bg-white/5 border border-dashed border-alkota-iron">
+               <span className="text-alkota-silver uppercase tracking-[0.2em] text-[10px]">Synchronizing Catalogue...</span>
+            </div>
+          )}
         </div>
 
         <div className="mt-24 flex flex-col items-center gap-12">
           <div className="h-24 w-px bg-gradient-to-b from-alkota-orange to-transparent" />
-          <button className="group relative flex items-center gap-6 border border-alkota-iron bg-alkota-black px-16 py-6 text-[11px] font-black uppercase tracking-[0.3em] text-white transition-all hover:bg-alkota-orange hover:border-alkota-orange">
+          <Link 
+            href="/machines"
+            className="group relative flex items-center gap-6 border border-alkota-iron bg-alkota-black px-16 py-6 text-[11px] font-black uppercase tracking-[0.3em] text-white transition-all hover:bg-alkota-orange hover:border-alkota-orange no-underline"
+          >
             View Full Catalogue
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-2" />
-          </button>
+          </Link>
         </div>
       </div>
 

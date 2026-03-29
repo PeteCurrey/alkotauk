@@ -1,74 +1,58 @@
 import { MetadataRoute } from 'next';
-import { client, getMockMachines } from '@/sanity/client';
+import { client } from '@/sanity/client';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://alkota.co.uk';
 
-  // Fetch dynamic slugs from Sanity first
-  let machines = [];
-  try {
-    machines = (await client.fetch(`*[_type == "machine"]{ "slug": slug.current, "category": category->slug.current }`)) || [];
-  } catch (e) {
-    // console.warn("Sitemap: Sanity fetch failed, falling back to mock data");
-  }
+  // Fetch all machines from Sanity
+  const machines = await client.fetch(`*[_type == "machine"] {
+    "slug": slug.current,
+    category,
+    _updatedAt
+  }`);
 
-  // Ensure we have a massive catalogue even if Sanity is empty
-  if (machines.length === 0) {
-    const mockMachines = getMockMachines();
-    machines = mockMachines.map((m: any) => ({
-      slug: m.slug || m.id,
-      category: m.type || 'hot-water'
-    }));
-  }
+  // Fetch all industries from Sanity
+  const industries = await client.fetch(`*[_type == "industry"] {
+    "slug": slug.current,
+    _updatedAt
+  }`);
 
-  const machineEntries = machines.map((m: any) => ({
+  const machineUrls = machines.map((m: any) => ({
     url: `${baseUrl}/machines/${m.category}/${m.slug}`,
-    lastModified: new Date(),
+    lastModified: new Date(m._updatedAt),
     changeFrequency: 'weekly' as const,
     priority: 0.8,
   }));
 
-  const staticRoutes = [
-    '',
-    '/machines',
-    '/machines/hot-water',
-    '/machines/cold-water',
-    '/machines/wash-plants',
-    '/machines/parts-washers',
-    '/bespoke',
-    '/chemicals',
-    '/chemicals/degreasers',
-    '/chemicals/auto-truck-wash',
-    '/chemicals/aluminum-brightener',
-    '/chemicals/industrial',
-    '/chemicals/food-processing',
-    '/chemicals/masonry-asphalt',
-    '/chemicals/parts-washer',
-    '/chemicals/residential',
-    '/chemicals/additives',
-    '/chemicals/coatings',
-    '/chemicals/aviation',
-    '/chemicals/transportation',
-    '/water-treatment',
-    '/configurator',
-    '/about',
-    '/support',
-    '/industrial',
-    '/industrial/mat-wash-plants',
-    '/industrial/containerised',
-    '/industrial/wash-installations',
-    '/industrial/brief',
-    '/mess-quest',
-    '/chemicals/selector',
-  ].map((route) => ({
-    url: `${baseUrl}${route}`,
+  const categoryUrls = ['hot-water', 'cold-water', 'parts-washers', 'water-treatment'].map(cat => ({
+    url: `${baseUrl}/machines/${cat}`,
     lastModified: new Date(),
-    changeFrequency: 'daily' as const,
-    priority: route === '' ? 1.0 : 0.9,
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
+  }));
+
+  const industryUrls = industries.map((i: any) => ({
+    url: `${baseUrl}/industries/${i.slug}`,
+    lastModified: new Date(i._updatedAt),
+    changeFrequency: 'monthly' as const,
+    priority: 0.6,
   }));
 
   return [
-    ...staticRoutes,
-    ...machineEntries,
+    {
+      url: baseUrl,
+      lastModified: new Date(),
+      changeFrequency: 'daily',
+      priority: 1,
+    },
+    {
+      url: `${baseUrl}/machines`,
+      lastModified: new Date(),
+      changeFrequency: 'daily',
+      priority: 0.9,
+    },
+    ...categoryUrls,
+    ...machineUrls,
+    ...industryUrls,
   ];
 }

@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Settings, Wrench, Mail, Factory, Loader2, CheckCircle2 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Settings, Wrench, Mail, Factory, Loader2, CheckCircle2, X } from 'lucide-react';
 import Logo from './Logo';
 
 interface MaintenanceScreenProps {
@@ -25,6 +25,9 @@ export default function MaintenanceScreen({
   });
   
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [showAdminLogin, setShowAdminLogin] = useState(false);
+  const [adminPassword, setAdminPassword] = useState('');
+  const [adminError, setAdminError] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,6 +52,19 @@ export default function MaintenanceScreen({
     } catch (err) {
       console.error(err);
       setStatus('error');
+    }
+  };
+
+  const handleAdminBypass = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (adminPassword === 'Vivaro2104!!') {
+      // Set a 24-hour cookie for admin bypass
+      const expires = new Date(Date.now() + 86400000).toUTCString();
+      document.cookie = `alkota_admin_access=true; path=/; expires=${expires}; SameSite=Lax`;
+      window.location.reload();
+    } else {
+      setAdminError(true);
+      setTimeout(() => setAdminError(false), 2000);
     }
   };
 
@@ -228,6 +244,62 @@ export default function MaintenanceScreen({
             </div>
          </div>
       </div>
+
+      {/* ADMIN BYPASS (HIDDEN DOT) */}
+      <div 
+        onClick={() => setShowAdminLogin(true)}
+        className="fixed bottom-0 right-0 w-2 h-2 cursor-default z-[10000] opacity-0"
+      />
+
+      <AnimatePresence>
+        {showAdminLogin && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[10001] bg-alkota-black/90 backdrop-blur-md flex items-center justify-center p-6"
+          >
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="w-full max-w-sm bg-white p-10 relative"
+            >
+              <button 
+                 onClick={() => setShowAdminLogin(false)}
+                 className="absolute top-4 right-4 text-alkota-silver hover:text-alkota-black"
+              >
+                <X className="h-5 w-5" />
+              </button>
+
+              <h3 className="font-barlow-condensed text-2xl font-black uppercase italic italic text-alkota-black mb-6">Internal Access Controller</h3>
+              
+              <form onSubmit={handleAdminBypass} className="space-y-6">
+                <div>
+                  <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-alkota-silver mb-2">Security Key</label>
+                  <input 
+                    autoFocus
+                    type="password"
+                    value={adminPassword}
+                    onChange={(e) => setAdminPassword(e.target.value)}
+                    className={`w-full bg-alkota-bg border ${adminError ? 'border-alkota-orange' : 'border-alkota-iron'} px-4 py-3 text-sm focus:border-alkota-black focus:outline-none transition-colors`}
+                    placeholder="••••••••"
+                  />
+                  {adminError && (
+                    <p className="text-[10px] font-black text-alkota-orange uppercase tracking-widest mt-2 animate-bounce">Access Denied</p>
+                  )}
+                </div>
+                <button 
+                  type="submit"
+                  className="w-full bg-alkota-black text-white font-black uppercase tracking-widest text-[11px] py-4 hover:bg-alkota-orange transition-colors"
+                >
+                  Verify Access
+                </button>
+              </form>
+              <p className="text-[10px] text-center text-alkota-silver uppercase tracking-widest mt-6">AL-KOTA_PLATFORM_V4.0</p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

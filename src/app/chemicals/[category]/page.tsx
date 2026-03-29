@@ -4,7 +4,6 @@ import { useParams } from 'next/navigation';
 import Navigation from '@/components/Navigation';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { motion } from 'framer-motion';
-import Footer from '@/components/Footer';
 import { ShoppingBasket, ArrowRight, ShieldCheck, CheckCircle2, ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
 
@@ -121,7 +120,6 @@ export default function ChemicalsCategoryPage() {
           </section>
         </div>
       </div>
-      <Footer />
     </main>
   );
 }

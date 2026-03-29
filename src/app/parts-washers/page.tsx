@@ -3,7 +3,6 @@
 import Navigation from '@/components/Navigation';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { motion } from 'framer-motion';
-import Footer from '@/components/Footer';
 import { Settings, RefreshCw, Layers, ArrowRight, Gauge, CheckSquare, Trash2, ShieldCheck, Factory } from 'lucide-react';
 import Link from 'next/link';
 
@@ -195,7 +194,6 @@ export default function PartsWashersHub() {
         </div>
       </div>
 
-      <Footer />
 
       <style jsx>{`
         .stroke-text {

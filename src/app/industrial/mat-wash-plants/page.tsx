@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion';
 import Navigation from '@/components/Navigation';
-import Footer from '@/components/Footer';
 import { 
   ArrowRight, 
   Clock, 
@@ -263,7 +262,6 @@ export default function MatWashPlants() {
         </div>
       </section>
 
-      <Footer />
     </main>
   );
 }

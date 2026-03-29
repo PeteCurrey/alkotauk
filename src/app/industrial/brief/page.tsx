@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navigation from '@/components/Navigation';
-import Footer from '@/components/Footer';
 import { 
   ArrowRight, 
   CheckCircle2, 
@@ -14,6 +13,7 @@ import {
   ShieldCheck,
   Send
 } from 'lucide-react';
+import Link from 'next/link';
 
 const sections = [
   { id: 'contact', title: 'Project Identity', icon: ClipboardCheck },
@@ -251,7 +251,6 @@ export default function EngineeringBrief() {
         </div>
       </section>
 
-      <Footer />
     </main>
   );
 }

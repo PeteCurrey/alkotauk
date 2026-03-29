@@ -4,7 +4,6 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 import Breadcrumbs from '@/components/Breadcrumbs';
-import Footer from '@/components/Footer';
 import {
   Settings, Droplets, Zap, Shield,
   Truck, Factory, Building2, Tractor, Users, Recycle, CheckCircle2, ArrowRight,
@@ -282,7 +281,6 @@ export default function TrailersPage() {
         </div>
       </div>
 
-      <Footer />
 
       <style jsx>{`
         .stroke-text {

@@ -29,7 +29,6 @@ import {
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { auth } from '@/auth';
 import { calculateDealerPrice, formatCurrency } from '@/lib/pricing';
-import Footer from '@/components/Footer';
 
 export const dynamic = 'force-dynamic';
 
@@ -348,7 +347,6 @@ export default async function MachineDetailPage({ params }: { params: { category
         </section>
       </div>
 
-      <Footer />
     </main>
   );
 }

@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion';
 import Navigation from '@/components/Navigation';
-import Footer from '@/components/Footer';
 import { ChevronRight, ArrowRight, Shield, Globe, Settings, Factory, Zap, Droplet } from 'lucide-react';
 import Link from 'next/link';
 
@@ -187,7 +186,6 @@ export default function IndustrialHub() {
         </div>
       </section>
 
-      <Footer />
     </main>
   );
 }

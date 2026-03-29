@@ -3,7 +3,6 @@
 import Navigation from '@/components/Navigation';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { motion } from 'framer-motion';
-import Footer from '@/components/Footer';
 import { ShieldAlert, Droplets, Waves, Wind, ArrowRight, Gauge, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -139,7 +138,6 @@ export default function WaterTreatmentHub() {
         </div>
       </div>
 
-      <Footer />
 
       <style jsx>{`
         .stroke-text {

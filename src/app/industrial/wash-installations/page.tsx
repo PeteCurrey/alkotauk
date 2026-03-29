@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion';
 import Navigation from '@/components/Navigation';
-import Footer from '@/components/Footer';
 import { 
   ArrowRight, 
   Settings, 
@@ -216,7 +215,6 @@ export default function WashInstallations() {
         </div>
       </section>
 
-      <Footer />
     </main>
   );
 }

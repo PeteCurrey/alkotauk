@@ -3,7 +3,6 @@
 import Navigation from '@/components/Navigation';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { motion } from 'framer-motion';
-import Footer from '@/components/Footer';
 import { ArrowRight, Settings, Factory, ShieldCheck, Zap } from 'lucide-react';
 import Link from 'next/link';
 
@@ -142,7 +141,6 @@ export default function WashPlantsPage() {
         </div>
       </div>
 
-      <Footer />
     </main>
   );
 }

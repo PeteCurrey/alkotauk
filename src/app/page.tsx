@@ -6,7 +6,6 @@ import Hero from "@/components/Hero";
 import MachineCatalogue from "@/components/MachineCatalogue";
 
 import IndustryGrid from "@/components/IndustryGrid";
-import Footer from "@/components/Footer";
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 import { motion } from 'framer-motion';
@@ -165,7 +164,6 @@ export default function Home() {
         </div>
       </section>
 
-      <Footer />
 
       <style jsx>{`
         .stroke-text {

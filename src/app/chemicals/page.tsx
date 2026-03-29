@@ -3,8 +3,7 @@
 import Navigation from '@/components/Navigation';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { motion } from 'framer-motion';
-import Footer from '@/components/Footer';
-import { Beaker, ShieldCheck, ArrowRight, Info, Droplets, Truck, Factory, Zap, Cloud, Trash2, Wind, Plane, Anchor } from 'lucide-react';
+import { Beaker, ShieldCheck, ArrowRight, Info, Droplets, Truck, Factory, Zap, Cloud, Trash2, Wind, Plane, Anchor, Settings } from 'lucide-react';
 import Link from 'next/link';
 
 export default function ChemicalsHub() {
@@ -106,7 +105,6 @@ export default function ChemicalsHub() {
           </section>
         </div>
       </div>
-      <Footer />
     </main>
   );
 }

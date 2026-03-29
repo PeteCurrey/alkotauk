@@ -6,7 +6,6 @@ import { getMockMachines } from '@/sanity/client';
 import MachineCard from '@/components/MachineCard';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import Footer from '@/components/Footer';
 import { ArrowRight } from 'lucide-react';
 
 export default function MachinesPage() {
@@ -115,7 +114,6 @@ export default function MachinesPage() {
         </div>
       </div>
 
-      <Footer />
     </main>
   );
 }

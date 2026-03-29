@@ -16,6 +16,8 @@ export default function SplashScreen({ title = "Alkota UK", onComplete }: Splash
     // Extended duration for the slow, smooth sequence (~4s reveal + linger)
     const timer = setTimeout(() => {
       setIsVisible(false);
+      // Mark as seen for this session
+      document.cookie = "alkota_splash_seen=true; path=/; SameSite=Lax";
       if (onComplete) onComplete();
     }, 4500);
 

@@ -104,7 +104,7 @@ export default async function MachineDetailPage({ params }: { params: { category
         <div className="mb-20">
           <Breadcrumbs 
             items={[
-              { label: 'Fleet', href: '/machines' },
+              { label: 'Machines', href: '/machines' },
               { label: machine.category || 'Standard', href: `/machines/${machine.categorySlug || machine.category?.toLowerCase()}` },
               { label: machine.name }
             ]} 
@@ -123,7 +123,7 @@ export default async function MachineDetailPage({ params }: { params: { category
                 <div className="absolute inset-0 bg-gradient-to-t from-white/40 to-transparent" />
                 <div className="absolute bottom-6 left-6 flex items-center gap-3">
                   <div className="h-2 w-2 rounded-full bg-alkota-orange animate-pulse" />
-                  <span className="font-ibm-plex-mono text-[9px] font-black uppercase tracking-[0.2em] text-alkota-black">Live Hardware Scan // Active</span>
+                  <span className="font-ibm-plex-mono text-[9px] font-black uppercase tracking-[0.2em] text-alkota-black">Industrial specification // verified</span>
                 </div>
             </div>
 
@@ -148,7 +148,7 @@ export default async function MachineDetailPage({ params }: { params: { category
           <div className="lg:col-span-5 lg:sticky lg:top-40">
             <div className="mb-6 flex items-center gap-3">
               <span className="font-ibm-plex-mono text-[10px] font-black uppercase tracking-[0.4em] text-alkota-orange">
-                {machine.category || 'High Pressure Fleet'}
+                {machine.category || 'High Pressure Systems'}
               </span>
               {machine.isEliteSeries && (
                 <div className="h-1 w-12 bg-alkota-iron" />
@@ -184,11 +184,11 @@ export default async function MachineDetailPage({ params }: { params: { category
                 <div className="flex items-center justify-between">
                    <div>
                      <p className="font-ibm-plex-mono text-[10px] text-alkota-silver uppercase tracking-widest mb-2">Build Availability</p>
-                     <p className="font-barlow-condensed text-4xl font-black text-alkota-black uppercase italic">Active Inventory</p>
+                     <p className="font-barlow-condensed text-4xl font-black text-alkota-black uppercase italic">Current Build Status</p>
                    </div>
                    <div className="text-right">
                      <p className="font-ibm-plex-mono text-[10px] text-alkota-silver uppercase tracking-widest mb-2">Price Estimate</p>
-                     <p className="font-barlow-condensed text-4xl font-black text-alkota-orange uppercase italic">P.O.A</p>
+                     <p className="font-barlow-condensed text-4xl font-black text-alkota-orange uppercase italic">Price on request</p>
                    </div>
                 </div>
               )}
@@ -199,7 +199,7 @@ export default async function MachineDetailPage({ params }: { params: { category
                 href="#quote"
                 className="flex items-center justify-center gap-4 bg-alkota-orange p-6 text-xs font-black uppercase tracking-[0.3em] text-white hover:bg-alkota-orange-hover transition-all group"
               >
-                Assemble Official Quote
+                Request a Quote
                 <ArrowRight className="h-4 w-4 transform group-hover:translate-x-2 transition-transform" />
               </a>
               
@@ -219,17 +219,17 @@ export default async function MachineDetailPage({ params }: { params: { category
         <section className="mt-60">
           <div className="mb-24 flex items-center gap-8">
             <h2 className="font-barlow-condensed text-6xl font-black text-alkota-black uppercase italic tracking-tighter md:text-8xl">
-              TECHNICAL <span className="text-alkota-orange">MANIFEST.</span>
+              SPECIFICATIONS <span className="text-alkota-orange">.</span>
             </h2>
             <div className="flex-1 h-[2px] bg-alkota-iron/30" />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-alkota-iron border border-alkota-iron">
             {[
-              { label: 'WATER FLOW', value: `${machine.specs?.flowRateLPM || '15'} LPM`, unit: 'Liters / Min', icon: Droplets },
-              { label: 'PRESSURE', value: `${machine.specs?.pressureBAR || '200'} BAR`, unit: 'Unit Force', icon: Gauge },
-              { label: 'TEMPERATURE', value: machine.category?.includes('hot') ? '98°C' : 'Ambient', unit: 'Thermal Index', icon: Thermometer },
-              { label: 'POWER', value: machine.specs?.powerSource || '440V / 3PH', unit: 'Logic Source', icon: Zap }
+              { label: 'WATER FLOW', value: `${machine.specs?.flowRateLPM || '15'} LPM`, unit: 'LPM', icon: Droplets },
+              { label: 'PRESSURE', value: `${machine.specs?.pressureBAR || '200'} BAR`, unit: 'Pressure', icon: Gauge },
+              { label: 'TEMPERATURE', value: machine.category?.includes('hot') ? '98°C' : 'Ambient', unit: 'Temperature', icon: Thermometer },
+              { label: 'POWER', value: machine.specs?.powerSource || '440V / 3PH', unit: 'Power Source', icon: Zap }
             ].map((spec, i) => (
               <div key={i} className="bg-white p-12 transition-all hover:bg-alkota-steel/40 group">
                 <spec.icon className="h-8 w-8 text-alkota-orange mb-8 transition-transform group-hover:scale-110" />
@@ -301,8 +301,8 @@ export default async function MachineDetailPage({ params }: { params: { category
                   <span className="text-[10px] font-black uppercase tracking-[0.4em] text-alkota-orange">Acquisition Channel</span>
                 </div>
                 <h2 className="font-barlow-condensed text-7xl font-black text-alkota-black uppercase italic tracking-tighter leading-[0.8] mb-12">
-                   DEPLOY THIS <br />
-                   <span className="text-alkota-orange [text-stroke:1.5px_rgba(0,0,0,0.1)]">COMMANDER.</span>
+                   REQUEST A <br />
+                   <span className="text-alkota-orange [text-stroke:1.5px_rgba(0,0,0,0.1)]">QUOTE.</span>
                 </h2>
                 <div className="space-y-8 max-w-md">
                    <div className="flex gap-6 group">
@@ -310,7 +310,7 @@ export default async function MachineDetailPage({ params }: { params: { category
                         <Truck className="h-5 w-5" />
                       </div>
                       <div>
-                        <h4 className="font-barlow-condensed text-xl font-black text-alkota-black uppercase italic mb-1">Direct Deployment</h4>
+                        <h4 className="font-barlow-condensed text-xl font-black text-alkota-black uppercase italic mb-1">Standard Delivery</h4>
                         <p className="font-inter text-xs text-alkota-silver uppercase tracking-wider">Fast-track delivery across the UK & Ireland from central stock.</p>
                       </div>
                    </div>
@@ -335,7 +335,10 @@ export default async function MachineDetailPage({ params }: { params: { category
                     />
                   ) : (
                     <div className="py-24 text-center border border-dashed border-alkota-iron">
-                      <p className="font-ibm-plex-mono text-[9px] text-alkota-silver uppercase tracking-widest mb-6">INT_ERROR: HUBSPOT_OFFLINE</p>
+                      <p className="font-ibm-plex-mono text-[9px] text-alkota-silver uppercase tracking-widest mb-6">Quote Service Standby</p>
+                      <p className="font-inter text-[10px] text-alkota-silver uppercase tracking-widest mb-6 max-w-xs mx-auto">
+                        Machines are priced to your specification. Request a quote and we'll come back to you within 1 working day.
+                      </p>
                       <button className="bg-alkota-orange px-10 py-5 text-[10px] font-black uppercase tracking-[0.3em] text-white">Call 01708 834567</button>
                     </div>
                   )}

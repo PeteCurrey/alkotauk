@@ -9,21 +9,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     machines = (await client.fetch(`*[_type == "machine"]{ "slug": slug.current, "category": category->slug.current }`)) || [];
   } catch (e) {
-    console.warn("Sitemap: Sanity fetch failed, falling back to mock data");
+    // console.warn("Sitemap: Sanity fetch failed, falling back to mock data");
   }
 
-  // Ensure we have a massive catalogue even if Sanity is empty during migration
+  // Ensure we have a massive catalogue even if Sanity is empty
   if (machines.length === 0) {
     const mockMachines = getMockMachines();
     machines = mockMachines.map((m: any) => ({
-      slug: m.slug || m._id,
-      category: m.categorySlug || m.category?.toLowerCase().replace(' ', '-')
+      slug: m.slug || m.id,
+      category: m.type || 'hot-water'
     }));
   }
-
-  const industries = (await client.fetch(`*[_type == "industry"]{ "slug": slug.current }`).catch(() => [])) || [];
-  const applications = (await client.fetch(`*[_type == "application"]{ "slug": slug.current }`).catch(() => [])) || [];
-  const posts = (await client.fetch(`*[_type == "blogPost"]{ "slug": slug.current }`).catch(() => [])) || [];
 
   const machineEntries = machines.map((m: any) => ({
     url: `${baseUrl}/machines/${m.category}/${m.slug}`,
@@ -32,48 +28,38 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  const industryEntries = Array.isArray(industries) ? industries.map((ind: any) => ({
-    url: `${baseUrl}/industries/${ind.slug?.current || ind.slug}`,
-    lastModified: new Date(),
-    changeFrequency: 'monthly' as const,
-    priority: 0.6,
-  })) : [];
-
-  const applicationEntries = Array.isArray(applications) ? applications.map((app: any) => ({
-    url: `${baseUrl}/applications/${app.slug?.current || app.slug}`,
-    lastModified: new Date(),
-    changeFrequency: 'monthly' as const,
-    priority: 0.6,
-  })) : [];
-
-  const postEntries = Array.isArray(posts) ? posts.map((post: any) => ({
-    url: `${baseUrl}/resources/blog/${post.slug?.current || post.slug}`,
-    lastModified: new Date(),
-    changeFrequency: 'monthly' as const,
-    priority: 0.5,
-  })) : [];
-
   const staticRoutes = [
     '',
     '/machines',
+    '/machines/hot-water',
+    '/machines/cold-water',
+    '/machines/wash-plants',
+    '/machines/parts-washers',
+    '/bespoke',
+    '/chemicals',
+    '/chemicals/degreasers',
+    '/chemicals/auto-truck-wash',
+    '/chemicals/aluminum-brightener',
+    '/chemicals/industrial',
+    '/chemicals/food-processing',
+    '/chemicals/masonry-asphalt',
+    '/chemicals/parts-washer',
+    '/chemicals/residential',
+    '/chemicals/additives',
+    '/chemicals/coatings',
+    '/chemicals/aviation',
+    '/chemicals/transportation',
     '/water-treatment',
-    '/parts-washers',
-    '/industries',
-    '/applications',
     '/configurator',
-    '/shop',
     '/about',
     '/support',
-    '/resources',
-    '/contact',
-    '/tools/machine-match',
+    '/industrial',
+    '/industrial/mat-wash-plants',
+    '/industrial/containerised',
+    '/industrial/wash-installations',
+    '/industrial/brief',
     '/mess-quest',
     '/chemicals/selector',
-    '/support/fault-finder',
-    '/tools/wash-bay-compliance',
-    '/tools/tco-calculator',
-    '/tools/hire-vs-buy',
-    '/compare',
   ].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),
@@ -84,8 +70,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     ...staticRoutes,
     ...machineEntries,
-    ...industryEntries,
-    ...applicationEntries,
-    ...postEntries,
   ];
 }

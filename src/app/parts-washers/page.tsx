@@ -8,26 +8,45 @@ import { Settings, RefreshCw, Layers, ArrowRight, Gauge, CheckSquare, Trash2, Sh
 import Link from 'next/link';
 
 export default function PartsWashersHub() {
-  const machines = [
+  const models = [
     {
-      id: 'top-load',
-      name: 'Top Load Series',
-      tagline: 'Automatic Component Cleaning',
-      description: 'Compact, high-pressure spray cabinets for fast part turnaround.',
+      id: 'model-110',
+      name: 'Model 110',
+      type: 'Top Load',
+      specs: '24" Turntable | 300 lbs Capacity',
+      description: 'Compact easy-lift lid design. Hot water and biodegradable detergent. No solvents required. Ideal for workshops, garages and agricultural maintenance.',
       icon: Layers,
     },
     {
-      id: 'front-load',
-      name: 'Front Load Cabinets',
-      tagline: 'Heavy-Duty Industrial',
-      description: 'Large capacity spray cabinets for engine blocks and industrial components.',
+      id: 'al2424',
+      name: 'Model AL2424',
+      type: 'Top Load',
+      specs: '50 PSI | 26 GPM | 500 lbs Capacity',
+      description: 'Gear-driven 24 inch turntable. Oil skimmer, debris screen, low water shutoff. For truck and automotive repair shops, equipment repair, machine shops.',
+      icon: Layers,
+    },
+    {
+      id: 'al3040',
+      name: 'Model AL3040',
+      type: 'Front Load',
+      specs: '30" Turntable | 1000 lbs Capacity',
+      description: 'Front load industrial cabinet washer for heavy continuous use. Gear-driven turntable, hot water and biodegradable detergent.',
       icon: Settings,
     },
     {
-      id: 'rollout',
-      name: 'Rollout Door',
-      tagline: 'Extreme Payload capacity',
-      description: 'Massive rollout systems for heavy machinery and oversized parts.',
+      id: 'al3654',
+      name: 'Model AL3654',
+      type: 'Front Load',
+      specs: '75 PSI | 60 GPM | 1500 lbs Capacity',
+      description: 'The flagship front load parts washer. 36 inch gear-driven turntable, oil skimmer, debris screen, low water shutoff, turntable jog switch. For intensive continuous industrial use.',
+      icon: Settings,
+    },
+    {
+      id: 'al3640-ro',
+      name: 'Model AL3640-RO',
+      type: 'Rollout Turntable',
+      specs: '36" Rollout | 1500 lbs Capacity',
+      description: 'Rollout turntable allows loading from front or side — ideal for oversized or awkwardly shaped components that cannot be lifted into a standard front load cabinet.',
       icon: RefreshCw,
     }
   ];
@@ -73,7 +92,7 @@ export default function PartsWashersHub() {
               transition={{ delay: 0.2 }}
               className="font-inter max-w-2xl text-lg text-alkota-silver leading-relaxed uppercase tracking-wider"
             >
-              Eliminate manual cleaning labor. Alkota's automatic parts washers use high-pressure, biodegradable detergent, and heat to restore industrial components.
+              Aqueous hot water parts washers using biodegradable detergents. No solvents. No aerosols. Load the parts, set the timer, return when clean.
             </motion.p>
           </header>
 
@@ -96,31 +115,31 @@ export default function PartsWashersHub() {
           <section className="mb-60">
             <div className="mb-20 flex items-center justify-between border-b border-alkota-iron pb-12">
               <h2 className="font-barlow-condensed text-5xl font-black text-white uppercase italic tracking-tighter md:text-7xl">
-                SYSTEM <span className="text-alkota-orange">ARCHITECTURES.</span>
+                MACHINE <span className="text-alkota-orange">FLEET.</span>
               </h2>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-alkota-iron border border-alkota-iron">
-              {machines.map((machine, i) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-alkota-iron border border-alkota-iron">
+              {models.map((model, i) => (
                 <div 
-                  key={machine.id}
+                  key={model.id}
                   className="group relative flex flex-col bg-alkota-black p-12 transition-all duration-500 hover:bg-alkota-orange/10"
                 >
-                  <machine.icon className="h-10 w-10 text-alkota-orange mb-10 transition-transform group-hover:scale-110" />
-                  <span className="font-ibm-plex-mono text-[9px] font-black text-alkota-orange uppercase mb-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                    [ AUTO_JET_0{i+1} ]
+                  <model.icon className="h-10 w-10 text-alkota-orange mb-10 transition-transform group-hover:scale-110" />
+                  <span className="font-ibm-plex-mono text-[9px] font-black text-alkota-orange uppercase mb-4">
+                    {model.type}
                   </span>
                   <h3 className="font-barlow-condensed text-4xl font-black text-white uppercase italic leading-none mb-4 group-hover:text-alkota-orange transition-colors duration-300">
-                    {machine.name}
+                    {model.name}
                   </h3>
                   <p className="font-inter text-[10px] text-alkota-smoke uppercase tracking-[0.2em] font-bold mb-8">
-                    {machine.tagline}
+                    {model.specs}
                   </p>
                   <p className="font-inter text-xs text-alkota-silver leading-relaxed mb-12 flex-1">
-                    {machine.description}
+                    {model.description}
                   </p>
                   <div className="mt-auto flex items-center gap-4 text-[10px] font-black text-white uppercase tracking-[0.3em] opacity-0 group-hover:opacity-100 transition-all transform translate-y-4 group-hover:translate-y-0">
-                    View Fleet <ArrowRight className="h-3 w-3" />
+                    Request Quote <ArrowRight className="h-3 w-3" />
                   </div>
                   <div className="absolute inset-x-0 bottom-0 h-1 bg-alkota-orange transform scale-x-0 transition-transform duration-500 group-hover:scale-x-100" />
                 </div>

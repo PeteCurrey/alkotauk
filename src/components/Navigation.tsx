@@ -33,29 +33,38 @@ export default function Navigation() {
   }, [navRef]);
 
   const machineCategories = [
-    { name: 'Elite Series HW', href: '/machines/hot-water', image: 'https://alkota.co.uk/assets/hot-water-pressure-washer-DHE0Q-_H.png', desc: 'The industrial gold standard in hot water performance.' },
+    { name: 'Hot Water ELITE', href: '/machines/hot-water', image: 'https://alkota.co.uk/assets/hot-water-pressure-washer-DHE0Q-_H.png', desc: 'The industrial gold standard in hot water performance.' },
     { name: 'Cold Water BD', href: '/machines/cold-water', image: 'https://alkota.co.uk/assets/cold-water-pressure-washer-D9J_Sudm.png', desc: 'Heavy duty belt-drive cold wash systems.' },
-    { name: 'Steam Generators', href: '/machines/steam', image: 'https://alkota.co.uk/assets/steam-cleaner-Bdrp7P2V.png', desc: 'Precision industrial steam for degreasing.' },
-    { name: 'Space Heaters', href: '/machines/space-heaters', image: 'https://alkota.com/wp-content/uploads/2023/11/Home-Page-Made-In-USA-Alkota.png', desc: 'High-output portable heating solutions.' },
-  ];
-
-  const environmentalCategories = [
-    { name: 'Vacuum Filtration', href: '/water-treatment/vacuum-filtration', image: 'https://alkota.co.uk/assets/water-treatment-CkILM82j.png', desc: 'VFS systems for wash-bay water recycling.' },
-    { name: 'Media Filtration', href: '/water-treatment/media-filtration', image: 'https://alkota.co.uk/assets/custom-build-C4FaO6d5.png', desc: 'Multi-stage filtration for trade effluent.' },
-    { name: 'Wastewater Evap', href: '/water-treatment/evaporators', image: 'https://alkota.co.uk/assets/hot-water-pressure-washer-DHE0Q-_H.png', desc: 'Zero liquid discharge evaporation systems.' },
-    { name: 'Compliance Hub', href: '/water-treatment', image: 'https://alkota.com/wp-content/uploads/2025/04/2025-Elite-Series-Collage-no-logo.png', desc: 'PPG2 & Trade Effluent regulatory guidance.' },
+    { name: 'Wash Plants', href: '/machines/wash-plants', image: 'https://alkota.co.uk/assets/custom-build-C4FaO6d5.png', desc: 'Permanent fixed-installation bay systems.' },
+    { name: 'Steam Cleaners', href: '/machines/steam', image: 'https://alkota.co.uk/assets/steam-cleaner-Bdrp7P2V.png', desc: 'Precision industrial steam for degreasing.' },
   ];
 
   const buildCategories = [
-    { name: 'Trailer Systems', href: '/machines/trailers', image: 'https://alkota.co.uk/assets/pressure-washer-trailer-L2Zp9v78.png', desc: 'Bespoke mobile cleaning rigs built to order.' },
+    { name: 'Bespoke Trailers', href: '/bespoke', image: 'https://alkota.co.uk/assets/pressure-washer-trailer-L2Zp9v78.png', desc: 'Custom mobile cleaning rigs built to order.' },
+    { name: 'Custom Skid Units', href: '/bespoke#skid', image: 'https://alkota.co.uk/assets/custom-build-C4FaO6d5.png', desc: 'Truck, van or trailer skid mounting.' },
     { name: 'Parts Washers', href: '/machines/parts-washers', image: 'https://alkota.co.uk/assets/custom-build-C4FaO6d5.png', desc: 'Automatic aqueous component cleaning.' },
     { name: 'Configurator', href: '/machines/trailers/configure', image: 'https://alkota.co.uk/assets/custom-build-C4FaO6d5.png', desc: 'Digital trailer systems design tool.' },
   ];
 
+  const industrialCategories = [
+    { name: 'Mat Wash Plants', href: '/industrial/mat-wash-plants', image: 'https://alkota.co.uk/assets/custom-build-C4FaO6d5.png', desc: 'Automated conveyor-based mat cleaning.' },
+    { name: 'Containerised Systems', href: '/industrial/containerised', image: 'https://alkota.co.uk/assets/custom-build-C4FaO6d5.png', desc: 'Self-contained road-transportable hubs.' },
+    { name: 'Wash Installations', href: '/industrial/wash-installations', image: 'https://alkota.co.uk/assets/custom-build-C4FaO6d5.png', desc: 'Permanent engineered infrastructure.' },
+    { name: 'Engineering Brief', href: '/industrial/brief', image: 'https://alkota.co.uk/assets/custom-build-C4FaO6d5.png', desc: 'Submit a custom project requirement.' },
+  ];
+
+  const chemicalCategories = [
+    { name: 'All Chemicals', href: '/chemicals', image: 'https://alkota.co.uk/assets/water-treatment-CkILM82j.png', desc: 'The complete Hydrus formulated range.' },
+    { name: 'Degreasers', href: '/chemicals/degreasers', image: 'https://alkota.co.uk/assets/water-treatment-CkILM82j.png', desc: 'Extreme grime and oil removal.' },
+    { name: 'Industrial', href: '/chemicals/industrial', image: 'https://alkota.co.uk/assets/water-treatment-CkILM82j.png', desc: 'Agricultural and heavy duty detergents.' },
+    { name: 'Parts Washers', href: '/chemicals/parts-washer', image: 'https://alkota.co.uk/assets/water-treatment-CkILM82j.png', desc: 'Aqueous, non-foaming, multi-metal.' },
+  ];
+
   const navLinks = [
     { name: 'Machines', href: '/machines', hasMega: true, data: machineCategories },
-    { name: 'Water Treatment', href: '/water-treatment', hasMega: true, data: environmentalCategories },
-    { name: 'Bespoke Builds', href: '/machines/trailers', hasMega: true, data: buildCategories },
+    { name: 'Industrial Systems', href: '/industrial', hasMega: true, data: industrialCategories },
+    { name: 'Bespoke Builds', href: '/bespoke', hasMega: true, data: buildCategories },
+    { name: 'Chemicals', href: '/chemicals', hasMega: true, data: chemicalCategories },
     { name: 'Mess Quest', href: '/mess-quest', hasMega: false },
     { name: 'Support', href: '/support', hasMega: false },
   ];
@@ -68,7 +77,6 @@ export default function Navigation() {
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6">
-        {/* Logo */}
         <Link href="/" className="flex items-center group">
           <Logo className={isScrolled ? "h-8" : "h-11"} />
         </Link>
@@ -76,19 +84,20 @@ export default function Navigation() {
         {/* Desktop Nav */}
         <div className="hidden items-center gap-10 lg:flex">
           {navLinks.map((link) => (
-            <div key={link.name} className="relative group/nav py-2">
+            <div 
+              key={link.name} 
+              className="relative group/nav py-2"
+              onMouseEnter={() => link.hasMega && setActiveMenu(link.name)}
+              onMouseLeave={() => setActiveMenu(null)}
+            >
               <button
-                onClick={(e) => link.hasMega ? setActiveMenu(activeMenu === link.name ? null : link.name) : null}
-                className={`flex items-center gap-1.5 text-[13px] font-bold uppercase tracking-[0.15em] transition-all ${
-                  isScrolled || activeMenu === link.name ? 'text-alkota-black hover:text-alkota-orange' : 'text-alkota-black hover:text-alkota-orange'
-                }`}
+                className={`flex items-center gap-1.5 text-[13px] font-bold uppercase tracking-[0.15em] transition-all text-alkota-black hover:text-alkota-orange`}
               >
                 {link.name}
                 {link.hasMega && <ChevronDown className={`h-3 w-3 transition-transform duration-300 ${activeMenu === link.name ? 'rotate-180' : ''}`} />}
               </button>
               <span className={`absolute -bottom-1 left-0 h-[2px] bg-alkota-orange transition-all duration-300 ${activeMenu === link.name ? 'w-full' : 'w-0 group-hover/nav:w-full'}`} />
 
-              {/* Mega Menu */}
               <AnimatePresence>
                 {link.hasMega && activeMenu === link.name && (
                   <motion.div
@@ -124,18 +133,14 @@ export default function Navigation() {
           ))}
         </div>
 
-        {/* Actions */}
         <div className="flex items-center gap-6">
           <Link
             href="/machines/trailers/configure"
-            className={`hidden border border-alkota-orange px-6 py-2.5 text-[11px] font-black uppercase tracking-[0.2em] transition-all hover:bg-alkota-orange hover:text-white md:block ${
-              isScrolled ? 'text-alkota-black' : 'text-alkota-black'
-            }`}
+            className={`hidden border border-alkota-orange px-6 py-2.5 text-[11px] font-black uppercase tracking-[0.2em] transition-all hover:bg-alkota-orange hover:text-white md:block text-alkota-black`}
           >
             Configurator
           </Link>
           <CartIndicator />
-          
           <button className="lg:hidden text-alkota-black" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
             {mobileMenuOpen ? <X className="h-7 w-7" /> : <Menu className="h-7 w-7" />}
           </button>
@@ -165,13 +170,6 @@ export default function Navigation() {
                   {link.name}
                 </Link>
               ))}
-              <Link
-                href="/machines/trailers/configure"
-                onClick={() => setMobileMenuOpen(false)}
-                className="mt-4 border-2 border-alkota-orange py-4 text-center font-barlow-condensed text-2xl font-black uppercase tracking-widest text-alkota-orange"
-              >
-                Start Build →
-              </Link>
             </div>
           </motion.div>
         )}

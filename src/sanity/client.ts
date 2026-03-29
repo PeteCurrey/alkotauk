@@ -1,7 +1,7 @@
 import { createClient } from 'next-sanity';
 import { createImageUrlBuilder } from '@sanity/image-url';
 
-const isDummyConfig = !process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || process.env.NEXT_PUBLIC_SANITY_PROJECT_ID === 'dummy' || process.env.NEXT_PUBLIC_SANITY_PROJECT_ID === 'your-project-id' || process.env.NEXT_PUBLIC_SANITY_PROJECT_ID === 'pa54q49w';
+const isDummyConfig = !process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || process.env.NEXT_PUBLIC_SANITY_PROJECT_ID === 'dummy' || process.env.NEXT_PUBLIC_SANITY_PROJECT_ID === 'your-project-id';
 
 // Note: Using hardcoded ID as primary requested for configuration clarity
 export const client = createClient({

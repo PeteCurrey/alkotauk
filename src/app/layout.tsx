@@ -7,7 +7,7 @@ import { CartProvider } from "@/context/CartContext";
 import { safeFetch, getMockSettings } from "@/sanity/client";
 import { generateSeo } from "@/lib/seo";
 import Script from 'next/script';
-import { headers } from "next/headers";
+import { headers, cookies } from "next/headers";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -52,7 +52,9 @@ export default async function RootLayout({
   const siteSettings = await safeFetch(`*[_type == "siteSettings"][0]`, getMockSettings());
   
   const isMaintenance = siteSettings?.maintenanceGroup?.isMaintenanceMode || process.env.NEXT_PUBLIC_MAINTENANCE_MODE === 'true';
-  const showSplash = siteSettings?.visualExperience?.enableSplashScreen;
+  const cookieStore = await cookies();
+  const splashSeen = cookieStore.get('alkota_splash_seen');
+  const showSplash = siteSettings?.visualExperience?.enableSplashScreen && !splashSeen;
   const showBanner = siteSettings?.bannerGroup?.showGlobalBanner;
 
   return (

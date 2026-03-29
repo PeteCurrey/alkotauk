@@ -178,5 +178,42 @@ export const siteSettingsType = defineType({
         }),
       ],
     },
+    {
+      name: 'aiChatGroup',
+      title: 'AI Advisor Configuration',
+      type: 'object',
+      fields: [
+        defineField({
+          name: 'claudeApiKey',
+          title: 'Claude API Key',
+          type: 'string',
+          description: 'Your Anthropic API key. This is stored securely and never exposed to the frontend.',
+        }),
+        defineField({
+          name: 'systemInstructions',
+          title: 'System Instructions',
+          type: 'text',
+          rows: 10,
+          description: 'The core personality and knowledge base for the AI Advisor.',
+          initialValue: `You are the Alkota UK Technical Advisor — an expert in industrial pressure washing and high-pressure cleaning systems.`,
+        }),
+        defineField({
+          name: 'teamMembers',
+          title: 'Team Personas',
+          type: 'array',
+          description: 'A list of real people whose names and avatars will be randomly associated with the bot for a personable experience.',
+          of: [
+            {
+              type: 'object',
+              fields: [
+                { name: 'name', title: 'Name', type: 'string' },
+                { name: 'role', title: 'Role', type: 'string', initialValue: 'Technical Advisor' },
+                { name: 'avatar', title: 'Avatar Image', type: 'image', options: { hotspot: true } },
+              ],
+            },
+          ],
+        }),
+      ],
+    },
   ],
 });

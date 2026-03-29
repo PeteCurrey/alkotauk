@@ -2,8 +2,9 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageSquare, X, Send, Wrench, Shield, Circle, Loader2 } from 'lucide-react';
+import { MessageSquare, X, Send, Wrench, Shield, Circle, Loader2, User } from 'lucide-react';
 import Image from 'next/image';
+import { client, urlFor } from '@/sanity/client';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -24,9 +25,28 @@ export default function AlkotaAdvisor() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [hasFirstLoad, setHasFirstLoad] = useState(true);
+  const [persona, setPersona] = useState<{ name: string; role: string; avatarUrl: string | null } | null>(null);
 
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    async function fetchPersona() {
+      try {
+        const settings = await client.fetch(`*[_type == "siteSettings"][0].aiChatGroup`);
+        if (settings?.teamMembers?.length > 0) {
+          const randomMember = settings.teamMembers[Math.floor(Math.random() * settings.teamMembers.length)];
+          setPersona({
+            name: randomMember.name,
+            role: randomMember.role || 'Technical Advisor',
+            avatarUrl: randomMember.avatar ? urlFor(randomMember.avatar).url() : null
+          });
+        }
+      } catch (error) {
+        console.error('Failed to fetch AI personas:', error);
+      }
+    }
+    fetchPersona();
+  }, []);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -77,13 +97,24 @@ export default function AlkotaAdvisor() {
           >
             {/* Header */}
             <div className="bg-alkota-steel p-6 border-b border-alkota-iron flex items-center justify-between">
-              <div>
-                <h3 className="text-sm font-black uppercase italic tracking-tighter text-white">
-                  Alkota Technical Advisor
-                </h3>
-                <p className="text-[10px] text-alkota-steel uppercase font-bold tracking-widest mt-1">
-                  Expert Industrial Support
-                </p>
+              <div className="flex items-center gap-3">
+                {persona?.avatarUrl ? (
+                  <div className="h-10 w-10 overflow-hidden border-2 border-alkota-orange">
+                    <img src={persona.avatarUrl} alt={persona.name} className="h-full w-full object-cover" />
+                  </div>
+                ) : (
+                  <div className="h-10 w-10 bg-alkota-orange flex items-center justify-center">
+                    <Shield className="h-6 w-6 text-white" />
+                  </div>
+                )}
+                <div>
+                  <h3 className="text-sm font-black uppercase italic tracking-tighter text-white">
+                    {persona?.name || 'Alkota Advisor'}
+                  </h3>
+                  <p className="text-[10px] text-alkota-steel uppercase font-bold tracking-widest mt-0.5">
+                    {persona?.role || 'Technical Advisor'}
+                  </p>
+                </div>
               </div>
               <button 
                 onClick={() => setIsOpen(false)}
@@ -100,11 +131,17 @@ export default function AlkotaAdvisor() {
             >
               {/* Initial Welcome */}
               <div className="flex gap-3">
-                <div className="h-8 w-8 rounded-sm bg-alkota-orange flex-shrink-0 flex items-center justify-center">
+                {persona?.avatarUrl ? (
+                  <div className="h-8 w-8 overflow-hidden flex-shrink-0 border border-alkota-orange">
+                    <img src={persona.avatarUrl} alt={persona.name} className="h-full w-full object-cover" />
+                  </div>
+                ) : (
+                  <div className="h-8 w-8 rounded-sm bg-alkota-orange flex-shrink-0 flex items-center justify-center">
                     <Shield className="h-4 w-4 text-white" />
-                </div>
+                  </div>
+                )}
                 <div className="bg-alkota-iron/30 rounded-2xl rounded-tl-none p-4 text-sm text-alkota-silver leading-relaxed">
-                  {WELCOME_MESSAGE}
+                  Hi, I'm {persona?.name ? `${persona.name}, your ${persona.role.toLowerCase()}` : 'the Alkota Technical Advisor'}. Tell me what you're cleaning and I'll point you to the right machine, chemical, or solution.
                 </div>
               </div>
 
@@ -131,12 +168,18 @@ export default function AlkotaAdvisor() {
                   className={`flex gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}
                 >
                   {msg.role === 'assistant' ? (
-                    <div className="h-8 w-8 rounded-sm bg-alkota-orange flex-shrink-0 flex items-center justify-center">
+                    persona?.avatarUrl ? (
+                      <div className="h-8 w-8 overflow-hidden flex-shrink-0 border border-alkota-orange">
+                        <img src={persona.avatarUrl} alt={persona.name} className="h-full w-full object-cover" />
+                      </div>
+                    ) : (
+                      <div className="h-8 w-8 rounded-sm bg-alkota-orange flex-shrink-0 flex items-center justify-center">
                         <Shield className="h-4 w-4 text-white" />
-                    </div>
+                      </div>
+                    )
                   ) : (
                     <div className="h-8 w-8 rounded-sm bg-alkota-blue flex-shrink-0 flex items-center justify-center">
-                        <Circle className="h-4 w-4 text-white fill-white" />
+                        <User className="h-4 w-4 text-white fill-white" />
                     </div>
                   )}
                   <div className={`p-4 text-sm leading-relaxed max-w-[85%] ${
@@ -152,9 +195,15 @@ export default function AlkotaAdvisor() {
               {/* Loading indicator */}
               {isLoading && (
                 <div className="flex gap-3">
-                  <div className="h-8 w-8 rounded-sm bg-alkota-orange flex-shrink-0 flex items-center justify-center">
+                  {persona?.avatarUrl ? (
+                    <div className="h-8 w-8 overflow-hidden flex-shrink-0 border border-alkota-orange">
+                      <img src={persona.avatarUrl} alt={persona.name} className="h-full w-full object-cover" />
+                    </div>
+                  ) : (
+                    <div className="h-8 w-8 rounded-sm bg-alkota-orange flex-shrink-0 flex items-center justify-center">
                       <Shield className="h-4 w-4 text-white" />
-                  </div>
+                    </div>
+                  )}
                   <div className="bg-alkota-iron/30 rounded-2xl rounded-tl-none p-4 flex gap-1 items-center">
                     <motion.div animate={{ opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1 }} className="h-1.5 w-1.5 rounded-full bg-alkota-steel" />
                     <motion.div animate={{ opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1, delay: 0.2 }} className="h-1.5 w-1.5 rounded-full bg-alkota-steel" />

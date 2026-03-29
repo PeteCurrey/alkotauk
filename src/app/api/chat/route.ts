@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { client } from '@/sanity/client';
 
-const SYSTEM_PROMPT = `
+const DEFAULT_SYSTEM_PROMPT = `
 You are the Alkota UK Technical Advisor — an expert in 
 industrial pressure washing and high-pressure cleaning systems.
 
@@ -38,22 +39,28 @@ export async function POST(req: NextRequest) {
   try {
     const { messages } = await req.json();
 
-    if (!process.env.ANTHROPIC_API_KEY) {
-      console.error('ANTHROPIC_API_KEY is not defined');
+    // Fetch AI settings from Sanity (server-side only)
+    const settings = await client.fetch(`*[_type == "siteSettings"][0].aiChatGroup`);
+    
+    const apiKey = settings?.claudeApiKey || process.env.ANTHROPIC_API_KEY;
+    const systemPrompt = settings?.systemInstructions || DEFAULT_SYSTEM_PROMPT;
+
+    if (!apiKey) {
+      console.error('No Claude API key found in Sanity or environment variables');
       return NextResponse.json({ error: 'Something went wrong' }, { status: 500 });
     }
 
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
-        'x-api-key': process.env.ANTHROPIC_API_KEY,
+        'x-api-key': apiKey,
         'anthropic-version': '2023-06-01',
         'content-type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'claude-opus-4-6',
+        model: 'claude-3-7-sonnet-20250219',
         max_tokens: 1024,
-        system: SYSTEM_PROMPT,
+        system: systemPrompt,
         messages: messages.map((m: any) => ({
           role: m.role,
           content: m.content,

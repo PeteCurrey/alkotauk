@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Settings, Wrench, Mail, Factory, Loader2, CheckCircle2, X } from 'lucide-react';
+import { Settings, Wrench, Mail, Factory, Loader2, CheckCircle2, X, Volume2, VolumeX } from 'lucide-react';
 import Logo from './Logo';
 
 interface MaintenanceScreenProps {
@@ -28,6 +28,8 @@ export default function MaintenanceScreen({
   const [showAdminLogin, setShowAdminLogin] = useState(false);
   const [adminPassword, setAdminPassword] = useState('');
   const [adminError, setAdminError] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const videoRef = useRef<HTMLIFrameElement>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,6 +70,16 @@ export default function MaintenanceScreen({
     }
   };
 
+  const toggleAudio = () => {
+    if (!videoRef.current) return;
+    const command = isMuted ? 'unMute' : 'mute';
+    videoRef.current.contentWindow?.postMessage(
+      JSON.stringify({ event: 'command', func: command, args: '' }),
+      '*'
+    );
+    setIsMuted(!isMuted);
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -79,7 +91,8 @@ export default function MaintenanceScreen({
         {/* YouTube Iframe Background - Oversized to crop black bars */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300vw] h-[300vh] md:w-[150vw] md:h-[150vh] opacity-60 grayscale pointer-events-none">
           <iframe
-            src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1`}
+            ref={videoRef}
+            src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1`}
             className="absolute inset-0 w-full h-full"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           />
@@ -95,6 +108,21 @@ export default function MaintenanceScreen({
             backgroundRepeat: 'repeat'
           }}
         />
+
+        {/* Audio Toggle */}
+        <button 
+          onClick={toggleAudio}
+          className="absolute bottom-8 right-8 z-30 flex items-center gap-3 bg-alkota-black/40 border border-white/10 px-4 py-2 hover:bg-alkota-orange transition-all group"
+        >
+          <span className="text-[9px] font-black uppercase tracking-widest text-white/60 group-hover:text-white">
+            Audio: {isMuted ? 'Off' : 'On'}
+          </span>
+          {isMuted ? (
+            <VolumeX className="w-3 h-3 text-white/60 group-hover:text-white" />
+          ) : (
+            <Volume2 className="w-3 h-3 text-white" />
+          )}
+        </button>
 
         {/* Messaging Overlay */}
         <div className="absolute bottom-0 md:bottom-auto md:top-1/2 left-0 w-full p-8 md:p-16 md:-translate-y-1/2 z-10 flex flex-col">

@@ -147,6 +147,7 @@ export const getMockMachines = () => {
       tagline: 'The Industry Standard Compact Hot Water Portable',
       category: 'hot-water',
       categorySlug: 'hot-water',
+      series: 'X4 Series — The Industry Standard',
       isEliteSeries: true,
       eliteFeatures: ['Precision Stainless Steel Coil', 'Heavy Duty Chassis', 'Industrial Belt Drive Pump'],
       heroImage: { asset: { url: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?q=80&w=2070&auto=format&fit=crop' } },
@@ -169,6 +170,7 @@ export const getMockMachines = () => {
       tagline: 'High-Pressure Elite Selection',
       category: 'hot-water',
       categorySlug: 'hot-water',
+      series: 'X4 Series — The Industry Standard',
       isEliteSeries: true,
       eliteFeatures: ['Chrome Plated Fittings', 'Triplex Ceramic Plunger Pump'],
       heroImage: { asset: { url: 'https://images.unsplash.com/photo-1543224523-0a7aa053c61f?q=80&w=2070&auto=format&fit=crop' } },
@@ -191,6 +193,7 @@ export const getMockMachines = () => {
       tagline: 'Maximum Flow Professional Series',
       category: 'hot-water',
       categorySlug: 'hot-water',
+      series: 'X4 Series — The Industry Standard',
       isEliteSeries: true,
       eliteFeatures: ['Ultra-Efficient Coil Design', 'Dual-Gun Compatible'],
       heroImage: { asset: { url: 'https://images.unsplash.com/photo-1519003722824-194d4455a60c?q=80&w=2075&auto=format&fit=crop' } },
@@ -214,6 +217,7 @@ export const getMockMachines = () => {
       tagline: 'High-Volume Cold Water Performance',
       category: 'cold-water',
       categorySlug: 'cold-water',
+      series: 'Wash Cannon — High Volume',
       isEliteSeries: false,
       heroImage: { asset: { url: 'https://images.unsplash.com/photo-1503387762-592dea58ef21?q=80&w=2062&auto=format&fit=crop' } },
       specs: {
@@ -233,6 +237,7 @@ export const getMockMachines = () => {
       tagline: 'Extreme Volume Industrial Cold Wash',
       category: 'cold-water',
       categorySlug: 'cold-water',
+      series: 'Wash Cannon — High Volume',
       isEliteSeries: false,
       heroImage: { asset: { url: 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?q=80&w=2070&auto=format&fit=crop' } },
       specs: {
@@ -252,6 +257,7 @@ export const getMockMachines = () => {
       slug: 'model-111',
       tagline: 'Precision Industrial Steam Generator',
       category: 'steam-cleaner',
+      series: 'Specialist Series',
       isEliteSeries: false,
       specs: {
         flowRateGPM: 1.1,
@@ -270,6 +276,7 @@ export const getMockMachines = () => {
       slug: 'alkota-210',
       tagline: 'Direct-Fired Industrial Space Heater',
       category: 'space-heater',
+      series: 'Heater Series',
       isEliteSeries: false,
       specs: {
         btuRating: '210,000 BTU',

@@ -1,5 +1,6 @@
 import { createClient } from 'next-sanity';
 import { createImageUrlBuilder } from '@sanity/image-url';
+import { MACHINES } from '@/lib/machines';
 
 const isDummyConfig = !process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || process.env.NEXT_PUBLIC_SANITY_PROJECT_ID === 'dummy' || process.env.NEXT_PUBLIC_SANITY_PROJECT_ID === 'your-project-id';
 
@@ -103,7 +104,7 @@ export const getMockSettings = () => ({
         defaultDescription: 'Alkota UK Industrial Cleaning Systems - The Platinum Standard in Pressure Washers.',
     },
     maintenanceGroup: {
-        isMaintenanceMode: false,
+        isMaintenanceMode: true,
         maintenanceTitle: 'System Maintenance',
         maintenanceMessage: 'The platform is currently undergoing scheduled upgrades to enhance performance and catalogue accuracy.',
         maintenanceVideoUrl: 'vFnvcx3vRUY',
@@ -137,154 +138,29 @@ export const getMockSettings = () => ({
 
 // Mock data generator for initial development
 export const getMockMachines = () => {
-  return [
-    // HOT WATER - ELITE SERIES
-    {
-      _id: 'elite-420x4',
-      name: '420X4',
-      modelCode: '420X4',
-      slug: '420x4',
-      tagline: 'The Industry Standard Compact Hot Water Portable',
-      category: 'hot-water',
-      categorySlug: 'hot-water',
-      series: 'X4 Series — The Industry Standard',
-      isEliteSeries: true,
-      eliteFeatures: ['Precision Stainless Steel Coil', 'Heavy Duty Chassis', 'Industrial Belt Drive Pump'],
-      heroImage: { asset: { url: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?q=80&w=2070&auto=format&fit=crop' } },
-      specs: {
-        flowRateGPM: 4,
-        flowRateLPM: 15.1,
-        pressurePSI: 2000,
-        pressureBar: 138,
-        powerSource: 'electric',
-        engineType: '5HP Electric Motor',
-        motorVoltage: '230V 1ph',
-        coilWarrantyYears: 7,
-      },
+  return MACHINES.map(m => ({
+    _id: m.id,
+    name: m.name,
+    modelCode: m.id.toUpperCase(),
+    slug: m.slug.split('/').pop() || m.id,
+    tagline: m.description, // Mapping description as tagline
+    category: m.type,
+    categorySlug: m.type,
+    series: m.series,
+    isEliteSeries: m.series.includes('Elite'),
+    eliteFeatures: m.highlights,
+    heroImage: { asset: { url: 'https://alkota.co.uk/assets/hot-water-pressure-washer-DHE0Q-_H.png' } }, // Placeholder for mock
+    specs: {
+      flowRateGPM: parseFloat(m.specs.flowLPM || '0') / 3.785,
+      flowRateLPM: parseFloat(m.specs.flowLPM || '0'),
+      pressurePSI: parseFloat(m.specs.pressureBar || '0') * 14.5038,
+      pressureBar: parseFloat(m.specs.pressureBar || '0'),
+      powerSource: m.specs.powerSource,
+      engineType: m.specs.engine,
+      motorVoltage: m.specs.voltageOptions,
+      coilWarrantyYears: parseInt(m.specs.coilWarranty) || 7,
     },
-    {
-      _id: 'elite-430x4',
-      name: '430X4',
-      modelCode: '430X4',
-      slug: '430x4',
-      tagline: 'High-Pressure Elite Selection',
-      category: 'hot-water',
-      categorySlug: 'hot-water',
-      series: 'X4 Series — The Industry Standard',
-      isEliteSeries: true,
-      eliteFeatures: ['Chrome Plated Fittings', 'Triplex Ceramic Plunger Pump'],
-      heroImage: { asset: { url: 'https://images.unsplash.com/photo-1543224523-0a7aa053c61f?q=80&w=2070&auto=format&fit=crop' } },
-      specs: {
-        flowRateGPM: 4,
-        flowRateLPM: 15.1,
-        pressurePSI: 3000,
-        pressureBar: 207,
-        powerSource: 'electric',
-        engineType: '7.5HP Electric Motor',
-        motorVoltage: '400V 3ph',
-        coilWarrantyYears: 7,
-      },
-    },
-    {
-      _id: 'elite-5355j',
-      name: '5355J',
-      modelCode: '5355J',
-      slug: '5355j',
-      tagline: 'Maximum Flow Professional Series',
-      category: 'hot-water',
-      categorySlug: 'hot-water',
-      series: 'X4 Series — The Industry Standard',
-      isEliteSeries: true,
-      eliteFeatures: ['Ultra-Efficient Coil Design', 'Dual-Gun Compatible'],
-      heroImage: { asset: { url: 'https://images.unsplash.com/photo-1519003722824-194d4455a60c?q=80&w=2075&auto=format&fit=crop' } },
-      specs: {
-        flowRateGPM: 4.8,
-        flowRateLPM: 18.2,
-        pressurePSI: 3000,
-        pressureBar: 207,
-        powerSource: 'electric',
-        engineType: '10HP Electric Motor',
-        motorVoltage: '400V 3ph',
-        coilWarrantyYears: 7,
-      },
-    },
-    // COLD WATER
-    {
-      _id: 'cold-8405hnl',
-      name: '8405HNL',
-      modelCode: '8405HNL',
-      slug: '8405hnl',
-      tagline: 'High-Volume Cold Water Performance',
-      category: 'cold-water',
-      categorySlug: 'cold-water',
-      series: 'Wash Cannon — High Volume',
-      isEliteSeries: false,
-      heroImage: { asset: { url: 'https://images.unsplash.com/photo-1503387762-592dea58ef21?q=80&w=2062&auto=format&fit=crop' } },
-      specs: {
-        flowRateGPM: 8,
-        flowRateLPM: 30.3,
-        pressurePSI: 4000,
-        pressureBar: 275,
-        powerSource: 'petrol',
-        engineType: 'Honda GX630',
-      },
-    },
-    {
-      _id: 'cold-10405hnl',
-      name: '10405HNL',
-      modelCode: '10405HNL',
-      slug: '10405hnl',
-      tagline: 'Extreme Volume Industrial Cold Wash',
-      category: 'cold-water',
-      categorySlug: 'cold-water',
-      series: 'Wash Cannon — High Volume',
-      isEliteSeries: false,
-      heroImage: { asset: { url: 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?q=80&w=2070&auto=format&fit=crop' } },
-      specs: {
-        flowRateGPM: 10,
-        flowRateLPM: 37.8,
-        pressurePSI: 4000,
-        pressureBar: 275,
-        powerSource: 'petrol',
-        engineType: 'Honda GX690 V-Twin',
-      },
-    },
-    // STEAM CLEANERS
-    {
-      _id: 'steam-111',
-      name: 'Model 111',
-      modelCode: '111',
-      slug: 'model-111',
-      tagline: 'Precision Industrial Steam Generator',
-      category: 'steam-cleaner',
-      series: 'Specialist Series',
-      isEliteSeries: false,
-      specs: {
-        flowRateGPM: 1.1,
-        flowRateLPM: 4.2,
-        pressurePSI: 100,
-        pressureBar: 7,
-        powerSource: 'electric',
-        heatingFuel: 'diesel-kerosene',
-      },
-    },
-    // SPACE HEATERS
-    {
-      _id: 'heater-210',
-      name: 'Alkota 210',
-      modelCode: '210',
-      slug: 'alkota-210',
-      tagline: 'Direct-Fired Industrial Space Heater',
-      category: 'space-heater',
-      series: 'Heater Series',
-      isEliteSeries: false,
-      specs: {
-        btuRating: '210,000 BTU',
-        powerSource: 'electric',
-        heatingFuel: 'diesel-kerosene',
-      },
-    },
-  ];
+  }));
 };
 
 export const getMockWaterTreatment = () => {

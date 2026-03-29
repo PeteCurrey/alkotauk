@@ -80,9 +80,13 @@ export default function Footer() {
             <p className="text-[10px] font-bold text-alkota-smoke">
               © {currentYear} ALKOTA UK • Industrial Cleaning Systems
             </p>
-            <p className="text-[9px] text-alkota-smoke">
-              Engineered Excellence Since 1964
-            </p>
+            <div className="flex items-center gap-2 text-[9px] text-alkota-smoke">
+              <span>Engineered Excellence Since 1964</span>
+              <span className="text-alkota-iron">|</span>
+              <a href="https://avorria.com" target="_blank" rel="noopener noreferrer" className="hover:text-alkota-orange transition-colors font-bold uppercase tracking-[0.2em]">
+                An Avorria Signature Build
+              </a>
+            </div>
           </div>
           <div className="flex gap-10 text-[9px] font-black text-alkota-smoke">
             <Link href="/privacy" className="hover:text-alkota-black transition-colors">Privacy</Link>

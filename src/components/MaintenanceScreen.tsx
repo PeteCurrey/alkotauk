@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Settings, Wrench, Mail, Factory, Loader2, CheckCircle2 } from 'lucide-react';
+import Logo from './Logo';
 
 interface MaintenanceScreenProps {
   title?: string;
@@ -84,10 +85,11 @@ export default function MaintenanceScreen({
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="flex items-center gap-4 mb-6"
+            className="flex items-center gap-6 mb-10"
           >
-             <Settings className="w-8 h-8 text-alkota-orange animate-spin-slow" />
-             <div className="h-[2px] w-12 bg-alkota-orange" />
+             <Logo className="h-10 text-white" />
+             <div className="h-[1px] w-12 bg-alkota-orange/50" />
+             <Settings className="w-6 h-6 text-alkota-orange animate-spin-slow" />
           </motion.div>
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}

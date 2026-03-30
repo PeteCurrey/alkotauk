@@ -75,6 +75,7 @@ export default function Navigation() {
     { name: 'Bespoke Builds', href: '/bespoke', hasMega: true, data: buildCategories },
     { name: 'Chemicals', href: '/chemicals', hasMega: true, data: chemicalCategories },
     { name: 'Mess Quest', href: '/mess-quest', hasMega: false },
+    { name: 'About', href: '/about', hasMega: false },
     { name: 'Support', href: '/support', hasMega: false },
   ];
 

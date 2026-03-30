@@ -14,6 +14,7 @@ export default function WaterTreatmentHub() {
       tagline: 'Vacuum Filtration Systems',
       description: 'Advanced solid-liquid separation for heavy industrial effluent.',
       icon: Waves,
+      href: null,
     },
     {
       id: 'media',
@@ -21,6 +22,7 @@ export default function WaterTreatmentHub() {
       tagline: 'Multi-Stage Purification',
       description: 'Granular activated carbon and specialized media for chemical removal.',
       icon: Droplets,
+      href: null,
     },
     {
       id: 'evaporator',
@@ -28,7 +30,16 @@ export default function WaterTreatmentHub() {
       tagline: 'Thermal Volume Reduction',
       description: 'Drastically reduce waste disposal costs by evaporating water content.',
       icon: Wind,
-    }
+      href: null,
+    },
+    {
+      id: 'vacgd',
+      name: 'VACGD',
+      tagline: 'Vacuum Recovery System',
+      description: 'Mobile wash water capture for surface cleaning operations. Vanguard powered. Sutorbilt blower. Integrates with surface cleaners and VFS filtration.',
+      icon: Wind,
+      href: '/water-treatment/vacgd',
+    },
   ];
 
   return (
@@ -108,31 +119,49 @@ export default function WaterTreatmentHub() {
               </h2>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-alkota-iron border border-alkota-iron">
-              {systems.map((system, i) => (
-                <div 
-                  key={system.id}
-                  className="group relative flex flex-col bg-alkota-black p-12 transition-all duration-500 hover:bg-alkota-orange/10"
-                >
-                  <system.icon className="h-10 w-10 text-alkota-orange mb-10 transition-transform group-hover:scale-110" />
-                  <span className="font-ibm-plex-mono text-[9px] font-black text-alkota-orange uppercase mb-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                    [ SYSTEM_RECLAM_0{i+1} ]
-                  </span>
-                  <h3 className="font-barlow-condensed text-4xl font-black text-white uppercase italic leading-none mb-4 group-hover:text-alkota-orange transition-colors duration-300">
-                    {system.name}
-                  </h3>
-                  <p className="font-inter text-[10px] text-alkota-smoke uppercase tracking-[0.2em] font-bold mb-8">
-                    {system.tagline}
-                  </p>
-                  <p className="font-inter text-xs text-alkota-silver leading-relaxed mb-12 flex-1">
-                    {system.description}
-                  </p>
-                  <div className="mt-auto flex items-center gap-4 text-[10px] font-black text-white uppercase tracking-[0.3em] opacity-0 group-hover:opacity-100 transition-all transform translate-y-4 group-hover:translate-y-0">
-                    Specifications <ArrowRight className="h-3 w-3" />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-alkota-iron border border-alkota-iron">
+              {systems.map((system, i) => {
+                const inner = (
+                  <>
+                    <system.icon className="h-10 w-10 text-alkota-orange mb-10 transition-transform group-hover:scale-110" />
+                    <span className="font-ibm-plex-mono text-[9px] font-black text-alkota-orange uppercase mb-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                      [ SYSTEM_RECLAM_0{i+1} ]
+                    </span>
+                    <h3 className="font-barlow-condensed text-4xl font-black text-white uppercase italic leading-none mb-4 group-hover:text-alkota-orange transition-colors duration-300">
+                      {system.name}
+                    </h3>
+                    <p className="font-inter text-[10px] text-alkota-smoke uppercase tracking-[0.2em] font-bold mb-8">
+                      {system.tagline}
+                    </p>
+                    <p className="font-inter text-xs text-alkota-silver leading-relaxed mb-12 flex-1">
+                      {system.description}
+                    </p>
+                    {system.href && (
+                      <div className="mt-auto flex items-center gap-4 text-[10px] font-black text-white uppercase tracking-[0.3em] opacity-0 group-hover:opacity-100 transition-all transform translate-y-4 group-hover:translate-y-0">
+                        View System →
+                      </div>
+                    )}
+                    <div className="absolute inset-x-0 bottom-0 h-1 bg-alkota-orange transform scale-x-0 transition-transform duration-500 group-hover:scale-x-100" />
+                  </>
+                );
+
+                return system.href ? (
+                  <a
+                    key={system.id}
+                    href={system.href}
+                    className="group relative flex flex-col bg-alkota-black p-12 transition-all duration-500 hover:bg-alkota-orange/10 no-underline"
+                  >
+                    {inner}
+                  </a>
+                ) : (
+                  <div
+                    key={system.id}
+                    className="group relative flex flex-col bg-alkota-black p-12 transition-all duration-500 hover:bg-alkota-orange/10"
+                  >
+                    {inner}
                   </div>
-                  <div className="absolute inset-x-0 bottom-0 h-1 bg-alkota-orange transform scale-x-0 transition-transform duration-500 group-hover:scale-x-100" />
-                </div>
-              ))}
+                );
+              })}
             </div>
           </section>
         </div>

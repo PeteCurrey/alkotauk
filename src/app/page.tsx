@@ -121,6 +121,63 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── THE PROOF SECTION ───────────────────────────────────── */}
+      <section className="bg-alkota-bg py-40 px-6 border-b border-alkota-iron">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-20 flex items-end justify-between border-b border-alkota-iron pb-12">
+            <div>
+              <div className="mb-6 flex items-center gap-4">
+                <div className="h-[2px] w-8 bg-alkota-orange" />
+                <span className="font-ibm-plex-mono text-[9px] font-black uppercase tracking-[0.4em] text-alkota-orange">
+                  Why Alkota. Not the alternative.
+                </span>
+              </div>
+              <h2 className="font-barlow-condensed text-6xl font-black uppercase italic tracking-tighter text-alkota-black md:text-8xl leading-[0.85]">
+                // THE PROOF.
+              </h2>
+            </div>
+            <a
+              href="/about"
+              className="hidden md:flex items-center gap-3 text-[10px] font-black text-alkota-silver hover:text-alkota-orange uppercase tracking-widest transition-colors"
+            >
+              Full Heritage Story →
+            </a>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-alkota-iron border border-alkota-iron">
+            {[
+              {
+                stat: '½ mile',
+                label: 'of Antarctic ice. Bored through by Alkota machines.',
+                sub: 'Custom-built Alkota pressure washing systems were the centrepiece of the first-ever hot water drill to reach a subglacial Antarctic lake. 2013. University of Nebraska-Lincoln. A genuine scientific breakthrough.',
+              },
+              {
+                stat: '7 years',
+                label: 'Coil warranty. Industry standard: 1–2 years.',
+                sub: 'The hydro-insulated Schedule 80 coil combined with the Soft Damping System. The engineering reason Alkota machines are still running at 15 and 20 years of daily industrial use.',
+              },
+              {
+                stat: '150+',
+                label: 'Years of combined engineering experience in the Alkota build team.',
+                sub: 'Average employee tenure: 17 years. Some craftsmen have been building Alkota machines for over 40 years. When you have a problem, you speak to the people who designed it.',
+              },
+            ].map((card, i) => (
+              <div key={i} className="bg-white p-12 flex flex-col group hover:bg-alkota-bg transition-colors">
+                <p className="font-barlow-condensed text-8xl font-black italic text-alkota-orange leading-none mb-6 group-hover:scale-105 transition-transform origin-left">
+                  {card.stat}
+                </p>
+                <h3 className="font-barlow-condensed text-2xl font-black uppercase italic text-alkota-black leading-tight mb-6">
+                  {card.label}
+                </h3>
+                <p className="font-inter text-sm text-alkota-silver leading-relaxed flex-1">
+                  {card.sub}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Cinematic Trust Section */}
       <section className="relative bg-alkota-black py-60 px-6 overflow-hidden border-t border-alkota-iron">
         {/* Background Watermark */}

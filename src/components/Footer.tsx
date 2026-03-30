@@ -8,9 +8,9 @@ export default function Footer() {
   return (
     <footer className="bg-alkota-bg border-t border-alkota-iron/50 pt-24 pb-12 text-alkota-black text-[11px] uppercase tracking-widest">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="grid grid-cols-1 gap-16 md:grid-cols-2 lg:grid-cols-5">
+        <div className="grid grid-cols-1 gap-16 md:grid-cols-2 lg:grid-cols-6">
           {/* Brand Identity */}
-          <div className="flex flex-col gap-8">
+          <div className="flex flex-col gap-8 lg:col-span-1">
             <Link href="/" className="group">
               <Logo className="h-10 text-alkota-black" />
             </Link>
@@ -19,7 +19,16 @@ export default function Footer() {
             </p>
           </div>
 
-          {/* Machine Hub */}
+          {/* Company */}
+          <div>
+            <h4 className="font-barlow-condensed text-xl font-black text-alkota-orange mb-8">Company</h4>
+            <ul className="flex flex-col gap-4 font-inter font-bold text-alkota-silver">
+              <li><Link href="/about" className="hover:text-alkota-black transition-all hover:pl-2">About Alkota UK</Link></li>
+              <li><Link href="/technology" className="hover:text-alkota-black transition-all hover:pl-2">Technology</Link></li>
+              <li><Link href="/about#origin" className="hover:text-alkota-black transition-all hover:pl-2">Heritage</Link></li>
+              <li><Link href="/contact" className="hover:text-alkota-black transition-all hover:pl-2">Contact</Link></li>
+            </ul>
+          </div>
           <div>
             <h4 className="font-barlow-condensed text-xl font-black text-alkota-orange mb-8">Industrial Machines</h4>
             <ul className="flex flex-col gap-4 font-inter font-bold text-alkota-silver">

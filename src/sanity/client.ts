@@ -108,6 +108,7 @@ export const getMockSettings = () => ({
         maintenanceTitle: 'System Maintenance',
         maintenanceMessage: 'The platform is currently undergoing scheduled upgrades to enhance performance and catalogue accuracy.',
         maintenanceVideoUrl: 'vFnvcx3vRUY',
+        maintenancePhone: '+447912506738',
     },
     bannerGroup: {
         showGlobalBanner: false,

@@ -9,12 +9,14 @@ interface MaintenanceScreenProps {
   title?: string;
   message?: string;
   videoId?: string;
+  phone?: string;
 }
 
 export default function MaintenanceScreen({ 
   title = "System Maintenance", 
   message = "The Alkota UK platform is currently undergoing scheduled infrastructure upgrades to enhance performance and catalogue accuracy. Access will be restored shortly.",
-  videoId = "vFnvcx3vRUY"
+  videoId = "vFnvcx3vRUY",
+  phone = "+44 (0) 123 456 7890"
 }: MaintenanceScreenProps) {
   const [formData, setFormData] = useState({
     name: '',
@@ -268,7 +270,12 @@ export default function MaintenanceScreen({
 
             <div className="mt-16 flex items-center justify-between border-t border-alkota-iron pt-6">
               <span className="text-[10px] font-bold uppercase tracking-widest text-alkota-silver">Emergency Support</span>
-              <span className="text-[10px] font-black text-alkota-black tracking-wider">+44 (0) 123 456 7890</span>
+              <a 
+                href={`tel:${phone}`}
+                className="text-[10px] font-black text-alkota-black tracking-wider hover:text-alkota-orange transition-colors"
+              >
+                {phone}
+              </a>
             </div>
          </div>
       </div>

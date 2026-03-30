@@ -44,6 +44,13 @@ export const siteSettingsType = defineType({
           description: 'The YouTube ID to loop behind the maintenance wall.',
           initialValue: 'vFnvcx3vRUY',
         }),
+        defineField({
+          name: 'maintenancePhone',
+          title: 'Emergency Contact Number',
+          type: 'string',
+          description: 'The telephone number displayed at the bottom of the maintenance screen.',
+          initialValue: '+447912506738',
+        }),
       ],
     },
     {

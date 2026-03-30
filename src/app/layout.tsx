@@ -104,6 +104,7 @@ export default async function RootLayout({
             title={siteSettings?.maintenanceGroup?.maintenanceTitle}
             message={siteSettings?.maintenanceGroup?.maintenanceMessage}
             videoId={siteSettings?.maintenanceGroup?.maintenanceVideoUrl}
+            phone={siteSettings?.maintenanceGroup?.maintenancePhone}
           />
         ) : (
           <>

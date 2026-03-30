@@ -26,11 +26,19 @@ const ibmPlexMono = IBM_Plex_Mono({
   subsets: ["latin"],
 });
 
+import { supabaseAdmin } from "@/lib/supabase/server";
+
 export async function generateMetadata(): Promise<Metadata> {
-  const siteSettings = await safeFetch(`*[_type == "siteSettings"][0]`, getMockSettings());
+  const { data: settings } = await supabaseAdmin
+    .from('site_settings')
+    .select('key, value');
+  
+  const settingsMap: Record<string, string> = {};
+  settings?.forEach(s => { settingsMap[s.key] = s.value; });
+
   return generateSeo({
-    title: siteSettings?.title || "Alkota UK",
-    description: siteSettings?.seoGroup?.defaultDescription,
+    title: settingsMap['site_name'] || "Alkota UK",
+    description: settingsMap['meta_description'],
   });
 }
 
@@ -39,6 +47,25 @@ import AlkotaAdvisor from "@/components/AlkotaAdvisor";
 import MaintenanceScreen from "@/components/MaintenanceScreen";
 import SplashScreen from "@/components/SplashScreen";
 import SiteBanner from "@/components/SiteBanner";
+
+async function getSiteSettings() {
+  const { data: settings } = await supabaseAdmin
+    .from('site_settings')
+    .select('key, value');
+  
+  const { data: banners } = await supabaseAdmin
+    .from('banners')
+    .select('*')
+    .eq('active', true);
+
+  const settingsMap: Record<string, string> = {};
+  settings?.forEach(s => { settingsMap[s.key] = s.value; });
+
+  return { 
+    ...settingsMap, 
+    banners: (banners || []) as any[] 
+  };
+}
 
 export default async function RootLayout({
   children,
@@ -50,6 +77,12 @@ export default async function RootLayout({
   const isAdminPage = pathname.startsWith("/admin");
   const isStudio = pathname.startsWith("/studio");
 
+  // Fetch settings for maintenance and common UI
+  const settings = await getSiteSettings() as Record<string, any>;
+  const isMaintenance = settings['maintenance_mode'] === 'true';
+  const showSplash = settings['enable_splash'] === 'true';
+  const activeBanner = settings.banners?.[0];
+
   return (
     <html
       lang="en"
@@ -57,16 +90,36 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col font-inter bg-alkota-bg text-alkota-black text-base">
-        <SiteBanner />
         <CartProvider>
           <SessionProvider>
-            {!isAdminPage && !isStudio && <SplashScreen />}
-            {!isAdminPage && !isStudio && <AlkotaAdvisor />}
-            <CartDrawer />
-            {children}
+            {isStudio ? (
+               <div className="h-full bg-white">
+                 {children}
+               </div>
+            ) : isMaintenance && !isAdminPage ? (
+              <MaintenanceScreen 
+                title="System Maintenance"
+                message={settings['maintenance_message']}
+                phone={settings['maintenance_phone']}
+              />
+            ) : (
+              <>
+                {!isAdminPage && showSplash && <SplashScreen />}
+                <div className="flex-1 flex flex-col">
+                  {!isAdminPage && activeBanner && (
+                    <SiteBanner />
+                  )}
+                  {children}
+                </div>
+                {!isAdminPage && <Footer />}
+                <CartDrawer />
+                {!isAdminPage && <AlkotaAdvisor />}
+              </>
+            )}
           </SessionProvider>
         </CartProvider>
-        {/* Google Analytics 4 */}
+
+        {/* Analytics Scripts */}
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
           strategy="afterInteractive"
@@ -79,8 +132,6 @@ export default async function RootLayout({
             gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
           `}
         </Script>
-
-        {/* Hotjar Tracking Code */}
         <Script id="hotjar" strategy="afterInteractive">
           {`
             (function(h,o,t,j,a,r){
@@ -93,42 +144,6 @@ export default async function RootLayout({
             })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
           `}
         </Script>
-
-        {isStudio ? (
-          <div className="h-full bg-white">
-            {children}
-          </div>
-        ) : isMaintenance ? (
-          <MaintenanceScreen 
-            title={siteSettings?.maintenanceGroup?.maintenanceTitle}
-            message={siteSettings?.maintenanceGroup?.maintenanceMessage}
-            videoId={siteSettings?.maintenanceGroup?.maintenanceVideoUrl}
-            phone={siteSettings?.maintenanceGroup?.maintenancePhone}
-          />
-        ) : (
-          <>
-            {showSplash && <SplashScreen title={siteSettings?.visualExperience?.splashTitle} />}
-            <SessionProvider>
-              <CartProvider>
-                <div className="flex-1 flex flex-col">
-                  {showBanner && (
-                    <SiteBanner 
-                      text={siteSettings?.bannerGroup?.bannerText}
-                      link={siteSettings?.bannerGroup?.bannerLink}
-                      type={siteSettings?.bannerGroup?.bannerType}
-                    />
-                  )}
-                  {children}
-                </div>
-                <Footer />
-                {/* Native cart drawer — replaces Snipcart */}
-                <CartDrawer />
-                {/* AI Technical Advisor */}
-                <AlkotaAdvisor />
-              </CartProvider>
-            </SessionProvider>
-          </>
-        )}
       </body>
     </html>
   );

@@ -19,11 +19,11 @@ export default function MachineCard({ machine, index }: MachineCardProps) {
 
   const dealerPrice = isDealer ? calculateDealerPrice(machine.price, user.tier) : null;
 
-  // Use seeded specs or fallbacks
-  const gpm = machine.specs?.flowRateGPM || 0;
-  const lpm = machine.specs?.flowRateLPM || (gpm * 3.785).toFixed(1);
-  const psi = machine.specs?.pressurePSI || 0;
-  const bar = machine.specs?.pressureBar || (psi / 14.5).toFixed(0);
+  // Specs from Supabase
+  const gpm = machine.gpm || 0;
+  const lpm = (gpm * 3.785).toFixed(1);
+  const psi = machine.psi || 0;
+  const bar = (psi / 14.5).toFixed(0);
 
   return (
     <motion.div
@@ -42,7 +42,7 @@ export default function MachineCard({ machine, index }: MachineCardProps) {
       />
 
       {/* Elite Series Indicator */}
-      {machine.isEliteSeries && (
+      {machine.is_elite_series && (
         <div className="absolute left-0 top-6 z-20 bg-alkota-orange px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-white shadow-xl">
           Elite Series
         </div>
@@ -53,7 +53,7 @@ export default function MachineCard({ machine, index }: MachineCardProps) {
         <div className="absolute inset-0 bg-gradient-to-t from-white/40 to-transparent z-10" />
         <img
           src={
-            machine.heroImage?.asset?.url ||
+            machine.image_url ||
             (machine.category === 'hot-water'
               ? 'https://alkota.co.uk/assets/hot-water-pressure-washer-DHE0Q-_H.png'
               : machine.category === 'steam-cleaner'
@@ -65,7 +65,7 @@ export default function MachineCard({ machine, index }: MachineCardProps) {
         />
         <div className="absolute bottom-6 left-6 z-20">
           <span className="font-ibm-plex-mono text-[10px] font-bold uppercase tracking-[0.3em] text-alkota-orange">
-            {machine.modelCode || machine.name}
+            {machine.model_code || machine.name}
           </span>
         </div>
       </div>
@@ -107,7 +107,7 @@ export default function MachineCard({ machine, index }: MachineCardProps) {
 
         {/* Action Button */}
         <Link
-          href={`/machines/${machine.category}/${machine.slug?.current || machine.slug}`}
+          href={`/machines/${machine.category}/${machine.slug}`}
           className="mt-8 flex w-full items-center justify-between border border-alkota-iron bg-transparent px-6 py-4 text-[11px] font-black uppercase tracking-[0.2em] text-alkota-black transition-all hover:bg-alkota-orange hover:border-alkota-orange hover:text-white group/btn"
         >
           <span>View Specifications</span>

@@ -1,8 +1,8 @@
+import { supabaseAdmin } from '@/lib/supabase/server';
 import Navigation from '@/components/Navigation';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { Beaker, ShieldCheck, ArrowRight, Droplets, Truck, Factory, Zap, Cloud, Trash2, Plane, Anchor, Settings, Sun, Home } from 'lucide-react';
 import Link from 'next/link';
-import { client } from '@/sanity/client';
 
 export default async function ChemicalsHub() {
   const categories = [
@@ -20,13 +20,12 @@ export default async function ChemicalsHub() {
     { name: 'TRANSPORTATION', slug: 'transportation', desc: 'Salt residue removal for HGVs, snow ploughs and fleet vehicles. Road transport specialist.', icon: Anchor }
   ];
 
-  // Fetch product counts per category to show "Live" status
-  const productCounts = await client.fetch(`*[_type == "chemical"] { category }`).then(data => {
-    return data.reduce((acc: any, curr: any) => {
-      acc[curr.category] = (acc[curr.category] || 0) + 1;
-      return acc;
-    }, {});
-  });
+  // Fetch product counts from Supabase
+  const { data: chemicalData } = await supabaseAdmin.from('chemicals').select('category');
+  const productCounts = (chemicalData || []).reduce((acc: any, curr: any) => {
+    acc[curr.category] = (acc[curr.category] || 0) + 1;
+    return acc;
+  }, {});
 
   return (
     <main className="min-h-screen bg-alkota-bg pt-32 pb-0">

@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { client, urlFor } from '@/sanity/client';
+import { supabaseAdmin } from '@/lib/supabase/server';
 import Navigation from '@/components/Navigation';
 import HubSpotForm from '@/components/HubSpotForm';
 import { generateSeo } from '@/lib/seo';
@@ -24,18 +24,12 @@ import { calculateDealerPrice, formatCurrency } from '@/lib/pricing';
 export const dynamic = 'force-dynamic';
 
 async function getMachine(slug: string) {
-  return await client.fetch(`*[_type == "machine" && slug.current == $slug][0] {
-    _id,
-    name,
-    tagline,
-    description,
-    heroImage,
-    specs,
-    ecommerce,
-    category,
-    "series": series->name,
-    "isEliteSeries": series->isEliteSeries
-  }`, { slug });
+  const { data } = await supabaseAdmin
+    .from('machines')
+    .select('*')
+    .eq('slug', slug)
+    .single();
+  return data;
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -46,14 +40,18 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return generateSeo({
     title: `Alkota ${machine.name} | Industrial Specification`,
     description: machine.tagline || 'Industrial pressure washing equipment.',
-    image: machine.heroImage ? urlFor(machine.heroImage).width(1200).height(630).url() : undefined,
+    image: machine.image_url || undefined,
   });
 }
 
 export default async function MachineDetailPage({ params }: { params: Promise<{ category: string; slug: string }> }) {
   const { slug } = await params;
   const machine = await getMachine(slug);
-  const siteSettings = await client.fetch(`*[_type == "siteSettings"][0]`).catch(() => null);
+  const { data: siteSettings } = await supabaseAdmin
+    .from('site_settings')
+    .select('*')
+    .then(res => ({ data: (res.data || []).reduce((acc: any, s: any) => ({ ...acc, [s.key]: s.value }), {}) }));
+    
   const session = await auth();
   const user = session?.user as any;
   const isDealer = user?.role === 'dealer' || user?.role === 'admin';
@@ -62,11 +60,11 @@ export default async function MachineDetailPage({ params }: { params: Promise<{ 
     notFound();
   }
 
-  const dealerPrice = isDealer ? calculateDealerPrice(machine.ecommerce?.price || 5000, user.tier) : null;
-  const hubspotPortalId = siteSettings?.hubspotGroup?.hubspotPortalId;
-  const hubspotQuoteFormId = siteSettings?.hubspotGroup?.hubspotQuoteFormId;
+  const dealerPrice = isDealer ? calculateDealerPrice(5000, user.tier) : null;
+  const hubspotPortalId = siteSettings?.hubspot_portal_id;
+  const hubspotQuoteFormId = siteSettings?.hubspot_quote_form_id;
 
-  const imageUrl = machine.heroImage ? urlFor(machine.heroImage).url() : 'https://alkota.co.uk/assets/hot-water-pressure-washer-DHE0Q-_H.png';
+  const imageUrl = machine.image_url || 'https://alkota.co.uk/assets/hot-water-pressure-washer-DHE0Q-_H.png';
 
   return (
     <main className="min-h-screen bg-alkota-bg pt-32 pb-0 overflow-x-hidden relative">
@@ -109,7 +107,7 @@ export default async function MachineDetailPage({ params }: { params: Promise<{ 
             {/* Feature Tags */}
             <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
-                  { label: 'COIL', value: `${machine.specs?.coilWarrantyYears || 7}YR WARRANTY`, icon: ShieldCheck },
+                  { label: 'COIL', value: `7YR WARRANTY`, icon: ShieldCheck },
                   { label: 'BUILD', value: 'FORGED STEEL', icon: Settings },
                   { label: 'ORIGIN', value: 'HANDCRAFTED USA', icon: Trophy },
                   { label: 'SPEC', value: 'UK CERTIFIED', icon: Zap },
@@ -129,7 +127,7 @@ export default async function MachineDetailPage({ params }: { params: Promise<{ 
               <span className="font-ibm-plex-mono text-[10px] font-black uppercase tracking-[0.4em] text-alkota-orange">
                 {machine.series || machine.category?.replace('-', ' ')}
               </span>
-              {machine.isEliteSeries && (
+              {machine.is_elite_series && (
                 <div className="h-1 w-12 bg-alkota-iron" />
               )}
             </div>
@@ -196,10 +194,10 @@ export default async function MachineDetailPage({ params }: { params: Promise<{ 
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-alkota-iron border border-alkota-iron">
             {[
-              { label: 'WATER FLOW', value: `${machine.specs?.flowRateLPM || '15'} LPM`, unit: 'Liters Per Minute', icon: Droplets },
-              { label: 'PRESSURE', value: `${machine.specs?.pressureBar || '200'} BAR`, unit: 'Operational Pressure', icon: Gauge },
+              { label: 'WATER FLOW', value: `${(machine.gpm * 3.785).toFixed(1)} LPM`, unit: 'Liters Per Minute', icon: Droplets },
+              { label: 'PRESSURE', value: `${(machine.psi / 14.5).toFixed(0)} BAR`, unit: 'Operational Pressure', icon: Gauge },
               { label: 'TEMPERATURE', value: machine.category === 'hot-water' ? '98°C / 200°F' : 'Ambient', unit: 'Cleaning Temp', icon: Thermometer },
-              { label: 'POWER', value: machine.specs?.powerSource || 'Industrial', unit: 'Primary Power', icon: Zap }
+              { label: 'POWER', value: machine.voltage || 'Industrial', unit: 'Primary Power', icon: Zap }
             ].map((spec, i) => (
               <div key={i} className="bg-white p-12 transition-all hover:bg-alkota-steel/40 group">
                 <spec.icon className="h-8 w-8 text-alkota-orange mb-8 transition-transform group-hover:scale-110" />

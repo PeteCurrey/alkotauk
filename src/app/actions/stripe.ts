@@ -1,14 +1,18 @@
-'use server';
-
 import Stripe from 'stripe';
-import { client } from '@/sanity/client';
+import { supabaseAdmin } from '@/lib/supabase/server';
 
 export async function createCheckoutSession(machineId: string, depositAmount: number, machineName: string) {
-  // Fetch Stripe Secret Key from Sanity siteSettings
-  const siteSettings = await client.fetch(`*[_type == "siteSettings"][0]`);
-  const stripeSecretKey = siteSettings?.stripeGroup?.stripeSecretKey;
+  // Fetch Stripe Secret Key from Supabase site_settings
+  const { data: settings, error } = await supabaseAdmin
+    .from('site_settings')
+    .select('value')
+    .eq('key', 'stripe_secret_key')
+    .single();
 
-  if (!stripeSecretKey) {
+  const stripeSecretKey = settings?.value;
+
+  if (error || !stripeSecretKey) {
+    console.error('Stripe error:', error);
     throw new Error('Stripe Secret Key not found in Site Settings.');
   }
 
@@ -55,11 +59,18 @@ export async function createCartCheckoutSession(items: CartLineItem[]) {
     throw new Error('Cart is empty.');
   }
 
-  const siteSettings = await client.fetch(`*[_type == "siteSettings"][0]`);
-  const stripeSecretKey = siteSettings?.stripeGroup?.stripeSecretKey;
+  // Fetch Stripe Secret Key from Supabase site_settings
+  const { data: settings, error } = await supabaseAdmin
+    .from('site_settings')
+    .select('value')
+    .eq('key', 'stripe_secret_key')
+    .single();
 
-  if (!stripeSecretKey || stripeSecretKey === 'sk_test_placeholder') {
-    throw new Error('Stripe is not configured. Add your Secret Key in Sanity CMS → Site Settings → Stripe.');
+  const stripeSecretKey = settings?.value;
+
+  if (error || !stripeSecretKey || stripeSecretKey === 'sk_test_placeholder') {
+    console.error('Stripe configuration error:', error);
+    throw new Error('Stripe is not configured. Add your Secret Key in the Admin Panel → Site Settings → Stripe.');
   }
 
   const stripe = new Stripe(stripeSecretKey, {

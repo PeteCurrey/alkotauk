@@ -1,4 +1,4 @@
-import { client } from '@/sanity/client';
+import { supabaseAdmin } from '@/lib/supabase/server';
 import Navigation from '@/components/Navigation';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import MachineCard from '@/components/MachineCard';
@@ -15,27 +15,20 @@ export default async function MachineCategoryPage({ params }: MachineCategoryPag
   const resolvedParams = await params;
   const categorySlug = resolvedParams.category;
   
-  // Fetch machines for this category with series details from Sanity
-  const machines = await client.fetch(`*[_type == "machine" && category == $categorySlug] {
-    _id,
-    name,
-    modelCode,
-    "slug": slug.current,
-    tagline,
-    category,
-    "series": series->name,
-    "seriesDescription": series->description,
-    "isEliteSeries": series->isEliteSeries,
-    heroImage,
-    specs
-  }`, { categorySlug });
+  // Fetch machines for this category from Supabase
+  const { data: machines = [] } = await supabaseAdmin
+    .from('machines')
+    .select('*')
+    .eq('category', categorySlug)
+    .eq('active', true)
+    .order('sort_order');
 
   const categoryName = categorySlug.replace('-', ' ');
 
   // Group machines by series
-  const groupedMachines = machines.reduce((acc: any, m: any) => {
+  const groupedMachines = (machines || []).reduce((acc: any, m: any) => {
     const series = m.series || "Other Models";
-    if (!acc[series]) acc[series] = { name: series, description: m.seriesDescription, machines: [] };
+    if (!acc[series]) acc[series] = { name: series, description: m.series_description, machines: [] };
     acc[series].machines.push(m);
     return acc;
   }, {} as Record<string, { name: string; description: string; machines: any[] }>);

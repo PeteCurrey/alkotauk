@@ -1,4 +1,4 @@
-import { client } from '@/sanity/client';
+import { supabaseAdmin } from '@/lib/supabase/server';
 import Navigation from '@/components/Navigation';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import MachineCard from '@/components/MachineCard';
@@ -6,19 +6,13 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
 export default async function MachinesPage() {
-  // Fetch all machines from Sanity
-  const machines = await client.fetch(`*[_type == "machine"] {
-    _id,
-    name,
-    modelCode,
-    "slug": slug.current,
-    tagline,
-    category,
-    "series": series->name,
-    "isEliteSeries": series->isEliteSeries,
-    heroImage,
-    specs
-  }`);
+  // Fetch all machines from Supabase
+  const { data: machines = [] } = await supabaseAdmin
+    .from('machines')
+    .select('*')
+    .eq('active', true)
+    .order('sort_order');
+  
   
   // Unique categories from real data
   const categories = Array.from(new Set(machines.map((m: any) => m.category))).map(cat => ({

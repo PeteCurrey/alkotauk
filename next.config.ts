@@ -28,11 +28,6 @@ const nextConfig: NextConfig = {
         destination: '/tools/machine-match',
         permanent: true,
       },
-      {
-        source: '/admin',
-        destination: '/studio',
-        permanent: false,
-      },
     ];
   },
 };

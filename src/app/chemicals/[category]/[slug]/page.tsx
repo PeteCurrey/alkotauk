@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { client, urlFor } from '@/sanity/client';
+import { supabaseAdmin } from '@/lib/supabase/server';
 import Navigation from '@/components/Navigation';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { 
@@ -15,6 +15,7 @@ import {
   CheckCircle2,
   Trash2
 } from 'lucide-react';
+import { generateSeo } from '@/lib/seo';
 
 interface ChemicalDetailPageProps {
   params: Promise<{
@@ -24,21 +25,12 @@ interface ChemicalDetailPageProps {
 }
 
 async function getChemical(slug: string) {
-  return await client.fetch(`*[_type == "chemical" && slug.current == $slug][0] {
-    _id,
-    name,
-    tagline,
-    description,
-    features,
-    specs,
-    image,
-    gallery,
-    "sdsUrl": sdsFile.asset->url,
-    "techSheetUrl": techSheetFile.asset->url,
-    variants,
-    category,
-    seo
-  }`, { slug });
+  const { data } = await supabaseAdmin
+    .from('chemicals')
+    .select('*')
+    .eq('slug', slug)
+    .single();
+  return data;
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -46,10 +38,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const chemical = await getChemical(slug);
   if (!chemical) return {};
 
-  return {
-    title: chemical.seo?.metaTitle || `Alkota ${chemical.name} | Industrial Detergent`,
-    description: chemical.seo?.metaDescription || chemical.tagline,
-  };
+  return generateSeo({
+    title: `Alkota ${chemical.name} | Industrial Detergent`,
+    description: chemical.tagline || 'Industrial cleaning chemical.',
+    image: chemical.image_url || undefined,
+  });
 }
 
 export default async function ChemicalDetailPage({ params }: ChemicalDetailPageProps) {
@@ -61,7 +54,7 @@ export default async function ChemicalDetailPage({ params }: ChemicalDetailPageP
   }
 
   const categoryName = categorySlug.replace(/-/g, ' ');
-  const mainImage = chemical.image ? urlFor(chemical.image).url() : 'https://alkota.co.uk/assets/water-treatment-CkILM82j.png';
+  const mainImage = chemical.image_url || 'https://alkota.co.uk/assets/water-treatment-CkILM82j.png';
 
   return (
     <main className="min-h-screen bg-alkota-bg pt-32 pb-0 overflow-x-hidden relative">
@@ -106,9 +99,8 @@ export default async function ChemicalDetailPage({ params }: ChemicalDetailPageP
                    Product <span className="text-alkota-orange">Profile.</span>
                 </h3>
                 <div className="prose prose-invert max-w-none text-alkota-silver uppercase text-sm tracking-wider leading-relaxed">
-                   {/* Rich text would be rendered here, using static fallback for now */}
                    <p className="mb-6">
-                      {chemical.description?.[0]?.children?.[0]?.text || chemical.tagline}
+                      {chemical.description || chemical.tagline}
                    </p>
                 </div>
 
@@ -144,19 +136,19 @@ export default async function ChemicalDetailPage({ params }: ChemicalDetailPageP
              <div className="mb-12 border-y border-alkota-iron py-10 grid grid-cols-2 gap-8">
                 <div>
                    <span className="block text-[8px] text-alkota-silver uppercase font-black tracking-widest mb-1">pH Classification</span>
-                   <span className="font-barlow-condensed text-4xl font-black text-alkota-black italic">{chemical.specs?.phLevel || 'N/A'}</span>
+                   <span className="font-barlow-condensed text-4xl font-black text-alkota-black italic">{chemical.ph_level || 'N/A'}</span>
                 </div>
                 <div>
                    <span className="block text-[8px] text-alkota-silver uppercase font-black tracking-widest mb-1">Dilution Strength</span>
-                   <span className="font-barlow-condensed text-4xl font-black text-alkota-black italic">{chemical.specs?.dilutionRatio || 'N/A'}</span>
+                   <span className="font-barlow-condensed text-4xl font-black text-alkota-black italic">{chemical.dilution_ratio || 'N/A'}</span>
                 </div>
                 <div>
                    <span className="block text-[8px] text-alkota-silver uppercase font-black tracking-widest mb-1">Biodegradable</span>
-                   <span className="font-barlow-condensed text-4xl font-black text-alkota-orange italic">{chemical.specs?.isBiodegradable ? 'YES' : 'NO'}</span>
+                   <span className="font-barlow-condensed text-4xl font-black text-alkota-orange italic">{chemical.is_biodegradable ? 'YES' : 'NO'}</span>
                 </div>
                 <div>
                    <span className="block text-[8px] text-alkota-silver uppercase font-black tracking-widest mb-1">Product Color</span>
-                   <span className="font-barlow-condensed text-4xl font-black text-alkota-black italic">{chemical.specs?.color || 'Clear'}</span>
+                   <span className="font-barlow-condensed text-4xl font-black text-alkota-black italic">Clear</span>
                 </div>
              </div>
 
@@ -164,12 +156,12 @@ export default async function ChemicalDetailPage({ params }: ChemicalDetailPageP
              <div className="mb-12">
                 <h4 className="font-ibm-plex-mono text-[10px] font-black uppercase tracking-[0.2em] text-alkota-silver mb-4">Availability & Packaging</h4>
                 <div className="flex flex-wrap gap-2">
-                   {chemical.variants?.map((v: any, i: number) => (
+                   {chemical.available_sizes?.map((v: any, i: number) => (
                       <button 
                         key={i} 
                         className={`border border-alkota-iron px-6 py-4 text-[10px] font-black uppercase tracking-widest transition-all ${i === 0 ? 'bg-alkota-black text-white' : 'bg-white text-alkota-black hover:border-alkota-orange'}`}
                       >
-                         {v.size} — £{v.price}
+                         {v}
                       </button>
                    ))}
                 </div>
@@ -182,14 +174,14 @@ export default async function ChemicalDetailPage({ params }: ChemicalDetailPageP
                 </button>
                 <div className="grid grid-cols-2 gap-4">
                    <a 
-                     href={chemical.sdsUrl || '#'} 
+                     href={chemical.sds_url || '#'} 
                      target="_blank"
                      className="flex items-center justify-center gap-3 border border-alkota-iron p-4 text-[9px] font-black uppercase tracking-widest text-alkota-black hover:border-alkota-orange transition-colors"
                    >
                       <FileText className="h-3 w-3" /> Safety Data (SDS)
                    </a>
                    <a 
-                     href={chemical.techSheetUrl || '#'} 
+                     href={chemical.tech_sheet_url || '#'} 
                      target="_blank"
                      className="flex items-center justify-center gap-3 border border-alkota-iron p-4 text-[9px] font-black uppercase tracking-widest text-alkota-black hover:border-alkota-orange transition-colors"
                    >

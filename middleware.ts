@@ -63,7 +63,15 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-  return NextResponse.next();
+  // Set header to access URL in layouts
+  const requestHeaders = new Headers(req.headers);
+  requestHeaders.set('x-url', pathname);
+
+  return NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  });
 }
 
 export const config = {

@@ -2,9 +2,10 @@ import Navigation from '@/components/Navigation';
 import { safeFetch, urlFor } from '@/sanity/client';
 import Image from 'next/image';
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   const query = `*[_type == "blogPost" && slug.current == $slug][0] { title, seo }`;
-  const post = await safeFetch(query, { slug: params.slug });
+  const post = await safeFetch(query, { slug });
   if (!post) return { title: 'Post Not Found' };
   return {
     title: post.seo?.metaTitle || `${post.title} | Good Clean News`,
@@ -12,7 +13,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default async function BlogPostPage({ params }: { params: { slug: string } }) {
+export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   const query = `*[_type == "blogPost" && slug.current == $slug][0] {
     title, publishedAt, author, excerpt,
     "imageUrl": featuredImage.asset->url,
@@ -20,7 +22,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
   }`;
   
   const post = await safeFetch(query, {
-    slug: params.slug,
+    slug,
     title: 'Dummy Post Placeholder',
     publishedAt: new Date().toISOString(),
     author: 'Alkota Editorial Team',

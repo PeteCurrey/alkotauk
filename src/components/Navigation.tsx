@@ -60,7 +60,7 @@ export default function Navigation() {
     { name: 'Bespoke Trailers', href: '/bespoke', image: 'https://alkota.co.uk/assets/pressure-washer-trailer-L2Zp9v78.png', desc: 'Custom mobile cleaning rigs built to order.' },
     { name: 'Custom Skid Units', href: '/bespoke#skid', image: 'https://alkota.co.uk/assets/custom-build-C4FaO6d5.png', desc: 'Truck, van or trailer skid mounting.' },
     { name: 'Parts Washers', href: '/machines/parts-washers', image: 'https://alkota.co.uk/assets/custom-build-C4FaO6d5.png', desc: 'Automatic aqueous component cleaning.' },
-    { name: 'Configurator', href: '/tools/machine-match', image: 'https://alkota.co.uk/assets/custom-build-C4FaO6d5.png', desc: 'Digital specification engine.' },
+    { name: 'Configurator', href: '/tools/configurator', image: 'https://alkota.co.uk/assets/custom-build-C4FaO6d5.png', desc: 'Custom specification engine. Build your machine.' },
   ];
 
   const chemicalCategories = [
@@ -144,7 +144,7 @@ export default function Navigation() {
 
         <div className="flex items-center gap-6">
           <Link
-            href="/tools/machine-match"
+            href="/tools/configurator"
             className={`hidden border border-alkota-orange px-6 py-2.5 text-[11px] font-black uppercase tracking-[0.2em] transition-all hover:bg-alkota-orange hover:text-white md:block text-alkota-black no-underline`}
           >
             Configurator

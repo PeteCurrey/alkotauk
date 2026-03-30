@@ -12,7 +12,8 @@ interface MachineCategoryPageProps {
 }
 
 export default async function MachineCategoryPage({ params }: MachineCategoryPageProps) {
-  const categorySlug = params.category;
+  const resolvedParams = await params;
+  const categorySlug = resolvedParams.category;
   
   // Fetch machines for this category with series details from Sanity
   const machines = await client.fetch(`*[_type == "machine" && category == $categorySlug] {

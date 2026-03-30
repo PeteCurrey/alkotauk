@@ -73,6 +73,17 @@ client.fetch = (async (query: string, params?: any, options?: any) => {
             }
             return washers;
         }
+        if (query.includes('_type == "chemical"')) {
+            const chemicals = getMockChemicals();
+            if (query.includes('[0]')) {
+                const slug = params?.slug;
+                return chemicals.find(c => c.slug?.current === slug) || chemicals[0];
+            }
+            if (params?.category) {
+                return chemicals.filter(c => c.category === params.category);
+            }
+            return chemicals;
+        }
         return Array.isArray(params) ? [] : {};
     }
     return originalFetch(query, params, options);
@@ -258,3 +269,48 @@ export function getMockApplications() {
       { name: 'De-Icing', slug: { current: 'de-icing' }, icon: 'Snowflake', description: 'Hot water systems for winter maintenance.' },
     ];
 }
+
+export const getMockChemicals = () => {
+    return [
+        {
+            _id: 'tr-440',
+            name: 'TR-440 Farm Soap',
+            slug: { current: 'tr-440' },
+            category: 'industrial',
+            tagline: 'The gold standard for agricultural and heavy equipment cleaning.',
+            description: [{ _type: 'block', children: [{ _type: 'span', text: 'TR-440 is a highly concentrated, heavy-duty alkaline detergent formulated specifically for the tough demands of the agricultural sector. It effectively removes heavy soil, mud, and organic matter while protecting the heating coils of your pressure washer.' }] }],
+            features: ['High foaming action', 'Contains Scale Stop technology', 'Biodegradable', 'Safe on most painted surfaces'],
+            specs: {
+                phLevel: '12.5',
+                dilutionRatio: '1:50 to 1:120',
+                scent: 'Mild Fresh',
+                color: 'Amber',
+                isBiodegradable: true
+            },
+            image: { asset: { url: 'https://alkota.co.uk/assets/water-treatment-CkILM82j.png' } },
+            variants: [
+                { size: '20L Drum', price: 85, sku: 'CHEM-TR440-20L' },
+                { size: '205L Barrel', price: 740, sku: 'CHEM-TR440-205L' },
+                { size: '1000L IBC', price: 3200, sku: 'CHEM-TR440-1000L' }
+            ]
+        },
+        {
+            _id: 'grease-cutter-703',
+            name: 'Grease Cutter DE-703',
+            slug: { current: 'grease-cutter-de-703' },
+            category: 'degreasers',
+            tagline: 'Industrial strength degreaser for extreme oil and grease environments.',
+            specs: {
+                phLevel: '13.5',
+                dilutionRatio: '1:10 to 1:40',
+                scent: 'Citrus',
+                color: 'Fluorescent Green',
+                isBiodegradable: true
+            },
+            variants: [
+                { size: '5L Bottle', price: 25, sku: 'CHEM-GC703-5L' },
+                { size: '20L Drum', price: 92, sku: 'CHEM-GC703-20L' }
+            ]
+        }
+    ];
+};

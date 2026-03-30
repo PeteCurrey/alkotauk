@@ -38,8 +38,9 @@ async function getMachine(slug: string) {
   }`, { slug });
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const machine = await getMachine(params.slug);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const machine = await getMachine(slug);
   if (!machine) return {};
 
   return generateSeo({
@@ -49,8 +50,9 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   });
 }
 
-export default async function MachineDetailPage({ params }: { params: { category: string; slug: string } }) {
-  const machine = await getMachine(params.slug);
+export default async function MachineDetailPage({ params }: { params: Promise<{ category: string; slug: string }> }) {
+  const { slug } = await params;
+  const machine = await getMachine(slug);
   const siteSettings = await client.fetch(`*[_type == "siteSettings"][0]`).catch(() => null);
   const session = await auth();
   const user = session?.user as any;

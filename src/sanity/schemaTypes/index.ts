@@ -18,6 +18,7 @@ import glossaryTermType from './glossaryTerm';
 import productVariantType from './productVariant';
 import merchandiseProductType from './merchandiseProduct';
 import dealerType from './dealer';
+import chemicalType from './chemical';
 import { lead } from './lead';
 
 export const schemaTypes = [
@@ -41,5 +42,6 @@ export const schemaTypes = [
   productVariantType,
   merchandiseProductType,
   dealerType,
+  chemicalType,
   lead
 ];

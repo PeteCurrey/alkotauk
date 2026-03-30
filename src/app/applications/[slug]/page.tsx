@@ -21,8 +21,9 @@ async function getApplication(slug: string) {
   }`, { slug });
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const app = await getApplication(params.slug);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const app = await getApplication(slug);
   if (!app) return { title: 'Application Not Found' };
   
   return {
@@ -31,8 +32,9 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default async function ApplicationDetailPage({ params }: { params: { slug: string } }) {
-  const app = await getApplication(params.slug);
+export default async function ApplicationDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const app = await getApplication(slug);
 
   if (!app?.name) {
     return (

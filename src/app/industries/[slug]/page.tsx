@@ -12,7 +12,7 @@ interface IndustryDetailPageProps {
 }
 
 export default async function IndustryDetailPage({ params }: IndustryDetailPageProps) {
-  const slug = params.slug;
+  const { slug } = await params;
   
   // Fetch real industry data from Sanity
   const industry = await client.fetch(`*[_type == "industry" && slug.current == $slug][0]`, { slug });

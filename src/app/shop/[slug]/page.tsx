@@ -26,8 +26,9 @@ async function getPart(slug: string) {
   }`, { slug });
 }
 
-export default async function PartDetailPage({ params }: { params: { slug: string } }) {
-  const part = await getPart(params.slug);
+export default async function PartDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const part = await getPart(slug);
 
   if (!part) {
     notFound();
@@ -48,7 +49,7 @@ export default async function PartDetailPage({ params }: { params: { slug: strin
     },
     "offers": {
       "@type": "Offer",
-      "url": `https://alkota.co.uk/shop/${params.slug}`,
+      "url": `https://alkota.co.uk/shop/${slug}`,
       "priceCurrency": "GBP",
       "price": part.price,
       "availability": "https://schema.org/InStock"

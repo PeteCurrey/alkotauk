@@ -1,12 +1,10 @@
-'use client';
-
 import Navigation from '@/components/Navigation';
 import Breadcrumbs from '@/components/Breadcrumbs';
-import { motion } from 'framer-motion';
-import { Beaker, ShieldCheck, ArrowRight, Info, Droplets, Truck, Factory, Zap, Cloud, Trash2, Wind, Plane, Anchor, Settings } from 'lucide-react';
+import { Beaker, ShieldCheck, ArrowRight, Droplets, Truck, Factory, Zap, Cloud, Trash2, Plane, Anchor, Settings, Sun, Home } from 'lucide-react';
 import Link from 'next/link';
+import { client } from '@/sanity/client';
 
-export default function ChemicalsHub() {
+export default async function ChemicalsHub() {
   const categories = [
     { name: 'DEGREASERS', slug: 'degreasers', desc: 'Blast through extreme road grime, grease and oil. Strong alkaline builders for plant and machinery.', icon: Trash2 },
     { name: 'AUTO & TRUCK WASH', slug: 'auto-truck-wash', desc: 'Powerful vehicle washing soaps designed to attack road film without damaging paintwork.', icon: Truck },
@@ -22,6 +20,14 @@ export default function ChemicalsHub() {
     { name: 'TRANSPORTATION', slug: 'transportation', desc: 'Salt residue removal for HGVs, snow ploughs and fleet vehicles. Road transport specialist.', icon: Anchor }
   ];
 
+  // Fetch product counts per category to show "Live" status
+  const productCounts = await client.fetch(`*[_type == "chemical"] { category }`).then(data => {
+    return data.reduce((acc: any, curr: any) => {
+      acc[curr.category] = (acc[curr.category] || 0) + 1;
+      return acc;
+    }, {});
+  });
+
   return (
     <main className="min-h-screen bg-alkota-bg pt-32 pb-0">
       <Navigation />
@@ -31,33 +37,19 @@ export default function ChemicalsHub() {
           <Breadcrumbs items={[{ label: 'Chemicals' }]} />
           
           <header className="mb-24 mt-12 max-w-5xl">
-            <motion.div 
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="mb-8 flex items-center gap-4"
-            >
+            <div className="mb-8 flex items-center gap-4">
               <div className="h-[2px] w-12 bg-alkota-orange" />
               <span className="text-[10px] font-black uppercase tracking-[0.4em] text-alkota-orange">
                 // ALKOTA DETERGENTS
               </span>
-            </motion.div>
-            <motion.h1 
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1, duration: 0.8 }}
-              className="font-barlow-condensed mb-10 text-7xl font-black text-alkota-black md:text-9xl uppercase italic leading-[0.8] tracking-tighter"
-            >
+            </div>
+            <h1 className="font-barlow-condensed mb-10 text-7xl font-black text-alkota-black md:text-9xl uppercase italic leading-[0.8] tracking-tighter">
               FORMULATED FOR <br />
               <span className="text-alkota-orange [text-stroke:1px_rgba(0,0,0,0.1)]">ALKOTA MACHINES.</span>
-            </motion.h1>
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="font-inter max-w-3xl text-lg text-alkota-silver leading-relaxed uppercase tracking-wider"
-            >
+            </h1>
+            <p className="font-inter max-w-3xl text-lg text-alkota-silver leading-relaxed uppercase tracking-wider">
               Every detergent is formulated by Hydrus — Alkota's own chemical division — to work hand-in-hand with hot and cold water pressure washers. Tested with Alkota equipment. Built for industrial duty.
-            </motion.p>
+            </p>
           </header>
 
           <section className="mb-24 bg-alkota-black p-12 border-l-8 border-alkota-orange">
@@ -70,20 +62,34 @@ export default function ChemicalsHub() {
           </section>
 
           <section className="mb-40 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-alkota-iron border border-alkota-iron">
-             {categories.map((cat, i) => (
-                <Link 
-                  key={i} 
-                  href={`/chemicals/${cat.slug}`}
-                  className="bg-white p-12 group hover:bg-alkota-bg transition-all duration-300 flex flex-col"
-                >
-                   <cat.icon className="h-10 w-10 text-alkota-orange mb-10 group-hover:scale-110 transition-transform" />
-                   <h4 className="font-barlow-condensed text-3xl font-black text-alkota-black uppercase italic mb-4 group-hover:text-alkota-orange transition-colors">{cat.name}</h4>
-                   <p className="font-inter text-[10px] text-alkota-silver uppercase tracking-widest leading-relaxed flex-1">{cat.desc}</p>
-                   <div className="mt-10 flex items-center gap-4 text-[9px] font-black text-alkota-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all">
-                      View Range <ArrowRight className="h-3 w-3" />
-                   </div>
-                </Link>
-             ))}
+             {categories.map((cat, i) => {
+                const count = productCounts[cat.slug] || 0;
+                return (
+                  <Link 
+                    key={i} 
+                    href={`/chemicals/${cat.slug}`}
+                    className="bg-white p-12 group hover:bg-alkota-bg transition-all duration-300 flex flex-col relative overflow-hidden"
+                  >
+                     <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <cat.icon className="h-24 w-24 translate-x-8 -translate-y-8" />
+                     </div>
+                     <cat.icon className="h-10 w-10 text-alkota-orange mb-10 group-hover:scale-110 transition-transform relative z-10" />
+                     <h4 className="font-barlow-condensed text-3xl font-black text-alkota-black uppercase italic mb-4 group-hover:text-alkota-orange transition-colors relative z-10">{cat.name}</h4>
+                     <p className="font-inter text-[10px] text-alkota-silver uppercase tracking-widest leading-relaxed flex-1 relative z-10">{cat.desc}</p>
+                     
+                     <div className="mt-10 flex items-center justify-between relative z-10">
+                        <div className="flex items-center gap-4 text-[9px] font-black text-alkota-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all">
+                           Explore Range <ArrowRight className="h-3 w-3" />
+                        </div>
+                        {count > 0 && (
+                          <span className="text-[8px] font-black bg-alkota-black text-white px-2 py-1 uppercase tracking-tighter">
+                            {count} PRO PRODUCTS
+                          </span>
+                        )}
+                     </div>
+                  </Link>
+                );
+             })}
           </section>
 
           <section className="mb-40 bg-alkota-black p-12 flex flex-col md:flex-row items-center justify-between gap-8 group hover:border-alkota-orange transition-colors border border-alkota-iron">
@@ -108,7 +114,3 @@ export default function ChemicalsHub() {
     </main>
   );
 }
-
-// Dummy icons for missing ones
-function Sun(props: any) { return <Cloud {...props} /> }
-function Home(props: any) { return <Factory {...props} /> }

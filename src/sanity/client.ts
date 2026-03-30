@@ -1,316 +1,56 @@
-import { createClient } from 'next-sanity';
-import { createImageUrlBuilder } from '@sanity/image-url';
-import { MACHINES } from '@/lib/machines';
+export const client = {
+  fetch: async (query: string, params?: any) => {
+    // This is now a pure TS static shim. Sanity packages have been removed.
+    if (query.includes('_type == "siteSettings"')) return getMockSettings();
+    if (query.includes('_type == "chemical"')) return [];
+    if (query.includes('_type == "industry"')) return getMockIndustries();
+    return [];
+  },
+  withConfig: () => client,
+};
 
-const isDummyConfig = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID === 'dummy' || !process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
-
-// Note: Using hardcoded ID as primary requested for configuration clarity
-export const client = createClient({
-  projectId: 'pa54q49w',
-  dataset: 'production',
-  apiVersion: '2024-03-29',
-  useCdn: false,
+// Minimal image URL builder implementation to replace @sanity/image-url
+export const urlFor = (source: any) => ({
+  url: () => source?.asset?.url || '',
+  width: (w: number) => ({ url: () => source?.asset?.url || '' }),
+  height: (h: number) => ({ url: () => source?.asset?.url || '' }),
+  fit: (f: string) => ({ url: () => source?.asset?.url || '' }),
 });
 
-const builder = createImageUrlBuilder(client);
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function urlFor(source: any) {
-  if (!source || isDummyConfig) {
-      // Return a robust placeholder if in dummy mode
-      return {
-          url: () => "https://alkota.co.uk/assets/hot-water-pressure-washer-DHE0Q-_H.png",
-          width: () => ({ height: () => ({ url: () => "https://alkota.co.uk/assets/hot-water-pressure-washer-DHE0Q-_H.png" }) })
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } as any;
+export const safeFetch = async (query: string, fallback: any) => {
+  try {
+    const data = await client.fetch(query);
+    return data || fallback;
+  } catch {
+    return fallback;
   }
-  return builder.image(source);
-}
-
-// INTERCEPT FETCH TO PREVENT CRASHES IN DUMMY MODE
-const originalFetch = client.fetch.bind(client);
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-client.fetch = (async (query: string, params?: any, options?: any) => {
-    if (isDummyConfig) {
-        if (query.includes('_type == "siteSettings"')) return getMockSettings();
-        if (query.includes('_type == "industry"')) {
-            const industries = getMockIndustries();
-            if (query.includes('[0]')) {
-                const slug = params?.slug;
-                return industries.find(i => i.slug.current === slug) || industries[0];
-            }
-            return industries;
-        }
-        if (query.includes('_type == "application"')) {
-            const applications = getMockApplications();
-            if (query.includes('[0]')) {
-                const slug = params?.slug;
-                return applications.find((a: any) => a.slug.current === slug) || applications[0];
-            }
-            return applications;
-        }
-        if (query.includes('_type == "machine"')) {
-            const machines = getMockMachines();
-            if (query.includes('[0]')) {
-                const slug = params?.slug;
-                return machines.find(m => m.slug === slug) || machines[0];
-            }
-            return machines;
-        }
-        if (query.includes('_type == "waterTreatmentSystem"')) {
-            const systems = getMockWaterTreatment();
-            if (query.includes('[0]')) {
-                const slug = params?.slug;
-                return systems.find(s => s.slug === slug) || systems[0];
-            }
-            return systems;
-        }
-        if (query.includes('_type == "partsWasher"')) {
-            const washers = getMockPartsWashers();
-            if (query.includes('[0]')) {
-                const slug = params?.slug;
-                return washers.find(w => w.slug === slug) || washers[0];
-            }
-            return washers;
-        }
-        if (query.includes('_type == "chemical"')) {
-            const chemicals = getMockChemicals();
-            if (query.includes('[0]')) {
-                const slug = params?.slug;
-                return chemicals.find(c => c.slug?.current === slug) || chemicals[0];
-            }
-            if (params?.category) {
-                return chemicals.filter(c => c.category === params.category);
-            }
-            return chemicals;
-        }
-        return Array.isArray(params) ? [] : {};
-    }
-    return originalFetch(query, params, options);
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-}) as any;
-
-// Robust fetcher that falls back to mock data if Sanity is misconfigured
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const safeFetch = async (query: string, mockData: any) => {
-    if (isDummyConfig) {
-        return mockData;
-    }
-    try {
-        const data = await client.fetch(query);
-        // If query looks like a single object fetch (e.g. [0]), handle it
-        if (query.includes('[0]') || !Array.isArray(data)) {
-            return data || mockData;
-        }
-        return data && data.length > 0 ? data : mockData;
-    } catch (error) {
-        console.error('Sanity fetch error, falling back to mock data:', error);
-        return mockData;
-    }
-}
+};
 
 export const getMockSettings = () => ({
-    title: 'Alkota UK',
-    seoGroup: {
-        defaultDescription: 'Alkota UK Industrial Cleaning Systems - The Platinum Standard in Pressure Washers.',
-    },
-    maintenanceGroup: {
-        isMaintenanceMode: true,
-        maintenanceTitle: 'System Maintenance',
-        maintenanceMessage: 'The platform is currently undergoing scheduled upgrades to enhance performance and catalogue accuracy.',
-        maintenanceVideoUrl: 'vFnvcx3vRUY',
-        maintenancePhone: '+447912506738',
-    },
-    bannerGroup: {
-        showGlobalBanner: false,
-        bannerText: 'New Elite Series Now Available for Order',
-        bannerType: 'info',
-        bannerLink: '/machines/hot-water',
-    },
-    visualExperience: {
-        enableSplashScreen: true,
-        splashTitle: 'Alkota UK',
-    },
-    snipcartGroup: {
-        snipcartApiKey: 'dummy-key',
-    },
-    contactInfo: {
-        email: 'info@alkota.co.uk',
-        phone: '01234 567890',
-        address: 'Industrial Estate, UK',
-    },
-    hubspotGroup: {
-        hubspotPortalId: '44882233', // Placeholder
-        hubspotQuoteFormId: '557799', // Placeholder
-    },
-    stripeGroup: {
-        stripeSecretKey: 'sk_test_placeholder',
-    }
+  title: 'Alkota UK',
+  seoGroup: {
+    defaultDescription: 'Alkota UK Industrial Cleaning Systems — Handcrafted in South Dakota since 1964. Belt-drive belt, Schedule 80 coil, 7-year warranty. Pressure washers built to last.',
+  },
+  maintenanceGroup: {
+    isMaintenanceMode: false,
+    maintenanceMessage: 'The platform is currently undergoing scheduled upgrades.',
+  },
+  visualExperience: {
+    enableSplashScreen: false,
+  },
+  bannerGroup: {
+    showGlobalBanner: false,
+  },
+  contactInfo: {
+    phone: '+447912506738',
+    email: 'info@alkota.co.uk',
+  }
 });
 
-// Mock data generator for initial development
-export const getMockMachines = () => {
-  return MACHINES.map(m => ({
-    _id: m.id,
-    name: m.name,
-    modelCode: m.id.toUpperCase(),
-    slug: m.slug.split('/').pop() || m.id,
-    tagline: m.description, // Mapping description as tagline
-    category: m.type,
-    categorySlug: m.type,
-    series: m.series,
-    isEliteSeries: m.series.includes('Elite'),
-    eliteFeatures: m.highlights,
-    heroImage: { asset: { url: 'https://alkota.co.uk/assets/hot-water-pressure-washer-DHE0Q-_H.png' } }, // Placeholder for mock
-    specs: {
-      flowRateGPM: parseFloat(m.specs.flowLPM || '0') / 3.785,
-      flowRateLPM: parseFloat(m.specs.flowLPM || '0'),
-      pressurePSI: parseFloat(m.specs.pressureBar || '0') * 14.5038,
-      pressureBar: parseFloat(m.specs.pressureBar || '0'),
-      powerSource: m.specs.powerSource,
-      engineType: m.specs.engine,
-      motorVoltage: m.specs.voltageOptions,
-      coilWarrantyYears: parseInt(m.specs.coilWarranty) || 7,
-    },
-  }));
-};
-
-export const getMockWaterTreatment = () => {
-  return [
-    {
-      _id: 'vfs-1',
-      name: 'VFS-1',
-      slug: 'vfs-1',
-      systemType: 'vfs',
-      tagline: 'Vacuum Filtration System for Wash-Bay Reuse',
-      description: [{ _type: 'block', children: [{ _type: 'span', text: 'The VFS-1 is designed to recycle water for continuous washing operations, meeting all UK environmental standards.' }] }],
-      specs: {
-        flowRateLPM: 38,
-        filtrationMicrons: '20',
-        powerRequirements: '230V 1ph',
-      },
-      applicationAreas: ['Fleet Washing', 'Equipment Rental', 'Car Dealerships'],
-    },
-    {
-      _id: 'evap-solator',
-      name: 'Evaporator Solator',
-      slug: 'evaporator-solator',
-      systemType: 'evaporator',
-      tagline: 'Zero Liquid Discharge Wastewater Solution',
-      specs: {
-        flowRateLPM: 1.5,
-        powerRequirements: 'Gas or Propane',
-      },
-      applicationAreas: ['Metal Finishing', 'Ink/Paint Cleanup', 'Coolant Disposal'],
-    },
-  ];
-};
-
-export const getMockPartsWashers = () => {
-  return [
-    {
-      _id: 'top-load-911',
-      name: 'Model 911',
-      slug: 'model-911',
-      loadType: 'top-load',
-      tagline: 'Compact Top-Loading Parts Washer',
-      specs: {
-        turntableDiameter: '26"',
-        workHeight: '12"',
-        weightCapacity: '250kg',
-        tankCapacity: '50L',
-        pumpPower: '1 HP',
-      },
-    },
-    {
-      _id: 'front-load-4000',
-      name: 'Model 4000',
-      slug: 'model-4000',
-      loadType: 'front-load',
-      tagline: 'Heavy Duty Front-Loading System',
-      specs: {
-        turntableDiameter: '42"',
-        workHeight: '60"',
-        weightCapacity: '1500kg',
-        tankCapacity: '150L',
-        pumpPower: '5 HP',
-      },
-    },
-  ];
-};
-
-// Industries Mock Data
-export const getMockIndustries = () => {
-  return [
-    { name: 'Agriculture', slug: { current: 'agriculture' }, icon: 'Cloud', description: 'Heavy-duty cleaning for farming and agricultural machinery.', image: '/assets/industries/agriculture.png' },
-    { name: 'Oil & Gas', slug: { current: 'oil-gas' }, icon: 'Zap', description: 'Safe, powerful cleaning for hazardous environments.', image: '/assets/industries/oil-gas.png' },
-    { name: 'Mining', slug: { current: 'mining' }, icon: 'Factory', description: 'Removing the toughest grime from heavy mining plant.', image: '/assets/industries/mining.png' },
-    { name: 'Construction', slug: { current: 'construction' }, icon: 'Layout', description: 'On-site cleaning for civil engineering and plant hire.', image: '/assets/industries/construction.png' },
-    { name: 'Fleet', slug: { current: 'fleet' }, icon: 'Car', description: 'Rapid, efficient washing systems for transport fleets.', image: '/assets/industries/fleet.png' },
-    { name: 'Manufacturing', slug: { current: 'manufacturing' }, icon: 'Box', description: 'Hygiene and degreasing for production floors.', image: '/assets/industries/manufacturing.png' },
-    { name: 'Food Processing', slug: { current: 'food-processing' }, icon: 'Target', description: 'Sanitation solutions for high-hygiene environments.', image: '/assets/industries/food-processing.png' },
-    { name: 'Waste Management', slug: { current: 'waste-management' }, icon: 'Trash2', description: 'Deep cleaning for recycling and waste facilities.', image: '/assets/industries/waste-management.png' },
-  ];
-};
-
-
-export function getMockApplications() {
-    return [
-      { name: 'Heavy Equipment', slug: { current: 'heavy-equipment' }, icon: 'HardHat', description: 'Tough dirt, mud, and grease on earthmovers.' },
-      { name: 'Vehicle Washing', slug: { current: 'vehicle-washing' }, icon: 'Truck', description: 'Safe, efficient cleaning for fleets and autos.' },
-      { name: 'Degreasing', slug: { current: 'degreasing' }, icon: 'Droplets', description: 'Eliminating stubborn industrial oils and fats.' },
-      { name: 'Surface Preparation', slug: { current: 'surface-preparation' }, icon: 'Layers', description: 'Prepping surfaces for painting or treatment.' },
-      { name: 'Wash Bay Setup', slug: { current: 'wash-bay-setup' }, icon: 'Home', description: 'Custom installations for dedicated wash bays.' },
-      { name: 'Parts Cleaning', slug: { current: 'parts-cleaning' }, icon: 'Settings', description: 'Specialized cleaning for mechanical components.' },
-      { name: 'Food Hygiene', slug: { current: 'food-hygiene' }, icon: 'ShieldCheck', description: 'Sanitation for food processing environments.' },
-      { name: 'Graffiti Removal', slug: { current: 'graffiti-removal' }, icon: 'Eraser', description: 'Restoring surfaces without damaging sub-layers.' },
-      { name: 'Drain Jetting', slug: { current: 'drain-jetting' }, icon: 'Activity', description: 'High-pressure sewer and drain unblocking.' },
-      { name: 'Trenchless Pipe Repair', slug: { current: 'trenchless-pipe-repair' }, icon: 'GitMerge', description: 'Preparing pipes for relining operations.' },
-      { name: 'De-Icing', slug: { current: 'de-icing' }, icon: 'Snowflake', description: 'Hot water systems for winter maintenance.' },
-    ];
-}
-
-export const getMockChemicals = () => {
-    return [
-        {
-            _id: 'tr-440',
-            name: 'TR-440 Farm Soap',
-            slug: { current: 'tr-440' },
-            category: 'industrial',
-            tagline: 'The gold standard for agricultural and heavy equipment cleaning.',
-            description: [{ _type: 'block', children: [{ _type: 'span', text: 'TR-440 is a highly concentrated, heavy-duty alkaline detergent formulated specifically for the tough demands of the agricultural sector. It effectively removes heavy soil, mud, and organic matter while protecting the heating coils of your pressure washer.' }] }],
-            features: ['High foaming action', 'Contains Scale Stop technology', 'Biodegradable', 'Safe on most painted surfaces'],
-            specs: {
-                phLevel: '12.5',
-                dilutionRatio: '1:50 to 1:120',
-                scent: 'Mild Fresh',
-                color: 'Amber',
-                isBiodegradable: true
-            },
-            image: { asset: { url: 'https://alkota.co.uk/assets/water-treatment-CkILM82j.png' } },
-            variants: [
-                { size: '20L Drum', price: 85, sku: 'CHEM-TR440-20L' },
-                { size: '205L Barrel', price: 740, sku: 'CHEM-TR440-205L' },
-                { size: '1000L IBC', price: 3200, sku: 'CHEM-TR440-1000L' }
-            ]
-        },
-        {
-            _id: 'grease-cutter-703',
-            name: 'Grease Cutter DE-703',
-            slug: { current: 'grease-cutter-de-703' },
-            category: 'degreasers',
-            tagline: 'Industrial strength degreaser for extreme oil and grease environments.',
-            specs: {
-                phLevel: '13.5',
-                dilutionRatio: '1:10 to 1:40',
-                scent: 'Citrus',
-                color: 'Fluorescent Green',
-                isBiodegradable: true
-            },
-            variants: [
-                { size: '5L Bottle', price: 25, sku: 'CHEM-GC703-5L' },
-                { size: '20L Drum', price: 92, sku: 'CHEM-GC703-20L' }
-            ]
-        }
-    ];
-};
+export const getMockIndustries = () => [
+  { title: 'Agriculture', slug: { current: 'agriculture' } },
+  { title: 'Transport & Fleet', slug: { current: 'transport-fleet' } },
+  { title: 'Food & Beverage', slug: { current: 'food-beverage' } },
+  { title: 'Industrial', slug: { current: 'industrial' } },
+  { title: 'Oil & Gas', slug: { current: 'oil-gas' } },
+];

@@ -213,6 +213,45 @@ export default async function MachineDetailPage({ params }: { params: Promise<{ 
           </div>
         </section>
 
+        {/* ── COIL TECHNOLOGY CALLOUT — hot water machines only ─────────── */}
+        {machine.category === 'hot-water' && (
+          <section className="mt-12">
+            <div
+              style={{
+                background: 'rgba(255, 105, 0, 0.06)',
+                borderLeft: '3px solid #FF6900',
+                padding: '24px',
+              }}
+            >
+              <span
+                style={{ fontFamily: 'var(--font-ibm-plex-mono, monospace)', fontSize: '10px', fontWeight: 900, letterSpacing: '0.3em', color: '#FF6900', textTransform: 'uppercase', display: 'block', marginBottom: '10px' }}
+              >
+                // ALKOTA COIL TECHNOLOGY
+              </span>
+              <h4
+                className="font-barlow-condensed font-black uppercase italic text-alkota-black"
+                style={{ fontSize: '1.4rem', lineHeight: 1.15, marginBottom: '12px' }}
+              >
+                The 7-Year Coil Warranty.{' '}
+                <span className="text-alkota-orange">Industry standard is 1–2 years.</span>
+              </h4>
+              <p
+                className="font-inter text-alkota-silver"
+                style={{ fontSize: '14px', lineHeight: 1.65, marginBottom: '14px', maxWidth: '72ch' }}
+              >
+                Every Alkota hot water machine uses the proprietary hydro-insulated Schedule 80 coil — a cold water wrap around the coil that protects the operator, pre-heats incoming water, and eliminates the thermal stress that kills standard coils. Combined with the Soft Damping System and Wayne Combustion burner partnership, this is the engineering behind machines that are still running at 15–20 years of daily industrial use.
+              </p>
+              <Link
+                href="/technology"
+                className="font-inter text-alkota-orange hover:underline"
+                style={{ fontSize: '13px', fontWeight: 600 }}
+              >
+                Read about the technology →
+              </Link>
+            </div>
+          </section>
+        )}
+
         {/* Quote Architecture */}
         <section id="quote" className="mt-60 py-40 border-t border-alkota-iron relative">
            <div className="absolute top-0 right-0 w-1/2 h-full bg-alkota-orange/5 skew-x-12 transform translate-x-1/2" />

@@ -15,7 +15,11 @@ export default function Footer() {
               <Logo className="h-10 text-alkota-black" />
             </Link>
             <p className="font-inter text-[13px] leading-relaxed text-alkota-silver max-w-xs">
-              EST. 1964. Handcrafted in South Dakota, USA. Engineered for the extreme UK climates. The cinematic standard in industrial cleaning.
+              EST. 1964. Handcrafted in South Dakota, USA. Engineered for the UK's most demanding industrial environments.
+            </p>
+            <p className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-smoke mt-3">
+              // CLEANING SINCE 1964
+
             </p>
           </div>
 

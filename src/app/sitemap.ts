@@ -1,25 +1,13 @@
 import { MetadataRoute } from 'next';
-import { client } from '@/sanity/client';
+import { MACHINES } from '@/lib/machines';
+import { INDUSTRIES } from '@/lib/industries';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://alkota.co.uk';
 
-  // Fetch all machines from Sanity
-  const machines = await client.fetch(`*[_type == "machine"] {
-    "slug": slug.current,
-    category,
-    _updatedAt
-  }`);
-
-  // Fetch all industries from Sanity
-  const industries = await client.fetch(`*[_type == "industry"] {
-    "slug": slug.current,
-    _updatedAt
-  }`);
-
-  const machineUrls = machines.map((m: any) => ({
-    url: `${baseUrl}/machines/${m.category || 'hot-water'}/${m.slug}`,
-    lastModified: m._updatedAt ? new Date(m._updatedAt) : new Date(),
+  const machineUrls = MACHINES.map((m) => ({
+    url: `${baseUrl}/machines/${m.type}/${m.slug}`,
+    lastModified: new Date(),
     changeFrequency: 'weekly' as const,
     priority: 0.8,
   }));
@@ -31,9 +19,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  const industryUrls = industries.map((i: any) => ({
+  const industryUrls = INDUSTRIES.map((i) => ({
     url: `${baseUrl}/industries/${i.slug}`,
-    lastModified: i._updatedAt ? new Date(i._updatedAt) : new Date(),
+    lastModified: new Date(),
     changeFrequency: 'monthly' as const,
     priority: 0.6,
   }));

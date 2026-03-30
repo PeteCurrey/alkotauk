@@ -1,59 +1,85 @@
 'use client';
 
-import { useState } from 'react';
-import { X, ArrowRight, Info, AlertTriangle, Sparkles } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { X, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
-import { cn } from '@/lib/utils';
 
-interface SiteBannerProps {
-  text: string;
-  link?: string;
-  type?: 'info' | 'special' | 'alert';
+interface Banner {
+  id: string;
+  message: string;
+  link_text?: string;
+  link_url?: string;
+  style: 'info' | 'promo' | 'warning' | 'urgent';
+  dismissible: boolean;
 }
 
-export default function SiteBanner({ text, link, type = 'info' }: SiteBannerProps) {
-  const [isVisible, setIsVisible] = useState(true);
+const STYLE_BACKGROUND: Record<string, string> = {
+  info: '#1d4ed8',
+  promo: '#FF6900',
+  warning: '#b45309',
+  urgent: '#b91c1c',
+};
 
-  if (!isVisible || !text) return null;
+const DISMISSED_KEY = 'alkota-dismissed-banners';
 
-  const bgStyles = {
-    info: "bg-alkota-black border-b border-white/10 text-white",
-    special: "bg-alkota-orange border-b border-orange-600 text-white",
-    alert: "bg-red-700 border-b border-red-900 text-white"
-  };
+function getDismissed(): string[] {
+  try { return JSON.parse(localStorage.getItem(DISMISSED_KEY) || '[]'); } catch { return []; }
+}
+function dismiss(id: string) {
+  const d = getDismissed();
+  localStorage.setItem(DISMISSED_KEY, JSON.stringify([...d, id]));
+}
 
-  const Icon = {
-    info: <Info className="h-4 w-4" />,
-    special: <Sparkles className="h-4 w-4" />,
-    alert: <AlertTriangle className="h-4 w-4" />
-  }[type];
+export default function SiteBanner() {
+  const [banners, setBanners] = useState<Banner[]>([]);
+  const [dismissed, setDismissed] = useState<string[]>([]);
+  const [loaded, setLoaded] = useState(false);
 
-  const Content = () => (
-    <div className="flex items-center justify-center gap-3 px-8 py-2.5">
-      <span className="flex-shrink-0 opacity-80">{Icon}</span>
-      <p className="font-barlow-condensed text-[11px] md:text-[13px] font-black uppercase tracking-widest leading-tight">
-        {text}
-      </p>
-      {link && <ArrowRight className="h-3.5 w-3.5 opacity-60 group-hover:translate-x-1 transition-transform" />}
-    </div>
-  );
+  useEffect(() => {
+    setDismissed(getDismissed());
+    fetch('/api/site-settings')
+      .then(r => r.json())
+      .then(data => {
+        setBanners(data.banners || []);
+        setLoaded(true);
+      })
+      .catch(() => setLoaded(true));
+  }, []);
+
+  const activeBanner = loaded ? banners.find(b => !dismissed.includes(b.id)) : null;
+
+  if (!activeBanner) return null;
+
+  function handleDismiss() {
+    dismiss(activeBanner!.id);
+    setDismissed(d => [...d, activeBanner!.id]);
+  }
+
+  const bg = STYLE_BACKGROUND[activeBanner.style] || STYLE_BACKGROUND.info;
 
   return (
-    <div className={cn("relative z-[60] group transition-all duration-300", bgStyles[type])}>
-      {link ? (
-        <Link href={link} className="block hover:opacity-90">
-          <Content />
+    <div
+      className="w-full py-2.5 px-4 flex items-center justify-center gap-4 text-white relative z-50"
+      style={{ background: bg }}
+    >
+      <p className="font-inter text-[13px] font-medium">{activeBanner.message}</p>
+      {activeBanner.link_text && activeBanner.link_url && (
+        <Link
+          href={activeBanner.link_url}
+          className="flex items-center gap-1 font-ibm-plex-mono text-[11px] uppercase tracking-wider font-bold underline underline-offset-2 hover:opacity-80 transition-opacity shrink-0"
+        >
+          {activeBanner.link_text} <ArrowRight className="h-3 w-3" />
         </Link>
-      ) : (
-        <Content />
       )}
-      <button 
-        onClick={() => setIsVisible(false)}
-        className="absolute right-4 top-1/2 -translate-y-1/2 p-1.5 hover:bg-black/20 rounded-full transition-colors"
-        aria-label="Close banner"
-      >
-        <X className="h-3.5 w-3.5 opacity-60" />
-      </button>
+      {activeBanner.dismissible && (
+        <button
+          onClick={handleDismiss}
+          className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:opacity-70 transition-opacity"
+          aria-label="Dismiss banner"
+        >
+          <X className="h-4 w-4" />
+        </button>
+      )}
     </div>
   );
 }

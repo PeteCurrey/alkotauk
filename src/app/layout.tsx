@@ -47,18 +47,8 @@ export default async function RootLayout({
 }>) {
   const headerList = await headers();
   const pathname = headerList.get("x-url") || "";
-  const isStudio = pathname.startsWith("/studio") || pathname.startsWith("/admin");
-
-  const siteSettings = await safeFetch(`*[_type == "siteSettings"][0]`, getMockSettings());
-  
-  const isMaintenanceMode = siteSettings?.maintenanceGroup?.isMaintenanceMode || process.env.NEXT_PUBLIC_MAINTENANCE_MODE === 'true';
-  const cookieStore = await cookies();
-  const isAdmin = cookieStore.get('alkota_admin_access')?.value === 'true';
-  const isMaintenance = isMaintenanceMode && !isAdmin;
-
-  const splashSeen = cookieStore.get('alkota_splash_seen');
-  const showSplash = siteSettings?.visualExperience?.enableSplashScreen && !splashSeen;
-  const showBanner = siteSettings?.bannerGroup?.showGlobalBanner;
+  const isAdminPage = pathname.startsWith("/admin");
+  const isStudio = pathname.startsWith("/studio");
 
   return (
     <html
@@ -67,6 +57,15 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col font-inter bg-alkota-bg text-alkota-black text-base">
+        <SiteBanner />
+        <CartProvider>
+          <SessionProvider>
+            {!isAdminPage && !isStudio && <SplashScreen />}
+            {!isAdminPage && !isStudio && <AlkotaAdvisor />}
+            <CartDrawer />
+            {children}
+          </SessionProvider>
+        </CartProvider>
         {/* Google Analytics 4 */}
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}

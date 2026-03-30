@@ -24,6 +24,11 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: '/studio/:path*',
+        destination: '/admin',
+        permanent: true,
+      },
+      {
         source: '/tools/mess-quest',
         destination: '/tools/machine-match',
         permanent: true,

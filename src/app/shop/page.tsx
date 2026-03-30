@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { client } from '@/sanity/client';
+import { supabaseAdmin } from '@/lib/supabase/server';
 import PartCard from '@/components/PartCard';
 import SectionHeading from '@/components/SectionHeading';
 import Navigation from '@/components/Navigation';
@@ -16,16 +16,28 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 async function getParts() {
-  return await client.fetch(`*[_type == "part"] | order(category asc, name asc) {
-    _id,
-    name,
-    sku,
-    slug,
-    price,
-    category,
-    image,
-    description
-  }`);
+  const { data: parts, error } = await supabaseAdmin
+    .from('parts')
+    .select('*')
+    .eq('active', true)
+    .order('sort_order', { ascending: true });
+
+  if (error) {
+    console.error('Error fetching parts:', error);
+    return [];
+  }
+
+  // Map to the structure expected by PartCard
+  return parts.map(p => ({
+    _id: p.id,
+    name: p.name,
+    sku: p.part_number,
+    slug: { current: p.part_number }, // Using part_number as slug for now
+    price: p.price,
+    category: p.category,
+    image: null, // Placeholders
+    description: p.description
+  }));
 }
 
 export default async function ShopPage() {

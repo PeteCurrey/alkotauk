@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { urlFor } from '@/sanity/client';
+
 import AddToCartButton from './AddToCartButton';
 
 interface PartCardProps {
@@ -9,15 +9,16 @@ interface PartCardProps {
     name: string;
     sku: string;
     slug: { current: string };
-    price: number;
+    price: number | null;
     category: string;
-    image?: unknown;
+    image?: string; // Expecting a URL string now
     description?: string;
   };
 }
 
 export default function PartCard({ part }: PartCardProps) {
-  const imageUrl = part.image ? urlFor(part.image).width(400).height(400).url() : null;
+  const imageUrl = part.image || null;
+  const displayPrice = part.price ? `£${part.price.toFixed(2)}` : 'Enquire for Pricing';
 
   return (
     <div className="group relative flex flex-col border border-alkota-iron bg-alkota-steel/30 p-4 transition-all hover:bg-alkota-steel/50">
@@ -46,18 +47,30 @@ export default function PartCard({ part }: PartCardProps) {
         <p className="text-xs text-secondary mb-4 line-clamp-2">
           {part.description}
         </p>
+        <p className="text-sm font-bold text-alkota-orange mb-4">
+          {displayPrice}
+        </p>
         <p className="text-xs text-alkota-iron mb-4">
           SKU: {part.sku}
         </p>
         
         <div className="mt-auto">
-          <AddToCartButton 
-            id={part._id}
-            name={part.name}
-            price={part.price}
-            image={imageUrl || undefined}
-            sku={part.sku}
-          />
+          {part.price !== null ? (
+            <AddToCartButton 
+              id={part._id}
+              name={part.name}
+              price={part.price}
+              image={imageUrl || undefined}
+              sku={part.sku}
+            />
+          ) : (
+            <Link 
+              href={`/contact?subject=Enquiry: ${part.name} (${part.sku})`}
+              className="flex w-full items-center justify-center gap-2 border border-alkota-orange bg-transparent py-4 text-sm font-black uppercase tracking-widest text-alkota-orange transition-all duration-200 hover:bg-alkota-orange hover:text-white"
+            >
+              Enquire Now
+            </Link>
+          )}
         </div>
       </div>
     </div>

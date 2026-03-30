@@ -4,7 +4,7 @@ import "./globals.css";
 import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
 import { CartProvider } from "@/context/CartContext";
-import { safeFetch, getMockSettings } from "@/sanity/client";
+import { supabaseAdmin } from "@/lib/supabase/server";
 import { generateSeo } from "@/lib/seo";
 import Script from 'next/script';
 import { headers, cookies } from "next/headers";
@@ -26,7 +26,7 @@ const ibmPlexMono = IBM_Plex_Mono({
   subsets: ["latin"],
 });
 
-import { supabaseAdmin } from "@/lib/supabase/server";
+
 
 export async function generateMetadata(): Promise<Metadata> {
   const { data: settings } = await supabaseAdmin
@@ -75,7 +75,6 @@ export default async function RootLayout({
   const headerList = await headers();
   const pathname = headerList.get("x-url") || "";
   const isAdminPage = pathname.startsWith("/admin");
-  const isStudio = pathname.startsWith("/studio");
 
   // Fetch settings for maintenance and common UI
   const settings = await getSiteSettings() as Record<string, any>;
@@ -92,11 +91,7 @@ export default async function RootLayout({
       <body className="min-h-full flex flex-col font-inter bg-alkota-bg text-alkota-black text-base">
         <CartProvider>
           <SessionProvider>
-            {isStudio ? (
-               <div className="h-full bg-white">
-                 {children}
-               </div>
-            ) : isMaintenance && !isAdminPage ? (
+            {isMaintenance && !isAdminPage ? (
               <MaintenanceScreen 
                 title="System Maintenance"
                 message={settings['maintenance_message']}

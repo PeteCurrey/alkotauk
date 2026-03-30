@@ -11,14 +11,13 @@ export default function robots(): MetadataRoute.Robots {
         disallow: [
           '/portal/', // Protect dealer portal from being indexed
           '/api/',    // Protect API routes
-          '/studio/', // Protect Sanity Studio
           '/checkout/', // Protect checkout flow
         ],
       },
       {
         userAgent: 'GPTBot', // Allow AI crawlers for help/info but restrict sensitive areas
         allow: '/',
-        disallow: ['/portal/', '/studio/'],
+        disallow: ['/portal/'],
       }
     ],
     sitemap: `${baseUrl}/sitemap.xml`,

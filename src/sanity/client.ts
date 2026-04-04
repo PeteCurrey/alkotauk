@@ -1,28 +1,91 @@
-import { MACHINES } from '@/lib/machines';
+import { supabase } from '@/lib/supabase/client';
 
 export const client = {
   fetch: async (query: string, params?: any): Promise<any> => {
-    // This is now a pure TS static shim. Sanity packages have been removed.
-    if (query.includes('_type == "siteSettings"')) return getMockSettings();
-    
+    // ─── SITE SETTINGS ──────────────────────────────────────────────────
+    if (query.includes('_type == "siteSettings"')) {
+      const { data } = await supabase.from('site_settings').select('*');
+      const settingsMap = (data || []).reduce((acc: any, s: any) => ({ ...acc, [s.key]: s.value }), {});
+      
+      return {
+        _id: 'siteSettings',
+        _type: 'siteSettings',
+        title: settingsMap['site_name'] || 'Alkota UK',
+        seoGroup: {
+          defaultDescription: settingsMap['meta_description']
+        },
+        contactInfo: {
+          phone: settingsMap['contact_phone'],
+          email: settingsMap['contact_email']
+        },
+        aiChatGroup: {
+          enabled: true,
+          systemPrompt: settingsMap['ai_system_prompt'] || 'You are the Alkota UK Industrial Advisor.'
+        }
+      };
+    }
+
+    // ─── MACHINES ─────────────────────────────────────────────────────
     if (query.includes('_type == "machine"')) {
-      return MACHINES.map(m => ({
+      const { data } = await supabase
+        .from('machines')
+        .select('*')
+        .eq('active', true)
+        .order('sort_order', { ascending: true });
+
+      return (data || []).map((m: any) => ({
         _id: m.id,
         _type: 'machine',
         name: m.name,
-        modelCode: m.id,
-        tagline: m.description.split('.')[0],
-        category: m.type,
-        slug: { current: m.slug.split('/').pop() }, // Extract last part of slug for consistency
+        modelCode: m.model_code,
+        tagline: m.tagline,
+        category: m.category,
+        slug: { current: m.slug },
         series: { name: m.series },
-        specs: m.specs,
-        eliteFeatures: m.highlights,
-        image: { asset: { url: `/assets/products/${m.id}.png` } }
+        specs: {
+          pressureBar: (m.psi / 14.5).toFixed(0),
+          flowLPM: (m.gpm * 3.785).toFixed(1),
+          powerSource: m.voltage || m.engine,
+          fuelType: m.burner_fuel,
+          driveType: m.drive,
+          weightKG: m.weight
+        },
+        eliteFeatures: m.features,
+        image: { asset: { url: m.image_url || '/assets/products/placeholder.png' } }
       }));
     }
 
-    if (query.includes('_type == "chemical"')) return [];
-    if (query.includes('_type == "industry"')) return getMockIndustries();
+    // ─── INDUSTRIES ───────────────────────────────────────────────────
+    if (query.includes('_type == "industry"')) {
+        const { data } = await supabase
+          .from('industries')
+          .select('*')
+          .order('sort_order', { ascending: true });
+          
+        return (data || []).map((i: any) => ({
+            name: i.name,
+            title: i.name,
+            slug: { current: i.slug },
+            icon: i.icon,
+            description: i.description
+        }));
+    }
+
+    // ─── APPLICATIONS ─────────────────────────────────────────────────
+    if (query.includes('_type == "application"')) {
+        const { data } = await supabase
+          .from('applications')
+          .select('*')
+          .order('sort_order', { ascending: true });
+          
+        return (data || []).map((a: any) => ({
+            name: a.name,
+            slug: { current: a.slug },
+            icon: a.icon,
+            description: a.description
+        }));
+    }
+
     return [];
   },
   withConfig: () => client,
@@ -55,61 +118,13 @@ export const safeFetch = async (query: string, fallback: any) => {
   }
 };
 
-export const getMockSettings = () => ({
-  title: 'Alkota UK',
-  seoGroup: {
-    defaultDescription: 'Alkota UK Industrial Cleaning Systems — Handcrafted in South Dakota since 1964. Belt-drive belt, Schedule 80 coil, 7-year warranty. Pressure washers built to last.',
-  },
-  maintenanceGroup: {
-    isMaintenanceMode: false,
-    maintenanceMessage: 'The platform is currently undergoing scheduled upgrades.',
-  },
-  visualExperience: {
-    enableSplashScreen: false,
-  },
-  bannerGroup: {
-    showGlobalBanner: false,
-  },
-  contactInfo: {
-    phone: '+447912506738',
-    email: 'info@alkota.co.uk',
-  }
-});
-
-export const getMockIndustries = () => [
-  { 
-    name: 'Agriculture', 
-    title: 'Agriculture',
-    slug: { current: 'agriculture' },
-    icon: 'Leaf',
-    description: 'Specialised cleaning for tractors, combines, and livestock housing. Keeping precision machinery in peak condition.'
-  },
-  { 
-    name: 'Transport & Fleet', 
-    title: 'Transport & Fleet',
-    slug: { current: 'transport-fleet' },
-    icon: 'Truck',
-    description: 'Rapid turnaround for HGV fleets, distribution centres, and logistics hubs. Eliminating road film and corrosive salt.'
-  },
-  { 
-    name: 'Food & Beverage', 
-    title: 'Food & Beverage',
-    slug: { current: 'food-beverage' },
-    icon: 'Utensils',
-    description: 'Food-safe cleaning solutions for production lines and kitchens. High-temperature steam for deep sanitization.'
-  },
-  { 
-    name: 'Industrial & Manufacturing', 
-    title: 'Industrial & Manufacturing',
-    slug: { current: 'industrial' },
-    icon: 'Factory',
-    description: 'Heavy-duty equipment cleaning for factories and floor bays. Built for continuous use in the toughest environments.'
-  },
-  { 
-    name: 'Maritime & Offshore', 
-    title: 'Maritime & Offshore',
-    slug: { current: 'maritime' },
-    icon: 'Anchor',
-    description: 'Salt-resistant machinery for docks, shipyards, and offshore platforms. Engineering that withstands coastal corrosion.'
-  }
-];
+export const getMockIndustries = async () => {
+    const { data } = await supabase.from('industries').select('*').order('sort_order', { ascending: true });
+    return (data || []).map((i: any) => ({
+        name: i.name,
+        title: i.name,
+        slug: { current: i.slug },
+        icon: i.icon,
+        description: i.description
+    }));
+};

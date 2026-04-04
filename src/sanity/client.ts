@@ -38,7 +38,9 @@ export const client = {
         _type: 'machine',
         name: m.name,
         modelCode: m.model_code,
+        model_code: m.model_code, // Compatibility with MachineCard
         tagline: m.tagline,
+        description: m.description,
         category: m.category,
         slug: { current: m.slug },
         series: { name: m.series },
@@ -51,6 +53,8 @@ export const client = {
           weightKG: m.weight
         },
         eliteFeatures: m.features,
+        image_url: m.image_url || '/assets/products/placeholder.png',
+        heroImage: { asset: { url: m.image_url || '/assets/products/placeholder.png' } },
         image: { asset: { url: m.image_url || '/assets/products/placeholder.png' } }
       }));
     }

@@ -29,12 +29,22 @@ export const client = {
 };
 
 // Minimal image URL builder implementation to replace @sanity/image-url
-export const urlFor = (source: any) => ({
-  url: () => source?.asset?.url || '',
-  width: (w: number) => ({ url: () => source?.asset?.url || '' }),
-  height: (h: number) => ({ url: () => source?.asset?.url || '' }),
-  fit: (f: string) => ({ url: () => source?.asset?.url || '' }),
-});
+export interface ImageBuilder {
+  url: () => string;
+  width: (w: number) => ImageBuilder;
+  height: (h: number) => ImageBuilder;
+  fit: (f: string) => ImageBuilder;
+}
+
+export const urlFor = (source: any): ImageBuilder => {
+  const builder: ImageBuilder = {
+    url: () => source?.asset?.url || '',
+    width: (w: number) => builder,
+    height: (h: number) => builder,
+    fit: (f: string) => builder,
+  };
+  return builder;
+};
 
 export const safeFetch = async (query: string, fallback: any) => {
   try {

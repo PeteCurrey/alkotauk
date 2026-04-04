@@ -1,7 +1,26 @@
+import { MACHINES } from '@/lib/machines';
+
 export const client = {
-  fetch: async (query: string, params?: any) => {
+  fetch: async (query: string, params?: any): Promise<any> => {
     // This is now a pure TS static shim. Sanity packages have been removed.
     if (query.includes('_type == "siteSettings"')) return getMockSettings();
+    
+    if (query.includes('_type == "machine"')) {
+      return MACHINES.map(m => ({
+        _id: m.id,
+        _type: 'machine',
+        name: m.name,
+        modelCode: m.id,
+        tagline: m.description.split('.')[0],
+        category: m.type,
+        slug: { current: m.slug.split('/').pop() }, // Extract last part of slug for consistency
+        series: { name: m.series },
+        specs: m.specs,
+        eliteFeatures: m.highlights,
+        image: { asset: { url: `/assets/products/${m.id}.png` } }
+      }));
+    }
+
     if (query.includes('_type == "chemical"')) return [];
     if (query.includes('_type == "industry"')) return getMockIndustries();
     return [];

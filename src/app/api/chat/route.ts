@@ -6,21 +6,13 @@ export async function POST(req: NextRequest) {
   try {
     const { messages } = await req.json();
 
-    // Fetch all machines from Sanity to provide context to the AI
-    const machines = await client.fetch(`*[_type == "machine"] {
-      name,
-      modelCode,
-      tagline,
-      category,
-      "series": series->name,
-      specs,
-      eliteFeatures
-    }`);
+    // Fetch all machines to provide context to the AI
+    const machines = await client.fetch(`*[_type == "machine"]`);
 
     const productContext = JSON.stringify(machines.map((m: any) => ({
       name: m.name,
       id: m.modelCode,
-      series: m.series,
+      series: m.series?.name || m.series,
       category: m.category,
       specs: m.specs,
       highlights: m.eliteFeatures

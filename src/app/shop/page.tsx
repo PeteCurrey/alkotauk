@@ -16,16 +16,18 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 async function getParts() {
-  const { data: parts, error } = await supabaseAdmin
+  const { data, error } = await supabaseAdmin
     .from('parts')
     .select('*')
     .eq('active', true)
     .order('sort_order', { ascending: true });
 
-  if (error) {
-    console.error('Error fetching parts:', error);
+  if (error || !data) {
+    if (error) console.error('Error fetching parts:', error);
     return [];
   }
+
+  const parts = data;
 
   // Map to the structure expected by PartCard
   return parts.map(p => ({

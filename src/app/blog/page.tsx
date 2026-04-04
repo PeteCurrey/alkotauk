@@ -16,11 +16,13 @@ const CATEGORY_LABELS: Record<string, string> = {
 };
 
 export default async function BlogPage() {
-  const { data: posts } = await supabaseAdmin
+  const { data } = await supabaseAdmin
     .from('blog_posts')
     .select('id,title,slug,excerpt,category,published_at,featured_image_url,author')
     .eq('published', true)
     .order('published_at', { ascending: false });
+
+  const posts = data || [];
 
   return (
     <main className="min-h-screen bg-white pt-32 pb-24">

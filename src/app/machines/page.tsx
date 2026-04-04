@@ -7,11 +7,13 @@ import { ArrowRight } from 'lucide-react';
 
 export default async function MachinesPage() {
   // Fetch all machines from Supabase
-  const { data: machines = [] } = await supabaseAdmin
+  const { data } = await supabaseAdmin
     .from('machines')
     .select('*')
     .eq('active', true)
     .order('sort_order');
+    
+  const machines = data || [];
   
   
   // Unique categories from real data

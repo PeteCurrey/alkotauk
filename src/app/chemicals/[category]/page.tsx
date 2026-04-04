@@ -16,12 +16,14 @@ export default async function ChemicalsCategoryPage({ params }: ChemicalsCategor
   const categoryName = categorySlug.replace(/-/g, ' ');
 
   // Fetch chemicals for this category from Supabase
-  const { data: chemicals = [] } = await supabaseAdmin
+  const { data } = await supabaseAdmin
     .from('chemicals')
     .select('*')
     .eq('category', categorySlug)
     .eq('active', true)
     .order('sort_order');
+
+  const chemicals = data || [];
 
   const categoryDescriptions: Record<string, string> = {
     "degreasers": "Industrial strength degreasers designed for plant, machinery, heavy transport and workshop floor cleaning. Powerful alkaline formulations that turn oils into soap.",

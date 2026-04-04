@@ -16,12 +16,14 @@ export default async function MachineCategoryPage({ params }: MachineCategoryPag
   const categorySlug = resolvedParams.category;
   
   // Fetch machines for this category from Supabase
-  const { data: machines = [] } = await supabaseAdmin
+  const { data } = await supabaseAdmin
     .from('machines')
     .select('*')
     .eq('category', categorySlug)
     .eq('active', true)
     .order('sort_order');
+    
+  const machines = data || [];
 
   const categoryName = categorySlug.replace('-', ' ');
 

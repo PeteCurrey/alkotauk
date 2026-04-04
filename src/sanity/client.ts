@@ -67,9 +67,39 @@ export const getMockSettings = () => ({
 });
 
 export const getMockIndustries = () => [
-  { title: 'Agriculture', slug: { current: 'agriculture' } },
-  { title: 'Transport & Fleet', slug: { current: 'transport-fleet' } },
-  { title: 'Food & Beverage', slug: { current: 'food-beverage' } },
-  { title: 'Industrial', slug: { current: 'industrial' } },
-  { title: 'Oil & Gas', slug: { current: 'oil-gas' } },
+  { 
+    name: 'Agriculture', 
+    title: 'Agriculture',
+    slug: { current: 'agriculture' },
+    icon: 'Leaf',
+    description: 'Specialised cleaning for tractors, combines, and livestock housing. Keeping precision machinery in peak condition.'
+  },
+  { 
+    name: 'Transport & Fleet', 
+    title: 'Transport & Fleet',
+    slug: { current: 'transport-fleet' },
+    icon: 'Truck',
+    description: 'Rapid turnaround for HGV fleets, distribution centres, and logistics hubs. Eliminating road film and corrosive salt.'
+  },
+  { 
+    name: 'Food & Beverage', 
+    title: 'Food & Beverage',
+    slug: { current: 'food-beverage' },
+    icon: 'Utensils',
+    description: 'Food-safe cleaning solutions for production lines and kitchens. High-temperature steam for deep sanitization.'
+  },
+  { 
+    name: 'Industrial & Manufacturing', 
+    title: 'Industrial & Manufacturing',
+    slug: { current: 'industrial' },
+    icon: 'Factory',
+    description: 'Heavy-duty equipment cleaning for factories and floor bays. Built for continuous use in the toughest environments.'
+  },
+  { 
+    name: 'Maritime & Offshore', 
+    title: 'Maritime & Offshore',
+    slug: { current: 'maritime' },
+    icon: 'Anchor',
+    description: 'Salt-resistant machinery for docks, shipyards, and offshore platforms. Engineering that withstands coastal corrosion.'
+  }
 ];

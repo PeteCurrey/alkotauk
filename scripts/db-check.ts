@@ -1,4 +1,4 @@
-import { supabaseAdmin } from './src/lib/supabase/server';
+import { supabaseAdmin } from '../src/lib/supabase/server';
 
 async function check() {
   const { data: machines } = await supabaseAdmin.from('machines').select('count');

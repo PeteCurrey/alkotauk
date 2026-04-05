@@ -14,8 +14,9 @@ async function getMaintenanceMode(req: NextRequest): Promise<boolean> {
   }
   return false;
 }
+export const runtime = 'edge';
 
-export async function proxy(req: NextRequest) {
+export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   // Static assets and internal routes

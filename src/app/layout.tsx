@@ -8,6 +8,8 @@ import { supabaseAdmin } from "@/lib/supabase/server";
 import { generateSeo } from "@/lib/seo";
 import Script from 'next/script';
 import { headers, cookies } from "next/headers";
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 const inter = Inter({
   variable: "--font-inter",

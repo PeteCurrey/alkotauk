@@ -116,9 +116,9 @@ export const urlFor = (source: any): ImageBuilder => {
 export const safeFetch = async (query: string, fallback: any) => {
   try {
     const data = await client.fetch(query);
-    return data || fallback;
+    return data || (await fallback);
   } catch {
-    return fallback;
+    return await fallback;
   }
 };
 

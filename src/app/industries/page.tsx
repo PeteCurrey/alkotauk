@@ -7,8 +7,14 @@ import { motion } from 'framer-motion';
 import * as LucideIcons from 'lucide-react';
 import Breadcrumbs from '@/components/Breadcrumbs';
 
+import { useState, useEffect } from 'react';
+
 export default function IndustriesPage() {
-  const industries = getMockIndustries();
+  const [industries, setIndustries] = useState<any[]>([]);
+
+  useEffect(() => {
+    getMockIndustries().then(setIndustries);
+  }, []);
 
   return (
     <main className="min-h-screen bg-alkota-black pt-32">

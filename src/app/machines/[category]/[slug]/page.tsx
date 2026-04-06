@@ -50,7 +50,7 @@ export default async function MachineDetailPage({ params }: { params: Promise<{ 
   const { data: siteSettings } = await supabaseAdmin
     .from('site_settings')
     .select('*')
-    .then(res => ({ data: (res.data || []).reduce((acc: any, s: any) => ({ ...acc, [s.key]: s.value }), {}) }));
+    .then((res: any) => ({ data: (res.data || []).reduce((acc: any, s: any) => ({ ...acc, [s.key]: s.value }), {}) }));
     
   const session = await auth();
   const user = session?.user as any;

@@ -5,20 +5,7 @@ import { Inbox, FileText, FlaskConical, Megaphone, Lock, ArrowRight, Plus } from
 async function getStats() {
   const now = new Date();
   const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
-  const [
-    { count: totalEnquiries },
-    { count: newEnquiries },
-    { count: monthEnquiries },
-    { count: trailerEnquiries },
-    { count: industrialEnquiries },
-    { count: blogPublished },
-    { count: activeChemicals },
-    { count: partsCount },
-    { count: activeBanners },
-    { data: enquiriesRecent },
-    { data: maintenanceSetting },
-    { data: activeBannerData },
-  ] = await Promise.all([
+  const results = await Promise.all([
     supabaseAdmin.from('enquiries').select('*', { count: 'exact', head: true }),
     supabaseAdmin.from('enquiries').select('*', { count: 'exact', head: true }).eq('status', 'new'),
     supabaseAdmin.from('enquiries').select('*', { count: 'exact', head: true }).gte('created_at', startOfMonth),
@@ -29,23 +16,38 @@ async function getStats() {
     supabaseAdmin.from('parts').select('*', { count: 'exact', head: true }).eq('active', true),
     supabaseAdmin.from('banners').select('*', { count: 'exact', head: true }).eq('active', true),
     supabaseAdmin.from('enquiries').select('id,reference,type,name,company,created_at,status').order('created_at', { ascending: false }).limit(10),
-    supabaseAdmin.from('site_settings').select('value').eq('key', 'maintenance_mode').single(),
+    supabaseAdmin.from('site_settings').select('value').eq('key', 'maintenance_mode').maybeSingle(),
     supabaseAdmin.from('banners').select('message').eq('active', true).limit(1).maybeSingle(),
   ]);
 
+  const [
+    totalEnquiries,
+    newEnquiries,
+    monthEnquiries,
+    trailerEnquiries,
+    industrialEnquiries,
+    blogPublished,
+    activeChemicals,
+    partsCount,
+    activeBanners,
+    enquiriesRecent,
+    maintenanceSetting,
+    activeBannerData,
+  ] = results;
+
   return {
-    totalEnquiries: totalEnquiries ?? 0,
-    newEnquiries: newEnquiries ?? 0,
-    monthEnquiries: monthEnquiries ?? 0,
-    trailerEnquiries: trailerEnquiries ?? 0,
-    industrialEnquiries: industrialEnquiries ?? 0,
-    blogPublished: blogPublished ?? 0,
-    activeChemicals: activeChemicals ?? 0,
-    partsCount: partsCount ?? 0,
-    activeBanners: activeBanners ?? 0,
-    enquiriesRecent: enquiriesRecent ?? [],
-    maintenanceActive: maintenanceSetting?.value === 'true',
-    activeBannerMessage: activeBannerData?.message ?? null,
+    totalEnquiries: totalEnquiries?.count ?? 0,
+    newEnquiries: newEnquiries?.count ?? 0,
+    monthEnquiries: monthEnquiries?.count ?? 0,
+    trailerEnquiries: trailerEnquiries?.count ?? 0,
+    industrialEnquiries: industrialEnquiries?.count ?? 0,
+    blogPublished: blogPublished?.count ?? 0,
+    activeChemicals: activeChemicals?.count ?? 0,
+    partsCount: partsCount?.count ?? 0,
+    activeBanners: activeBanners?.count ?? 0,
+    enquiriesRecent: enquiriesRecent?.data ?? [],
+    maintenanceActive: maintenanceSetting?.data?.value === 'true',
+    activeBannerMessage: activeBannerData?.data?.message ?? null,
   };
 }
 

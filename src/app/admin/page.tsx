@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Logo from '@/components/Logo';
 
@@ -10,6 +10,17 @@ export default function AdminLoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  // Auto-redirect if already logged in
+  useEffect(() => {
+    const checkAuth = async () => {
+      // Check if cookie exists (client-side check is a fast hint)
+      if (document.cookie.includes('alkota-admin-token')) {
+        router.push('/admin/dashboard');
+      }
+    };
+    checkAuth();
+  }, [router]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

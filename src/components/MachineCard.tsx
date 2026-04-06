@@ -42,11 +42,11 @@ export default function MachineCard({ machine, index }: MachineCardProps) {
       />
 
       {/* Elite Series Indicator */}
-      {machine.is_elite_series && (
+      {machine.series?.toLowerCase().includes('elite') || machine.is_elite_series ? (
         <div className="absolute left-0 top-6 z-20 bg-alkota-orange px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-white shadow-xl">
           Elite Series
         </div>
-      )}
+      ) : null}
 
       {/* Image Container */}
       <div className="relative aspect-[16/10] w-full overflow-hidden bg-alkota-bg">
@@ -61,7 +61,7 @@ export default function MachineCard({ machine, index }: MachineCardProps) {
               : 'https://alkota.co.uk/assets/cold-water-pressure-washer-D9J_Sudm.png')
           }
           alt={machine.name}
-          className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110 grayscale-[0.8] group-hover:grayscale-0"
+          className="h-full w-full object-contain p-8 transition-transform duration-1000 group-hover:scale-110 grayscale-[0.8] group-hover:grayscale-0"
         />
         <div className="absolute bottom-6 left-6 z-20">
           <span className="font-ibm-plex-mono text-[10px] font-bold uppercase tracking-[0.3em] text-alkota-orange">

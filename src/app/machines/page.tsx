@@ -17,7 +17,7 @@ export default async function MachinesPage() {
   
   
   // Unique categories from real data
-  const categories = Array.from(new Set(machines.map((m: any) => m.category))).map(cat => ({
+  const categories = Array.from(new Set((machines || []).map((m: any) => m.category))).map(cat => ({
     name: (cat as string).replace('-', ' '),
     slug: cat as string
   }));
@@ -87,24 +87,37 @@ export default async function MachinesPage() {
 
           {/* Full Catalogue Section */}
           <section className="relative">
-            <div className="mb-20 flex items-center justify-between border-b border-alkota-iron pb-12">
-              <h2 className="font-barlow-condensed text-5xl font-black text-alkota-black uppercase italic tracking-tighter md:text-7xl">
-                FULL <span className="text-alkota-orange">INVENTORY.</span>
-              </h2>
-              <span className="font-ibm-plex-mono text-[10px] text-alkota-silver hidden md:block uppercase tracking-widest">
-                TOTAL_REPL: {machines.length} UNITS
-              </span>
-            </div>
-            
-            <div className="grid grid-cols-1 gap-px bg-alkota-iron border border-alkota-iron md:grid-cols-2 lg:grid-cols-3">
-              {machines.map((machine: any, i: number) => (
-                <MachineCard key={machine._id} machine={machine} index={i} />
+            <div className="space-y-32 mb-40">
+              {Object.entries(
+                (machines || []).reduce((acc: any, m: any) => {
+                  const series = m.series || 'Other';
+                  if (!acc[series]) acc[series] = [];
+                  acc[series].push(m);
+                  return acc;
+                }, {})
+              ).map(([series, items]: [string, any], groupIndex) => (
+                <div key={series}>
+                  <div className="mb-12 flex items-center gap-8">
+                    <h2 className="font-barlow-condensed text-5xl font-black text-alkota-black uppercase italic tracking-tighter md:text-7xl">
+                      {series} <span className="text-alkota-orange">SERIES.</span>
+                    </h2>
+                    <div className="h-px flex-1 bg-alkota-iron hidden md:block" />
+                    <span className="font-ibm-plex-mono text-[10px] text-alkota-silver uppercase tracking-widest">
+                      UNIT_COUNT: {items.length}
+                    </span>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 gap-px bg-alkota-iron border border-alkota-iron md:grid-cols-2 lg:grid-cols-3">
+                    {items.map((machine: any, i: number) => (
+                      <MachineCard key={machine.id} machine={machine} index={i} />
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
           </section>
         </div>
       </div>
-
     </main>
   );
 }

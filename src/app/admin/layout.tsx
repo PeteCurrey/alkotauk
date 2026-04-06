@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Logo from '@/components/Logo';
 import {
   BarChart3, Inbox, FileText, Wrench, FlaskConical,
@@ -66,7 +66,15 @@ function SidebarLink({ href, icon: Icon, label }: { href: string; icon: React.El
 }
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    // Basic client-side check to improve UX
+    if (!document.cookie.includes('alkota-admin-token')) {
+      router.push('/admin');
+    }
+  }, [router]);
 
   return (
     <div className="flex min-h-screen" style={{ background: '#111', fontFamily: 'Inter, sans-serif' }}>

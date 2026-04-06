@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import CartIndicator from './CartIndicator';
 import { useSession } from 'next-auth/react';
 import Logo from './Logo';
-import { client, urlFor } from '@/sanity/client';
+import { supabase } from '@/lib/supabase/client';
 
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -34,26 +34,38 @@ export default function Navigation() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [navRef]);
 
-  // Fetch real categories from Sanity for the mega menu
+  // Fetch real machines from Supabase for the mega menu
   useEffect(() => {
-    // We can either fetch actual machines or just a list of unique categories
-    // For the mega menu, we'll fetch a representative machine for each category link
-    client.fetch(`*[_type == "machine"] | order(_createdAt desc) [0...50] {
-      category,
-      "slug": slug.current,
-      heroImage
-    }`).then(data => {
-      const uniqueCats = Array.from(new Set(data.map((m: any) => m.category))).map(cat => {
-        const rep = data.find((m: any) => m.category === cat);
-        return {
-          name: (cat as string).replace('-', ' '),
-          href: `/machines/${cat}`,
-          image: rep?.heroImage ? urlFor(rep.heroImage).url() : 'https://alkota.co.uk/assets/hot-water-pressure-washer-DHE0Q-_H.png',
-          desc: `Industrial elite ${cat} systems.`
-        };
-      });
-      setSanityCategories(uniqueCats);
-    });
+    async function fetchMachines() {
+      const { data, error } = await supabase
+        .from('machines')
+        .select('category, series, slug, image_url, name')
+        .eq('active', true)
+        .order('sort_order', { ascending: true });
+
+      if (data && !error) {
+        // Group by category first, but the user wants to see Series
+        // We'll create a list of unique Category + Series combinations
+        const seriesMap = new Map();
+        
+        data.forEach(m => {
+          const key = `${m.category}-${m.series}`;
+          if (!seriesMap.has(key)) {
+            seriesMap.set(key, {
+              category: m.category,
+              series: m.series,
+              name: `${m.series} Series`,
+              href: `/machines/${m.category}?series=${m.series}`,
+              image: m.image_url || 'https://alkota.co.uk/assets/hot-water-pressure-washer-DHE0Q-_H.png',
+              desc: `${m.category.replace('-', ' ')} // Industrial Power`
+            });
+          }
+        });
+
+        setSanityCategories(Array.from(seriesMap.values()));
+      }
+    }
+    fetchMachines();
   }, []);
 
   const buildCategories = [

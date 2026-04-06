@@ -1,28 +1,36 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { client } from '@/sanity/client';
+import { supabase } from '@/lib/supabase/client';
 import MachineCard from './MachineCard';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
 export default function MachineCatalogue() {
-  const [machines, setMachines] = useState<any[]>([]);
+  const [groupedMachines, setGroupedMachines] = useState<Record<string, any[]>>({});
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    client.fetch(`*[_type == "machine"][0...6] {
-      _id,
-      name,
-      modelCode,
-      "slug": slug.current,
-      tagline,
-      category,
-      "series": series->name,
-      "isEliteSeries": series->isEliteSeries,
-      heroImage,
-      specs
-    }`).then(setMachines);
+    async function fetchMachines() {
+      const { data, error } = await supabase
+        .from('machines')
+        .select('*')
+        .eq('active', true)
+        .order('sort_order', { ascending: true });
+
+      if (data && !error) {
+        const grouped = data.reduce((acc: any, machine) => {
+          const series = machine.series || 'Other';
+          if (!acc[series]) acc[series] = [];
+          acc[series].push(machine);
+          return acc;
+        }, {});
+        setGroupedMachines(grouped);
+      }
+      setLoading(false);
+    }
+    fetchMachines();
   }, []);
 
   return (
@@ -57,13 +65,33 @@ export default function MachineCatalogue() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-px bg-alkota-iron border border-alkota-iron md:grid-cols-2 lg:grid-cols-3">
-          {machines.map((machine, i) => (
-            <MachineCard key={machine._id} machine={machine} index={i} />
+        <div className="space-y-24">
+          {Object.entries(groupedMachines).map(([series, machines], groupIndex) => (
+            <div key={series}>
+              <div className="mb-10 flex items-center gap-6">
+                <h3 className="font-barlow-condensed text-3xl font-black uppercase italic text-white tracking-tight">
+                  {series} <span className="text-alkota-orange">Series</span>
+                </h3>
+                <div className="h-px flex-1 bg-alkota-iron" />
+              </div>
+              
+              <div className="grid grid-cols-1 gap-px bg-alkota-iron border border-alkota-iron md:grid-cols-2 lg:grid-cols-3">
+                {machines.map((machine, i) => (
+                  <MachineCard key={machine.id} machine={machine} index={i} />
+                ))}
+              </div>
+            </div>
           ))}
-          {machines.length === 0 && (
-            <div className="col-span-full py-20 text-center bg-white/5 border border-dashed border-alkota-iron">
-               <span className="text-alkota-silver uppercase tracking-[0.2em] text-[10px]">Synchronizing Catalogue...</span>
+
+          {loading && (
+            <div className="py-20 text-center bg-white/5 border border-dashed border-alkota-iron">
+               <span className="text-alkota-silver uppercase tracking-[0.2em] text-[10px] animate-pulse">Synchronizing Fleet Data...</span>
+            </div>
+          )}
+
+          {!loading && Object.keys(groupedMachines).length === 0 && (
+            <div className="py-20 text-center bg-white/5 border border-dashed border-alkota-iron">
+               <span className="text-alkota-silver uppercase tracking-[0.2em] text-[10px]">No machines found in catalogue.</span>
             </div>
           )}
         </div>

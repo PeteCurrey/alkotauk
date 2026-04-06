@@ -97,7 +97,7 @@ export default async function MachineCategoryPage({ params }: MachineCategoryPag
                 </div>
                 <div className="grid grid-cols-1 gap-px bg-alkota-iron border border-alkota-iron md:grid-cols-2 lg:grid-cols-3">
                   {data.machines.map((machine: any, i: number) => (
-                    <MachineCard key={machine._id} machine={machine} index={i} />
+                    <MachineCard key={machine.id} machine={machine} index={i} />
                   ))}
                 </div>
               </section>

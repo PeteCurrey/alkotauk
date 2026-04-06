@@ -31,42 +31,58 @@ const ibmPlexMono = IBM_Plex_Mono({
 
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { data: settings } = await supabaseAdmin
-    .from('site_settings')
-    .select('key, value');
-  
-  const settingsMap: Record<string, string> = {};
-  settings?.forEach(s => { settingsMap[s.key] = s.value; });
+  try {
+    const { data: settings } = await supabaseAdmin
+      .from('site_settings')
+      .select('key, value');
+    
+    const settingsMap: Record<string, string> = {};
+    settings?.forEach((s: any) => { settingsMap[s.key] = s.value; });
 
-  return generateSeo({
-    title: settingsMap['site_name'] || "Alkota UK",
-    description: settingsMap['meta_description'],
-  });
+    return generateSeo({
+      title: settingsMap['site_name'] || "Alkota UK",
+      description: settingsMap['meta_description'] || "Industrial pressure washing equipment handcrafted in South Dakota since 1964.",
+    });
+  } catch (error) {
+    console.error('Metadata fetch failed:', error);
+    return generateSeo({
+      title: "Alkota UK",
+      description: "Industrial pressure washing equipment handcrafted in South Dakota since 1964.",
+    });
+  }
 }
 
-import { SessionProvider } from "@/components/SessionProvider";
 import AlkotaAdvisor from "@/components/AlkotaAdvisor";
 import MaintenanceScreen from "@/components/MaintenanceScreen";
 import SplashScreen from "@/components/SplashScreen";
 import SiteBanner from "@/components/SiteBanner";
 
 async function getSiteSettings() {
-  const { data: settings } = await supabaseAdmin
-    .from('site_settings')
-    .select('key, value');
-  
-  const { data: banners } = await supabaseAdmin
-    .from('banners')
-    .select('*')
-    .eq('active', true);
+  try {
+    const { data: settings } = await supabaseAdmin
+      .from('site_settings')
+      .select('key, value');
+    
+    const { data: banners } = await supabaseAdmin
+      .from('banners')
+      .select('*')
+      .eq('active', true);
 
-  const settingsMap: Record<string, string> = {};
-  settings?.forEach(s => { settingsMap[s.key] = s.value; });
+    const settingsMap: Record<string, string> = {};
+    settings?.forEach((s: any) => { settingsMap[s.key] = s.value; });
 
-  return { 
-    ...settingsMap, 
-    banners: (banners || []) as any[] 
-  };
+    return { 
+      ...settingsMap, 
+      banners: (banners || []) as any[] 
+    };
+  } catch (error) {
+    console.error('Site settings fetch failed:', error);
+    return {
+      site_name: 'Alkota UK',
+      maintenance_mode: 'false',
+      banners: []
+    };
+  }
 }
 
 export default async function RootLayout({
@@ -92,8 +108,7 @@ export default async function RootLayout({
     >
       <body className="min-h-full flex flex-col font-inter bg-alkota-bg text-alkota-black text-base">
         <CartProvider>
-          <SessionProvider>
-            {isMaintenance && !isAdminPage ? (
+          {isMaintenance && !isAdminPage ? (
               <MaintenanceScreen 
                 title="System Maintenance"
                 message={settings['maintenance_message']}
@@ -113,9 +128,9 @@ export default async function RootLayout({
                 {!isAdminPage && <AlkotaAdvisor />}
               </>
             )}
-          </SessionProvider>
         </CartProvider>
 
+        {/* Analytics Scripts */}
         {process.env.NEXT_PUBLIC_GA_ID && (
           <>
             <Script
@@ -132,18 +147,20 @@ export default async function RootLayout({
             </Script>
           </>
         )}
-        <Script id="hotjar" strategy="afterInteractive">
-          {`
-            (function(h,o,t,j,a,r){
-                h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-                h._hjSettings={hjid:${process.env.NEXT_PUBLIC_HOTJAR_ID},hjsv:6};
-                a=o.getElementsByTagName('head')[0];
-                r=o.createElement('script');r.async=1;
-                r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
-                a.appendChild(r);
-            })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
-          `}
-        </Script>
+        {process.env.NEXT_PUBLIC_HOTJAR_ID && (
+          <Script id="hotjar" strategy="afterInteractive">
+            {`
+              (function(h,o,t,j,a,r){
+                  h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+                  h._hjSettings={hjid:${process.env.NEXT_PUBLIC_HOTJAR_ID},hjsv:6};
+                  a=o.getElementsByTagName('head')[0];
+                  r=o.createElement('script');r.async=1;
+                  r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+                  a.appendChild(r);
+              })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+            `}
+          </Script>
+        )}
       </body>
     </html>
   );

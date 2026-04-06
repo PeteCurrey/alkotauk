@@ -26,7 +26,7 @@ const nextConfig: NextConfig = {
       {
         source: '/studio/:path*',
         destination: '/admin',
-        permanent: true,
+        permanent: false,
       },
       {
         source: '/tools/mess-quest',

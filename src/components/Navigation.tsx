@@ -9,6 +9,13 @@ import { useSession } from 'next-auth/react';
 import Logo from './Logo';
 import { supabase } from '@/lib/supabase/client';
 
+interface NavLink {
+  name: string;
+  href: string;
+  hasMega?: boolean;
+  data?: any[];
+}
+
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -16,7 +23,7 @@ export default function Navigation() {
   const [sanityCategories, setSanityCategories] = useState<any[]>([]);
   const navRef = useRef<HTMLDivElement>(null);
 
-  const { data: session } = useSession() as { data: any };
+  const { data: session } = useSession() as any;
   
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -82,7 +89,7 @@ export default function Navigation() {
     { name: 'Parts Washers', href: '/chemicals/parts-washer', image: 'https://alkota.co.uk/assets/water-treatment-CkILM82j.png', desc: 'Aqueous, non-foaming, multi-metal.' },
   ];
 
-  const navLinks = [
+  const navLinks: NavLink[] = [
     { name: 'Machines', href: '/machines', hasMega: true, data: sanityCategories.length > 0 ? sanityCategories : [] },
     { name: 'Bespoke Builds', href: '/bespoke', hasMega: true, data: buildCategories },
     { name: 'Chemicals', href: '/chemicals', hasMega: true, data: chemicalCategories },

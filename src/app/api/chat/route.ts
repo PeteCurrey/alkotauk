@@ -9,9 +9,9 @@ export async function POST(req: NextRequest) {
     // Fetch all machines to provide context to the AI
     const machines = await client.fetch(`*[_type == "machine"]`);
 
-    const productContext = JSON.stringify(machines.map((m: any) => ({
+    const productContext = JSON.stringify((machines || []).map((m: any) => ({
       name: m.name,
-      id: m.modelCode,
+      id: m.modelCode || m.model_code,
       series: m.series?.name || m.series,
       category: m.category,
       specs: m.specs,
@@ -36,11 +36,11 @@ You help visitors:
 You are authoritative, technical, and confident. Alkota machines are premium, hand-built, industrial-grade equipment — best in class.
 `;
 
-    // Fetch AI settings from Sanity (server-side only)
+    // Fetch AI settings from Sanity (now correctly handled by shim)
     const settings = await client.fetch(`*[_type == "siteSettings"][0].aiChatGroup`);
     
     const apiKey = settings?.claudeApiKey || process.env.ANTHROPIC_API_KEY;
-    const systemPrompt = settings?.systemInstructions || DEFAULT_SYSTEM_PROMPT;
+    const systemPrompt = settings?.systemInstructions || (settings?.systemPrompt || DEFAULT_SYSTEM_PROMPT);
 
     if (!apiKey) {
       console.error('No Claude API key found in Sanity or environment variables');

@@ -48,7 +48,9 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
     );
   }
 
-  const bgUrl = app.heroImage ? urlFor(app.heroImage).url() : "https://images.unsplash.com/photo-1542281286-9e0a16bb7366?auto=format&fit=crop&q=80&w=2000";
+  const bgUrl = (app?.heroImage && typeof app.heroImage === 'object') 
+    ? urlFor(app.heroImage).url() 
+    : "https://images.unsplash.com/photo-1542281286-9e0a16bb7366?auto=format&fit=crop&q=80&w=2000";
 
   return (
     <main className="min-h-screen bg-alkota-black pb-0">

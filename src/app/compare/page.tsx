@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, use } from 'react';
 import { client } from '@/sanity/client';
 import { CheckCircle2, Share2, Info, ArrowRight, Loader2 } from 'lucide-react';
 import Link from 'next/link';
@@ -13,10 +13,13 @@ const extractNum = (str: any) => {
 };
 
 type CompareProps = {
-  searchParams: { machines?: string };
+  searchParams: Promise<{ machines?: string }>;
 };
 
 export default function ComparePage({ searchParams }: CompareProps) {
+  const resolvedSearchParams = use(searchParams);
+  const machinesParam = resolvedSearchParams.machines;
+  
   const [allMachines, setAllMachines] = useState<any[]>([]);
   const [selectedIds, setSelectedIds] = useState<string[]>(['', '', '']);
   const [copied, setCopied] = useState(false);
@@ -40,8 +43,8 @@ export default function ComparePage({ searchParams }: CompareProps) {
 
   // Initialize from URL params
   useEffect(() => {
-    if (searchParams.machines && allMachines.length > 0) {
-      const ids = searchParams.machines.split(',').slice(0, 3);
+    if (machinesParam && allMachines.length > 0) {
+      const ids = machinesParam.split(',').slice(0, 3);
       const newIds = ['', '', ''];
       ids.forEach((id, i) => { 
         // Try to match by ID or slug
@@ -50,7 +53,7 @@ export default function ComparePage({ searchParams }: CompareProps) {
       });
       setSelectedIds(newIds);
     }
-  }, [searchParams, allMachines]);
+  }, [machinesParam, allMachines]);
 
   const updateUrl = (ids: string[]) => {
     const validIds = ids.filter(Boolean);

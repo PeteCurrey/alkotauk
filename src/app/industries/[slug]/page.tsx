@@ -62,11 +62,13 @@ export default async function IndustryDetailPage({ params }: IndustryDetailPageP
       <Navigation />
       
       {/* Background Watermark */}
-      <div className="absolute top-40 right-0 pointer-events-none select-none opacity-[0.02] z-0">
-        <span className="font-barlow-condensed text-[50vw] font-black uppercase italic leading-none text-white whitespace-nowrap">
-          {industry.name.split(' ')[0]}
-        </span>
-      </div>
+      {industry.name && (
+        <div className="absolute top-40 right-0 pointer-events-none select-none opacity-[0.02] z-0">
+          <span className="font-barlow-condensed text-[50vw] font-black uppercase italic leading-none text-white whitespace-nowrap">
+            {industry.name.split(' ')[0]}
+          </span>
+        </div>
+      )}
 
       <div className="mx-auto max-w-7xl px-6 relative z-10">
         <Breadcrumbs items={[

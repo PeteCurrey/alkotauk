@@ -7,7 +7,7 @@ export const client = {
       const { data } = await supabase.from('site_settings').select('*');
       const settingsMap = (data || []).reduce((acc: any, s: any) => ({ ...acc, [s.key]: s.value }), {});
       
-      return {
+      const siteSettings = {
         _id: 'siteSettings',
         _type: 'siteSettings',
         title: settingsMap['site_name'] || 'Alkota UK',
@@ -20,9 +20,19 @@ export const client = {
         },
         aiChatGroup: {
           enabled: true,
-          systemPrompt: settingsMap['ai_system_prompt'] || 'You are the Alkota UK Industrial Advisor.'
+          systemPrompt: settingsMap['ai_system_prompt'] || 'You are the Alkota UK Industrial Advisor.',
+          systemInstructions: settingsMap['ai_system_prompt'],
+          claudeApiKey: process.env.ANTHROPIC_API_KEY,
+          teamMembers: [
+            { name: 'Dave', role: 'Technical Specialist', avatar: null },
+            { name: 'Sarah', role: 'Engineering Lead', avatar: null },
+            { name: 'Pete', role: 'Product Advisor', avatar: null }
+          ]
         }
       };
+
+      if (query.includes('.aiChatGroup')) return siteSettings.aiChatGroup;
+      return siteSettings;
     }
 
     // ─── MACHINES ─────────────────────────────────────────────────────
@@ -66,13 +76,20 @@ export const client = {
           .select('*')
           .order('sort_order', { ascending: true });
           
-        return (data || []).map((i: any) => ({
+        const mapped = (data || []).map((i: any) => ({
             name: i.name,
             title: i.name,
             slug: { current: i.slug },
             icon: i.icon,
             description: i.description
         }));
+
+        if (query.includes('[0]') || params?.slug) {
+          const slug = params?.slug || (query.match(/slug\.current == "([^"]+)"/) || [])[1];
+          if (slug) return mapped.find(i => i.slug.current === slug) || null;
+          return mapped[0] || null;
+        }
+        return mapped;
     }
 
     // ─── APPLICATIONS ─────────────────────────────────────────────────
@@ -82,12 +99,19 @@ export const client = {
           .select('*')
           .order('sort_order', { ascending: true });
           
-        return (data || []).map((a: any) => ({
+        const mapped = (data || []).map((a: any) => ({
             name: a.name,
             slug: { current: a.slug },
             icon: a.icon,
             description: a.description
         }));
+
+        if (query.includes('[0]') || params?.slug) {
+          const slug = params?.slug || (query.match(/slug\.current == "([^"]+)"/) || [])[1];
+          if (slug) return mapped.find(a => a.slug.current === slug) || null;
+          return mapped[0] || null;
+        }
+        return mapped;
     }
 
     return [];

@@ -43,6 +43,12 @@ export function generateSeo({
       index: !noIndex,
       follow: !noIndex,
     },
-    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://alkota.co.uk'),
+    metadataBase: (() => {
+      try {
+        return new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://alkota.co.uk');
+      } catch {
+        return new URL('https://alkota.co.uk');
+      }
+    })(),
   };
 }

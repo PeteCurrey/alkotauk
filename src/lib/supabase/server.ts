@@ -15,15 +15,15 @@ export const supabaseAdmin = (supabaseUrl && supabaseServiceKey)
       get: () => {
         // Log the error but don't crash the server
         console.warn('Supabase Admin Client accessed but not initialized. Check your environment variables.');
-        const mock = {
+        const mock: any = {
           from: () => mock,
           select: () => mock,
           eq: () => mock,
           order: () => mock,
           match: () => mock,
-          single: () => Promise.resolve({ data: null, error: null }),
-          maybeSingle: () => Promise.resolve({ data: null, error: null }),
-          then: (cb: any) => cb({ data: [], error: null }),
+          single: () => mock,
+          maybeSingle: () => mock,
+          then: (resolve: any) => Promise.resolve({ data: [], error: null }).then(resolve),
         };
         return mock;
       },

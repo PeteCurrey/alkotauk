@@ -1,6 +1,25 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// Fail-safe initialization to prevent global crashes on Vercel
+export const supabase = (supabaseUrl && supabaseAnonKey) 
+  ? createClient(supabaseUrl, supabaseAnonKey)
+  : new Proxy({} as any, {
+      get: () => {
+        // Log the error but don't crash the server
+        console.warn('Public Supabase Client accessed but not initialized. Check your environment variables.');
+        const mock = {
+          from: () => mock,
+          select: () => mock,
+          eq: () => mock,
+          order: () => mock,
+          match: () => mock,
+          single: () => Promise.resolve({ data: null, error: null }),
+          maybeSingle: () => Promise.resolve({ data: null, error: null }),
+          then: (cb: any) => cb({ data: [], error: null }),
+        };
+        return mock;
+      },
+    });

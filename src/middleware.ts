@@ -3,14 +3,20 @@ import { createClient } from '@supabase/supabase-js';
 import { verifyToken, COOKIE_NAME } from './lib/auth';
 
 // Edge-compatible Supabase client for middleware
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const supabase = createClient(supabaseUrl, supabaseKey);
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+// Fail-safe initialization for middleware
+const supabase = (supabaseUrl && supabaseKey) 
+  ? createClient(supabaseUrl, supabaseKey)
+  : null;
 
 // Maintenance mode cache
 let maintenanceModeCache: { value: boolean; expiresAt: number } | null = null;
 
 async function getMaintenanceMode(): Promise<boolean> {
+  if (!supabase) return false;
+  
   // Use cache to avoid DB hit on every request (30s TTL)
   if (maintenanceModeCache && Date.now() < maintenanceModeCache.expiresAt) {
     return maintenanceModeCache.value;

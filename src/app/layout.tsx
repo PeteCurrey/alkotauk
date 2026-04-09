@@ -32,10 +32,12 @@ const ibmPlexMono = IBM_Plex_Mono({
 
 export async function generateMetadata(): Promise<Metadata> {
   try {
-    const { data: settings } = await supabaseAdmin
+    const { data: settings, error } = await supabaseAdmin
       .from('site_settings')
       .select('key, value');
     
+    if (error) throw error;
+
     const settingsMap: Record<string, string> = {};
     settings?.forEach((s: any) => { settingsMap[s.key] = s.value; });
 
@@ -44,7 +46,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description: settingsMap['meta_description'] || "Industrial pressure washing equipment handcrafted in South Dakota since 1964.",
     });
   } catch (error) {
-    console.error('Metadata fetch failed:', error);
+    console.error('Metadata fetch failed, using defaults:', error);
     return generateSeo({
       title: "Alkota UK",
       description: "Industrial pressure washing equipment handcrafted in South Dakota since 1964.",
@@ -59,27 +61,25 @@ import SiteBanner from "@/components/SiteBanner";
 
 async function getSiteSettings() {
   try {
-    const { data: settings } = await supabaseAdmin
-      .from('site_settings')
-      .select('key, value');
+    // Parallel fetch for efficiency
+    const [settingsRes, bannersRes] = await Promise.all([
+      supabaseAdmin.from('site_settings').select('key, value'),
+      supabaseAdmin.from('banners').select('*').eq('active', true)
+    ]);
     
-    const { data: banners } = await supabaseAdmin
-      .from('banners')
-      .select('*')
-      .eq('active', true);
-
     const settingsMap: Record<string, string> = {};
-    settings?.forEach((s: any) => { settingsMap[s.key] = s.value; });
+    settingsRes.data?.forEach((s: any) => { settingsMap[s.key] = s.value; });
 
     return { 
       ...settingsMap, 
-      banners: (banners || []) as any[] 
+      banners: (bannersRes.data || []) as any[] 
     };
   } catch (error) {
-    console.error('Site settings fetch failed:', error);
+    console.error('Site settings fetch failed, using defaults:', error);
     return {
       site_name: 'Alkota UK',
       maintenance_mode: 'false',
+      enable_splash: 'false',
       banners: []
     };
   }

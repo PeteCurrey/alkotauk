@@ -11,20 +11,18 @@ export const supabaseAdmin = (supabaseUrl && supabaseServiceKey)
         persistSession: false,
       },
     })
-  : new Proxy({} as any, {
-      get: () => {
-        // Log the error but don't crash the server
-        console.warn('Supabase Admin Client accessed but not initialized. Check your environment variables.');
-        const mock: any = {
-          from: () => mock,
-          select: () => mock,
-          eq: () => mock,
-          order: () => mock,
-          match: () => mock,
-          single: () => mock,
-          maybeSingle: () => mock,
-          then: (resolve: any) => Promise.resolve({ data: [], error: null }).then(resolve),
-        };
-        return mock;
-      },
-    });
+  : {
+      from: () => ({
+        select: () => ({
+          eq: () => ({
+            order: () => ({
+              limit: () => Promise.resolve({ data: [], error: null }),
+              then: (resolve: any) => resolve({ data: [], error: null })
+            }),
+            maybeSingle: () => Promise.resolve({ data: null, error: null }),
+            then: (resolve: any) => resolve({ data: [], error: null })
+          }),
+          then: (resolve: any) => resolve({ data: [], error: null })
+        })
+      })
+    } as any;

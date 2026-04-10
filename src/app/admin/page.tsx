@@ -3,11 +3,13 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Logo from '@/components/Logo';
+import { Eye, EyeOff } from 'lucide-react';
 
 export default function AdminLoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -81,14 +83,23 @@ export default function AdminLoginPage() {
             <label className="block font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#666] mb-2">
               Password
             </label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              placeholder="••••••••••"
-              className="w-full bg-[#1A1A1A] border border-[#2A2A2A] text-white px-4 py-3 font-inter text-sm focus:outline-none focus:border-[#FF6900] transition-colors"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                placeholder="••••••••••"
+                className="w-full bg-[#1A1A1A] border border-[#2A2A2A] text-white px-4 py-3 font-inter text-sm focus:outline-none focus:border-[#FF6900] transition-colors pr-12"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#666] hover:text-[#FF6900] transition-colors focus:outline-none p-1"
+              >
+                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
+            </div>
           </div>
 
           {error && (

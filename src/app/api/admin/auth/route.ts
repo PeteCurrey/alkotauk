@@ -7,14 +7,14 @@ export async function POST(req: NextRequest) {
   try {
     const { email, password } = await req.json();
 
-    // Validate email
+    // Validate email (case-insensitive and trimmed)
     const adminEmail = process.env.ADMIN_EMAIL || 'admin@alkota.co.uk';
-    if (email !== adminEmail) {
+    if (email.trim().toLowerCase() !== adminEmail.trim().toLowerCase()) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
     }
 
     // Fallback hash for "Alkota2024!!" in case the database is offline/deleted (404)
-    let hash = '$2b$10$Y9Bm6eknxGK7U5FHIpyxYesMc3kcpeZZS.mkUNDM253bwQvFSQhXC';
+    let hash = '$2b$10$hHjT5mtpmkFHRmUxhwf6j.TgSrM0SWdxrBgsTyg4jjCvatQBdu5Gu';
 
     // Try to fetch password hash from Supabase admin_config
     if (supabaseAdmin) {

@@ -67,14 +67,20 @@ function SidebarLink({ href, icon: Icon, label }: { href: string; icon: React.El
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
+  const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     // Basic client-side check to improve UX
-    if (!document.cookie.includes('alkota-admin-token')) {
+    if (!document.cookie.includes('alkota-admin-token') && pathname !== '/admin') {
       router.push('/admin');
     }
-  }, [router]);
+  }, [router, pathname]);
+
+  // Hide the sidebar and top navigation for the login page itself
+  if (pathname === '/admin') {
+    return <div className="min-h-screen bg-[#0D0D0D] text-white">{children}</div>;
+  }
 
   return (
     <div className="flex min-h-screen" style={{ background: '#111', fontFamily: 'Inter, sans-serif' }}>

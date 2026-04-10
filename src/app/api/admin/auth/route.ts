@@ -13,19 +13,27 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
     }
 
-    // Fetch password hash from Supabase admin_config
-    const { data, error } = await supabaseAdmin
-      .from('admin_config')
-      .select('value')
-      .eq('key', 'password_hash')
-      .single();
+    // Fallback hash for "Alkota2024!!" in case the database is offline/deleted (404)
+    let hash = '$2b$10$Y9Bm6eknxGK7U5FHIpyxYesMc3kcpeZZS.mkUNDM253bwQvFSQhXC';
 
-    if (error || !data?.value) {
-      console.error('Failed to fetch password hash:', error);
-      return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
+    // Try to fetch password hash from Supabase admin_config
+    if (supabaseAdmin) {
+      try {
+        const { data, error } = await supabaseAdmin
+          .from('admin_config')
+          .select('value')
+          .eq('key', 'password_hash')
+          .single();
+
+        if (!error && data?.value) {
+          hash = data.value;
+        } else {
+          console.warn('Failed to fetch password hash from DB, using fallback.', error);
+        }
+      } catch (err) {
+        console.warn('DB connection error, using fallback.', err);
+      }
     }
-
-    const hash = data.value;
 
     // Verify password
     const valid = await bcrypt.compare(password, hash);

@@ -66,9 +66,9 @@ export const client = {
           weightKG: m.weight
         },
         eliteFeatures: m.features,
-        image_url: m.image_url || '/assets/products/placeholder.png',
-        heroImage: { asset: { url: m.image_url || '/assets/products/placeholder.png' } },
-        image: { asset: { url: m.image_url || '/assets/products/placeholder.png' } }
+        image_url: (m.image_url || `/assets/products/${m.model_code?.toLowerCase()}.png`).toLowerCase(),
+        heroImage: { asset: { url: (m.image_url || `/assets/products/${m.model_code?.toLowerCase()}.png`).toLowerCase() } },
+        image: { asset: { url: (m.image_url || `/assets/products/${m.model_code?.toLowerCase()}.png`).toLowerCase() } }
       }));
     }
 

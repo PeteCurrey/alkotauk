@@ -55,10 +55,10 @@ export default function MachineCard({ machine, index }: MachineCardProps) {
           src={
             machine.image_url ||
             (machine.category === 'hot-water'
-              ? 'https://alkota.co.uk/assets/hot-water-pressure-washer-DHE0Q-_H.png'
+              ? '/assets/products/420x4.png'
               : machine.category === 'steam-cleaner'
-              ? 'https://alkota.co.uk/assets/steam-cleaner-Bdrp7P2V.png'
-              : 'https://alkota.co.uk/assets/cold-water-pressure-washer-D9J_Sudm.png')
+              ? '/assets/products/steam-oil.png'
+              : '/assets/products/4305xd4.png')
           }
           alt={machine.name}
           className="h-full w-full object-contain p-8 transition-transform duration-1000 group-hover:scale-110 grayscale-[0.8] group-hover:grayscale-0"

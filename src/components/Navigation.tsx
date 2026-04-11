@@ -46,9 +46,13 @@ export default function Navigation() {
     async function fetchMachines() {
       const { data, error } = await supabase
         .from('machines')
-        .select('category, series, slug, image_url, name')
+        .select('*')
         .eq('active', true)
         .order('sort_order', { ascending: true });
+
+      if (error) {
+        console.error('Mega menu fetch failed:', error);
+      }
 
       if (data && !error) {
         // Group by category first, but the user wants to see Series
@@ -56,15 +60,17 @@ export default function Navigation() {
         const seriesMap = new Map();
         
         data.forEach(m => {
-          const key = `${m.category}-${m.series}`;
+          const cat = m.category || 'other';
+          const ser = m.series || 'Other';
+          const key = `${cat}-${ser}`;
           if (!seriesMap.has(key)) {
             seriesMap.set(key, {
-              category: m.category,
-              series: m.series,
-              name: `${m.series} Series`,
-              href: `/machines/${m.category}?series=${m.series}`,
+              category: cat,
+              series: ser,
+              name: `${ser} Series`,
+              href: `/machines/${cat}?series=${ser}`,
               image: m.image_url || 'https://alkota.co.uk/assets/hot-water-pressure-washer-DHE0Q-_H.png',
-              desc: `${m.category.replace('-', ' ')} // Industrial Power`
+              desc: `${cat.replace('-', ' ')} // Industrial Power`
             });
           }
         });

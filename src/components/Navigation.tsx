@@ -64,12 +64,16 @@ export default function Navigation() {
           const ser = m.series || 'Other';
           const key = `${cat}-${ser}`;
           if (!seriesMap.has(key)) {
+            // Ensure image URL is lowercase and points to local assets if remote is missing
+            const modelKey = m.model_code?.toLowerCase() || '420x4';
+            const imgPath = (m.image_url || `/assets/products/${modelKey}.png`).toLowerCase();
+            
             seriesMap.set(key, {
               category: cat,
               series: ser,
               name: `${ser} Series`,
               href: `/machines/${cat}?series=${ser}`,
-              image: m.image_url || 'https://alkota.co.uk/assets/hot-water-pressure-washer-DHE0Q-_H.png',
+              image: imgPath,
               desc: `${cat.replace('-', ' ')} // Industrial Power`
             });
           }
@@ -84,15 +88,15 @@ export default function Navigation() {
   const buildCategories = [
     { name: 'Bespoke Trailers', href: '/bespoke', image: '/assets/products/trailer-single.png', desc: 'Custom mobile cleaning rigs built to order.' },
     { name: 'Custom Skid Units', href: '/bespoke#skid', image: '/assets/products/ged-12v-skid.png', desc: 'Truck, van or trailer skid mounting.' },
-    { name: 'Parts Washers', href: '/machines/parts-washers', image: '/assets/products/model-911.png', desc: 'Automatic aqueous component cleaning.' },
+    { name: 'Parts Washers', href: '/machines/parts-washers', image: '/assets/products/stationary-gas-fired.png', desc: 'Automatic aqueous component cleaning.' },
     { name: 'Configurator', href: '/tools/configurator', image: '/assets/products/420x4.png', desc: 'Custom specification engine. Build your machine.' },
   ];
 
   const chemicalCategories = [
-    { name: 'All Chemicals', href: '/chemicals', image: '/assets/products/tr440-farm-soap.png', desc: 'The complete Hydrus formulated range.' },
-    { name: 'Degreasers', href: '/chemicals/degreasers', image: '/assets/products/grease-cutter.png', desc: 'Extreme grime and oil removal.' },
-    { name: 'Industrial', href: '/chemicals/industrial', image: '/assets/products/truck-plant-wash.png', desc: 'Agricultural and heavy duty detergents.' },
-    { name: 'Parts Washers', href: '/chemicals/parts-washer', image: '/assets/products/food-safe-cleaner.png', desc: 'Aqueous, non-foaming, multi-metal.' },
+    { name: 'All Chemicals', href: '/chemicals', image: '/assets/products/industrial-pump.png', desc: 'The complete Hydrus formulated range.' },
+    { name: 'Degreasers', href: '/chemicals/degreasers', image: '/assets/products/whirl-away-surface-cleaner.png', desc: 'Extreme grime and oil removal.' },
+    { name: 'Industrial', href: '/chemicals/industrial', image: '/assets/products/spray-nozzles.png', desc: 'Agricultural and heavy duty detergents.' },
+    { name: 'Parts Washers', href: '/chemicals/parts-washer', image: '/assets/products/jetter-series.png', desc: 'Aqueous, non-foaming, multi-metal.' },
   ];
 
   const navLinks: NavLink[] = [

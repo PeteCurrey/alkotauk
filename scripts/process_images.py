@@ -28,36 +28,37 @@ FALLBACK_ASSETS = {
 }
 
 KNOWN_URLS = {
-    "216x4": "https://alkota.com/wp-content/uploads/2023/06/Hot_Water_Pressure_Washer_X4_Belt_Drive_01_Alkota.png",
-    "216ax4": "https://alkota.com/wp-content/uploads/2023/07/Hot_Water_Pressure_Washer_AX4_Belt_Drive_01_Alkota.png",
-    "420ax4": "https://alkota.com/wp-content/uploads/2023/07/Hot_Water_Pressure_Washer_AX4_Belt_Drive_01_Alkota.png",
-    "420x4": "https://alkota.com/wp-content/uploads/2023/07/Hot_Water_Pressure_Washer_X4_Belt_Drive_03_Alkota.png",
-    "430xm4": "https://alkota.com/wp-content/uploads/2023/10/Hot_Water_Pressure_Washer_Gas_Fired_Vertical_Triplex_02_Alkota.png",
-    "4405xd4": "https://alkota.com/wp-content/uploads/2023/07/Hot_Water_Pressure_Washer_XD4_Direct_Drive_01_Alkota.png",
-    "480x4": "https://alkota.com/wp-content/uploads/2023/07/Hot_Water_Pressure_Washer_X4_Belt_Drive_03_Alkota.png",
-    "3305xd4": "https://alkota.com/wp-content/uploads/2023/07/Hot_Water_Pressure_Washer_XD4_Direct_Drive_01_Alkota.png",
-    "3405xd4": "https://alkota.com/wp-content/uploads/2023/07/Hot_Water_Pressure_Washer_XD4_Direct_Drive_01_Alkota.png",
-    "4305xd4": "https://alkota.com/wp-content/uploads/2023/07/Hot_Water_Pressure_Washer_XD4_Direct_Drive_01_Alkota.png",
-    "5355ens": "https://alkota.com/wp-content/uploads/2023/10/Gas_Engine_Space_Saving_Skid_Hot_Water_Pressure_Washer_GED-EN_Series_04_Alkota.png",
-    "5355j": "https://alkota.com/wp-content/uploads/2023/10/Gas_Engine_Space_Saving_Skid_Hot_Water_Pressure_Washer_GED-EN_Series_03_Alkota.png",
-    "5357c": "https://alkota.com/wp-content/uploads/2026/01/Elite-5357C-2026.png",
-    "5355hnl": "https://alkota.com/wp-content/uploads/2023/10/Gas_Engine_Space_Saving_Skid_Hot_Water_Pressure_Washer_GED-EN_Series_02_Alkota.png",
-    "8405hnl": "https://alkota.com/wp-content/uploads/2023/10/Gas_Engine_Space_Saving_Skid_Hot_Water_Pressure_Washer_GED-EN_Series_02_Alkota.png",
-    "10307kk": "https://alkota.com/wp-content/uploads/2023/10/Hot_Water_Pressure_Washer_Diesel_Engine_01_Alkota.png",
-    "model-911": "https://alkota.com/wp-content/uploads/2023/10/Steam_Cleaner_Oil_Fired_122_Alkota.png",
-    "steam-oil": "https://alkota.com/wp-content/uploads/2023/10/Steam_Cleaner_Oil_Fired_122_Alkota.png",
-    "trailer-single": "https://alkota.com/wp-content/uploads/2023/11/Pressure_Washer_Trailer.png"
+    # Verified direct URLs (200 OK) from current Alkota.com site
+    "216ax4": "https://alkota.com/wp-content/uploads/2023/06/Hot_Water_Pressure_Washer_AX4_Belt_Drive_320AX4__01_Alkota.png",
+    "420ax4": "https://alkota.com/wp-content/uploads/2023/06/Hot_Water_Pressure_Washer_AX4_Belt_Drive_320AX4__01_Alkota.png",
+    "216x4": "https://alkota.com/wp-content/uploads/2024/04/Hot_Water_Pressure_Washer_AX4_Belt_Drive_420X4_Alkota-1024x1024_2024.png",
+    "420x4": "https://alkota.com/wp-content/uploads/2024/04/Hot_Water_Pressure_Washer_AX4_Belt_Drive_420X4_Alkota-1024x1024_2024.png",
+    "430xm4": "https://alkota.com/wp-content/uploads/2024/04/Hot_Water_Pressure_Washer_AX4_Belt_Drive_420X4_Alkota-1024x1024_2024.png",
+    "480x4": "https://alkota.com/wp-content/uploads/2024/04/Hot_Water_Pressure_Washer_AX4_Belt_Drive_420X4_Alkota-1024x1024_2024.png",
+    "3305xd4": "https://alkota.com/wp-content/uploads/2023/07/Gas_Engine_Portable_Hot_Water_Pressure_Washer_XD4_Direct_Drive_4405XD4_Alkota-1.png",
+    "3405xd4": "https://alkota.com/wp-content/uploads/2023/07/Gas_Engine_Portable_Hot_Water_Pressure_Washer_XD4_Direct_Drive_4405XD4_Alkota-1.png",
+    "4305xd4": "https://alkota.com/wp-content/uploads/2023/07/Gas_Engine_Portable_Hot_Water_Pressure_Washer_XD4_Direct_Drive_4405XD4_Alkota-1.png",
+    "4405xd4": "https://alkota.com/wp-content/uploads/2023/07/Gas_Engine_Portable_Hot_Water_Pressure_Washer_XD4_Direct_Drive_4405XD4_Alkota-1.png",
+    "5355ens": "https://alkota.com/wp-content/uploads/2023/07/Gas_Engine_Space_Saving_Skid_Hot_Water_Pressure_Washer_GED-EN_Series_01_Alkota-1-1.png",
+    "5355j": "https://alkota.com/wp-content/uploads/2023/07/Gas_Engine_Space_Saving_Skid_Hot_Water_Pressure_Washer_GED-EN_Series_01_Alkota-1-1.png",
+    "5355hnl": "https://alkota.com/wp-content/uploads/2023/07/Gas_Engine_Space_Saving_Skid_Hot_Water_Pressure_Washer_GED-EN_Series_01_Alkota-1-1.png",
+    "8405hnl": "https://alkota.com/wp-content/uploads/2023/07/Gas_Engine_Space_Saving_Skid_Hot_Water_Pressure_Washer_GED-EN_Series_01_Alkota-1-1.png",
+    "ged-115v-skid": "https://alkota.com/wp-content/uploads/2023/07/Gas_Engine_Space_Saving_Skid_Hot_Water_Pressure_Washer_GED-EN_Series_01_Alkota-1-1.png",
+    "ged-12v-skid": "https://alkota.com/wp-content/uploads/2023/07/Gas_Engine_Space_Saving_Skid_Hot_Water_Pressure_Washer_GED-EN_Series_01_Alkota-1-1.png",
+    "steam-oil": "https://alkota.com/wp-content/uploads/2023/07/Steam_Cleaner_Oil_Fired_Steam_Cleaner_122_Alkota-1.png",
+    "model-111": "https://alkota.com/wp-content/uploads/2023/07/Steam_Cleaner_Oil_Fired_Steam_Cleaner_122_Alkota-1.png",
+    "trailer-single": "https://alkota.com/wp-content/uploads/2024/04/Hot_Water_Pressure_Washer_AX4_Belt_Drive_420X4_Alkota-1024x1024_2024.png"
 }
 
 # Series Mappings to ensure consistency for similar models
 SERIES_RELIANCE = {
-    "ax4": "https://alkota.com/wp-content/uploads/2023/07/Hot_Water_Pressure_Washer_AX4_Belt_Drive_01_Alkota.png",
-    "x4": "https://alkota.com/wp-content/uploads/2023/06/Hot_Water_Pressure_Washer_X4_Belt_Drive_01_Alkota.png",
-    "xd4": "https://alkota.com/wp-content/uploads/2023/07/Hot_Water_Pressure_Washer_XD4_Direct_Drive_01_Alkota.png",
-    "ged": "https://alkota.com/wp-content/uploads/2023/10/Gas_Engine_Space_Saving_Skid_Hot_Water_Pressure_Washer_GED-EN_Series_02_Alkota.png",
-    "hot": "https://alkota.com/wp-content/uploads/2023/06/Hot_Water_Pressure_Washer_X4_Belt_Drive_01_Alkota.png",
-    "cold": FALLBACK_ASSETS['machine'],
-    "steam": "https://alkota.com/wp-content/uploads/2023/10/Steam_Cleaner_Oil_Fired_122_Alkota.png",
+    "ax4": "https://alkota.com/wp-content/uploads/2023/06/Hot_Water_Pressure_Washer_AX4_Belt_Drive_320AX4__01_Alkota.png",
+    "x4": "https://alkota.com/wp-content/uploads/2024/04/Hot_Water_Pressure_Washer_AX4_Belt_Drive_420X4_Alkota-1024x1024_2024.png",
+    "xd4": "https://alkota.com/wp-content/uploads/2023/07/Gas_Engine_Portable_Hot_Water_Pressure_Washer_XD4_Direct_Drive_4405XD4_Alkota-1.png",
+    "ged": "https://alkota.com/wp-content/uploads/2023/07/Gas_Engine_Space_Saving_Skid_Hot_Water_Pressure_Washer_GED-EN_Series_01_Alkota-1-1.png",
+    "hot": "https://alkota.com/wp-content/uploads/2024/04/Hot_Water_Pressure_Washer_AX4_Belt_Drive_420X4_Alkota-1024x1024_2024.png",
+    "cold": "https://alkota.com/wp-content/uploads/2023/07/Gas_Engine_Portable_Hot_Water_Pressure_Washer_XD4_Direct_Drive_4405XD4_Alkota-1.png",
+    "steam": "https://alkota.com/wp-content/uploads/2023/07/Steam_Cleaner_Oil_Fired_Steam_Cleaner_122_Alkota-1.png",
 }
 
 STATIC_PRODUCTS = {

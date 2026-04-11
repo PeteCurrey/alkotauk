@@ -53,7 +53,10 @@ export const client = {
         description: m.description,
         category: m.category,
         slug: { current: m.slug },
-        series: { name: m.series },
+        series: m.series,
+        is_elite_series: m.is_elite_series,
+        psi: m.psi,
+        gpm: m.gpm,
         specs: {
           pressureBar: (m.psi / 14.5).toFixed(0),
           flowLPM: (m.gpm * 3.785).toFixed(1),

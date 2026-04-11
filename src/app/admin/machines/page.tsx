@@ -1,19 +1,20 @@
-import Link from 'next/link';
-import { MACHINES } from '@/lib/machines';
+import { client } from '@/sanity/client';
 
-export default function AdminMachinesPage() {
-  const byCategory = MACHINES.reduce((acc, m) => {
-    if (!acc[m.type]) acc[m.type] = [];
-    acc[m.type].push(m);
+export default async function AdminMachinesPage() {
+  const machinesData = await client.fetch(`*[_type == "machine"]`);
+  
+  const byCategory = (machinesData || []).reduce((acc: any, m: any) => {
+    if (!acc[m.category]) acc[m.category] = [];
+    acc[m.category].push(m);
     return acc;
-  }, {} as Record<string, typeof MACHINES>);
+  }, {} as Record<string, any[]>);
 
   return (
     <div className="text-white">
       <div className="mb-8">
         <h1 className="font-barlow-condensed text-4xl font-black uppercase italic">Machines</h1>
         <p className="font-ibm-plex-mono text-[10px] text-[#555] uppercase tracking-widest mt-1">
-          // {MACHINES.length} machines — sourced from <code className="text-[#FF6900]">src/lib/machines.ts</code>
+          // {(machinesData?.length || 0)} machines — sourced from <code className="text-[#FF6900]">Supabase Inventory</code>
         </p>
       </div>
 

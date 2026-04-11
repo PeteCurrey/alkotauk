@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { client } from '@/sanity/client';
-import { MACHINES } from '@/lib/machines';
 
 export async function POST(req: NextRequest) {
   try {

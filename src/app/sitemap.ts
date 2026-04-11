@@ -1,12 +1,15 @@
 import { MetadataRoute } from 'next';
-import { MACHINES } from '@/lib/machines';
-import { INDUSTRIES } from '@/lib/industries';
+import { client } from '@/sanity/client';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://alkota.co.uk';
 
-  const machineUrls = MACHINES.map((m) => ({
-    url: `${baseUrl}/machines/${m.type}/${m.slug}`,
+  // Fetch live products for sitemap
+  const machines = await client.fetch(`*[_type == "machine"]`);
+  const industries = await client.fetch(`*[_type == "industry"]`);
+
+  const machineUrls = (machines || []).map((m: any) => ({
+    url: `${baseUrl}/machines/${m.category}/${m.slug?.current || m.slug}`,
     lastModified: new Date(),
     changeFrequency: 'weekly' as const,
     priority: 0.8,
@@ -19,8 +22,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  const industryUrls = INDUSTRIES.map((i) => ({
-    url: `${baseUrl}/industries/${i.slug}`,
+  const industryUrls = (industries || []).map((i: any) => ({
+    url: `${baseUrl}/industries/${i.slug?.current || i.slug}`,
     lastModified: new Date(),
     changeFrequency: 'monthly' as const,
     priority: 0.6,

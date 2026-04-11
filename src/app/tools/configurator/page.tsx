@@ -19,7 +19,7 @@ const BASE_MACHINES = [
     subtitle: 'Maximum industrial power. Petroleum-fired coil.',
     category: 'hot-water',
     specs: 'Up to 40 BAR / 20 LPM',
-    image: 'https://alkota.co.uk/assets/hot-water-pressure-washer-DHE0Q-_H.png',
+    image: '/assets/products/420x4.png',
     tag: 'MOST POPULAR',
   },
   {
@@ -28,7 +28,7 @@ const BASE_MACHINES = [
     subtitle: 'Versatile electric or diesel. Core industrial range.',
     category: 'hot-water',
     specs: 'Up to 200 BAR / 15 LPM',
-    image: 'https://alkota.co.uk/assets/hot-water-pressure-washer-DHE0Q-_H.png',
+    image: '/assets/products/216ax4.png',
     tag: null,
   },
   {
@@ -37,7 +37,7 @@ const BASE_MACHINES = [
     subtitle: 'Portable, lightweight aluminium frame. Engine or electric.',
     category: 'cold-water',
     specs: 'Up to 250 BAR / 20 LPM',
-    image: 'https://alkota.co.uk/assets/hot-water-pressure-washer-DHE0Q-_H.png',
+    image: '/assets/products/4305xd4.png',
     tag: null,
   },
   {
@@ -46,7 +46,7 @@ const BASE_MACHINES = [
     subtitle: 'Dry vapour steam for hygiene-critical environments.',
     category: 'steam-cleaner',
     specs: '140°C / low water volume',
-    image: 'https://alkota.co.uk/assets/hot-water-pressure-washer-DHE0Q-_H.png',
+    image: '/assets/products/steam-oil.png',
     tag: null,
   },
 ];

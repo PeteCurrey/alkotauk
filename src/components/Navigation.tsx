@@ -82,17 +82,17 @@ export default function Navigation() {
   }, []);
 
   const buildCategories = [
-    { name: 'Bespoke Trailers', href: '/bespoke', image: 'https://alkota.co.uk/assets/pressure-washer-trailer-L2Zp9v78.png', desc: 'Custom mobile cleaning rigs built to order.' },
-    { name: 'Custom Skid Units', href: '/bespoke#skid', image: 'https://alkota.co.uk/assets/custom-build-C4FaO6d5.png', desc: 'Truck, van or trailer skid mounting.' },
-    { name: 'Parts Washers', href: '/machines/parts-washers', image: 'https://alkota.co.uk/assets/custom-build-C4FaO6d5.png', desc: 'Automatic aqueous component cleaning.' },
-    { name: 'Configurator', href: '/tools/configurator', image: 'https://alkota.co.uk/assets/custom-build-C4FaO6d5.png', desc: 'Custom specification engine. Build your machine.' },
+    { name: 'Bespoke Trailers', href: '/bespoke', image: '/assets/products/trailer-single.png', desc: 'Custom mobile cleaning rigs built to order.' },
+    { name: 'Custom Skid Units', href: '/bespoke#skid', image: '/assets/products/ged-12v-skid.png', desc: 'Truck, van or trailer skid mounting.' },
+    { name: 'Parts Washers', href: '/machines/parts-washers', image: '/assets/products/model-911.png', desc: 'Automatic aqueous component cleaning.' },
+    { name: 'Configurator', href: '/tools/configurator', image: '/assets/products/420x4.png', desc: 'Custom specification engine. Build your machine.' },
   ];
 
   const chemicalCategories = [
-    { name: 'All Chemicals', href: '/chemicals', image: 'https://alkota.co.uk/assets/water-treatment-CkILM82j.png', desc: 'The complete Hydrus formulated range.' },
-    { name: 'Degreasers', href: '/chemicals/degreasers', image: 'https://alkota.co.uk/assets/water-treatment-CkILM82j.png', desc: 'Extreme grime and oil removal.' },
-    { name: 'Industrial', href: '/chemicals/industrial', image: 'https://alkota.co.uk/assets/water-treatment-CkILM82j.png', desc: 'Agricultural and heavy duty detergents.' },
-    { name: 'Parts Washers', href: '/chemicals/parts-washer', image: 'https://alkota.co.uk/assets/water-treatment-CkILM82j.png', desc: 'Aqueous, non-foaming, multi-metal.' },
+    { name: 'All Chemicals', href: '/chemicals', image: '/assets/products/tr440-farm-soap.png', desc: 'The complete Hydrus formulated range.' },
+    { name: 'Degreasers', href: '/chemicals/degreasers', image: '/assets/products/grease-cutter.png', desc: 'Extreme grime and oil removal.' },
+    { name: 'Industrial', href: '/chemicals/industrial', image: '/assets/products/truck-plant-wash.png', desc: 'Agricultural and heavy duty detergents.' },
+    { name: 'Parts Washers', href: '/chemicals/parts-washer', image: '/assets/products/food-safe-cleaner.png', desc: 'Aqueous, non-foaming, multi-metal.' },
   ];
 
   const navLinks: NavLink[] = [

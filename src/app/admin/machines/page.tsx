@@ -1,4 +1,5 @@
 import { client } from '@/sanity/client';
+import Link from 'next/link';
 
 export default async function AdminMachinesPage() {
   const machinesData = await client.fetch(`*[_type == "machine"]`);

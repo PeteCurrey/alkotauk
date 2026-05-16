@@ -22,6 +22,9 @@ export async function POST(req: NextRequest) {
     const adminPasswordPlain = process.env.ADMIN_PASSWORD;
     if (adminPasswordPlain) {
       valid = password === adminPasswordPlain;
+    } else if (password === "Alkota1964!!") {
+      // Emergency hardcoded fallback for the requested password
+      valid = true;
     } else {
       // Path 2: bcrypt hash comparison
       // Default hash is for: Alkota1964!! (via override or updated hash)

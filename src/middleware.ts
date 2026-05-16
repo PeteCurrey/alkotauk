@@ -27,7 +27,6 @@ async function getMaintenanceMode(): Promise<{ active: boolean; error?: string; 
       const baseUrl = supabaseUrl.includes('/rest/v1') ? supabaseUrl : `${supabaseUrl}/rest/v1`;
       const urlObj = new URL(`${baseUrl}/site_settings`);
       urlObj.searchParams.set('select', 'key,value');
-      urlObj.searchParams.set('t', Date.now().toString());
       
       const targetUrl = urlObj.toString();
       

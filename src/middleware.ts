@@ -14,8 +14,8 @@ async function getMaintenanceMode(): Promise<boolean> {
   try {
     // Direct fetch to Supabase PostgREST API (more reliable in Edge Runtime)
     // Add a timestamp to bypass any potential Vercel/CDN caching
-    // Check for both 'maintenance_mode' and 'site_maintenance' keys
-    const url = `${supabaseUrl}/rest/v1/site_settings?key=in.(maintenance_mode,site_maintenance)&select=value&t=${Date.now()}`;
+    // Check for multiple possible keys: 'maintenance_mode', 'site_maintenance', or just 'maintenance'
+    const url = `${supabaseUrl}/rest/v1/site_settings?key=in.(maintenance_mode,site_maintenance,maintenance)&select=value&t=${Date.now()}`;
     
     const response = await fetch(url, {
       method: 'GET',
@@ -24,7 +24,6 @@ async function getMaintenanceMode(): Promise<boolean> {
         'Authorization': `Bearer ${serviceKey}`,
         'Content-Type': 'application/json',
       },
-      // Ensure no caching at the fetch level
       cache: 'no-store'
     });
 
@@ -34,7 +33,13 @@ async function getMaintenanceMode(): Promise<boolean> {
     }
 
     const data = await response.json();
-    return Array.isArray(data) && data.some((row: any) => row.value === 'true');
+    if (!Array.isArray(data)) return false;
+
+    // Check for 'true' (string), true (boolean), or 'TRUE' (uppercase)
+    return data.some((row: any) => {
+      const val = row.value;
+      return val === 'true' || val === true || String(val).toLowerCase() === 'true';
+    });
   } catch (err) {
     console.error('Middleware: Fetch execution error', err);
     return false;

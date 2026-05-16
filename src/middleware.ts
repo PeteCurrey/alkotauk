@@ -1,47 +1,41 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
 import { verifyToken, COOKIE_NAME } from './lib/auth';
 
-// Edge-compatible Supabase client for middleware
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-// Use service role key to bypass RLS in middleware (it's server-side)
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-// Fail-safe initialization for middleware
-const supabase = (supabaseUrl && supabaseKey) 
-  ? createClient(supabaseUrl, supabaseKey, {
-      auth: {
-        persistSession: false,
-        autoRefreshToken: false
-      }
-    })
-  : null;
-
-// Maintenance mode cache
-let maintenanceModeCache: { value: boolean; expiresAt: number } | null = null;
-
+// Maintenance mode check logic (Direct fetch to bypass SDK issues in Edge)
 async function getMaintenanceMode(): Promise<boolean> {
-  if (!supabase) {
-    console.warn('Supabase client not initialized in middleware');
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !serviceKey) {
+    console.warn('Middleware: Missing Supabase environment variables');
     return false;
   }
 
   try {
-    // Direct fetch with no-cache hint
-    const { data, error } = await supabase
-      .from('site_settings')
-      .select('value')
-      .eq('key', 'maintenance_mode')
-      .maybeSingle();
+    // Direct fetch to Supabase PostgREST API (more reliable in Edge Runtime)
+    // Add a timestamp to bypass any potential Vercel/CDN caching
+    const url = `${supabaseUrl}/rest/v1/site_settings?key=eq.maintenance_mode&select=value&t=${Date.now()}`;
+    
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'apikey': serviceKey,
+        'Authorization': `Bearer ${serviceKey}`,
+        'Content-Type': 'application/json',
+      },
+      // Ensure no caching at the fetch level
+      cache: 'no-store'
+    });
 
-    if (error) {
-      console.error('Middleware DB Error:', error.message);
+    if (!response.ok) {
+      console.error('Middleware: DB fetch failed', response.status);
       return false;
     }
-    
-    return data?.value === 'true';
+
+    const data = await response.json();
+    return data && data[0] && data[0].value === 'true';
   } catch (err) {
-    console.error('Middleware execution error:', err);
+    console.error('Middleware: Fetch execution error', err);
     return false;
   }
 }

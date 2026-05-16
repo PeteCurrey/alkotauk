@@ -6,28 +6,31 @@ const FALLBACK_URL = 'https://xohftjaohhkwgxdnouoo.supabase.co';
 const FALLBACK_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhvaGZ0amFvaGhrd2d4ZG5vdW9vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDg2NzU5MywiZXhwIjoyMDkwNDQzNTkzfQ.65YGsr1ZbSgECaM0nUZ8-sJR7lezQPd7xWxwTDirZD4';
 
 // Maintenance mode check logic (Direct fetch to bypass SDK issues in Edge)
-async function getMaintenanceMode(): Promise<{ active: boolean; error?: string; data?: any }> {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || FALLBACK_URL;
+async function getMaintenanceMode(): Promise<{ active: boolean; error?: string; diagnostics?: any }> {
+  const supabaseUrl = (process.env.NEXT_PUBLIC_SUPABASE_URL || FALLBACK_URL).replace(/\/$/, '');
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || FALLBACK_KEY;
   const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   if (!supabaseUrl) return { active: false, error: 'Missing Supabase URL' };
 
-  // Attempt fetch with Service Role Key first, fallback to Anon Key
-  const keysToTry = [serviceKey, anonKey].filter(Boolean);
+  const keysToTry = [
+    { name: 'service_role', key: serviceKey },
+    { name: 'anon', key: anonKey }
+  ].filter(item => !!item.key);
 
-  for (const key of keysToTry) {
+  const diagnosticResults: any[] = [];
+
+  for (const item of keysToTry) {
+    const key = item.key!;
     try {
       const url = `${supabaseUrl}/rest/v1/site_settings?key=in.(maintenance_mode,site_maintenance,maintenance)&select=value&t=${Date.now()}`;
       
       const response = await fetch(url, {
         method: 'GET',
         headers: {
-          'apikey': key!,
-          'Authorization': `Bearer ${key}`,
-          'Content-Type': 'application/json',
-        },
-        cache: 'no-store'
+          'apikey': key,
+          'Authorization': `Bearer ${key}`
+        }
       });
 
       if (response.ok) {
@@ -39,17 +42,25 @@ async function getMaintenanceMode(): Promise<{ active: boolean; error?: string; 
             if (typeof val === 'string' && (val.toLowerCase() === 'true' || val.toLowerCase() === 'on')) return true;
             return false;
           });
-          return { active: isActive, data };
+          return { active: isActive, diagnostics: { source: item.name, data } };
         }
-      } else {
-        console.error(`Middleware: DB fetch failed with status ${response.status} using key: ${key?.substring(0, 10)}...`);
       }
+      
+      diagnosticResults.push({
+        source: item.name,
+        status: response.status,
+        statusText: response.statusText,
+        keyPrefix: key.substring(0, 10)
+      });
     } catch (err: any) {
-      console.error('Middleware: Fetch attempt failed', err);
+      diagnosticResults.push({
+        source: item.name,
+        error: err.message || 'Unknown fetch error'
+      });
     }
   }
 
-  return { active: false, error: 'All fetch attempts failed' };
+  return { active: false, error: 'All fetch attempts failed', diagnostics: diagnosticResults };
 }
 
 export const runtime = 'experimental-edge';

@@ -33,9 +33,10 @@ async function getMaintenanceMode(): Promise<{ active: boolean; error?: string; 
       
       // Use Headers constructor which is safer in Edge Runtime
       const headers = new Headers();
-      headers.append('apikey', key);
+      headers.append('apiKey', key); // Try apiKey with capital K
       headers.append('Authorization', `Bearer ${key}`);
       headers.append('Accept', 'application/json');
+      headers.append('Accept-Profile', 'public');
       
       const response = await fetch(targetUrl, {
         method: 'GET',
@@ -59,11 +60,20 @@ async function getMaintenanceMode(): Promise<{ active: boolean; error?: string; 
         }
       }
       
+      // Capture error body for better debugging
+      let errorBody = '';
+      try {
+        errorBody = await response.text();
+      } catch (e) {
+        errorBody = 'Could not read error body';
+      }
+
       diagnosticResults.push({
         source: item.name,
         url: targetUrl.split('?')[0],
         status: response.status,
         statusText: response.statusText,
+        errorBody: errorBody,
         keyPrefix: key.substring(0, 10)
       });
     } catch (err: any) {

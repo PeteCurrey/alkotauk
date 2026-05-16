@@ -85,8 +85,8 @@ export async function middleware(req: NextRequest) {
 
   // ── MAINTENANCE MODE CHECK ────────────────────────────────────────────────
   if (!isExcluded) {
-    // TEMPORARY DIAGNOSTIC: Force maintenance to FALSE to check for Vercel caching
-    const isMaintenance = false; 
+    const debugMode = req.nextUrl.searchParams.get('debugMaintenance') === 'true';
+    const isMaintenance = debugMode || (await getMaintenanceMode());
     
     if (isMaintenance) {
       const token = req.cookies.get(COOKIE_NAME)?.value;

@@ -23,10 +23,11 @@ async function getMaintenanceMode(): Promise<{ active: boolean; error?: string; 
   for (const item of keysToTry) {
     const key = item.key!;
     try {
-      // Simplify query: fetch all settings and filter in JS to avoid 400 Bad Request
-      const url = `${supabaseUrl}/rest/v1/site_settings?select=key,value&t=${Date.now()}`;
+      // Robust URL construction: ensure /rest/v1 is present but not duplicated
+      const baseUrl = supabaseUrl.includes('/rest/v1') ? supabaseUrl : `${supabaseUrl}/rest/v1`;
+      const targetUrl = `${baseUrl}/site_settings?select=key,value&t=${Date.now()}`;
       
-      const response = await fetch(url, {
+      const response = await fetch(targetUrl, {
         method: 'GET',
         headers: {
           'apikey': key,
@@ -47,12 +48,13 @@ async function getMaintenanceMode(): Promise<{ active: boolean; error?: string; 
             if (typeof val === 'string' && (val.toLowerCase() === 'true' || val.toLowerCase() === 'on')) return true;
             return false;
           });
-          return { active: isActive, diagnostics: { source: item.name, data } };
+          return { active: isActive, diagnostics: { source: item.name, url: targetUrl.split('?')[0] + '?...', data } };
         }
       }
       
       diagnosticResults.push({
         source: item.name,
+        url: targetUrl.split('?')[0] + '?...',
         status: response.status,
         statusText: response.statusText,
         keyPrefix: key.substring(0, 10)

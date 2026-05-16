@@ -27,7 +27,8 @@ async function getMaintenanceMode(): Promise<boolean> {
           'Authorization': `Bearer ${key}`,
           'Accept': 'application/json',
           'Accept-Profile': 'public'
-        }
+        },
+        cache: 'no-store'
       });
 
       if (response.ok) {

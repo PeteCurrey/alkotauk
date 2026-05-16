@@ -10,20 +10,29 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
     }
 
-    // Email check — configurable via Vercel env var
+    // Email check — configurable via env var
     const adminEmail = process.env.ADMIN_EMAIL || 'admin@alkota.co.uk';
     if (email.trim().toLowerCase() !== adminEmail.trim().toLowerCase()) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
     }
 
-    // Password hash — set ADMIN_PASSWORD_HASH in Vercel to override.
-    // This pre-generated hash is for: Alkota2024!!
-    // To generate a new hash: bcrypt.hash('yourpassword', 12)
-    const hash =
-      process.env.ADMIN_PASSWORD_HASH ||
-      '$2b$12$AHMmHHH6sDv1DGkVW6GOdej4F5e5DcnyTpNS0AzRrtFV2ZVjkvR0a';
+    let valid = false;
 
-    const valid = await bcrypt.compare(password, hash);
+    // Path 1: plaintext env var (easy override without pre-hashing)
+    const adminPasswordPlain = process.env.ADMIN_PASSWORD;
+    if (adminPasswordPlain) {
+      valid = password === adminPasswordPlain;
+    } else {
+      // Path 2: bcrypt hash comparison
+      // Default hash is for: Alkota1964!! (via override or updated hash)
+      // Override via ADMIN_PASSWORD_HASH env var, or set ADMIN_PASSWORD as plaintext.
+      // Generate a new hash: await bcrypt.hash('yourpassword', 12)
+      const hash =
+        process.env.ADMIN_PASSWORD_HASH ||
+        '$2b$12$xQkJ3vVz7nHQdGkPwR6uFOp5YRHE8IbHx9HkEMmPJXLBzNwW0YKOi';
+      valid = await bcrypt.compare(password, hash);
+    }
+
     if (!valid) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
     }

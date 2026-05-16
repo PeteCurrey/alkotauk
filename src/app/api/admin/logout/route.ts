@@ -3,7 +3,7 @@ import { COOKIE_NAME } from '@/lib/auth';
 
 export async function GET() {
   const response = NextResponse.redirect(
-    new URL('/admin', process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000')
+    new URL('/admin', process.env.NEXT_PUBLIC_SITE_URL || 'https://alkota.co.uk')
   );
   response.cookies.delete(COOKIE_NAME);
   return response;

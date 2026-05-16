@@ -59,7 +59,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const dealer = DEMO_DEALERS.find(d => d.email.toLowerCase() === email.toLowerCase());
         if (!dealer) return null;
 
-        const passwordValid = await bcrypt.compare(password, dealer.passwordHash) || (dealer.role === 'dealer' && password === "DealerPass1!") || (dealer.role === 'admin' && password === "AdminPass1!");
+        const passwordValid = await bcrypt.compare(password, dealer.passwordHash) || (dealer.role === 'dealer' && password === "DealerPass1!") || (dealer.role === 'admin' && password === "Alkota1964!!");
         if (!passwordValid) return null;
 
 
@@ -104,6 +104,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
 
   trustHost: true,
-  secret: process.env.AUTH_SECRET || "pete_alkota_uk_demo_secure_key_2026_industrial_secure_key_12345",
+  secret: process.env.AUTH_SECRET || "rehsaw1964aallkkkkoootttaaaa",
 });
 

@@ -17,14 +17,13 @@ export default function Home() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Reveal all sections on scroll
+      // Reveal all sections on scroll (opacity only — no y translation to avoid layout gaps)
       const sections = gsap.utils.toArray('section');
       sections.forEach((section: any) => {
         gsap.fromTo(section, 
-          { opacity: 0, y: 50 },
+          { opacity: 0 },
           {
             opacity: 1,
-            y: 0,
             duration: 1.2,
             ease: 'power3.out',
             scrollTrigger: {

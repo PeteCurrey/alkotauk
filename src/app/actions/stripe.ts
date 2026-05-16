@@ -36,8 +36,8 @@ export async function createCheckoutSession(machineId: string, depositAmount: nu
       },
     ],
     mode: 'payment',
-    success_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3002'}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3002'}/machines/detail/${machineId}`,
+    success_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://alkota.co.uk'}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://alkota.co.uk'}/machines/detail/${machineId}`,
   });
 
   return { sessionId: session.id, url: session.url };
@@ -77,7 +77,7 @@ export async function createCartCheckoutSession(items: CartLineItem[]) {
     apiVersion: '2023-10-16' as any,
   });
 
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3002';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://alkota.co.uk';
 
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],

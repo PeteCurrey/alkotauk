@@ -71,10 +71,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
-    // Basic client-side check to improve UX
-    if (!document.cookie.includes('alkota-admin-token') && pathname !== '/admin') {
-      router.push('/admin');
-    }
+    // Client-side check removed. Server-side middleware handles auth protection.
   }, [router, pathname]);
 
   // Hide the sidebar and top navigation for the login page itself

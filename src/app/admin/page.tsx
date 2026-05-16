@@ -15,13 +15,7 @@ export default function AdminLoginPage() {
 
   // Auto-redirect if already logged in
   useEffect(() => {
-    const checkAuth = async () => {
-      // Check if cookie exists (client-side check is a fast hint)
-      if (document.cookie.includes('alkota-admin-token')) {
-        router.push('/admin/dashboard');
-      }
-    };
-    checkAuth();
+    // Client-side auto-redirect removed as token is httpOnly.
   }, [router]);
 
   async function handleSubmit(e: React.FormEvent) {

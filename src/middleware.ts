@@ -5,45 +5,42 @@ import { verifyToken, COOKIE_NAME } from './lib/auth';
 async function getMaintenanceMode(): Promise<boolean> {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-  if (!supabaseUrl || !serviceKey) {
-    console.warn('Middleware: Missing Supabase environment variables');
-    return false;
-  }
+  if (!supabaseUrl) return false;
 
-  try {
-    // Direct fetch to Supabase PostgREST API (more reliable in Edge Runtime)
-    // Add a timestamp to bypass any potential Vercel/CDN caching
-    // Check for multiple possible keys: 'maintenance_mode', 'site_maintenance', or just 'maintenance'
-    const url = `${supabaseUrl}/rest/v1/site_settings?key=in.(maintenance_mode,site_maintenance,maintenance)&select=value&t=${Date.now()}`;
-    
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'apikey': serviceKey,
-        'Authorization': `Bearer ${serviceKey}`,
-        'Content-Type': 'application/json',
-      },
-      cache: 'no-store'
-    });
+  // Attempt fetch with Service Role Key first, fallback to Anon Key
+  const keysToTry = [serviceKey, anonKey].filter(Boolean);
 
-    if (!response.ok) {
-      console.error('Middleware: DB fetch failed', response.status);
-      return false;
+  for (const key of keysToTry) {
+    try {
+      const url = `${supabaseUrl}/rest/v1/site_settings?key=in.(maintenance_mode,site_maintenance,maintenance)&select=value&t=${Date.now()}`;
+      
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'apikey': key!,
+          'Authorization': `Bearer ${key}`,
+          'Content-Type': 'application/json',
+        },
+        cache: 'no-store'
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (Array.isArray(data)) {
+          return data.some((row: any) => {
+            const val = row.value;
+            return val === 'true' || val === true || String(val).toLowerCase() === 'true';
+          });
+        }
+      }
+    } catch (err) {
+      console.error('Middleware: Fetch attempt failed', err);
     }
-
-    const data = await response.json();
-    if (!Array.isArray(data)) return false;
-
-    // Check for 'true' (string), true (boolean), or 'TRUE' (uppercase)
-    return data.some((row: any) => {
-      const val = row.value;
-      return val === 'true' || val === true || String(val).toLowerCase() === 'true';
-    });
-  } catch (err) {
-    console.error('Middleware: Fetch execution error', err);
-    return false;
   }
+
+  return false;
 }
 
 export const runtime = 'experimental-edge';

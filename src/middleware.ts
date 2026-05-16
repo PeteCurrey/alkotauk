@@ -1,13 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyToken, COOKIE_NAME } from './lib/auth';
 
+// HARDCODED FALLBACKS (Use these if environment variables are missing)
+const FALLBACK_URL = 'https://xohftjaohhkwgxdnouoo.supabase.co';
+const FALLBACK_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhvaGZ0amFvaGhrd2d4ZG5vdW9vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDg2NzU5MywiZXhwIjoyMDkwNDQzNTkzfQ.65YGsr1ZbSgECaM0nUZ8-sJR7lezQPd7xWxwTDirZD4';
+
 // Maintenance mode check logic (Direct fetch to bypass SDK issues in Edge)
-async function getMaintenanceMode(): Promise<boolean> {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhvaGZ0amFvaGhrd2d4ZG5vdW9vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDg2NzU5MywiZXhwIjoyMDkwNDQzNTkzfQ.65YGsr1ZbSgECaM0nUZ8-sJR7lezQPd7xWxwTDirZD4';
+async function getMaintenanceMode(): Promise<{ active: boolean; error?: string; data?: any }> {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || FALLBACK_URL;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || FALLBACK_KEY;
   const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-  if (!supabaseUrl) return false;
+  if (!supabaseUrl) return { active: false, error: 'Missing Supabase URL' };
 
   // Attempt fetch with Service Role Key first, fallback to Anon Key
   const keysToTry = [serviceKey, anonKey].filter(Boolean);
@@ -29,27 +33,43 @@ async function getMaintenanceMode(): Promise<boolean> {
       if (response.ok) {
         const data = await response.json();
         if (Array.isArray(data)) {
-          return data.some((row: any) => {
+          const isActive = data.some((row: any) => {
             const val = row.value;
-            // Handle booleans, strings, and numbers (e.g., true, 'true', 1, '1', 'on')
             if (val === true || val === 'true' || val === 1 || val === '1') return true;
             if (typeof val === 'string' && (val.toLowerCase() === 'true' || val.toLowerCase() === 'on')) return true;
             return false;
           });
+          return { active: isActive, data };
         }
+      } else {
+        console.error(`Middleware: DB fetch failed with status ${response.status} using key: ${key?.substring(0, 10)}...`);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Middleware: Fetch attempt failed', err);
     }
   }
 
-  return false;
+  return { active: false, error: 'All fetch attempts failed' };
 }
 
 export const runtime = 'experimental-edge';
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
+
+  // ── DIAGNOSTIC ENDPOINT ──────────────────────────────────────────────────
+  if (pathname === '/api/health-check') {
+    const status = await getMaintenanceMode();
+    return NextResponse.json({
+      timestamp: new Date().toISOString(),
+      maintenance: status,
+      env: {
+        hasUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+        hasServiceKey: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+        hasAnonKey: !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+      }
+    });
+  }
 
   // ── EXCLUSIONS ────────────────────────────────────────────────────────────
   // We NEVER redirect these paths to maintenance
@@ -81,7 +101,8 @@ export async function middleware(req: NextRequest) {
   if (!isExcluded) {
     // DEBUG OVERRIDE: visiting any page with ?debugMaintenance=true will force the screen
     const debugMode = req.nextUrl.searchParams.get('debugMaintenance') === 'true';
-    const isMaintenance = debugMode || (await getMaintenanceMode());
+    const maintenanceStatus = await getMaintenanceMode();
+    const isMaintenance = debugMode || maintenanceStatus.active;
     
     if (isMaintenance) {
       // Admin bypass: logged in admins can see the live site

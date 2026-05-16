@@ -21,33 +21,27 @@ const supabase = (supabaseUrl && supabaseKey)
 let maintenanceModeCache: { value: boolean; expiresAt: number } | null = null;
 
 async function getMaintenanceMode(): Promise<boolean> {
-  const now = Date.now();
-  // Shorten cache to 10s for better responsiveness during testing
-  if (maintenanceModeCache && maintenanceModeCache.expiresAt > now) {
-    return maintenanceModeCache.value;
+  if (!supabase) {
+    console.warn('Supabase client not initialized in middleware');
+    return false;
   }
 
-  if (!supabase) return false;
-
   try {
+    // Direct fetch with no-cache hint
     const { data, error } = await supabase
       .from('site_settings')
       .select('value')
       .eq('key', 'maintenance_mode')
       .maybeSingle();
 
-    if (error) throw error;
+    if (error) {
+      console.error('Middleware DB Error:', error.message);
+      return false;
+    }
     
-    const isActive = data?.value === 'true';
-    
-    maintenanceModeCache = {
-      value: isActive,
-      expiresAt: now + 10000 // 10 second cache
-    };
-
-    return isActive;
+    return data?.value === 'true';
   } catch (err) {
-    console.error('Maintenance check error:', err);
+    console.error('Middleware execution error:', err);
     return false;
   }
 }
@@ -57,36 +51,38 @@ export const runtime = 'experimental-edge';
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // Always allow admin and api routes through regardless of maintenance
+  // ── EXCLUSIONS ────────────────────────────────────────────────────────────
+  // We NEVER redirect these paths to maintenance
   const isExcluded = 
     pathname.startsWith('/admin') || 
     pathname.startsWith('/api') || 
     pathname === '/maintenance' ||
-    pathname.startsWith('/_next') ||
+    pathname.startsWith('/_next/') ||
+    pathname.includes('.') || // Static files like favicon.ico, images, etc.
     pathname === '/favicon.ico';
 
   // ── ADMIN ROUTE PROTECTION ───────────────────────────────────────────────
   if (pathname.startsWith('/admin')) {
-    if (pathname === '/admin') {
-      return NextResponse.next();
-    }
+    if (pathname === '/admin') return NextResponse.next();
+    
     const token = req.cookies.get(COOKIE_NAME)?.value;
-    if (!token) {
-      return NextResponse.redirect(new URL('/admin', req.url));
-    }
+    if (!token) return NextResponse.redirect(new URL('/admin', req.url));
+    
     const payload = await verifyToken(token);
     if (!payload) {
       const response = NextResponse.redirect(new URL('/admin', req.url));
       response.cookies.delete(COOKIE_NAME);
       return response;
     }
+    return NextResponse.next();
   }
 
   // ── MAINTENANCE MODE CHECK ────────────────────────────────────────────────
   if (!isExcluded) {
     const isMaintenance = await getMaintenanceMode();
+    
     if (isMaintenance) {
-      // Check if user is an admin — if so, bypass maintenance redirect
+      // Admin bypass: logged in admins can see the live site
       const token = req.cookies.get(COOKIE_NAME)?.value;
       const isAdmin = token ? !!(await verifyToken(token)) : false;
       
@@ -96,15 +92,8 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-  // Set header to access URL in layouts
-  const requestHeaders = new Headers(req.headers);
-  requestHeaders.set('x-url', pathname);
-
-  return NextResponse.next({
-    request: {
-      headers: requestHeaders,
-    },
-  });
+  // Allow through
+  return NextResponse.next();
 }
 
 export const config = {

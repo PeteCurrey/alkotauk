@@ -61,7 +61,7 @@ export default function MaintenanceScreen({
 
   const handleAdminBypass = (e: React.FormEvent) => {
     e.preventDefault();
-    if (adminPassword === 'Vivaro2104!!') {
+    if (adminPassword === 'Alkota1964!!') {
       // Set a 24-hour cookie for admin bypass
       const expires = new Date(Date.now() + 86400000).toUTCString();
       document.cookie = `alkota_admin_access=true; path=/; expires=${expires}; SameSite=Lax`;
@@ -74,12 +74,26 @@ export default function MaintenanceScreen({
 
   const toggleAudio = () => {
     if (!videoRef.current) return;
-    const command = isMuted ? 'unMute' : 'mute';
+    
+    // Toggle the state
+    const newMuted = !isMuted;
+    const command = newMuted ? 'mute' : 'unMute';
+    
+    // Send command to YouTube iframe
     videoRef.current.contentWindow?.postMessage(
       JSON.stringify({ event: 'command', func: command, args: '' }),
       '*'
     );
-    setIsMuted(!isMuted);
+
+    // If unmuting, also ensure volume is at 100
+    if (!newMuted) {
+      videoRef.current.contentWindow?.postMessage(
+        JSON.stringify({ event: 'command', func: 'setVolume', args: [100] }),
+        '*'
+      );
+    }
+    
+    setIsMuted(newMuted);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -94,7 +108,7 @@ export default function MaintenanceScreen({
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300vw] h-[300vh] md:w-[150vw] md:h-[150vh] opacity-60 grayscale pointer-events-none">
           <iframe
             ref={videoRef}
-            src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1`}
+            src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&origin=${typeof window !== 'undefined' ? window.location.origin : ''}`}
             className="absolute inset-0 w-full h-full"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           />

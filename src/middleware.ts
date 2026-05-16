@@ -14,7 +14,8 @@ async function getMaintenanceMode(): Promise<boolean> {
   try {
     // Direct fetch to Supabase PostgREST API (more reliable in Edge Runtime)
     // Add a timestamp to bypass any potential Vercel/CDN caching
-    const url = `${supabaseUrl}/rest/v1/site_settings?key=eq.maintenance_mode&select=value&t=${Date.now()}`;
+    // Check for both 'maintenance_mode' and 'site_maintenance' keys
+    const url = `${supabaseUrl}/rest/v1/site_settings?key=in.(maintenance_mode,site_maintenance)&select=value&t=${Date.now()}`;
     
     const response = await fetch(url, {
       method: 'GET',
@@ -33,7 +34,7 @@ async function getMaintenanceMode(): Promise<boolean> {
     }
 
     const data = await response.json();
-    return data && data[0] && data[0].value === 'true';
+    return Array.isArray(data) && data.some((row: any) => row.value === 'true');
   } catch (err) {
     console.error('Middleware: Fetch execution error', err);
     return false;
@@ -73,7 +74,9 @@ export async function middleware(req: NextRequest) {
 
   // ── MAINTENANCE MODE CHECK ────────────────────────────────────────────────
   if (!isExcluded) {
-    const isMaintenance = await getMaintenanceMode();
+    // DEBUG OVERRIDE: visiting any page with ?debugMaintenance=true will force the screen
+    const debugMode = req.nextUrl.searchParams.get('debugMaintenance') === 'true';
+    const isMaintenance = debugMode || (await getMaintenanceMode());
     
     if (isMaintenance) {
       // Admin bypass: logged in admins can see the live site

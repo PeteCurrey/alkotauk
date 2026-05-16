@@ -7,9 +7,9 @@ const FALLBACK_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 
 // Maintenance mode check logic (Direct fetch to bypass SDK issues in Edge)
 async function getMaintenanceMode(): Promise<{ active: boolean; error?: string; diagnostics?: any }> {
-  const supabaseUrl = (process.env.NEXT_PUBLIC_SUPABASE_URL || FALLBACK_URL).replace(/\/$/, '');
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || FALLBACK_KEY;
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const supabaseUrl = (process.env.NEXT_PUBLIC_SUPABASE_URL || FALLBACK_URL).trim().replace(/\/$/, '');
+  const serviceKey = (process.env.SUPABASE_SERVICE_ROLE_KEY || FALLBACK_KEY).trim();
+  const anonKey = (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '').trim();
 
   if (!supabaseUrl) return { active: false, error: 'Missing Supabase URL' };
 

@@ -189,17 +189,26 @@ export default function MaintenancePage() {
       <div className="border border-[#222] bg-[#141414] p-6">
         <h3 className="font-barlow-condensed text-xl font-black uppercase italic text-white mb-4">Preview</h3>
         <div
-          className="aspect-[16/9] overflow-hidden"
+          className="aspect-[16/9] overflow-hidden relative"
           style={{ background: '#0A0A0A', border: '1px solid #1A1A1A' }}
         >
-          <div className="h-full flex flex-col items-center justify-center p-8 text-center scale-75 origin-center">
+          {/* Video Background in Preview */}
+          <div className="absolute inset-0 opacity-40 grayscale pointer-events-none scale-150">
+            <iframe
+              src={`https://www.youtube.com/embed/vFnvcx3vRUY?autoplay=1&mute=1&loop=1&playlist=vFnvcx3vRUY&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1`}
+              className="absolute inset-0 w-full h-full"
+              allow="autoplay"
+            />
+          </div>
+
+          <div className="relative h-full flex flex-col items-center justify-center p-8 text-center scale-75 origin-center z-10">
             <p className="font-ibm-plex-mono text-[8px] uppercase tracking-[0.4em] text-[#FF6900] mb-3">// System Status</p>
             <h2 className="font-barlow-condensed text-3xl font-black uppercase italic text-white mb-3">System Maintenance</h2>
             <p className="font-inter text-[11px] text-[#888] max-w-sm mb-6">
               {settings['maintenance_message'] || 'The platform is currently undergoing scheduled upgrades.'}
             </p>
             {settings['maintenance_lead_capture'] !== 'false' && (
-              <div className="border border-[#2A2A2A] p-4 w-64">
+              <div className="border border-[#2A2A2A] bg-black/50 backdrop-blur-sm p-4 w-64">
                 <p className="font-ibm-plex-mono text-[8px] text-[#FF6900] uppercase tracking-widest mb-2">
                   {settings['maintenance_lead_heading'] || 'Need immediate assistance?'}
                 </p>

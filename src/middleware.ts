@@ -23,7 +23,8 @@ async function getMaintenanceMode(): Promise<{ active: boolean; error?: string; 
   for (const item of keysToTry) {
     const key = item.key!;
     try {
-      const url = `${supabaseUrl}/rest/v1/site_settings?key=in.(maintenance_mode,site_maintenance,maintenance)&select=value&t=${Date.now()}`;
+      // Simplify query: fetch all settings and filter in JS to avoid 400 Bad Request
+      const url = `${supabaseUrl}/rest/v1/site_settings?select=key,value&t=${Date.now()}`;
       
       const response = await fetch(url, {
         method: 'GET',
@@ -37,6 +38,10 @@ async function getMaintenanceMode(): Promise<{ active: boolean; error?: string; 
         const data = await response.json();
         if (Array.isArray(data)) {
           const isActive = data.some((row: any) => {
+            // Check if this is a maintenance key
+            const isRelevantKey = ['maintenance_mode', 'site_maintenance', 'maintenance'].includes(row.key);
+            if (!isRelevantKey) return false;
+
             const val = row.value;
             if (val === true || val === 'true' || val === 1 || val === '1') return true;
             if (typeof val === 'string' && (val.toLowerCase() === 'true' || val.toLowerCase() === 'on')) return true;

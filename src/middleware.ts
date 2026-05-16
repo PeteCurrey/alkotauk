@@ -31,7 +31,10 @@ async function getMaintenanceMode(): Promise<boolean> {
         if (Array.isArray(data)) {
           return data.some((row: any) => {
             const val = row.value;
-            return val === 'true' || val === true || String(val).toLowerCase() === 'true';
+            // Handle booleans, strings, and numbers (e.g., true, 'true', 1, '1', 'on')
+            if (val === true || val === 'true' || val === 1 || val === '1') return true;
+            if (typeof val === 'string' && (val.toLowerCase() === 'true' || val.toLowerCase() === 'on')) return true;
+            return false;
           });
         }
       }
@@ -89,6 +92,11 @@ export async function middleware(req: NextRequest) {
         return NextResponse.redirect(new URL('/maintenance', req.url));
       }
     }
+
+    // Add a debug header for internal testing
+    const response = NextResponse.next();
+    response.headers.set('x-maintenance-status', isMaintenance ? 'active' : 'inactive');
+    return response;
   }
 
   // Allow through

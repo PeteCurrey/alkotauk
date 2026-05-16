@@ -12,10 +12,18 @@ export default function MaintenancePage() {
   useEffect(() => {
     fetch('/api/admin/settings')
       .then((r) => r.json())
-      .then((data: Array<{ key: string; value: string }>) => {
-        const map: Record<string, string> = {};
-        data.forEach((row) => { map[row.key] = row.value; });
-        setSettings(map);
+      .then((data) => {
+        if (Array.isArray(data)) {
+          const map: Record<string, string> = {};
+          data.forEach((row) => { map[row.key] = row.value; });
+          setSettings(map);
+        } else {
+          console.error('Expected array from settings API, got:', data);
+        }
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error('Fetch error:', err);
         setLoading(false);
       });
   }, []);

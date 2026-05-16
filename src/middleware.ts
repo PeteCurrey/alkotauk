@@ -14,15 +14,49 @@ const supabase = (supabaseUrl && supabaseKey)
 // Maintenance mode cache
 let maintenanceModeCache: { value: boolean; expiresAt: number } | null = null;
 
-// Maintenance mode check is currently disabled for emergency stabilization
+// Maintenance mode check logic with short-lived cache
 async function getMaintenanceMode(): Promise<boolean> {
-  return false;
+  const now = Date.now();
+  if (maintenanceModeCache && maintenanceModeCache.expiresAt > now) {
+    return maintenanceModeCache.value;
+  }
+
+  if (!supabase) return false;
+
+  try {
+    const { data, error } = await supabase
+      .from('site_settings')
+      .select('value')
+      .eq('key', 'maintenance_mode')
+      .single();
+
+    const isActive = data?.value === 'true';
+    
+    // Cache for 30 seconds to balance DB load and responsiveness
+    maintenanceModeCache = {
+      value: isActive,
+      expiresAt: now + 30000
+    };
+
+    return isActive;
+  } catch (err) {
+    console.error('Maintenance check error:', err);
+    return false;
+  }
 }
 
 export const runtime = 'experimental-edge';
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
+
+  // Always allow admin and api routes through regardless of maintenance
+  const isExcluded = 
+    pathname.startsWith('/admin') || 
+    pathname.startsWith('/api') || 
+    pathname === '/maintenance' ||
+    pathname.startsWith('/_next') ||
+    pathname === '/favicon.ico';
 
   // ── ADMIN ROUTE PROTECTION ───────────────────────────────────────────────
   if (pathname.startsWith('/admin')) {
@@ -41,14 +75,12 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-  // Allow all /api/admin/* and /api/site-settings through
-  if (pathname.startsWith('/api/admin') || pathname.startsWith('/api/site-settings')) {
-    return NextResponse.next();
-  }
-
-  // Always allow the maintenance page itself
-  if (pathname === '/maintenance') {
-    return NextResponse.next();
+  // ── MAINTENANCE MODE CHECK ────────────────────────────────────────────────
+  if (!isExcluded) {
+    const isMaintenance = await getMaintenanceMode();
+    if (isMaintenance) {
+      return NextResponse.redirect(new URL('/maintenance', req.url));
+    }
   }
 
   // Set header to access URL in layouts

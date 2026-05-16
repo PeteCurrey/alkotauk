@@ -23,16 +23,23 @@ async function getMaintenanceMode(): Promise<{ active: boolean; error?: string; 
   for (const item of keysToTry) {
     const key = item.key!;
     try {
-      // Robust URL construction: ensure /rest/v1 is present but not duplicated
+      // Use URL constructor for safer URL building
       const baseUrl = supabaseUrl.includes('/rest/v1') ? supabaseUrl : `${supabaseUrl}/rest/v1`;
-      const targetUrl = `${baseUrl}/site_settings?select=key,value&t=${Date.now()}`;
+      const urlObj = new URL(`${baseUrl}/site_settings`);
+      urlObj.searchParams.set('select', 'key,value');
+      urlObj.searchParams.set('t', Date.now().toString());
+      
+      const targetUrl = urlObj.toString();
+      
+      // Use Headers constructor which is safer in Edge Runtime
+      const headers = new Headers();
+      headers.append('apikey', key);
+      headers.append('Authorization', `Bearer ${key}`);
+      headers.append('Accept', 'application/json');
       
       const response = await fetch(targetUrl, {
         method: 'GET',
-        headers: {
-          'apikey': key,
-          'Authorization': `Bearer ${key}`
-        }
+        headers: headers
       });
 
       if (response.ok) {
@@ -48,13 +55,13 @@ async function getMaintenanceMode(): Promise<{ active: boolean; error?: string; 
             if (typeof val === 'string' && (val.toLowerCase() === 'true' || val.toLowerCase() === 'on')) return true;
             return false;
           });
-          return { active: isActive, diagnostics: { source: item.name, url: targetUrl.split('?')[0] + '?...', data } };
+          return { active: isActive, diagnostics: { source: item.name, url: targetUrl.split('?')[0], data } };
         }
       }
       
       diagnosticResults.push({
         source: item.name,
-        url: targetUrl.split('?')[0] + '?...',
+        url: targetUrl.split('?')[0],
         status: response.status,
         statusText: response.statusText,
         keyPrefix: key.substring(0, 10)

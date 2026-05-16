@@ -6,47 +6,34 @@ const FALLBACK_URL = 'https://xohftjaohhkwgxdnouoo.supabase.co';
 const FALLBACK_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhvaGZ0amFvaGhrd2d4ZG5vdW9vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDg2NzU5MywiZXhwIjoyMDkwNDQzNTkzfQ.65YGsr1ZbSgECaM0nUZ8-sJR7lezQPd7xWxwTDirZD4';
 
 // Maintenance mode check logic (Direct fetch to bypass SDK issues in Edge)
-async function getMaintenanceMode(): Promise<{ active: boolean; error?: string; diagnostics?: any }> {
+async function getMaintenanceMode(): Promise<boolean> {
   const supabaseUrl = (process.env.NEXT_PUBLIC_SUPABASE_URL || FALLBACK_URL).trim().replace(/\/$/, '');
   const serviceKey = (process.env.SUPABASE_SERVICE_ROLE_KEY || FALLBACK_KEY).trim();
   const anonKey = (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '').trim();
 
-  if (!supabaseUrl) return { active: false, error: 'Missing Supabase URL' };
+  if (!supabaseUrl) return false;
 
-  const keysToTry = [
-    { name: 'service_role', key: serviceKey },
-    { name: 'anon', key: anonKey }
-  ].filter(item => !!item.key);
+  const keysToTry = [serviceKey, anonKey].filter(Boolean);
 
-  const diagnosticResults: any[] = [];
-
-  for (const item of keysToTry) {
-    const key = item.key!;
+  for (const key of keysToTry) {
     try {
-      // Use URL constructor for safer URL building
       const baseUrl = supabaseUrl.includes('/rest/v1') ? supabaseUrl : `${supabaseUrl}/rest/v1`;
-      const urlObj = new URL(`${baseUrl}/site_settings`);
-      urlObj.searchParams.set('select', 'key,value');
+      const url = `${baseUrl}/site_settings?select=key,value`;
       
-      const targetUrl = urlObj.toString();
-      
-      // Use Headers constructor which is safer in Edge Runtime
-      const headers = new Headers();
-      headers.append('apiKey', key); // Try apiKey with capital K
-      headers.append('Authorization', `Bearer ${key}`);
-      headers.append('Accept', 'application/json');
-      headers.append('Accept-Profile', 'public');
-      
-      const response = await fetch(targetUrl, {
+      const response = await fetch(url, {
         method: 'GET',
-        headers: headers
+        headers: {
+          'apiKey': key,
+          'Authorization': `Bearer ${key}`,
+          'Accept': 'application/json',
+          'Accept-Profile': 'public'
+        }
       });
 
       if (response.ok) {
         const data = await response.json();
         if (Array.isArray(data)) {
-          const isActive = data.some((row: any) => {
-            // Check if this is a maintenance key
+          return data.some((row: any) => {
             const isRelevantKey = ['maintenance_mode', 'site_maintenance', 'maintenance'].includes(row.key);
             if (!isRelevantKey) return false;
 
@@ -55,35 +42,14 @@ async function getMaintenanceMode(): Promise<{ active: boolean; error?: string; 
             if (typeof val === 'string' && (val.toLowerCase() === 'true' || val.toLowerCase() === 'on')) return true;
             return false;
           });
-          return { active: isActive, diagnostics: { source: item.name, url: targetUrl.split('?')[0], data } };
         }
       }
-      
-      // Capture error body for better debugging
-      let errorBody = '';
-      try {
-        errorBody = await response.text();
-      } catch (e) {
-        errorBody = 'Could not read error body';
-      }
-
-      diagnosticResults.push({
-        source: item.name,
-        url: targetUrl.split('?')[0],
-        status: response.status,
-        statusText: response.statusText,
-        errorBody: errorBody,
-        keyPrefix: key.substring(0, 10)
-      });
-    } catch (err: any) {
-      diagnosticResults.push({
-        source: item.name,
-        error: err.message || 'Unknown fetch error'
-      });
+    } catch (err) {
+      console.error('Middleware: Maintenance check failed', err);
     }
   }
 
-  return { active: false, error: 'All fetch attempts failed', diagnostics: diagnosticResults };
+  return false;
 }
 
 export const runtime = 'experimental-edge';
@@ -91,28 +57,13 @@ export const runtime = 'experimental-edge';
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // ── DIAGNOSTIC ENDPOINT ──────────────────────────────────────────────────
-  if (pathname === '/api/health-check') {
-    const status = await getMaintenanceMode();
-    return NextResponse.json({
-      timestamp: new Date().toISOString(),
-      maintenance: status,
-      env: {
-        hasUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
-        hasServiceKey: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
-        hasAnonKey: !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-      }
-    });
-  }
-
   // ── EXCLUSIONS ────────────────────────────────────────────────────────────
-  // We NEVER redirect these paths to maintenance
   const isExcluded = 
     pathname.startsWith('/admin') || 
     pathname.startsWith('/api') || 
     pathname === '/maintenance' ||
     pathname.startsWith('/_next/') ||
-    pathname.includes('.') || // Static files like favicon.ico, images, etc.
+    pathname.includes('.') || 
     pathname === '/favicon.ico';
 
   // ── ADMIN ROUTE PROTECTION ───────────────────────────────────────────────
@@ -133,13 +84,10 @@ export async function middleware(req: NextRequest) {
 
   // ── MAINTENANCE MODE CHECK ────────────────────────────────────────────────
   if (!isExcluded) {
-    // DEBUG OVERRIDE: visiting any page with ?debugMaintenance=true will force the screen
     const debugMode = req.nextUrl.searchParams.get('debugMaintenance') === 'true';
-    const maintenanceStatus = await getMaintenanceMode();
-    const isMaintenance = debugMode || maintenanceStatus.active;
+    const isMaintenance = debugMode || (await getMaintenanceMode());
     
     if (isMaintenance) {
-      // Admin bypass: logged in admins can see the live site
       const token = req.cookies.get(COOKIE_NAME)?.value;
       const isAdmin = token ? !!(await verifyToken(token)) : false;
       
@@ -147,25 +95,13 @@ export async function middleware(req: NextRequest) {
         return NextResponse.redirect(new URL('/maintenance', req.url));
       }
     }
-
-    // Add a debug header for internal testing
-    const response = NextResponse.next();
-    response.headers.set('x-maintenance-status', isMaintenance ? 'active' : 'inactive');
-    return response;
   }
 
-  // Allow through
   return NextResponse.next();
 }
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except:
-     * - _next/static (static files)
-     * - _next/image (image optimization)
-     * - favicon.ico
-     */
     '/((?!_next/static|_next/image|favicon.ico).*)',
   ],
 };

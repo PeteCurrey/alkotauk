@@ -101,7 +101,7 @@ export default function IndustryGrid() {
                 className="group relative h-[450px] overflow-hidden bg-white transition-all duration-500 hover:bg-alkota-bg"
               >
                 {/* Background Image Reveal */}
-                <div className="absolute inset-0 z-0 opacity-0 grayscale transition-all duration-1000 ease-out group-hover:opacity-60 group-hover:grayscale-0 group-hover:scale-110">
+                <div className="absolute inset-0 z-0 opacity-25 grayscale transition-all duration-1000 ease-out group-hover:opacity-80 group-hover:grayscale-0 group-hover:scale-110">
                   <Image 
                     src={imageSrc}
                     alt={industry.name}

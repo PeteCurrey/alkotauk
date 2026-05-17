@@ -9,22 +9,26 @@ export default function TrailersSection() {
     {
       title: 'Chassis & Custom Tank Configuration',
       desc: 'Single or tandem axle road-legal trailers from 750kg to 3,500kg GVW, integrated with baffled onboard water tanks up to 2,091L.',
-      icon: Truck
+      icon: Truck,
+      image: '/assets/products/trailer-single.png'
     },
     {
       title: 'High-Heat Steam (Up to 150°C)',
       desc: 'Configurable with single or dual-user pressure washers, outputting clean high-pressure steam for instant oil and grease emulsification.',
-      icon: Zap
+      icon: Zap,
+      image: '/assets/products/steam-oil.png'
     },
     {
       title: 'Wastewater Vacuum & Recycle',
       desc: 'Fully environmentally compliant. High-suction recovery vacuum filters and recycles wastewater from up to 100 meters away.',
-      icon: Award
+      icon: Award,
+      image: '/assets/products/stationary-gas-fired.png'
     },
     {
       title: 'Bespoke Tooling & Lighting Packs',
       desc: 'Equipped with dual hose reels up to 100m, on-board silent generator systems, work lighting, and safe CAT 5 air-gap protection.',
-      icon: Settings
+      icon: Settings,
+      image: '/assets/products/ged-12v-skid.png'
     }
   ];
 
@@ -71,15 +75,36 @@ export default function TrailersSection() {
               return (
                 <div 
                   key={idx}
-                  className="bg-alkota-black border border-alkota-iron p-8 relative group hover:border-alkota-orange transition-all duration-500"
+                  className="bg-alkota-black border border-alkota-iron flex flex-col justify-between relative group hover:border-alkota-orange transition-all duration-500 overflow-hidden"
                 >
-                  <Icon className="h-8 w-8 text-alkota-orange mb-6 group-hover:scale-110 transition-transform duration-500" />
-                  <h4 className="font-barlow-condensed text-2xl font-bold uppercase italic text-white mb-3">
-                    {feat.title}
-                  </h4>
-                  <p className="text-alkota-grey text-xs leading-relaxed uppercase tracking-wider">
-                    {feat.desc}
-                  </p>
+                  {/* Image Container (Full-Bleed Edge to Edge) */}
+                  <div className="relative aspect-[16/10] w-full overflow-hidden bg-alkota-bg border-b border-alkota-iron/50">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent z-10" />
+                    <img 
+                      src={feat.image}
+                      alt={feat.title}
+                      className="h-full w-full object-cover transition-transform duration-[1500ms] ease-out group-hover:scale-110 grayscale-[0.8] group-hover:grayscale-0"
+                    />
+                  </div>
+
+                  {/* Content Container (Padded) */}
+                  <div className="p-8 flex-1 flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center gap-3 mb-4">
+                        <Icon className="h-5 w-5 text-alkota-orange group-hover:scale-110 transition-transform duration-500" />
+                        <span className="font-ibm-plex-mono text-[9px] font-bold text-alkota-orange uppercase tracking-widest">
+                          Configuration 0{idx + 1}
+                        </span>
+                      </div>
+                      
+                      <h4 className="font-barlow-condensed text-2xl font-bold uppercase italic text-white mb-3 leading-tight">
+                        {feat.title}
+                      </h4>
+                      <p className="text-alkota-grey text-xs leading-relaxed uppercase tracking-wider">
+                        {feat.desc}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               );
             })}

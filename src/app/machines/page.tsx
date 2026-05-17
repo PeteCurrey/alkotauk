@@ -56,7 +56,7 @@ export default async function MachinesPage() {
           {/* Categories Horizontal Strip */}
           <section className="mb-40">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-alkota-iron border border-alkota-iron">
-              {categories.slice(0, 4).map((cat, i) => (
+              {categories.slice(0, 3).map((cat, i) => (
                 <Link 
                   key={cat.slug}
                   href={`/machines/${cat.slug}`}
@@ -82,6 +82,31 @@ export default async function MachinesPage() {
                   <div className="absolute inset-x-0 bottom-0 h-1 bg-alkota-orange transform scale-x-0 transition-transform duration-500 group-hover:scale-x-100" />
                 </Link>
               ))}
+
+              {/* Bespoke Trailers Card */}
+              <Link 
+                href="/machines/trailers"
+                className="group relative flex flex-col justify-end bg-white p-10 h-[350px] transition-all duration-500 hover:bg-alkota-bg"
+              >
+                <div className="relative z-10">
+                  <span className="font-ibm-plex-mono text-[9px] font-black text-alkota-orange uppercase mb-4 block opacity-0 group-hover:opacity-100 transition-opacity">
+                    [ BESPOKE_RIGS ]
+                  </span>
+                  <h3 className="font-barlow-condensed text-4xl font-black text-alkota-black uppercase italic leading-none group-hover:text-alkota-orange transition-colors duration-300">
+                    Bespoke Trailers
+                  </h3>
+                  <div className="mt-8 flex items-center gap-4 text-[10px] font-black text-alkota-black uppercase tracking-[0.3em] opacity-0 group-hover:opacity-100 transition-all transform translate-y-4 group-hover:translate-y-0">
+                    Access Range <ArrowRight className="h-3 w-3" />
+                  </div>
+                </div>
+                
+                {/* Background Watermark */}
+                <div className="absolute -right-4 -bottom-4 text-alkota-black/[0.03] text-9xl font-black italic uppercase select-none group-hover:text-alkota-orange/5 transition-colors duration-500">
+                  T
+                </div>
+
+                <div className="absolute inset-x-0 bottom-0 h-1 bg-alkota-orange transform scale-x-0 transition-transform duration-500 group-hover:scale-x-100" />
+              </Link>
             </div>
           </section>
 

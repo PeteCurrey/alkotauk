@@ -5,6 +5,7 @@ import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import MachineCatalogue from "@/components/MachineCatalogue";
 import WaterTreatmentSection from "@/components/WaterTreatmentSection";
+import TrailersSection from "@/components/TrailersSection";
 
 import IndustryGrid from "@/components/IndustryGrid";
 import gsap from 'gsap';
@@ -51,6 +52,8 @@ export default function Home() {
       <MachineCatalogue />
 
       <WaterTreatmentSection />
+
+      <TrailersSection />
 
       {/* TOOLS & SERIES STRIP */}
       <section className="bg-alkota-bg py-24 px-6 border-y border-alkota-iron relative z-20">

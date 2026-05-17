@@ -86,7 +86,7 @@ export default function Navigation() {
   }, []);
 
   const buildCategories = [
-    { name: 'Bespoke Trailers', href: '/bespoke', image: '/assets/products/trailer-single.png', desc: 'Custom mobile cleaning rigs built to order.' },
+    { name: 'Bespoke Trailers', href: '/machines/trailers', image: '/assets/products/trailer-single.png', desc: 'Custom mobile cleaning rigs built to order.' },
     { name: 'Custom Skid Units', href: '/bespoke#skid', image: '/assets/products/ged-12v-skid.png', desc: 'Truck, van or trailer skid mounting.' },
     { name: 'Parts Washers', href: '/machines/parts-washers', image: '/assets/products/stationary-gas-fired.png', desc: 'Automatic aqueous component cleaning.' },
     { name: 'Configurator', href: '/tools/configurator', image: '/assets/products/420x4.png', desc: 'Custom specification engine. Build your machine.' },

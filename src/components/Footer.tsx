@@ -40,6 +40,7 @@ export default function Footer() {
               <li><Link href="/machines/cold-water" className="hover:text-alkota-black transition-all hover:pl-2">Cold Water Industrial</Link></li>
               <li><Link href="/machines/wash-plants" className="hover:text-alkota-black transition-all hover:pl-2">Wash Plants & Bay Systems</Link></li>
               <li><Link href="/machines/parts-washers" className="hover:text-alkota-black transition-all hover:pl-2">Automatic Parts Washers</Link></li>
+              <li><Link href="/machines/trailers" className="hover:text-alkota-black transition-all hover:pl-2">Bespoke Trailers</Link></li>
               <li><Link href="/bespoke" className="hover:text-alkota-black transition-all hover:pl-2">Bespoke Builds</Link></li>
             </ul>
           </div>

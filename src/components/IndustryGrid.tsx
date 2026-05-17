@@ -4,19 +4,40 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { urlFor, getMockIndustries, safeFetch } from '@/sanity/client';
-import { Cloud, Zap, Factory, Layout, Car, Box, Target, Trash2 } from 'lucide-react';
+import { 
+  Leaf, 
+  Truck, 
+  Utensils, 
+  Factory, 
+  Anchor, 
+  HardHat, 
+  Trash2, 
+  Layers,
+  Cloud, 
+  Zap, 
+  Layout, 
+  Car, 
+  Box, 
+  Target 
+} from 'lucide-react';
 import BorderBeam from './ui/BorderBeam';
 import { motion } from 'framer-motion';
 
 const iconMap: Record<string, any> = {
+  Leaf,
+  Truck,
+  Utensils,
+  Factory,
+  Anchor,
+  HardHat,
+  Trash2,
+  Layers,
   Cloud,
   Zap,
-  Factory,
   Layout,
   Car,
   Box,
   Target,
-  Trash2,
 };
 
 export default function IndustryGrid() {
@@ -32,8 +53,36 @@ export default function IndustryGrid() {
         image,
         description
       }`;
-      const data = await safeFetch(query, getMockIndustries());
-      setIndustries(data);
+      const data = await safeFetch(query, []);
+      
+      const fallbackData = [
+        { _id: '1', name: 'Agriculture', slug: 'agriculture', icon: 'Leaf', description: 'Specialised cleaning for tractors, combines, and livestock housing. Keeping precision machinery in peak condition.' },
+        { _id: '2', name: 'Transport & Fleet', slug: 'transport-fleet', icon: 'Truck', description: 'Rapid turnaround for HGV fleets, distribution centres, and logistics hubs. Eliminating road film and corrosive salt.' },
+        { _id: '3', name: 'Food & Beverage', slug: 'food-beverage', icon: 'Utensils', description: 'Food-safe cleaning solutions for production lines and kitchens. High-temperature steam for deep sanitization.' },
+        { _id: '4', name: 'Industrial & Manufacturing', slug: 'industrial', icon: 'Factory', description: 'Heavy-duty equipment cleaning for factories and floor bays. Built for continuous use in the toughest environments.' },
+        { _id: '5', name: 'Maritime & Offshore', slug: 'maritime', icon: 'Anchor', description: 'Salt-resistant machinery for docks, shipyards, and offshore platforms. Engineering that withstands coastal corrosion.' },
+        { _id: '6', name: 'Construction & Demolition', slug: 'construction', icon: 'HardHat', description: 'Powerful mud, concrete, and debris removal for earthmovers, scaffolding, and active sites.' },
+        { _id: '7', name: 'Waste & Recycling', slug: 'waste-management', icon: 'Trash2', description: 'Sanitization and grease removal for refuse fleets, recycling facilities, and waste containers.' },
+        { _id: '8', name: 'Mining & Quarrying', slug: 'mining', icon: 'Layers', description: 'High-pressure descaling and ore dust removal for extraction machinery and heavy conveyors.' }
+      ];
+
+      if (data && data.length > 0) {
+        const merged = [...data];
+        fallbackData.forEach((fallbackItem) => {
+          const exists = merged.some(
+            (item) => (item.slug?.current || item.slug) === fallbackItem.slug
+          );
+          if (!exists) {
+            merged.push({
+              ...fallbackItem,
+              slug: { current: fallbackItem.slug }
+            });
+          }
+        });
+        setIndustries(merged.slice(0, 8));
+      } else {
+        setIndustries(fallbackData);
+      }
     }
     fetchIndustries();
   }, []);
@@ -78,16 +127,21 @@ export default function IndustryGrid() {
             const Icon = iconMap[industry.icon] || Factory;
             const industrySlug = industry.slug?.current || industry.slug;
             
-            // Per-industry fallback images
+            // Per-industry fallback images mapped to exact database slugs
             const fallbackImages: Record<string, string> = {
               'agriculture': '/assets/industries/agriculture.png',
-              'oil-gas': '/assets/industries/oil-gas.png',
-              'mining': '/assets/industries/mining.png',
+              'transport-fleet': '/assets/industries/fleet.png',
+              'food-beverage': '/assets/industries/food-processing.png',
+              'industrial': '/assets/industries/manufacturing.png',
+              'maritime': '/assets/industries/oil-gas.png',
               'construction': '/assets/industries/construction.png',
+              'waste-management': '/assets/industries/waste-management.png',
+              'mining': '/assets/industries/mining.png',
+              // Legacy keys for backward compatibility
+              'oil-gas': '/assets/industries/oil-gas.png',
               'fleet': '/assets/industries/fleet.png',
               'manufacturing': '/assets/industries/manufacturing.png',
-              'food-processing': '/assets/industries/food-processing.png',
-              'waste-management': '/assets/industries/waste-management.png'
+              'food-processing': '/assets/industries/food-processing.png'
             };
 
             const imageSrc = industry.image 

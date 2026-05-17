@@ -151,11 +151,50 @@ export const safeFetch = async (query: string, fallback: any) => {
 
 export const getMockIndustries = async () => {
     const { data } = await supabase.from('industries').select('*').order('sort_order', { ascending: true });
-    return (data || []).map((i: any) => ({
+    
+    const fallbackData = [
+      { name: 'Agriculture', slug: 'agriculture', icon: 'Leaf', description: 'Specialised cleaning for tractors, combines, and livestock housing. Keeping precision machinery in peak condition.' },
+      { name: 'Transport & Fleet', slug: 'transport-fleet', icon: 'Truck', description: 'Rapid turnaround for HGV fleets, distribution centres, and logistics hubs. Eliminating road film and corrosive salt.' },
+      { name: 'Food & Beverage', slug: 'food-beverage', icon: 'Utensils', description: 'Food-safe cleaning solutions for production lines and kitchens. High-temperature steam for deep sanitization.' },
+      { name: 'Industrial & Manufacturing', slug: 'industrial', icon: 'Factory', description: 'Heavy-duty equipment cleaning for factories and floor bays. Built for continuous use in the toughest environments.' },
+      { name: 'Maritime & Offshore', slug: 'maritime', icon: 'Anchor', description: 'Salt-resistant machinery for docks, shipyards, and offshore platforms. Engineering that withstands coastal corrosion.' },
+      { name: 'Construction & Demolition', slug: 'construction', icon: 'HardHat', description: 'Powerful mud, concrete, and debris removal for earthmovers, scaffolding, and active sites.' },
+      { name: 'Waste & Recycling', slug: 'waste-management', icon: 'Trash2', description: 'Sanitization and grease removal for refuse fleets, recycling facilities, and waste containers.' },
+      { name: 'Mining & Quarrying', slug: 'mining', icon: 'Layers', description: 'High-pressure descaling and ore dust removal for extraction machinery and heavy conveyors.' }
+    ];
+
+    const mapped = (data || []).map((i: any) => ({
         name: i.name,
         title: i.name,
         slug: { current: i.slug },
         icon: i.icon,
         description: i.description
+    }));
+
+    if (mapped.length > 0) {
+      const merged = [...mapped];
+      fallbackData.forEach((fallbackItem) => {
+        const exists = merged.some(
+          (item) => (item.slug?.current || item.slug) === fallbackItem.slug
+        );
+        if (!exists) {
+          merged.push({
+            name: fallbackItem.name,
+            title: fallbackItem.name,
+            slug: { current: fallbackItem.slug },
+            icon: fallbackItem.icon,
+            description: fallbackItem.description
+          });
+        }
+      });
+      return merged.slice(0, 8);
+    }
+
+    return fallbackData.map(f => ({
+      name: f.name,
+      title: f.name,
+      slug: { current: f.slug },
+      icon: f.icon,
+      description: f.description
     }));
 };

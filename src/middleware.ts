@@ -26,7 +26,10 @@ async function getMaintenanceMode(): Promise<boolean> {
           'apiKey': key,
           'Authorization': `Bearer ${key}`,
           'Accept': 'application/json',
-          'Accept-Profile': 'public'
+          'Accept-Profile': 'public',
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0'
         },
         cache: 'no-store'
       });
@@ -93,7 +96,12 @@ export async function middleware(req: NextRequest) {
       const isAdmin = token ? !!(await verifyToken(token)) : false;
       
       if (!isAdmin) {
-        return NextResponse.redirect(new URL('/maintenance', req.url));
+        const response = NextResponse.redirect(new URL('/maintenance', req.url));
+        // Force the browser and CDN to never cache this redirect response
+        response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+        response.headers.set('Pragma', 'no-cache');
+        response.headers.set('Expires', '0');
+        return response;
       }
     }
   }

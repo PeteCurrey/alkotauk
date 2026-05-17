@@ -33,9 +33,10 @@ export default function MaintenancePage() {
   async function toggle() {
     const newVal = isActive ? 'false' : 'true';
     setSaving(true);
-    // Update multiple possible keys for redundancy
+    // Update multiple possible keys for redundancy to ensure sync
     const updates = [
       { key: 'maintenance_mode', value: newVal },
+      { key: 'site_maintenance', value: newVal },
       { key: 'maintenance', value: newVal }
     ];
     await fetch('/api/admin/settings', {
@@ -43,7 +44,12 @@ export default function MaintenancePage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(updates),
     });
-    setSettings((s) => ({ ...s, maintenance_mode: newVal, maintenance: newVal }));
+    setSettings((s) => ({ 
+      ...s, 
+      maintenance_mode: newVal, 
+      site_maintenance: newVal, 
+      maintenance: newVal 
+    }));
     setSaving(false);
   }
 

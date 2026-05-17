@@ -20,6 +20,7 @@ import {
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { auth } from '@/auth';
 import { calculateDealerPrice, formatCurrency } from '@/lib/pricing';
+import { resolveMachineImage } from '@/lib/images';
 
 export const dynamic = 'force-dynamic';
 
@@ -64,7 +65,7 @@ export default async function MachineDetailPage({ params }: { params: Promise<{ 
   const hubspotPortalId = siteSettings?.hubspot_portal_id;
   const hubspotQuoteFormId = siteSettings?.hubspot_quote_form_id;
 
-  const imageUrl = machine.image_url || 'https://alkota.co.uk/assets/hot-water-pressure-washer-DHE0Q-_H.png';
+  const imageUrl = resolveMachineImage(machine.image_url, machine.model_code, machine.category);
 
   return (
     <main className="min-h-screen bg-alkota-bg pt-32 pb-0 overflow-x-hidden relative">

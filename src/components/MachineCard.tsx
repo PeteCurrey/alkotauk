@@ -6,6 +6,7 @@ import { ArrowRight, Zap, Target, Gauge } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { calculateDealerPrice, formatCurrency } from '@/lib/pricing';
 import BorderBeam from './ui/BorderBeam';
+import { resolveMachineImage } from '@/lib/images';
 
 interface MachineCardProps {
   machine: any;
@@ -52,14 +53,7 @@ export default function MachineCard({ machine, index }: MachineCardProps) {
       <div className="relative aspect-[16/10] w-full overflow-hidden bg-alkota-bg">
         <div className="absolute inset-0 bg-gradient-to-t from-white/40 to-transparent z-10" />
         <img
-          src={
-            machine.image_url ||
-            (machine.category === 'hot-water'
-              ? '/assets/products/420x4.png'
-              : machine.category === 'steam-cleaner'
-              ? '/assets/products/steam-oil.png'
-              : '/assets/products/4305xd4.png')
-          }
+          src={resolveMachineImage(machine.image_url, machine.model_code, machine.category)}
           alt={machine.name}
           className="h-full w-full object-contain p-8 transition-transform duration-1000 group-hover:scale-110 grayscale-[0.8] group-hover:grayscale-0"
         />

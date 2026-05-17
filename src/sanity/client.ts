@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase/client';
+import { resolveMachineImage } from '@/lib/images';
 
 export const client = {
   fetch: async (query: string, params?: any): Promise<any> => {
@@ -66,9 +67,9 @@ export const client = {
           weightKG: m.weight
         },
         eliteFeatures: m.features,
-        image_url: (m.image_url || `/assets/products/${m.model_code?.toLowerCase()}.png`).toLowerCase(),
-        heroImage: { asset: { url: (m.image_url || `/assets/products/${m.model_code?.toLowerCase()}.png`).toLowerCase() } },
-        image: { asset: { url: (m.image_url || `/assets/products/${m.model_code?.toLowerCase()}.png`).toLowerCase() } }
+        image_url: resolveMachineImage(m.image_url, m.model_code, m.category),
+        heroImage: { asset: { url: resolveMachineImage(m.image_url, m.model_code, m.category) } },
+        image: { asset: { url: resolveMachineImage(m.image_url, m.model_code, m.category) } }
       }));
     }
 

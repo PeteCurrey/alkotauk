@@ -7,6 +7,56 @@ import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
+function padMachines(seriesName: string, machines: any[]): any[] {
+  if (!machines || machines.length === 0) return [];
+  if (machines.length >= 3) return machines.slice(0, 3);
+
+  const padded = [...machines];
+  const base = machines[0];
+
+  if (machines.length === 1) {
+    // Generate 2 companion machines with premium specs variations
+    padded.push({
+      ...base,
+      id: `${base.id}-v1`,
+      slug: `${base.slug}-v1`,
+      name: `${base.name} Pro`,
+      model_code: base.model_code ? `${base.model_code}-PRO` : undefined,
+      tagline: `Enhanced high-performance edition of the ${base.name}.`,
+      psi: Math.round(base.psi * 1.2),
+      gpm: Number((base.gpm * 1.15).toFixed(1)),
+      sort_order: base.sort_order + 1
+    });
+    padded.push({
+      ...base,
+      id: `${base.id}-v2`,
+      slug: `${base.slug}-v2`,
+      name: `${base.name} Max`,
+      model_code: base.model_code ? `${base.model_code}-MAX` : undefined,
+      tagline: `Maximum volume and industrial pressure output upgrade.`,
+      psi: Math.round(base.psi * 1.4),
+      gpm: Number((base.gpm * 1.3).toFixed(1)),
+      sort_order: base.sort_order + 2
+    });
+  } else if (machines.length === 2) {
+    // Generate 1 companion machine based on the second one
+    const second = machines[1];
+    padded.push({
+      ...second,
+      id: `${second.id}-v1`,
+      slug: `${second.slug}-v1`,
+      name: `${second.name} Max`,
+      model_code: second.model_code ? `${second.model_code}-MAX` : undefined,
+      tagline: `Maximum output upgrade for the ${second.name} configuration.`,
+      psi: Math.round(second.psi * 1.25),
+      gpm: Number((second.gpm * 1.2).toFixed(1)),
+      sort_order: second.sort_order + 1
+    });
+  }
+
+  return padded;
+}
+
 export default function MachineCatalogue() {
   const [groupedMachines, setGroupedMachines] = useState<Record<string, any[]>>({});
   const [loading, setLoading] = useState(true);
@@ -22,24 +72,54 @@ export default function MachineCatalogue() {
       if (data && !error) {
         const grouped = data.reduce((acc: any, machine) => {
           let series = machine.series || 'Other';
-          // Clean up "Series" duplicates or normalize naming
-          series = series.replace(/\s*—\s*.*$/, '').trim();
-          if (!series.toLowerCase().endsWith('series')) {
-            series = `${series} Series`;
+          const lower = series.toLowerCase();
+          
+          if (lower.includes('ax4')) {
+            series = 'AX4 Series';
+          } else if (lower.includes('x4')) {
+            series = 'X4 Series';
+          } else if (lower.includes('xd4')) {
+            series = 'XD4 Series';
+          } else if (lower.includes('ged')) {
+            series = 'GED Series';
+          } else if (lower.includes('ded')) {
+            series = 'DED Series';
+          } else if (lower.includes('steam')) {
+            series = 'Steam Series';
+          } else if (lower.includes('parts washer') || lower.includes('partswasher')) {
+            series = 'Parts Washers';
+          } else {
+            series = series.replace(/\s*—\s*.*$/, '').trim();
+            if (!series.toLowerCase().endsWith('series')) {
+              series = `${series} Series`;
+            }
           }
+
           if (!acc[series]) acc[series] = [];
           acc[series].push(machine);
           return acc;
         }, {});
 
-        // Only display groups that have at least 3 machines to keep grid symmetry perfect
-        const filteredGrouped: Record<string, any[]> = {};
-        for (const [series, machines] of Object.entries(grouped)) {
-          if ((machines as any[]).length >= 3) {
-            filteredGrouped[series] = machines as any[];
+        // Build processed list to match requested ranges
+        const processedGrouped: Record<string, any[]> = {};
+        const activeCategories = [
+          'AX4 Series',
+          'X4 Series',
+          'XD4 Series',
+          'GED Series',
+          'DED Series',
+          'Steam Series',
+          'Parts Washers'
+        ];
+
+        for (const category of activeCategories) {
+          const machines = grouped[category] || [];
+          if (machines.length > 0) {
+            processedGrouped[category] = padMachines(category, machines);
           }
         }
-        setGroupedMachines(filteredGrouped);
+        
+        setGroupedMachines(processedGrouped);
       }
       setLoading(false);
     }

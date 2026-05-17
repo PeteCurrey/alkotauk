@@ -21,12 +21,25 @@ export default function MachineCatalogue() {
 
       if (data && !error) {
         const grouped = data.reduce((acc: any, machine) => {
-          const series = machine.series || 'Other';
+          let series = machine.series || 'Other';
+          // Clean up "Series" duplicates or normalize naming
+          series = series.replace(/\s*—\s*.*$/, '').trim();
+          if (!series.toLowerCase().endsWith('series')) {
+            series = `${series} Series`;
+          }
           if (!acc[series]) acc[series] = [];
           acc[series].push(machine);
           return acc;
         }, {});
-        setGroupedMachines(grouped);
+
+        // Only display groups that have at least 3 machines to keep grid symmetry perfect
+        const filteredGrouped: Record<string, any[]> = {};
+        for (const [series, machines] of Object.entries(grouped)) {
+          if ((machines as any[]).length >= 3) {
+            filteredGrouped[series] = machines as any[];
+          }
+        }
+        setGroupedMachines(filteredGrouped);
       }
       setLoading(false);
     }
@@ -66,22 +79,25 @@ export default function MachineCatalogue() {
         </div>
 
         <div className="space-y-24">
-          {Object.entries(groupedMachines).map(([series, machines], groupIndex) => (
-            <div key={series}>
-              <div className="mb-10 flex items-center gap-6">
-                <h3 className="font-barlow-condensed text-3xl font-black uppercase italic text-white tracking-tight">
-                  {series} <span className="text-alkota-orange">Series</span>
-                </h3>
-                <div className="h-px flex-1 bg-alkota-iron" />
+          {Object.entries(groupedMachines).map(([series, machines], groupIndex) => {
+            const displayMachines = machines.slice(0, 3);
+            return (
+              <div key={series}>
+                <div className="mb-10 flex items-center gap-6">
+                  <h3 className="font-barlow-condensed text-3xl font-black uppercase italic text-white tracking-tight">
+                    {series}
+                  </h3>
+                  <div className="h-px flex-1 bg-alkota-iron" />
+                </div>
+                
+                <div className="grid grid-cols-1 gap-px bg-alkota-iron border border-alkota-iron md:grid-cols-2 lg:grid-cols-3">
+                  {displayMachines.map((machine, i) => (
+                    <MachineCard key={machine.id} machine={machine} index={i} />
+                  ))}
+                </div>
               </div>
-              
-              <div className="grid grid-cols-1 gap-px bg-alkota-iron border border-alkota-iron md:grid-cols-2 lg:grid-cols-3">
-                {machines.map((machine, i) => (
-                  <MachineCard key={machine.id} machine={machine} index={i} />
-                ))}
-              </div>
-            </div>
-          ))}
+            );
+          })}
 
           {loading && (
             <div className="py-20 text-center bg-white/5 border border-dashed border-alkota-iron">

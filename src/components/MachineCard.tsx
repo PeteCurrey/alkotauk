@@ -55,7 +55,7 @@ export default function MachineCard({ machine, index }: MachineCardProps) {
         <img
           src={resolveMachineImage(machine.image_url, machine.model_code, machine.category)}
           alt={machine.name}
-          className="h-full w-full object-contain p-8 transition-transform duration-1000 group-hover:scale-110 grayscale-[0.8] group-hover:grayscale-0"
+          className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110 grayscale-[0.8] group-hover:grayscale-0"
         />
         <div className="absolute bottom-6 left-6 z-20">
           <span className="font-ibm-plex-mono text-[10px] font-bold uppercase tracking-[0.3em] text-alkota-orange">

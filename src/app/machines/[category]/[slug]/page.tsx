@@ -96,7 +96,7 @@ export default async function MachineDetailPage({ params }: { params: Promise<{ 
                 <img 
                   src={imageUrl} 
                   alt={machine.name}
-                  className="h-full w-full object-contain p-8 md:p-12 grayscale transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-105"
+                  className="h-full w-full object-cover grayscale transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-white/40 to-transparent" />
                 <div className="absolute bottom-6 left-6 flex items-center gap-3">

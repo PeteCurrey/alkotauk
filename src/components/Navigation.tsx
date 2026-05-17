@@ -129,12 +129,21 @@ export default function Navigation() {
               onMouseEnter={() => link.hasMega && setActiveMenu(link.name)}
               onMouseLeave={() => setActiveMenu(null)}
             >
-              <button
-                className={`flex items-center gap-1.5 text-[13px] font-bold uppercase tracking-[0.15em] transition-all text-alkota-black hover:text-alkota-orange`}
-              >
-                {link.name}
-                {link.hasMega && <ChevronDown className={`h-3 w-3 transition-transform duration-300 ${activeMenu === link.name ? 'rotate-180' : ''}`} />}
-              </button>
+              {!link.hasMega ? (
+                <Link
+                  href={link.href}
+                  className="flex items-center gap-1.5 text-[13px] font-bold uppercase tracking-[0.15em] transition-all text-alkota-black hover:text-alkota-orange no-underline"
+                >
+                  {link.name}
+                </Link>
+              ) : (
+                <button
+                  className="flex items-center gap-1.5 text-[13px] font-bold uppercase tracking-[0.15em] transition-all text-alkota-black hover:text-alkota-orange bg-transparent border-none cursor-pointer"
+                >
+                  {link.name}
+                  {link.hasMega && <ChevronDown className={`h-3 w-3 transition-transform duration-300 ${activeMenu === link.name ? 'rotate-180' : ''}`} />}
+                </button>
+              )}
               <span className={`absolute -bottom-1 left-0 h-[2px] bg-alkota-orange transition-all duration-300 ${activeMenu === link.name ? 'w-full' : 'w-0 group-hover/nav:w-full'}`} />
 
               <AnimatePresence>

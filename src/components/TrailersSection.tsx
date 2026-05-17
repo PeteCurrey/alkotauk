@@ -75,32 +75,32 @@ export default function TrailersSection() {
               return (
                 <div 
                   key={idx}
-                  className="bg-alkota-black border border-alkota-iron flex flex-col justify-between relative group hover:border-alkota-orange transition-all duration-500 overflow-hidden"
+                  className="relative h-[380px] bg-alkota-black border border-alkota-iron flex flex-col justify-end group hover:border-alkota-orange transition-all duration-500 overflow-hidden"
                 >
-                  {/* Image Container (Full-Bleed Edge to Edge) */}
-                  <div className="relative aspect-[16/10] w-full overflow-hidden bg-alkota-bg border-b border-alkota-iron/50">
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent z-10" />
+                  {/* Full-Bleed Background Image */}
+                  <div className="absolute inset-0 w-full h-full bg-alkota-bg">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/85 to-black/20 z-10" />
                     <img 
                       src={feat.image}
                       alt={feat.title}
-                      className="h-full w-full object-cover transition-transform duration-[1500ms] ease-out group-hover:scale-110 grayscale-[0.8] group-hover:grayscale-0"
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1500ms] ease-out group-hover:scale-110 grayscale-[0.8] group-hover:grayscale-0"
                     />
                   </div>
 
-                  {/* Content Container (Padded) */}
-                  <div className="p-8 flex-1 flex flex-col justify-between">
+                  {/* Content Container (Overlayed on top) */}
+                  <div className="relative z-20 p-8 flex flex-col justify-between h-full">
+                    <div className="flex justify-between items-start">
+                      <span className="font-ibm-plex-mono text-[9px] font-bold text-alkota-orange uppercase tracking-widest bg-alkota-black/40 px-2.5 py-1.5 backdrop-blur-sm border border-alkota-orange/20">
+                        Configuration 0{idx + 1}
+                      </span>
+                      <Icon className="h-5 w-5 text-alkota-orange group-hover:scale-110 transition-transform duration-500" />
+                    </div>
+
                     <div>
-                      <div className="flex items-center gap-3 mb-4">
-                        <Icon className="h-5 w-5 text-alkota-orange group-hover:scale-110 transition-transform duration-500" />
-                        <span className="font-ibm-plex-mono text-[9px] font-bold text-alkota-orange uppercase tracking-widest">
-                          Configuration 0{idx + 1}
-                        </span>
-                      </div>
-                      
-                      <h4 className="font-barlow-condensed text-2xl font-bold uppercase italic text-white mb-3 leading-tight">
+                      <h4 className="font-barlow-condensed text-2xl font-bold uppercase italic text-white mb-2 leading-tight drop-shadow-md">
                         {feat.title}
                       </h4>
-                      <p className="text-alkota-grey text-xs leading-relaxed uppercase tracking-wider">
+                      <p className="text-alkota-grey text-xs leading-relaxed uppercase tracking-wider font-medium drop-shadow-sm">
                         {feat.desc}
                       </p>
                     </div>

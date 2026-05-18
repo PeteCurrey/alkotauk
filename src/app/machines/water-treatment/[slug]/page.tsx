@@ -27,7 +27,7 @@ const SYSTEMS_DB: Record<string, any> = {
     ],
     description: 'Protecting the environment from wash water runoff and complying with governmental storm drain regulations is simple, economical and effective with the Alkota Vacuum Filtration System (VFS).',
     icon: Filter,
-    image: '/assets/products/stationary-gas-fired.png',
+    image: 'https://easttnchemicals.com/wp-content/uploads/2023/11/Water_Treatment_8_VFS_1_Alkota-1024x1024.jpg',
     overview: 'The VFS is designed to be used as a portable or stationary treatment system that guarantees results with ease of service while minimizing disposal cost. This automatic and easy to use zero or controlled discharge system has been uniquely designed to keep businesses operating without expensive filter cost, down time and additional manpower. The first two phases of filtration operate and flow under a vacuum or negative void to enhance flow and extended filter life.',
     specs: [
       { label: 'Hydrocarbon Removal', value: 'Up to 99%' },
@@ -46,7 +46,7 @@ const SYSTEMS_DB: Record<string, any> = {
     features: ['Ultra Low Maintenance', 'High-Efficiency Media', 'Affordable Compliance', 'Automated Backwash Options'],
     description: 'A low-maintenance, cost-effective way of working with strict water conservation regulations that limit waste streams from pressure washers.',
     icon: Droplet,
-    image: '/assets/products/industrial-pump.png',
+    image: 'https://www.alkota.com/wp-content/uploads/2020/06/VFS-System.png',
     overview: 'The CSF-10 Media Filtration unit is the definitive solution for stationary wash bays and industrial operations. By passing wastewater through 300 lbs of highly efficient filtration media, it removes suspended solids, oils, and greases, allowing for safe discharge or closed-loop recycling.',
     specs: [
       { label: 'Flow Rate', value: 'Up to 10 GPM' },
@@ -71,7 +71,7 @@ const SYSTEMS_DB: Record<string, any> = {
     ],
     description: 'You need an Alkota evaporator if you have water that is dirty and expensive to dispose of. This system evaporates the bulk of your wastewater cleanly and efficiently.',
     icon: Wind,
-    image: '/assets/products/steam-oil.png',
+    image: 'https://www.alkota.com/wp-content/uploads/2018/07/20-30-Evaporator.jpg',
     overview: 'Operating on LP or natural gas, the Alkota Evaporator Series is clean burning, quiet, and can be used almost anywhere. It effectively evaporates the bulk of your wastewater, leaving only a small fraction of solid waste for disposal. With a maximum rate of 20 gallons per hour (up to 480 gallons per day), it is the ultimate tool for cutting expensive wastewater removal costs.',
     specs: [
       { label: 'Evaporation Rate', value: '20 Gallons Per Hour' },

@@ -16,7 +16,7 @@ export default function WaterTreatmentSection() {
       features: ['Reduces 99% of free petroleum hydrocarbons', 'On-demand system', 'Discharge point of choice'],
       description: 'Protecting the environment from wash water runoff and complying with governmental storm drain regulations is simple, economical and effective with the Alkota Vacuum Filtration System.',
       icon: Filter,
-      image: '/assets/products/stationary-gas-fired.png',
+      image: 'https://easttnchemicals.com/wp-content/uploads/2023/11/Water_Treatment_8_VFS_1_Alkota-1024x1024.jpg',
       link: '/machines/water-treatment/vfs'
     },
     {
@@ -29,7 +29,7 @@ export default function WaterTreatmentSection() {
       features: ['Ultra Low Maintenance', 'High-Efficiency Media', 'Affordable Compliance'],
       description: 'A low-maintenance, cost-effective way of working with strict water conservation regulations that limit waste streams from pressure washers.',
       icon: Droplet,
-      image: '/assets/products/industrial-pump.png',
+      image: 'https://www.alkota.com/wp-content/uploads/2020/06/VFS-System.png',
       link: '/machines/water-treatment/csf-10'
     },
     {
@@ -42,7 +42,7 @@ export default function WaterTreatmentSection() {
       features: ['Clean Burning & Quiet LP/NG', 'Defoamer pump standard', 'Massively reduces disposal costs'],
       description: 'You need an Alkota evaporator if you have water that is dirty and expensive to dispose of. This system evaporates the bulk of your wastewater cleanly and efficiently.',
       icon: Wind,
-      image: '/assets/products/steam-oil.png',
+      image: 'https://www.alkota.com/wp-content/uploads/2018/07/20-30-Evaporator.jpg',
       link: '/machines/water-treatment/evaporator'
     }
   ];

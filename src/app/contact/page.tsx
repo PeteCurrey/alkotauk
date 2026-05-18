@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navigation from '@/components/Navigation';
 import Breadcrumbs from '@/components/Breadcrumbs';
-import { Mail, Phone, MapPin, Send, Loader2, CheckCircle2, AlertTriangle, ChevronRight } from 'lucide-react';
+import { Mail, Send, Loader2, CheckCircle2, AlertTriangle, ChevronRight } from 'lucide-react';
 
 function ContactFormInner() {
   const searchParams = useSearchParams();
@@ -72,7 +72,7 @@ function ContactFormInner() {
           Send An Enquiry
         </h2>
         <p className="text-alkota-grey text-sm mb-12 max-w-2xl">
-          Our specialized UK engineering team responds to all technical machinery, bespoke trailer, water treatment, and service inquiries within 2 hours during normal business operations.
+          Our specialised UK engineering team responds to all technical machinery, bespoke trailer, water treatment, and service enquiries within 2 hours during normal business operations.
         </p>
 
         {status === 'success' ? (
@@ -183,12 +183,12 @@ function ContactFormInner() {
               {status === 'submitting' ? (
                 <>
                   <Loader2 className="h-5 w-5 animate-spin" />
-                  <span>Transmitting...</span>
+                  <span>Submitting...</span>
                 </>
               ) : (
                 <>
                   <Send className="h-4 w-4" />
-                  <span>Transmit Enquiry</span>
+                  <span>Submit</span>
                 </>
               )}
             </button>
@@ -211,30 +211,6 @@ function ContactFormInner() {
           <a href="mailto:sales@alkota.co.uk" className="font-ibm-plex-mono text-lg font-bold text-alkota-orange hover:underline block">
             sales@alkota.co.uk
           </a>
-        </div>
-
-        <div className="bg-alkota-steel p-8 border border-alkota-iron">
-          <div className="flex items-center gap-4 mb-4">
-            <Phone className="h-6 w-6 text-alkota-orange" />
-            <h3 className="font-barlow-condensed text-2xl font-bold uppercase italic text-white">Telephone Support</h3>
-          </div>
-          <p className="text-alkota-grey text-xs leading-relaxed mb-4">Connect with our UK technical advisory office during business hours:</p>
-          <a href="tel:+4401214567890" className="font-ibm-plex-mono text-lg font-bold text-white hover:text-alkota-orange transition-colors block">
-            +44 (0) 121 456 7890
-          </a>
-        </div>
-
-        <div className="bg-alkota-steel p-8 border border-alkota-iron">
-          <div className="flex items-center gap-4 mb-4">
-            <MapPin className="h-6 w-6 text-alkota-orange" />
-            <h3 className="font-barlow-condensed text-2xl font-bold uppercase italic text-white">UK Distribution Centre</h3>
-          </div>
-          <p className="text-alkota-grey text-xs leading-relaxed">
-            Alkota Cleaning Systems UK<br />
-            Industrial Estate Parkway<br />
-            Birmingham, B1 1AA<br />
-            United Kingdom
-          </p>
         </div>
       </motion.div>
     </div>

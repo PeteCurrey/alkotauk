@@ -46,7 +46,7 @@ const SYSTEMS_DB: Record<string, any> = {
     features: ['Ultra Low Maintenance', 'High-Efficiency Media', 'Affordable Compliance', 'Automated Backwash Options'],
     description: 'A low-maintenance, cost-effective way of working with strict water conservation regulations that limit waste streams from pressure washers.',
     icon: Droplet,
-    image: 'https://www.alkota.com/wp-content/uploads/2020/06/VFS-System.png',
+    image: 'https://easttnchemicals.com/wp-content/uploads/2023/11/Water_Treatment_8_VFS_1_Alkota-1024x1024.jpg',
     overview: 'The CSF-10 Media Filtration unit is the definitive solution for stationary wash bays and industrial operations. By passing wastewater through 300 lbs of highly efficient filtration media, it removes suspended solids, oils, and greases, allowing for safe discharge or closed-loop recycling.',
     specs: [
       { label: 'Flow Rate', value: 'Up to 10 GPM' },

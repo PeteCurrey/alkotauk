@@ -29,7 +29,7 @@ export default function WaterTreatmentSection() {
       features: ['Ultra Low Maintenance', 'High-Efficiency Media', 'Affordable Compliance'],
       description: 'A low-maintenance, cost-effective way of working with strict water conservation regulations that limit waste streams from pressure washers.',
       icon: Droplet,
-      image: 'https://www.alkota.com/wp-content/uploads/2020/06/VFS-System.png',
+      image: 'https://easttnchemicals.com/wp-content/uploads/2023/11/Water_Treatment_8_VFS_1_Alkota-1024x1024.jpg',
       link: '/machines/water-treatment/csf-10'
     },
     {
@@ -90,11 +90,11 @@ export default function WaterTreatmentSection() {
                   <img
                     src={sys.image}
                     alt={sys.name}
-                    className="w-full h-full object-cover object-center grayscale opacity-40 transition-all duration-700 ease-out group-hover:grayscale-0 group-hover:opacity-80 group-hover:scale-105"
+                    className="w-full h-full object-cover object-center grayscale opacity-60 transition-all duration-700 ease-out group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-105"
                   />
-                  {/* Overlay to ensure text readability */}
-                  <div className="absolute inset-0 bg-alkota-steel/90 transition-opacity duration-700 group-hover:bg-alkota-steel/60" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-alkota-steel via-alkota-steel/80 to-transparent" />
+                  {/* Overlay to ensure text readability without completely hiding the image */}
+                  <div className="absolute inset-0 bg-alkota-steel/40 transition-opacity duration-700 group-hover:bg-alkota-steel/10" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-alkota-steel via-alkota-steel/60 to-transparent" />
                 </div>
 
                 {/* Upper Content */}

@@ -14,20 +14,26 @@ const SYSTEMS_DB: Record<string, any> = {
   'vfs': {
     id: 'vfs',
     badge: 'Vacuum System',
-    name: 'Alkota VFS Series',
-    tagline: 'Vacuum Filtration System',
-    capacity: '5 GPM Capacity',
+    name: 'Alkota 8-VFS-1 Series',
+    tagline: 'Portable Water Reclaiming System',
+    capacity: 'High Volume Performance',
     size: 'Small Compact Design',
-    features: ['Multiple Phase Separation', 'Ease of Service', 'Minimises Disposal Cost', 'Portable or Stationary Usage'],
-    description: 'The VFS is designed as a portable or stationary recovery system that guarantees environmental compliance while minimizing waste water disposal costs.',
+    features: [
+      'Reduces 99% of free petroleum hydrocarbons load',
+      'On-demand system with high volume performance',
+      'Easy to maintain with minimal operational costs',
+      'Trailer Mount or portable wheel kit available',
+      'Discharge point of choice'
+    ],
+    description: 'Protecting the environment from wash water runoff and complying with governmental storm drain regulations is simple, economical and effective with the Alkota Vacuum Filtration System (VFS).',
     icon: Filter,
     image: '/assets/products/stationary-gas-fired.png',
-    overview: 'The Alkota Vacuum Filtration System (VFS) is engineered to solve complex water recovery challenges on-site. By utilizing high-suction vacuum technology, it recovers, separates, and filters waste streams instantaneously, preventing hazardous runoff and ensuring you meet all local environmental agency regulations.',
+    overview: 'The VFS is designed to be used as a portable or stationary treatment system that guarantees results with ease of service while minimizing disposal cost. This automatic and easy to use zero or controlled discharge system has been uniquely designed to keep businesses operating without expensive filter cost, down time and additional manpower. The first two phases of filtration operate and flow under a vacuum or negative void to enhance flow and extended filter life.',
     specs: [
-      { label: 'Flow Rate', value: 'Up to 5 GPM' },
-      { label: 'Power', value: '115V / 230V Options' },
-      { label: 'Filtration', value: 'Multi-Phase Separation' },
-      { label: 'Portability', value: 'Skid or Trailer Mountable' }
+      { label: 'Hydrocarbon Removal', value: 'Up to 99%' },
+      { label: 'Design', value: 'Small Compact Frame' },
+      { label: 'Portability', value: 'Trailer or Wheel Kit' },
+      { label: 'Filtration', value: 'Negative Void Vacuum' }
     ]
   },
   'csf-10': {
@@ -53,19 +59,25 @@ const SYSTEMS_DB: Record<string, any> = {
     id: 'evaporator',
     badge: 'Wastewater Evaporation',
     name: 'Alkota Evaporator Series',
-    tagline: 'Natural Gas & LP Systems',
-    capacity: 'High-Volume Evaporation',
-    size: 'Quiet LP/NG Burner',
-    features: ['Clean Burning & Quiet', 'Near-Zero Waste Footprint', 'Indoor & Outdoor Safe', 'Heavy-Duty Steel Construction'],
-    description: 'Evaporates the bulk of your wastewater on-site. Operating on clean LPG or natural gas, this stationary unit is clean burning, quiet, and highly efficient.',
+    tagline: '15/20 NG LP Systems',
+    capacity: '20 GPH Evaporation',
+    size: 'Maximum 480 Gal/Day',
+    features: [
+      'Clean Burning & Quiet LP/NG',
+      'Defoamer pump standard',
+      '4" drain port included',
+      '115V High Efficiency Burner',
+      'Massively reduces disposal costs'
+    ],
+    description: 'You need an Alkota evaporator if you have water that is dirty and expensive to dispose of. This system evaporates the bulk of your wastewater cleanly and efficiently.',
     icon: Wind,
     image: '/assets/products/steam-oil.png',
-    overview: 'When discharging wastewater is completely prohibited, the Alkota Evaporator Series provides the ultimate closed-loop answer. Operating on high-efficiency Natural Gas or Liquid Propane, it safely and quietly evaporates the bulk of your wastewater on-site, leaving behind only a fraction of solid waste for simple, legal disposal.',
+    overview: 'Operating on LP or natural gas, the Alkota Evaporator Series is clean burning, quiet, and can be used almost anywhere. It effectively evaporates the bulk of your wastewater, leaving only a small fraction of solid waste for disposal. With a maximum rate of 20 gallons per hour (up to 480 gallons per day), it is the ultimate tool for cutting expensive wastewater removal costs.',
     specs: [
-      { label: 'Heat Source', value: 'Natural Gas or LPG' },
-      { label: 'Evaporation Rate', value: 'High-Volume Burner' },
-      { label: 'Construction', value: 'Heavy-Gauge Carbon/Stainless' },
-      { label: 'Emissions', value: 'Clean Burning / Low NOx' }
+      { label: 'Evaporation Rate', value: '20 Gallons Per Hour' },
+      { label: 'Max Daily Volume', value: '480 Gallons Per Day' },
+      { label: 'Burner Power', value: '115V Electric + LP/NG' },
+      { label: 'Hardware', value: 'Defoamer Pump / 4" Drain' }
     ]
   }
 };

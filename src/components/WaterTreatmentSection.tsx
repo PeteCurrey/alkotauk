@@ -17,7 +17,7 @@ export default function WaterTreatmentSection() {
       description: 'The VFS is designed as a portable or stationary recovery system that guarantees environmental compliance while minimizing waste water disposal costs.',
       icon: Filter,
       image: '/assets/products/stationary-gas-fired.png',
-      link: '/machines/water-treatment/vfs-1'
+      link: 'https://alkota.com/products/water-treatment-and-recovery-systems/pressure-washer-recycling-vacuum-filtration-system/'
     },
     {
       id: 'csf10',
@@ -30,7 +30,7 @@ export default function WaterTreatmentSection() {
       description: 'A low-maintenance, cost-effective way of working with strict water conservation regulations that limit waste streams from pressure washers.',
       icon: Droplet,
       image: '/assets/products/industrial-pump.png',
-      link: '/machines/water-treatment/vfs-1'
+      link: 'https://alkota.com/products/water-treatment-and-recovery-systems/water-treatment-systems/'
     },
     {
       id: 'evap',
@@ -43,7 +43,7 @@ export default function WaterTreatmentSection() {
       description: 'Evaporates the bulk of your wastewater on-site. Operating on clean LPG or natural gas, this stationary unit is clean burning, quiet, and highly efficient.',
       icon: Wind,
       image: '/assets/products/steam-oil.png',
-      link: '/machines/water-treatment/vfs-1'
+      link: 'https://alkota.com/products/water-treatment-and-recovery-systems/evaporation-systems/'
     }
   ];
 
@@ -176,7 +176,7 @@ export default function WaterTreatmentSection() {
             
             <div className="lg:col-span-4 flex lg:justify-end">
               <Link
-                href="/machines/water-treatment/vfs-1"
+                href="/contact"
                 className="w-full lg:w-auto inline-flex items-center justify-center gap-3 bg-cyan-400 px-8 py-5 text-xs font-black uppercase tracking-[0.2em] text-alkota-black hover:bg-cyan-300 transition-colors"
               >
                 <span>Consult An Advisor</span>

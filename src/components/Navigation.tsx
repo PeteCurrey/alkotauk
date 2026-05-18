@@ -99,13 +99,18 @@ export default function Navigation() {
     { name: 'Parts Washers', href: '/chemicals/parts-washer', image: '/assets/products/jetter-series.png', desc: 'Aqueous, non-foaming, multi-metal.' },
   ];
 
+  const resourceCategories = [
+    { name: 'Mess Quest', href: '/mess-quest', image: '/assets/industries/construction.png', desc: 'Interactive cleaning challenges and extreme grime removal.' },
+    { name: 'About', href: '/about', image: '/assets/industries/manufacturing.png', desc: 'Our heritage, master craftsmanship, and industrial power.' },
+    { name: 'Support', href: '/support', image: '/assets/products/whirl-away-surface-cleaner.png', desc: 'Technical documentation, service, and expert assistance.' },
+  ];
+
   const navLinks: NavLink[] = [
     { name: 'Machines', href: '/machines', hasMega: true, data: sanityCategories.length > 0 ? sanityCategories : [] },
     { name: 'Bespoke Builds', href: '/bespoke', hasMega: true, data: buildCategories },
     { name: 'Chemicals', href: '/chemicals', hasMega: true, data: chemicalCategories },
-    { name: 'Mess Quest', href: '/mess-quest', hasMega: false },
-    { name: 'About', href: '/about', hasMega: false },
-    { name: 'Support', href: '/support', hasMega: false },
+    { name: 'Resources', href: '/resources', hasMega: true, data: resourceCategories },
+    { name: 'Contact', href: '/contact', hasMega: false },
   ];
 
   return (
@@ -154,7 +159,7 @@ export default function Navigation() {
                     exit={{ opacity: 0, y: 10 }}
                     className="absolute left-1/2 -translate-x-1/2 top-[calc(100%+12px)] w-[900px] bg-white border border-alkota-iron shadow-2xl z-50 p-2"
                   >
-                    <div className="grid grid-cols-4 p-4 gap-4">
+                    <div className={`grid ${link.data?.length === 3 ? 'grid-cols-3' : 'grid-cols-4'} p-4 gap-4`}>
                       {link.data?.map((cat: any) => (
                         <Link 
                           key={cat.name} 
@@ -202,21 +207,54 @@ export default function Navigation() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 20 }}
-            className="fixed inset-0 z-50 bg-alkota-bg pt-24 px-8 lg:hidden"
+            className="fixed inset-0 z-50 bg-alkota-bg pt-24 px-8 lg:hidden overflow-y-auto"
           >
             <button className="absolute top-8 right-8 text-alkota-black" onClick={() => setMobileMenuOpen(false)}>
               <X className="h-8 w-8" />
             </button>
-            <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-8 pb-12">
               {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="font-barlow-condensed text-5xl font-black uppercase tracking-tighter text-alkota-black hover:text-alkota-orange no-underline"
-                >
-                  {link.name}
-                </Link>
+                <div key={link.name} className="flex flex-col">
+                  <div className="flex items-center justify-between">
+                    <Link
+                      href={link.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="font-barlow-condensed text-5xl font-black uppercase tracking-tighter text-alkota-black hover:text-alkota-orange no-underline"
+                    >
+                      {link.name}
+                    </Link>
+                    {link.hasMega && (
+                      <button
+                        onClick={() => setActiveMenu(activeMenu === link.name ? null : link.name)}
+                        className="p-2 text-alkota-black bg-transparent border-none cursor-pointer"
+                        aria-label={`Toggle ${link.name} submenu`}
+                      >
+                        <ChevronDown className={`h-8 w-8 transition-transform duration-300 ${activeMenu === link.name ? 'rotate-180 text-alkota-orange' : ''}`} />
+                      </button>
+                    )}
+                  </div>
+                  <AnimatePresence>
+                    {link.hasMega && activeMenu === link.name && link.data && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="flex flex-col gap-4 pl-6 pt-4 border-l-2 border-alkota-orange/30 overflow-hidden"
+                      >
+                        {link.data.map((sub: any) => (
+                          <Link
+                            key={sub.name}
+                            href={sub.href}
+                            onClick={() => setMobileMenuOpen(false)}
+                            className="font-barlow-condensed text-2xl font-bold uppercase tracking-tight text-alkota-black/70 hover:text-alkota-orange no-underline py-1"
+                          >
+                            {sub.name}
+                          </Link>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               ))}
             </div>
           </motion.div>

@@ -16,7 +16,7 @@ export default function WaterTreatmentSection() {
       features: ['Multiple Phase Separation', 'Ease of Service', 'Minimises Disposal Cost'],
       description: 'The VFS is designed as a portable or stationary recovery system that guarantees environmental compliance while minimizing waste water disposal costs.',
       icon: Filter,
-      image: '/assets/products/vfs-1.png',
+      image: '/assets/products/stationary-gas-fired.png',
       link: '/machines/water-treatment/vfs-1'
     },
     {
@@ -29,7 +29,7 @@ export default function WaterTreatmentSection() {
       features: ['Ultra Low Maintenance', 'High-Efficiency Media', 'Affordable Compliance'],
       description: 'A low-maintenance, cost-effective way of working with strict water conservation regulations that limit waste streams from pressure washers.',
       icon: Droplet,
-      image: '/assets/products/vfs-1.png', // Fallback to matching filtration asset
+      image: '/assets/products/industrial-pump.png',
       link: '/machines/water-treatment/vfs-1'
     },
     {
@@ -42,7 +42,7 @@ export default function WaterTreatmentSection() {
       features: ['Clean Burning & Quiet', 'Near-Zero Waste Footprint', 'Indoor & Outdoor Safe'],
       description: 'Evaporates the bulk of your wastewater on-site. Operating on clean LPG or natural gas, this stationary unit is clean burning, quiet, and highly efficient.',
       icon: Wind,
-      image: '/assets/products/vfs-1.png', // Fallback to matching filtration asset
+      image: '/assets/products/steam-oil.png',
       link: '/machines/water-treatment/vfs-1'
     }
   ];
@@ -83,18 +83,30 @@ export default function WaterTreatmentSection() {
             return (
               <div 
                 key={sys.id}
-                className="group relative flex flex-col justify-between bg-alkota-steel p-10 transition-all hover:bg-alkota-steel/80"
+                className="group relative flex flex-col justify-between bg-alkota-steel p-10 transition-all overflow-hidden"
               >
+                {/* Background Image */}
+                <div className="absolute inset-0 z-0 bg-alkota-black">
+                  <img
+                    src={sys.image}
+                    alt={sys.name}
+                    className="w-full h-full object-cover object-center grayscale opacity-40 transition-all duration-700 ease-out group-hover:grayscale-0 group-hover:opacity-80 group-hover:scale-105"
+                  />
+                  {/* Overlay to ensure text readability */}
+                  <div className="absolute inset-0 bg-alkota-steel/90 transition-opacity duration-700 group-hover:bg-alkota-steel/60" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-alkota-steel via-alkota-steel/80 to-transparent" />
+                </div>
+
                 {/* Upper Content */}
-                <div>
+                <div className="relative z-10">
                   <div className="flex justify-between items-start mb-12">
-                    <span className="font-ibm-plex-mono text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1.5 border border-cyan-400/30 text-cyan-400 bg-cyan-950/20">
+                    <span className="font-ibm-plex-mono text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1.5 border border-cyan-400/30 text-cyan-400 bg-cyan-950/40 backdrop-blur-sm">
                       {sys.badge}
                     </span>
                     <Icon className="h-6 w-6 text-cyan-400 group-hover:scale-110 transition-transform duration-500" />
                   </div>
 
-                  <h3 className="font-barlow-condensed text-3xl font-black uppercase italic text-white mb-2">
+                  <h3 className="font-barlow-condensed text-3xl font-black uppercase italic text-white mb-2 group-hover:text-cyan-400 transition-colors duration-500">
                     {sys.name}
                   </h3>
                   
@@ -102,18 +114,18 @@ export default function WaterTreatmentSection() {
                     {sys.tagline}
                   </p>
 
-                  <p className="text-alkota-grey leading-relaxed mb-8 text-sm">
+                  <p className="text-alkota-grey leading-relaxed mb-8 text-sm group-hover:text-white/90 transition-colors duration-500">
                     {sys.description}
                   </p>
 
                   {/* Highlights Strip */}
-                  <div className="grid grid-cols-2 gap-4 border-t border-alkota-iron pt-6 mb-8">
+                  <div className="grid grid-cols-2 gap-4 border-t border-white/10 pt-6 mb-8">
                     <div>
-                      <span className="block font-ibm-plex-mono text-[9px] uppercase tracking-wider text-alkota-grey mb-1">Capacity</span>
+                      <span className="block font-ibm-plex-mono text-[9px] uppercase tracking-wider text-alkota-grey mb-1 group-hover:text-cyan-400/80 transition-colors duration-500">Capacity</span>
                       <span className="font-barlow-condensed text-lg font-bold text-white uppercase">{sys.capacity}</span>
                     </div>
                     <div>
-                      <span className="block font-ibm-plex-mono text-[9px] uppercase tracking-wider text-alkota-grey mb-1">Architecture</span>
+                      <span className="block font-ibm-plex-mono text-[9px] uppercase tracking-wider text-alkota-grey mb-1 group-hover:text-cyan-400/80 transition-colors duration-500">Architecture</span>
                       <span className="font-barlow-condensed text-lg font-bold text-white uppercase">{sys.size}</span>
                     </div>
                   </div>
@@ -132,7 +144,7 @@ export default function WaterTreatmentSection() {
                 {/* Footer Button */}
                 <Link
                   href={sys.link}
-                  className="flex items-center justify-between w-full border border-alkota-iron bg-alkota-black p-4 text-xs font-bold uppercase tracking-widest text-white transition-all group-hover:border-cyan-400 group-hover:text-cyan-400"
+                  className="relative z-10 flex items-center justify-between w-full border border-white/10 bg-alkota-black/50 backdrop-blur-md p-4 text-xs font-bold uppercase tracking-widest text-white transition-all group-hover:border-cyan-400 group-hover:text-cyan-400 group-hover:bg-alkota-black"
                 >
                   <span>View Specifications</span>
                   <ChevronRight className="h-4 w-4" />

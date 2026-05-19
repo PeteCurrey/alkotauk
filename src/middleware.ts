@@ -72,14 +72,17 @@ export async function middleware(req: NextRequest) {
 
   // ── ADMIN ROUTE PROTECTION ───────────────────────────────────────────────
   if (pathname.startsWith('/admin')) {
+    // Allow login page through without auth check
+    if (pathname === '/admin/login') return NextResponse.next();
+    // Legacy login at /admin — allow through (it's the login form)
     if (pathname === '/admin') return NextResponse.next();
     
     const token = req.cookies.get(COOKIE_NAME)?.value;
-    if (!token) return NextResponse.redirect(new URL('/admin', req.url));
+    if (!token) return NextResponse.redirect(new URL('/admin/login', req.url));
     
     const payload = await verifyToken(token);
     if (!payload) {
-      const response = NextResponse.redirect(new URL('/admin', req.url));
+      const response = NextResponse.redirect(new URL('/admin/login', req.url));
       response.cookies.delete(COOKIE_NAME);
       return response;
     }
@@ -97,7 +100,6 @@ export async function middleware(req: NextRequest) {
       
       if (!isAdmin) {
         const response = NextResponse.redirect(new URL('/maintenance', req.url));
-        // Force the browser and CDN to never cache this redirect response
         response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
         response.headers.set('Pragma', 'no-cache');
         response.headers.set('Expires', '0');

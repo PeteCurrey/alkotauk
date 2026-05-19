@@ -4,6 +4,7 @@ import { Inbox, FileText, FlaskConical, Megaphone, Lock, ArrowRight, Plus } from
 
 async function getStats() {
   const now = new Date();
+  const startOfWeek = new Date(now); startOfWeek.setDate(now.getDate() - 7);
   const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
   const results = await Promise.all([
     supabaseAdmin.from('enquiries').select('*', { count: 'exact', head: true }),
@@ -18,21 +19,18 @@ async function getStats() {
     supabaseAdmin.from('enquiries').select('id,reference,type,name,company,created_at,status').order('created_at', { ascending: false }).limit(10),
     supabaseAdmin.from('site_settings').select('value').eq('key', 'maintenance_mode').maybeSingle(),
     supabaseAdmin.from('banners').select('message').eq('active', true).limit(1).maybeSingle(),
+    supabaseAdmin.from('products').select('*', { count: 'exact', head: true }).eq('active', true),
+    supabaseAdmin.from('bespoke_builds').select('*', { count: 'exact', head: true }).eq('active', true),
+    supabaseAdmin.from('products').select('id').is('primary_image_url', null),
+    supabaseAdmin.from('products').select('id').is('pdf_spec_url', null),
+    supabaseAdmin.from('posts').select('*', { count: 'exact', head: true }).eq('published', true),
   ]);
 
   const [
-    totalEnquiries,
-    newEnquiries,
-    monthEnquiries,
-    trailerEnquiries,
-    industrialEnquiries,
-    blogPublished,
-    activeChemicals,
-    partsCount,
-    activeBanners,
-    enquiriesRecent,
-    maintenanceSetting,
-    activeBannerData,
+    totalEnquiries, newEnquiries, monthEnquiries, trailerEnquiries, industrialEnquiries,
+    blogPublished, activeChemicals, partsCount, activeBanners, enquiriesRecent,
+    maintenanceSetting, activeBannerData, activeProducts, activeBuilds,
+    missingImages, missingPdfs, postsPublished,
   ] = results;
 
   return {
@@ -41,13 +39,17 @@ async function getStats() {
     monthEnquiries: monthEnquiries?.count ?? 0,
     trailerEnquiries: trailerEnquiries?.count ?? 0,
     industrialEnquiries: industrialEnquiries?.count ?? 0,
-    blogPublished: blogPublished?.count ?? 0,
+    blogPublished: (blogPublished?.count ?? 0) + (postsPublished?.count ?? 0),
     activeChemicals: activeChemicals?.count ?? 0,
     partsCount: partsCount?.count ?? 0,
     activeBanners: activeBanners?.count ?? 0,
     enquiriesRecent: enquiriesRecent?.data ?? [],
     maintenanceActive: maintenanceSetting?.data?.value === 'true',
     activeBannerMessage: activeBannerData?.data?.message ?? null,
+    activeProducts: activeProducts?.count ?? 0,
+    activeBuilds: activeBuilds?.count ?? 0,
+    missingImageCount: missingImages?.data?.length ?? 0,
+    missingPdfCount: missingPdfs?.data?.length ?? 0,
   };
 }
 
@@ -94,19 +96,40 @@ export default async function AdminDashboard() {
         <StatCard label="Industrial Briefs" value={stats.industrialEnquiries} sub="Submitted" href="/admin/enquiries?type=industrial" />
       </div>
 
-      {/* Row 2 — Content */}
-      <p className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#444] mb-3">Content</p>
+      {/* Row 2 — Catalogue */}
+      <p className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#444] mb-3">Catalogue</p>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-        <StatCard label="Posts Published" value={stats.blogPublished} href="/admin/blog" icon={FileText} />
+        <StatCard label="Live Products" value={stats.activeProducts} href="/admin/products" icon={FileText} />
         <StatCard label="Active Chemicals" value={stats.activeChemicals} href="/admin/chemicals" icon={FlaskConical} />
-        <StatCard label="Parts Listed" value={stats.partsCount} href="/admin/parts" />
-        <StatCard label="Active Banners" value={stats.activeBanners} href="/admin/banners" icon={Megaphone} />
+        <StatCard label="Bespoke Builds" value={stats.activeBuilds} href="/admin/bespoke" />
+        <StatCard label="Posts Published" value={stats.blogPublished} href="/admin/posts" icon={FileText} />
       </div>
+
+      {/* Missing Assets Warning */}
+      {(stats.missingImageCount > 0 || stats.missingPdfCount > 0) && (
+        <div className="border border-amber-900/40 bg-amber-950/20 px-5 py-4 mb-6 flex items-start gap-3">
+          <Plus className="h-4 w-4 text-amber-500 shrink-0 mt-0.5 rotate-45" />
+          <div>
+            <p className="font-ibm-plex-mono text-[10px] text-amber-400 uppercase tracking-wider font-bold mb-1">Products need attention</p>
+            <div className="flex gap-4 mt-1">
+              {stats.missingImageCount > 0 && (
+                <Link href="/admin/products" className="font-inter text-[12px] text-amber-300 hover:underline">
+                  {stats.missingImageCount} missing image{stats.missingImageCount !== 1 ? 's' : ''} →
+                </Link>
+              )}
+              {stats.missingPdfCount > 0 && (
+                <Link href="/admin/products" className="font-inter text-[12px] text-amber-300 hover:underline">
+                  {stats.missingPdfCount} missing spec PDF{stats.missingPdfCount !== 1 ? 's' : ''} →
+                </Link>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Row 3 — Site Status */}
       <p className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#444] mb-3">Site Status</p>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-8">
-        {/* Maintenance Mode */}
         <div className="p-6 border border-[#222] bg-[#141414]">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
@@ -123,7 +146,6 @@ export default async function AdminDashboard() {
           </div>
         </div>
 
-        {/* Active Banner */}
         <div className="p-6 border border-[#222] bg-[#141414]">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
@@ -157,22 +179,16 @@ export default async function AdminDashboard() {
             </thead>
             <tbody>
               {stats.enquiriesRecent.map((enq: any, i: number) => (
-                <tr
-                  key={enq.id}
-                  style={{ borderBottom: '1px solid #1A1A1A', background: i % 2 === 0 ? '#111' : '#0D0D0D' }}
-                  className="hover:bg-[#1A1A1A] transition-colors"
-                >
+                <tr key={enq.id} style={{ borderBottom: '1px solid #1A1A1A', background: i % 2 === 0 ? '#111' : '#0D0D0D' }} className="hover:bg-[#1A1A1A] transition-colors">
                   <td className="px-4 py-3">
                     <Link href={`/admin/enquiries/${enq.id}`} className="font-ibm-plex-mono text-[11px] text-[#FF6900] hover:underline">
-                      {enq.reference || '—'}
+                      {enq.reference || enq.id?.slice(0, 8) || '—'}
                     </Link>
                   </td>
                   <td className="px-4 py-3 font-ibm-plex-mono text-[10px] text-[#888] uppercase">{enq.type}</td>
                   <td className="px-4 py-3 font-inter text-[13px] text-white">{enq.name || '—'}</td>
                   <td className="px-4 py-3 font-inter text-[13px] text-[#888]">{enq.company || '—'}</td>
-                  <td className="px-4 py-3 font-ibm-plex-mono text-[10px] text-[#555]">
-                    {new Date(enq.created_at).toLocaleDateString('en-GB')}
-                  </td>
+                  <td className="px-4 py-3 font-ibm-plex-mono text-[10px] text-[#555]">{new Date(enq.created_at).toLocaleDateString('en-GB')}</td>
                   <td className="px-4 py-3">
                     <span className="px-2 py-0.5 font-ibm-plex-mono text-[9px] uppercase tracking-wider" style={{
                       color: STATUS_COLOURS[enq.status] || '#666',
@@ -185,11 +201,7 @@ export default async function AdminDashboard() {
                 </tr>
               ))}
               {stats.enquiriesRecent.length === 0 && (
-                <tr>
-                  <td colSpan={6} className="px-4 py-12 text-center font-ibm-plex-mono text-[10px] text-[#444] uppercase tracking-widest">
-                    No enquiries yet
-                  </td>
-                </tr>
+                <tr><td colSpan={6} className="px-4 py-12 text-center font-ibm-plex-mono text-[10px] text-[#444] uppercase tracking-widest">No enquiries yet</td></tr>
               )}
             </tbody>
           </table>
@@ -201,17 +213,15 @@ export default async function AdminDashboard() {
         <h2 className="font-barlow-condensed text-2xl font-black uppercase italic text-white mb-4">Quick Actions</h2>
         <div className="flex flex-wrap gap-3">
           {[
-            { label: '+ New Blog Post', href: '/admin/blog/new' },
+            { label: '+ Add Product', href: '/admin/products/new' },
             { label: '+ New Chemical', href: '/admin/chemicals/new' },
-            { label: '+ New Part', href: '/admin/parts/new' },
-            { label: '+ New Banner', href: '/admin/banners/new' },
-            { label: '⚙ Maintenance Mode', href: '/admin/maintenance' },
+            { label: '+ Bespoke Build', href: '/admin/bespoke/new' },
+            { label: '+ New Post', href: '/admin/posts/new' },
+            { label: 'View Enquiries', href: '/admin/enquiries' },
+            { label: '⚙ Maintenance', href: '/admin/maintenance' },
           ].map((action) => (
-            <Link
-              key={action.href}
-              href={action.href}
-              className="px-5 py-2.5 border border-[#333] font-ibm-plex-mono text-[10px] uppercase tracking-widest text-[#888] hover:text-white hover:border-[#FF6900] hover:text-[#FF6900] transition-all"
-            >
+            <Link key={action.href} href={action.href}
+              className="px-5 py-2.5 border border-[#333] font-ibm-plex-mono text-[10px] uppercase tracking-widest text-[#888] hover:text-[#FF6900] hover:border-[#FF6900] transition-all">
               {action.label}
             </Link>
           ))}
@@ -220,3 +230,4 @@ export default async function AdminDashboard() {
     </div>
   );
 }
+

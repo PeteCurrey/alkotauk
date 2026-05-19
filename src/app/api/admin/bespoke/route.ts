@@ -3,9 +3,9 @@ import { supabaseAdmin } from '@/lib/supabase/server';
 
 export async function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl;
-  const category = searchParams.get('category');
-  let q = supabaseAdmin.from('chemicals').select('*').order('sort_order').order('name');
-  if (category) q = q.eq('category', category);
+  const type = searchParams.get('type');
+  let q = supabaseAdmin.from('bespoke_builds').select('*').order('sort_order').order('created_at', { ascending: false });
+  if (type) q = q.eq('build_type', type);
   const { data, error } = await q;
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json(data);
@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { data, error } = await supabaseAdmin.from('chemicals').insert(body).select().single();
+  const { data, error } = await supabaseAdmin.from('bespoke_builds').insert(body).select().single();
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json(data, { status: 201 });
 }

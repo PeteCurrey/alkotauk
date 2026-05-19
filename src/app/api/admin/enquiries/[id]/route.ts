@@ -23,7 +23,9 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   const allowed: Record<string, unknown> = {};
   if (body.status !== undefined) allowed.status = body.status;
   if (body.notes !== undefined) allowed.notes = body.notes;
+  if (body.admin_notes !== undefined) allowed.admin_notes = body.admin_notes;
   if (body.assigned_to !== undefined) allowed.assigned_to = body.assigned_to;
+  if (body.follow_up_date !== undefined) allowed.follow_up_date = body.follow_up_date;
   const { data, error } = await supabaseAdmin.from('enquiries').update(allowed).eq('id', id).select().single();
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json(data);

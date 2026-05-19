@@ -16,14 +16,17 @@ export async function GET(req: NextRequest) {
   const type = searchParams.get('type');
   const search = searchParams.get('search');
 
-  let query = supabaseAdmin.from('enquiries').select('*').order('created_at', { ascending: false });
+  const countOnly = searchParams.get('countOnly') === 'true';
+
+  let query = supabaseAdmin.from('enquiries').select('*', { count: countOnly ? 'exact' : undefined, head: countOnly }).order('created_at', { ascending: false });
 
   if (status && status !== 'all') query = query.eq('status', status);
   if (type && type !== 'all') query = query.eq('type', type);
   if (search) query = query.or(`name.ilike.%${search}%,email.ilike.%${search}%,company.ilike.%${search}%,reference.ilike.%${search}%`);
 
-  const { data, error } = await query;
+  const { data, count, error } = await query;
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (countOnly) return NextResponse.json({ count: count ?? 0 });
   return NextResponse.json(data);
 }
 

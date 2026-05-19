@@ -19,18 +19,20 @@ export default function Home() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Reveal all sections on scroll (opacity only — no y translation to avoid layout gaps)
+      // Use autoAlpha (opacity + visibility) to prevent background bleed-through
+      // when sections are at opacity 0. visibility:hidden means the dark body
+      // background never shows through transparent sections during scroll.
       const sections = gsap.utils.toArray('section');
       sections.forEach((section: any) => {
-        gsap.fromTo(section, 
-          { opacity: 0 },
+        gsap.fromTo(section,
+          { autoAlpha: 0 },
           {
-            opacity: 1,
-            duration: 1.2,
+            autoAlpha: 1,
+            duration: 1.0,
             ease: 'power3.out',
             scrollTrigger: {
               trigger: section,
-              start: 'top 85%',
+              start: 'top 88%',
               toggleActions: 'play none none reverse',
             }
           }
@@ -42,7 +44,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main ref={containerRef} className="flex min-h-screen flex-col bg-alkota-black overflow-x-hidden">
+    <main ref={containerRef} className="flex min-h-screen flex-col overflow-x-hidden" style={{ backgroundColor: '#0D0D0D' }}>
       <Navigation />
       
       <Hero />

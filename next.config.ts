@@ -17,7 +17,11 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'cdn.sanity.io',
+        hostname: 'xohftjaohhkwgxdnouoo.supabase.co',
+      },
+      {
+        protocol: 'https',
+        hostname: 'easttnchemicals.com',
       },
     ],
   },
@@ -25,7 +29,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/studio/:path*',
-        destination: '/admin',
+        destination: '/admin/login',
         permanent: false,
       },
       {

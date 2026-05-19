@@ -2,7 +2,7 @@ import { supabaseAdmin } from '@/lib/supabase/server';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
-import ChemicalForm from '../../ChemicalForm';
+import ChemicalForm from '../ChemicalForm';
 
 export default async function EditChemicalPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

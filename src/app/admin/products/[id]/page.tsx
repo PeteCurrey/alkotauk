@@ -2,7 +2,7 @@ import { supabaseAdmin } from '@/lib/supabase/server';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
-import ProductForm from '../../ProductForm';
+import ProductForm from '../ProductForm';
 
 export default async function EditProductPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

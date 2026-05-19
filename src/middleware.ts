@@ -18,7 +18,7 @@ async function getMaintenanceMode(): Promise<boolean> {
   for (const key of keysToTry) {
     try {
       const baseUrl = supabaseUrl.includes('/rest/v1') ? supabaseUrl : `${supabaseUrl}/rest/v1`;
-      const url = `${baseUrl}/site_settings?select=key,value`;
+      const url = `${baseUrl}/site_settings?select=key,value&t=${Date.now()}`;
       
       const response = await fetch(url, {
         method: 'GET',

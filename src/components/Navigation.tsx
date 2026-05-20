@@ -9,7 +9,7 @@ import { useSession } from 'next-auth/react';
 import Logo from './Logo';
 import { supabase } from '@/lib/supabase/client';
 import { resolveMachineImage } from '@/lib/images';
-
+import { MACHINES } from '@/lib/machines';
 
 interface NavLink {
   name: string;
@@ -18,11 +18,39 @@ interface NavLink {
   data?: any[];
 }
 
+function mapMachinesToCategories(items: any[]) {
+  const seriesMap = new Map();
+  items.forEach(m => {
+    let cat = m.category || m.type || 'other';
+    // Normalize category slug for DB vs static array differences
+    if (cat === 'parts-washers') cat = 'parts-washer';
+    if (cat === 'wash-plants') cat = 'wash-plant';
+
+    const ser = m.series || 'Other';
+    const key = `${cat}-${ser}`;
+    if (!seriesMap.has(key)) {
+      const modelCode = m.model_code || m.id || m.slug?.replace('alkota-', '').toUpperCase() || m.name;
+      const imgPath = resolveMachineImage(m.primary_image_url || m.image_url, modelCode, cat);
+      const urlCategory = cat === 'parts-washer' ? 'parts-washers' : cat;
+
+      seriesMap.set(key, {
+        category: cat,
+        series: ser,
+        name: `${ser} Series`,
+        href: `/machines/${urlCategory}?series=${ser}`,
+        image: imgPath,
+        desc: `${cat.replace('-', ' ')} // Industrial Power`
+      });
+    }
+  });
+  return Array.from(seriesMap.values());
+}
+
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
-  const [sanityCategories, setSanityCategories] = useState<any[]>([]);
+  const [sanityCategories, setSanityCategories] = useState<any[]>(() => mapMachinesToCategories(MACHINES));
   const navRef = useRef<HTMLDivElement>(null);
 
   const { data: session } = useSession() as any;
@@ -56,31 +84,8 @@ export default function Navigation() {
         console.error('Mega menu fetch failed:', error);
       }
 
-      if (data && !error) {
-        // Group by category first, but the user wants to see Series
-        // We'll create a list of unique Category + Series combinations
-        const seriesMap = new Map();
-        
-        data.forEach(m => {
-          const cat = m.category || 'other';
-          const ser = m.series || 'Other';
-          const key = `${cat}-${ser}`;
-          if (!seriesMap.has(key)) {
-            const modelCode = m.model_code || m.slug?.replace('alkota-', '').toUpperCase() || m.name;
-            const imgPath = resolveMachineImage(m.primary_image_url || m.image_url, modelCode, m.category);
-            
-            seriesMap.set(key, {
-              category: cat,
-              series: ser,
-              name: `${ser} Series`,
-              href: `/machines/${cat}?series=${ser}`,
-              image: imgPath,
-              desc: `${cat.replace('-', ' ')} // Industrial Power`
-            });
-          }
-        });
-
-        setSanityCategories(Array.from(seriesMap.values()));
+      if (data && !error && data.length > 0) {
+        setSanityCategories(mapMachinesToCategories(data));
       }
     }
     fetchMachines();

@@ -6,9 +6,9 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
 export default async function MachinesPage() {
-  // Fetch all machines from Supabase
+  // Fetch all machines from Supabase products table
   const { data } = await supabaseAdmin
-    .from('machines')
+    .from('products')
     .select('*')
     .eq('active', true)
     .order('sort_order');
@@ -17,10 +17,13 @@ export default async function MachinesPage() {
   
   
   // Unique categories from real data
-  const categories = Array.from(new Set((machines || []).map((m: any) => m.category))).map(cat => ({
-    name: (cat as string).replace('-', ' '),
-    slug: cat as string
-  }));
+  const categories = Array.from(new Set((machines || []).map((m: any) => m.category))).map(cat => {
+    const slug = cat === 'parts-washer' ? 'parts-washers' : cat as string;
+    return {
+      name: (slug as string).replace('-', ' '),
+      slug
+    };
+  });
 
   return (
     <main className="min-h-screen bg-alkota-bg pt-32 pb-0">

@@ -31,30 +31,48 @@ export async function GET() {
 
     await supabaseAdmin.from('applications').upsert(applications, { onConflict: 'slug' });
 
-    // 3. Machines
-    const machinesToInsert = MACHINES.map(m => ({
-      name: m.name,
-      model_code: m.id,
-      slug: m.slug.split('/').pop(),
-      tagline: m.description.split('.')[0],
-      description: m.description,
-      category: m.type,
-      series: m.series,
-      psi: parseInt(m.specs.pressureBar) * 14.5 || 2000,
-      gpm: parseFloat(m.specs.flowLPM) / 3.785 || 3.0,
-      drive: m.specs.driveType,
-      voltage: m.specs.voltageOptions,
-      engine: m.specs.engine,
-      burner_fuel: m.specs.fuelType,
-      weight: m.specs.weightKG,
-      features: m.highlights,
-      image_url: `/assets/products/${m.id}.png`,
-      active: true
-    }));
+    // 3. Products
+    const productsToInsert = MACHINES.map(m => {
+      let cat = m.type as string;
+      if (cat === 'parts-washers') cat = 'parts-washer';
+      if (cat === 'wash-plants') cat = 'wash-plant';
 
-    await supabaseAdmin.from('machines').upsert(machinesToInsert, { onConflict: 'slug' });
+      const gpm = parseFloat(m.specs.flowLPM) / 3.785;
+      const psi = parseInt(m.specs.pressureBar) * 14.5;
 
-    return NextResponse.json({ success: true, message: 'Migration completed successfully' });
+      return {
+        slug: m.slug.split('/').pop() || m.id,
+        name: m.name,
+        series: m.series,
+        category: cat,
+        tagline: m.description.split('.')[0] || m.name,
+        description: m.description,
+        featured: false,
+        active: true,
+
+        // Specifications
+        flow_rate_gpm: Math.round(gpm * 10) / 10 || null,
+        flow_rate_lpm: parseFloat(m.specs.flowLPM) || null,
+        pressure_psi: Math.round(psi) || null,
+        pressure_bar: parseInt(m.specs.pressureBar) || null,
+        power_source: m.specs.driveType || null,
+        heating_fuel: m.specs.fuelType || null,
+        voltage: m.specs.voltageOptions || null,
+        portable: !m.name.toLowerCase().includes('stationary') && !m.name.toLowerCase().includes('cabinet'),
+        weight_kg: parseFloat(m.specs.weightKG) || null,
+        certifications: ['CE', 'UKCA'],
+        industries: ['agriculture', 'fleet-transport', 'construction', 'manufacturing'],
+        
+        // Media
+        primary_image_url: `/assets/products/${m.id}.png`,
+        sort_order: 0
+      };
+    });
+
+    const { error: productsError } = await supabaseAdmin.from('products').upsert(productsToInsert, { onConflict: 'slug' });
+    if (productsError) throw productsError;
+
+    return NextResponse.json({ success: true, message: 'Migration and Product Sync completed successfully' });
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }

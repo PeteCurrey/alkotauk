@@ -91,6 +91,83 @@ function Field({ label, children, note }: { label: string; children: React.React
   );
 }
 
+function FileUploadField({
+  label,
+  value,
+  onChange,
+  accept,
+  placeholder,
+  helper,
+}: {
+  label: string;
+  value: string;
+  onChange: (url: string) => void;
+  accept: string;
+  placeholder?: string;
+  helper?: string;
+}) {
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    setError(null);
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const res = await fetch('/api/admin/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.error || 'Upload failed');
+      }
+
+      const data = await res.json();
+      onChange(data.url);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  return (
+    <div>
+      <label className="block font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#666] mb-2">{label}</label>
+      <div className="flex gap-2">
+        <input
+          type="text"
+          value={value}
+          onChange={e => onChange(e.target.value)}
+          placeholder={placeholder}
+          className="flex-1 bg-[#0D0D0D] border border-[#2A2A2A] text-white px-4 py-2.5 font-inter text-sm focus:outline-none focus:border-[#FF6900] transition-colors"
+        />
+        <label className="relative shrink-0 flex items-center justify-center px-4 border border-[#333] font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#888] hover:text-white hover:border-[#FF6900] transition-all cursor-pointer bg-[#111]">
+          {uploading ? 'Uploading...' : 'Upload'}
+          <input
+            type="file"
+            accept={accept}
+            onChange={handleUpload}
+            disabled={uploading}
+            className="hidden"
+          />
+        </label>
+      </div>
+      {error && <p className="font-ibm-plex-mono text-[9px] text-red-500 mt-1 uppercase">{error}</p>}
+      {helper && <p className="font-inter text-[11px] text-[#555] mt-1">{helper}</p>}
+    </div>
+  );
+}
+
+
 const INITIAL: Partial<Product> = {
   name: '', slug: '', series: '', category: 'hot-water', tagline: '', description: '',
   featured: false, active: true, flow_rate_gpm: undefined, flow_rate_lpm: undefined,
@@ -242,12 +319,30 @@ export default function ProductForm({ initial, id }: { initial?: Partial<Product
       {/* SECTION 5: MEDIA */}
       <SectionHeader label="Media" />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Field label="Primary Image URL">
-          {inp('primary_image_url', 'text', 'https://...')}
+        <div>
+          <FileUploadField
+            label="Primary Image URL"
+            value={form.primary_image_url || ''}
+            onChange={val => set('primary_image_url', val)}
+            accept="image/*"
+            placeholder="https://..."
+          />
           {form.primary_image_url && <img src={form.primary_image_url} alt="" className="mt-2 h-24 w-24 object-cover border border-[#222]" onError={() => {}} />}
-        </Field>
-        <Field label="Spec Sheet PDF URL">{inp('pdf_spec_url', 'text', 'https://...')}</Field>
-        <Field label="Service Manual PDF URL">{inp('pdf_manual_url', 'text', 'https://...')}</Field>
+        </div>
+        <FileUploadField
+          label="Spec Sheet PDF URL"
+          value={form.pdf_spec_url || ''}
+          onChange={val => set('pdf_spec_url', val)}
+          accept="application/pdf"
+          placeholder="https://..."
+        />
+        <FileUploadField
+          label="Service Manual PDF URL"
+          value={form.pdf_manual_url || ''}
+          onChange={val => set('pdf_manual_url', val)}
+          accept="application/pdf"
+          placeholder="https://..."
+        />
       </div>
 
       {/* SECTION 6: SEO */}

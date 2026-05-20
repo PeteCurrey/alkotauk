@@ -13,6 +13,8 @@ function padMachines(seriesName: string, machines: any[]): any[] {
 
   const padded = [...machines];
   const base = machines[0];
+  const basePsi = base.pressure_psi || base.psi || 0;
+  const baseGpm = base.flow_rate_gpm || base.gpm || 0;
 
   if (machines.length === 1) {
     // Generate 2 companion machines with premium specs variations
@@ -23,8 +25,10 @@ function padMachines(seriesName: string, machines: any[]): any[] {
       name: `${base.name} Pro`,
       model_code: base.model_code ? `${base.model_code}-PRO` : undefined,
       tagline: `Enhanced high-performance edition of the ${base.name}.`,
-      psi: Math.round(base.psi * 1.2),
-      gpm: Number((base.gpm * 1.15).toFixed(1)),
+      pressure_psi: Math.round(basePsi * 1.2),
+      psi: Math.round(basePsi * 1.2),
+      flow_rate_gpm: Number((baseGpm * 1.15).toFixed(1)),
+      gpm: Number((baseGpm * 1.15).toFixed(1)),
       sort_order: base.sort_order + 1
     });
     padded.push({
@@ -34,13 +38,17 @@ function padMachines(seriesName: string, machines: any[]): any[] {
       name: `${base.name} Max`,
       model_code: base.model_code ? `${base.model_code}-MAX` : undefined,
       tagline: `Maximum volume and industrial pressure output upgrade.`,
-      psi: Math.round(base.psi * 1.4),
-      gpm: Number((base.gpm * 1.3).toFixed(1)),
+      pressure_psi: Math.round(basePsi * 1.4),
+      psi: Math.round(basePsi * 1.4),
+      flow_rate_gpm: Number((baseGpm * 1.3).toFixed(1)),
+      gpm: Number((baseGpm * 1.3).toFixed(1)),
       sort_order: base.sort_order + 2
     });
   } else if (machines.length === 2) {
     // Generate 1 companion machine based on the second one
     const second = machines[1];
+    const secondPsi = second.pressure_psi || second.psi || 0;
+    const secondGpm = second.flow_rate_gpm || second.gpm || 0;
     padded.push({
       ...second,
       id: `${second.id}-v1`,
@@ -48,8 +56,10 @@ function padMachines(seriesName: string, machines: any[]): any[] {
       name: `${second.name} Max`,
       model_code: second.model_code ? `${second.model_code}-MAX` : undefined,
       tagline: `Maximum output upgrade for the ${second.name} configuration.`,
-      psi: Math.round(second.psi * 1.25),
-      gpm: Number((second.gpm * 1.2).toFixed(1)),
+      pressure_psi: Math.round(secondPsi * 1.25),
+      psi: Math.round(secondPsi * 1.25),
+      flow_rate_gpm: Number((secondGpm * 1.2).toFixed(1)),
+      gpm: Number((secondGpm * 1.2).toFixed(1)),
       sort_order: second.sort_order + 1
     });
   }
@@ -64,7 +74,7 @@ export default function MachineCatalogue() {
   useEffect(() => {
     async function fetchMachines() {
       const { data, error } = await supabase
-        .from('machines')
+        .from('products')
         .select('*')
         .eq('active', true)
         .order('sort_order', { ascending: true });

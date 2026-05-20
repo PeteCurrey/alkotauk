@@ -9,58 +9,58 @@ export async function GET(req: NextRequest) {
   const machines = [
     {
       name: 'Alkota 311AX4',
-      model_code: '311AX4',
       slug: 'alkota-311ax4',
       tagline: 'High pressure compact belt drive.',
       category: 'hot-water',
       series: 'AX4 Series',
-      gpm: 3.0,
-      psi: 1100,
-      drive: 'belt',
+      flow_rate_gpm: 3.0,
+      flow_rate_lpm: 11.4,
+      pressure_psi: 1100,
+      pressure_bar: 76,
+      power_source: 'belt',
       voltage: '230V',
-      price: 3950.00,
       active: true,
       sort_order: 7,
-      image_url: '/assets/products/216ax4.png' // Fallback to compatible AX4 product image
+      primary_image_url: '/assets/products/216ax4.png'
     },
     {
       name: 'Alkota 3305XD4',
-      model_code: '3305XD4',
       slug: 'alkota-3305xd4',
       tagline: 'Premium direct drive gas power.',
       category: 'hot-water',
       series: 'XD4 Series',
-      gpm: 3.0,
-      psi: 3000,
-      drive: 'direct',
+      flow_rate_gpm: 3.0,
+      flow_rate_lpm: 11.4,
+      pressure_psi: 3000,
+      pressure_bar: 207,
+      power_source: 'direct',
       voltage: 'Gas Engine',
-      price: 4850.00,
       active: true,
       sort_order: 26,
-      image_url: '/assets/products/3305xd4.png' // Fallback to compatible XD4 product image
+      primary_image_url: '/assets/products/3305xd4.png'
     },
     {
       name: 'Alkota 3405XD4',
-      model_code: '3405XD4',
       slug: 'alkota-3405xd4',
       tagline: 'Extreme pressure direct drive.',
       category: 'hot-water',
       series: 'XD4 Series',
-      gpm: 3.5,
-      psi: 4000,
-      drive: 'direct',
+      flow_rate_gpm: 3.5,
+      flow_rate_lpm: 13.2,
+      pressure_psi: 4000,
+      pressure_bar: 276,
+      power_source: 'direct',
       voltage: 'Gas Engine',
-      price: 5250.00,
       active: true,
       sort_order: 27,
-      image_url: '/assets/products/3405xd4.png' // Fallback to compatible XD4 product image
+      primary_image_url: '/assets/products/3405xd4.png'
     }
   ];
 
   const results = [];
   for (const machine of machines) {
     const { data, error } = await supabaseAdmin
-      .from('machines')
+      .from('products')
       .upsert(machine, { onConflict: 'slug' })
       .select();
 

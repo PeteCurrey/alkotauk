@@ -14,12 +14,13 @@ interface MachineCategoryPageProps {
 export default async function MachineCategoryPage({ params }: MachineCategoryPageProps) {
   const resolvedParams = await params;
   const categorySlug = resolvedParams.category;
+  const dbCategory = categorySlug === 'parts-washers' ? 'parts-washer' : categorySlug;
   
-  // Fetch machines for this category from Supabase
+  // Fetch machines for this category from Supabase products table
   const { data } = await supabaseAdmin
-    .from('machines')
+    .from('products')
     .select('*')
-    .eq('category', categorySlug)
+    .eq('category', dbCategory)
     .eq('active', true)
     .order('sort_order');
     

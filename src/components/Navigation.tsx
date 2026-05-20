@@ -8,6 +8,8 @@ import CartIndicator from './CartIndicator';
 import { useSession } from 'next-auth/react';
 import Logo from './Logo';
 import { supabase } from '@/lib/supabase/client';
+import { resolveMachineImage } from '@/lib/images';
+
 
 interface NavLink {
   name: string;
@@ -41,11 +43,11 @@ export default function Navigation() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [navRef]);
 
-  // Fetch real machines from Supabase for the mega menu
+  // Fetch real products from Supabase for the mega menu
   useEffect(() => {
     async function fetchMachines() {
       const { data, error } = await supabase
-        .from('machines')
+        .from('products')
         .select('*')
         .eq('active', true)
         .order('sort_order', { ascending: true });
@@ -64,9 +66,8 @@ export default function Navigation() {
           const ser = m.series || 'Other';
           const key = `${cat}-${ser}`;
           if (!seriesMap.has(key)) {
-            // Ensure image URL is lowercase and points to local assets if remote is missing
-            const modelKey = m.model_code?.toLowerCase() || '420x4';
-            const imgPath = (m.image_url || `/assets/products/${modelKey}.png`).toLowerCase();
+            const modelCode = m.model_code || m.slug?.replace('alkota-', '').toUpperCase() || m.name;
+            const imgPath = resolveMachineImage(m.primary_image_url || m.image_url, modelCode, m.category);
             
             seriesMap.set(key, {
               category: cat,

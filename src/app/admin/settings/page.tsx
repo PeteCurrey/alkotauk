@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Globe, Lock, Megaphone } from 'lucide-react';
+import { Globe, Lock, Megaphone, Database } from 'lucide-react';
 
 export default function AdminSettingsPage() {
   return (
@@ -14,6 +14,7 @@ export default function AdminSettingsPage() {
           { icon: Globe, label: 'Site Settings', desc: 'Meta, contact info, social links, analytics', href: '/admin/settings/site' },
           { icon: Lock, label: 'Maintenance Mode', desc: 'Toggle maintenance screen and customise the message', href: '/admin/maintenance' },
           { icon: Megaphone, label: 'Banners', desc: 'Sitewide announcement strips', href: '/admin/banners' },
+          { icon: Database, label: 'Database Utilities', desc: 'Trigger migration script and database seeds', href: '/admin/settings/utilities' },
         ].map(({ icon: Icon, label, desc, href }) => (
           <Link
             key={href}

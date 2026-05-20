@@ -20,11 +20,13 @@ export default function MachineCard({ machine, index }: MachineCardProps) {
 
   const dealerPrice = isDealer ? calculateDealerPrice(machine.price, user.tier) : null;
 
-  // Specs from Supabase
-  const gpm = machine.gpm || 0;
-  const lpm = (gpm * 3.785).toFixed(1);
-  const psi = machine.psi || 0;
-  const bar = (psi / 14.5).toFixed(0);
+  // Specs from Supabase / Products
+  const gpm = machine.flow_rate_gpm !== undefined && machine.flow_rate_gpm !== null ? machine.flow_rate_gpm : (machine.gpm || 0);
+  const lpm = machine.flow_rate_lpm !== undefined && machine.flow_rate_lpm !== null ? machine.flow_rate_lpm : (gpm * 3.785).toFixed(1);
+  const psi = machine.pressure_psi || machine.psi || 0;
+  const bar = machine.pressure_bar || (psi / 14.5).toFixed(0);
+  const imageUrl = machine.primary_image_url || machine.image_url;
+  const modelCode = machine.model_code || machine.slug?.replace('alkota-', '').toUpperCase() || machine.name;
 
   return (
     <motion.div
@@ -53,13 +55,13 @@ export default function MachineCard({ machine, index }: MachineCardProps) {
       <div className="relative aspect-[16/10] w-full overflow-hidden bg-alkota-bg">
         <div className="absolute inset-0 bg-gradient-to-t from-white/40 to-transparent z-10" />
         <img
-          src={resolveMachineImage(machine.image_url, machine.model_code, machine.category)}
+          src={resolveMachineImage(imageUrl, modelCode, machine.category)}
           alt={machine.name}
           className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110 grayscale-[0.8] group-hover:grayscale-0"
         />
         <div className="absolute bottom-6 left-6 z-20">
           <span className="font-ibm-plex-mono text-[10px] font-bold uppercase tracking-[0.3em] text-alkota-orange">
-            {machine.model_code || machine.name}
+            {modelCode}
           </span>
         </div>
       </div>

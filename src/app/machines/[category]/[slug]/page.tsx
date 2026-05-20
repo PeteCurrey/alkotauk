@@ -26,7 +26,7 @@ export const dynamic = 'force-dynamic';
 
 async function getMachine(slug: string) {
   const { data } = await supabaseAdmin
-    .from('machines')
+    .from('products')
     .select('*')
     .eq('slug', slug)
     .single();
@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return generateSeo({
     title: `Alkota ${machine.name} | Industrial Specification`,
     description: machine.tagline || 'Industrial pressure washing equipment.',
-    image: machine.image_url || undefined,
+    image: machine.primary_image_url || machine.image_url || undefined,
   });
 }
 
@@ -65,7 +65,13 @@ export default async function MachineDetailPage({ params }: { params: Promise<{ 
   const hubspotPortalId = siteSettings?.hubspot_portal_id;
   const hubspotQuoteFormId = siteSettings?.hubspot_quote_form_id;
 
-  const imageUrl = resolveMachineImage(machine.image_url, machine.model_code, machine.category);
+  const gpm = machine.flow_rate_gpm !== undefined && machine.flow_rate_gpm !== null ? machine.flow_rate_gpm : (machine.gpm || 0);
+  const lpm = machine.flow_rate_lpm !== undefined && machine.flow_rate_lpm !== null ? machine.flow_rate_lpm : (gpm * 3.785).toFixed(1);
+  const psi = machine.pressure_psi || machine.psi || 0;
+  const bar = machine.pressure_bar || (psi / 14.5).toFixed(0);
+
+  const modelCode = machine.model_code || machine.slug?.replace('alkota-', '').toUpperCase() || machine.name;
+  const imageUrl = resolveMachineImage(machine.primary_image_url || machine.image_url, modelCode, machine.category);
 
   return (
     <main className="min-h-screen bg-alkota-bg pt-32 pb-0 overflow-x-hidden relative">
@@ -195,8 +201,8 @@ export default async function MachineDetailPage({ params }: { params: Promise<{ 
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-alkota-iron border border-alkota-iron">
             {[
-              { label: 'WATER FLOW', value: `${(machine.gpm * 3.785).toFixed(1)} LPM`, unit: 'Liters Per Minute', icon: Droplets },
-              { label: 'PRESSURE', value: `${(machine.psi / 14.5).toFixed(0)} BAR`, unit: 'Operational Pressure', icon: Gauge },
+              { label: 'WATER FLOW', value: `${lpm} LPM`, unit: 'Liters Per Minute', icon: Droplets },
+              { label: 'PRESSURE', value: `${bar} BAR`, unit: 'Operational Pressure', icon: Gauge },
               { label: 'TEMPERATURE', value: machine.category === 'hot-water' ? '98°C / 200°F' : 'Ambient', unit: 'Cleaning Temp', icon: Thermometer },
               { label: 'POWER', value: machine.voltage || 'Industrial', unit: 'Primary Power', icon: Zap }
             ].map((spec, i) => (

@@ -40,12 +40,18 @@ export default function DbUtilitiesPage() {
     setDbChecking(true);
     setDbHealth(null);
     try {
-      const res = await fetch('/api/admin/db-check');
+      const res = await fetch('/api/admin/db-check', { credentials: 'same-origin' });
       const data = await res.json();
+      
+      if (!res.ok || data.error) {
+        addLog(`DB Check ERROR: ${data.error || 'Server error'}`);
+        return;
+      }
+      
       setDbHealth(data);
       addLog(data.healthy
         ? 'DB Check: enquiries table is healthy — all columns present.'
-        : `DB Check: enquiries table is missing ${data.missing.length} column(s): ${data.missing.join(', ')}`
+        : `DB Check: enquiries table is missing ${data.missing?.length || 0} column(s): ${(data.missing || []).join(', ')}`
       );
     } catch (err: any) {
       addLog(`DB Check ERROR: ${err.message}`);
@@ -89,7 +95,7 @@ export default function DbUtilitiesPage() {
               <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest">
                 {dbHealth.healthy
                   ? 'All columns present — table is healthy'
-                  : `${dbHealth.missing.length} column(s) missing: ${dbHealth.missing.join(', ')}`}
+                  : `${dbHealth.missing?.length || 0} column(s) missing: ${(dbHealth.missing || []).join(', ')}`}
               </span>
             </div>
 

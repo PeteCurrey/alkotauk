@@ -17,9 +17,12 @@ export async function signToken(payload: Record<string, unknown>): Promise<strin
 
 export async function verifyToken(token: string): Promise<Record<string, unknown> | null> {
   try {
-    const { payload } = await jwtVerify(token, JWT_SECRET);
+    const { payload } = await jwtVerify(token, JWT_SECRET, {
+      clockTolerance: 60, // 60 seconds tolerance for clock skew between Edge and Node runtimes
+    });
     return payload as Record<string, unknown>;
-  } catch {
+  } catch (err) {
+    console.error('JWT Verification Failed:', err);
     return null;
   }
 }

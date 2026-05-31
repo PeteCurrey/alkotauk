@@ -1,85 +1,86 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyToken, COOKIE_NAME } from './lib/auth';
 
-// HARDCODED FALLBACKS (Use these if environment variables are missing)
+// HARDCODED FALLBACKS
 const FALLBACK_URL = 'https://xohftjaohhkwgxdnouoo.supabase.co';
-const FALLBACK_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhvaGZ0amFvaGhrd2d4ZG5vdW9vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDg2NzU5MywiZXhwIjoyMDkwNDQzNTkzfQ.65YGsr1ZbSgECaM0nUZ8-sJR7lezQPd7xWxwTDirZD4';
+const FALLBACK_KEY =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhvaGZ0amFvaGhrd2d4ZG5vdW9vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDg2NzU5MywiZXhwIjoyMDkwNDQzNTkzfQ.65YGsr1ZbSgECaM0nUZ8-sJR7lezQPd7xWxwTDirZD4';
 
-// Maintenance mode check logic (Direct fetch to bypass SDK issues in Edge)
 async function getMaintenanceMode(): Promise<boolean> {
-  const supabaseUrl = (process.env.NEXT_PUBLIC_SUPABASE_URL || FALLBACK_URL).trim().replace(/\/$/, '');
-  const serviceKey = (process.env.SUPABASE_SERVICE_ROLE_KEY || FALLBACK_KEY).trim();
-  const anonKey = (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '').trim();
+  const supabaseUrl = (
+    process.env.NEXT_PUBLIC_SUPABASE_URL || FALLBACK_URL
+  )
+    .trim()
+    .replace(/\/$/, '');
 
-  if (!supabaseUrl) return false;
+  // Prefer service role key (bypasses RLS), fall back to anon
+  const key = (
+    process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    FALLBACK_KEY
+  ).trim();
 
-  const keysToTry = [serviceKey, anonKey].filter(Boolean);
+  try {
+    // Filter directly to maintenance_mode row — faster + safer
+    const url = `${supabaseUrl}/rest/v1/site_settings?select=value&key=eq.maintenance_mode&limit=1`;
 
-  for (const key of keysToTry) {
-    try {
-      const baseUrl = supabaseUrl.includes('/rest/v1') ? supabaseUrl : `${supabaseUrl}/rest/v1`;
-      const url = `${baseUrl}/site_settings?select=key,value&t=${Date.now()}`;
-      
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'apiKey': key,
-          'Authorization': `Bearer ${key}`,
-          'Accept': 'application/json',
-          'Accept-Profile': 'public',
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Pragma': 'no-cache',
-          'Expires': '0'
-        },
-        cache: 'no-store'
-      });
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        // Supabase REST API requires lowercase 'apikey'
+        'apikey': key,
+        'Authorization': `Bearer ${key}`,
+        'Accept': 'application/json',
+        'Cache-Control': 'no-cache, no-store',
+        'Pragma': 'no-cache',
+      },
+      cache: 'no-store',
+    });
 
-      if (response.ok) {
-        const data = await response.json();
-        if (Array.isArray(data)) {
-          return data.some((row: any) => {
-            const isRelevantKey = ['maintenance_mode', 'site_maintenance', 'maintenance'].includes(row.key);
-            if (!isRelevantKey) return false;
-
-            const val = row.value;
-            if (val === true || val === 'true' || val === 1 || val === '1') return true;
-            if (typeof val === 'string' && (val.toLowerCase() === 'true' || val.toLowerCase() === 'on')) return true;
-            return false;
-          });
-        }
-      }
-    } catch (err) {
-      console.error('Middleware: Maintenance check failed', err);
+    if (!response.ok) {
+      console.error(
+        `Middleware: Supabase returned ${response.status} for maintenance check`
+      );
+      return false;
     }
+
+    const data = await response.json();
+
+    // data is an array of matching rows, e.g. [{ value: 'true' }]
+    if (Array.isArray(data) && data.length > 0) {
+      const val = data[0]?.value;
+      return val === 'true' || val === true || val === '1' || val === 1;
+    }
+
+    return false;
+  } catch (err) {
+    console.error('Middleware: getMaintenanceMode failed:', err);
+    return false;
   }
-
-  return false;
 }
-
-export const runtime = 'experimental-edge';
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // ── EXCLUSIONS ────────────────────────────────────────────────────────────
-  const isExcluded = 
-    pathname.startsWith('/admin') || 
-    pathname.startsWith('/api') || 
+  // ── EXCLUSIONS ─────────────────────────────────────────────────────────────
+  // Never run maintenance check on admin, API, the maintenance page itself,
+  // Next.js internals, or static assets.
+  const isExcluded =
+    pathname.startsWith('/admin') ||
+    pathname.startsWith('/api') ||
     pathname === '/maintenance' ||
     pathname.startsWith('/_next/') ||
-    pathname.includes('.') || 
+    pathname.startsWith('/static/') ||
+    pathname.includes('.') ||
     pathname === '/favicon.ico';
 
-  // ── ADMIN ROUTE PROTECTION ───────────────────────────────────────────────
+  // ── ADMIN ROUTE PROTECTION ─────────────────────────────────────────────────
   if (pathname.startsWith('/admin')) {
-    // Allow login page through without auth check
     if (pathname === '/admin/login') return NextResponse.next();
-    // Legacy login at /admin — allow through (it's the login form)
     if (pathname === '/admin') return NextResponse.next();
-    
+
     const token = req.cookies.get(COOKIE_NAME)?.value;
     if (!token) return NextResponse.redirect(new URL('/admin/login', req.url));
-    
+
     const payload = await verifyToken(token);
     if (!payload) {
       const response = NextResponse.redirect(new URL('/admin/login', req.url));
@@ -89,18 +90,25 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // ── MAINTENANCE MODE CHECK ────────────────────────────────────────────────
+  // ── MAINTENANCE MODE CHECK ─────────────────────────────────────────────────
   if (!isExcluded) {
-    const debugMode = req.nextUrl.searchParams.get('debugMaintenance') === 'true';
+    // Allow ?debugMaintenance=true to force the maintenance screen in dev
+    const debugMode =
+      req.nextUrl.searchParams.get('debugMaintenance') === 'true';
     const isMaintenance = debugMode || (await getMaintenanceMode());
-    
+
     if (isMaintenance) {
+      // Admins with a valid session can still browse the live site
       const token = req.cookies.get(COOKIE_NAME)?.value;
       const isAdmin = token ? !!(await verifyToken(token)) : false;
-      
+
       if (!isAdmin) {
-        const response = NextResponse.redirect(new URL('/maintenance', req.url));
-        response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+        const url = new URL('/maintenance', req.url);
+        const response = NextResponse.redirect(url);
+        response.headers.set(
+          'Cache-Control',
+          'no-store, no-cache, must-revalidate, max-age=0'
+        );
         response.headers.set('Pragma', 'no-cache');
         response.headers.set('Expires', '0');
         return response;
@@ -112,7 +120,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    '/((?!_next/static|_next/image|favicon.ico).*)',
-  ],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
 };

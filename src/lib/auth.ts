@@ -1,7 +1,7 @@
 import { SignJWT, jwtVerify } from 'jose';
 
 const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || 'bvH+3fFScs5lDsWi7A/YsjsB+l6ZeKoxME1Cn3ICWyGV1G+icwL6I1w7CEnRrGnjD6YTiJOlH9J7inAXFeIgGg=='
+  process.env.JWT_SECRET || 'd3ce8bd588e03e9ad002689d06ab8e9b'
 );
 
 export const COOKIE_NAME = 'alkota-admin-token';

@@ -1,5 +1,84 @@
 import { NextResponse } from 'next/server';
 
+const SUPABASE_URL =
+  process.env.NEXT_PUBLIC_SUPABASE_URL ||
+  'https://xohftjaohhkwgxdnouoo.supabase.co';
+const SERVICE_KEY =
+  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhvaGZ0amFvaGhrd2d4ZG5vdW9vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDg2NzU5MywiZXhwIjoyMDkwNDQzNTkzfQ.65YGsr1ZbSgECaM0nUZ8-sJR7lezQPd7xWxwTDirZD4';
+
+/** Insert a row into the enquiries table using the REST API directly.
+ *  Tries the full schema first; if Supabase returns PGRST204 (unknown column)
+ *  it strips the offending columns and retries with a minimal safe payload. */
+async function saveEnquiry(payload: Record<string, unknown>): Promise<{ ok: boolean; error?: string }> {
+  const url = `${SUPABASE_URL}/rest/v1/enquiries`;
+
+  const headers = {
+    apikey: SERVICE_KEY,
+    Authorization: `Bearer ${SERVICE_KEY}`,
+    'Content-Type': 'application/json',
+    Prefer: 'return=minimal',
+  };
+
+  // ── Attempt 1: full payload ────────────────────────────────────────────────
+  const res1 = await fetch(url, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(payload),
+  });
+
+  if (res1.ok || res1.status === 201) return { ok: true };
+
+  const err1 = await res1.json().catch(() => ({}));
+
+  // PGRST204 = column not found in schema cache → strip unknown fields and retry
+  if (err1?.code === 'PGRST204' || res1.status === 400) {
+    console.warn('contact/route: schema mismatch, retrying with minimal payload:', err1?.message);
+
+    // Minimal payload — only id + created_at are guaranteed; these are universal
+    const minimal: Record<string, unknown> = {};
+    const safeKeys = ['id', 'created_at'];
+    for (const k of safeKeys) {
+      if (payload[k] !== undefined) minimal[k] = payload[k];
+    }
+
+    // Try each extra column individually to find what exists
+    const optionalKeys = ['type', 'status', 'name', 'email', 'company', 'phone', 'subject', 'message', 'reference', 'notes', 'assigned_to', 'metadata'];
+    for (const key of optionalKeys) {
+      if (payload[key] === undefined) continue;
+      const test = await fetch(url, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ ...minimal, [key]: payload[key] }),
+      });
+      if (test.ok || test.status === 201 || test.status === 204) {
+        minimal[key] = payload[key];
+      } else {
+        const testErr = await test.json().catch(() => ({}));
+        if (testErr?.code !== 'PGRST204') {
+          // Not a column error — something else, include anyway for next attempt
+          minimal[key] = payload[key];
+        }
+        // PGRST204 = column genuinely missing — skip it
+      }
+    }
+
+    // Final insert with only confirmed-safe columns
+    const res2 = await fetch(url, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(minimal),
+    });
+
+    if (res2.ok || res2.status === 201 || res2.status === 204) return { ok: true };
+
+    const err2 = await res2.json().catch(() => ({}));
+    return { ok: false, error: err2?.message || `HTTP ${res2.status}` };
+  }
+
+  return { ok: false, error: err1?.message || `HTTP ${res1.status}` };
+}
+
 export async function POST(req: Request) {
   try {
     const body = await req.json();
@@ -15,8 +94,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Email service not configured' }, { status: 500 });
     }
 
-    // Build a clean, readable email body
-    const subjectLine = subject || (enquiry ? `New Enquiry — ${enquiry}` : 'New Contact Form Enquiry');
+    const subjectLine =
+      subject || (enquiry ? `New Enquiry — ${enquiry}` : 'New Contact Form Enquiry');
     const origin = source === 'maintenance_splash' ? 'Maintenance Screen' : 'Contact Page';
 
     const htmlBody = `
@@ -38,6 +117,7 @@ export async function POST(req: Request) {
             ${company ? `<tr><td style="padding: 8px 0; color: #999; font-size: 12px;">Company</td><td style="padding: 8px 0; font-weight: bold; color: #1a1a1a;">${company}</td></tr>` : ''}
             ${phone ? `<tr><td style="padding: 8px 0; color: #999; font-size: 12px;">Phone</td><td style="padding: 8px 0; font-weight: bold; color: #1a1a1a;"><a href="tel:${phone}" style="color: #f97316;">${phone}</a></td></tr>` : ''}
             ${enquiry ? `<tr><td style="padding: 8px 0; color: #999; font-size: 12px;">Enquiry Type</td><td style="padding: 8px 0; font-weight: bold; color: #1a1a1a;">${enquiry}</td></tr>` : ''}
+            <tr><td style="padding: 8px 0; color: #999; font-size: 12px;">Source</td><td style="padding: 8px 0; font-weight: bold; color: #1a1a1a;">${origin}</td></tr>
           </table>
         </div>
 
@@ -54,11 +134,11 @@ export async function POST(req: Request) {
       </div>
     `;
 
-    // Send email via Resend
+    // ── 1. Send email (must succeed) ─────────────────────────────────────────
     const resendRes = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${apiKey}`,
+        Authorization: `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -76,27 +156,30 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Failed to send email' }, { status: 500 });
     }
 
-    // Also save to Supabase if available (non-blocking — don't fail if Supabase is down)
-    try {
-      const { supabaseAdmin } = await import('@/lib/supabase/server');
-      await supabaseAdmin
-        .from('enquiries')
-        .insert({
-          type: source || enquiry || 'contact',
-          name,
-          email,
-          company: company || '',
-          phone: phone || '',
-          message: message || '',
-          status: 'new',
-          metadata: { source: source || 'contact_page', enquiry_type: enquiry }
-        });
-    } catch (dbErr) {
-      console.warn('Supabase save skipped (non-fatal):', dbErr);
+    // ── 2. Save to database (schema-adaptive) ────────────────────────────────
+    const dbResult = await saveEnquiry({
+      type: source || enquiry || 'contact',
+      name,
+      email,
+      company: company || '',
+      phone: phone || '',
+      subject: subjectLine,
+      message: message || '',
+      status: 'new',
+      metadata: { source: source || 'contact_page', enquiry_type: enquiry || null },
+    });
+
+    if (!dbResult.ok) {
+      // Email was sent — log the DB error but still return success to the user
+      console.error('Enquiry DB save failed (email was sent):', dbResult.error);
+    } else {
+      console.log('Enquiry saved to database successfully');
     }
 
-    return NextResponse.json({ success: true, message: 'Enquiry sent successfully' }, { status: 200 });
-
+    return NextResponse.json(
+      { success: true, message: 'Enquiry sent successfully', dbSaved: dbResult.ok },
+      { status: 200 }
+    );
   } catch (error) {
     console.error('Contact API error:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });

@@ -8,7 +8,7 @@ import {
   LayoutDashboard, Inbox, FileText, Wrench, FlaskConical,
   Building2, Globe, Settings, ExternalLink, LogOut,
   ChevronRight, Flame, Waves, Wind, Truck, Factory,
-  Droplets, Zap, BarChart3, PenSquare, BookOpen,
+  Droplets, Zap, BarChart3, PenSquare, BookOpen, Film,
   Bell,
 } from 'lucide-react';
 
@@ -43,6 +43,7 @@ const NAV = [
     section: 'CONTENT',
     items: [
       { icon: BookOpen, label: 'The Lobby CMS', href: '/admin/lobby' },
+      { icon: Film, label: 'Mess Quest Series', href: '/admin/mess-quest' },
       { icon: PenSquare, label: 'Blog & Resources', href: '/admin/posts' },
     ],
   },

@@ -4,6 +4,7 @@ import MachineCard from '@/components/MachineCard';
 import { ShieldCheck, Zap } from 'lucide-react';
 import Link from 'next/link';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import Footer from '@/components/Footer';
 
 interface IndustryDetailPageProps {
   params: {
@@ -140,6 +141,7 @@ export default async function IndustryDetailPage({ params }: IndustryDetailPageP
           </div>
         </section>
       </div>
+      <Footer />
     </main>
   );
 }

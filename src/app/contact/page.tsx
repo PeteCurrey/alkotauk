@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navigation from '@/components/Navigation';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import Footer from '@/components/Footer';
 import { Mail, Send, Loader2, CheckCircle2, AlertTriangle, ChevronRight } from 'lucide-react';
 
 function ContactFormInner() {
@@ -246,6 +247,9 @@ export default function ContactPage() {
             <ContactFormInner />
           </Suspense>
         </div>
+      </div>
+      <div className="mt-20">
+        <Footer />
       </div>
     </main>
   );

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Navigation from '@/components/Navigation';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
@@ -225,6 +226,7 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+      <Footer />
     </main>
   );
 }

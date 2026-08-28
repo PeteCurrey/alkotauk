@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
@@ -233,6 +234,7 @@ export default function TechnologyPage() {
           </Link>
         </div>
       </section>
+      <Footer />
     </main>
   );
 }

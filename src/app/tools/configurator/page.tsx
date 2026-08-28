@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 
 // ─── DATA ───────────────────────────────────────────────────────────────────
 
@@ -593,6 +594,9 @@ export default function ConfiguratorPage() {
             </div>
           </motion.div>
         )}
+      </div>
+      <div className="mt-20">
+        <Footer />
       </div>
     </main>
   );

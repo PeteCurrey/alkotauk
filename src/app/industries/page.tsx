@@ -7,6 +7,8 @@ import { motion } from 'framer-motion';
 import * as LucideIcons from 'lucide-react';
 import Breadcrumbs from '@/components/Breadcrumbs';
 
+import Footer from '@/components/Footer';
+
 import { useState, useEffect } from 'react';
 
 export default function IndustriesPage() {
@@ -17,7 +19,7 @@ export default function IndustriesPage() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-alkota-black pt-32">
+    <main className="min-h-screen bg-alkota-bg pt-32">
       <Navigation />
       
       <div className="mx-auto max-w-7xl px-6 pb-24">
@@ -35,7 +37,7 @@ export default function IndustriesPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="mb-6 text-5xl font-bold text-white md:text-7xl lg:text-8xl italic uppercase tracking-tighter"
+            className="mb-6 text-5xl font-bold text-alkota-black md:text-7xl lg:text-8xl italic uppercase tracking-tighter"
           >
             BUILT FOR <br />
             <span className="text-alkota-orange">YOUR WORLD.</span>
@@ -62,20 +64,20 @@ export default function IndustriesPage() {
               >
                 <Link 
                   href={`/industries/${industry.slug.current}`}
-                  className="group relative flex h-full flex-col justify-between border border-alkota-iron bg-alkota-steel/30 p-8 transition-all hover:bg-alkota-orange/5 hover:border-alkota-orange"
+                  className="group relative flex h-full flex-col justify-between border border-alkota-iron bg-white p-8 transition-all hover:border-alkota-orange shadow-sm"
                 >
                   <div>
-                    <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-sm bg-alkota-iron/50 text-alkota-orange transition-colors group-hover:bg-alkota-orange group-hover:text-white">
+                    <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-sm bg-alkota-bg text-alkota-orange transition-colors group-hover:bg-alkota-orange group-hover:text-white">
                       <IconComponent className="h-6 w-6" />
                     </div>
-                    <h3 className="mb-4 text-2xl font-bold text-white group-hover:text-alkota-orange transition-colors uppercase italic">
+                    <h3 className="mb-4 text-2xl font-bold text-alkota-black group-hover:text-alkota-orange transition-colors uppercase italic">
                       {industry.name}
                     </h3>
                     <p className="text-sm text-alkota-silver leading-relaxed">
                       {industry.description}
                     </p>
                   </div>
-                  <div className="mt-8 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-alkota-steel group-hover:text-white transition-colors">
+                  <div className="mt-8 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-alkota-black group-hover:text-alkota-orange transition-colors">
                     Explore Solutions
                     <LucideIcons.ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </div>
@@ -85,6 +87,7 @@ export default function IndustriesPage() {
           })}
         </div>
       </div>
+      <Footer />
     </main>
   );
 }

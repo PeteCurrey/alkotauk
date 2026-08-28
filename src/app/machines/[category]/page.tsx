@@ -5,6 +5,7 @@ import MachineCard from '@/components/MachineCard';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { getProducts, CANONICAL_CATEGORIES } from '@/lib/products';
+import Footer from '@/components/Footer';
 
 interface MachineCategoryPageProps {
   params: Promise<{
@@ -177,6 +178,7 @@ export default async function MachineCategoryPage({ params }: MachineCategoryPag
           </div>
         </div>
       </div>
+      <Footer />
     </main>
   );
 }

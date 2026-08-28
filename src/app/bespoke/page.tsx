@@ -2,6 +2,7 @@
 
 import Navigation from '@/components/Navigation';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import Footer from '@/components/Footer';
 import { motion } from 'framer-motion';
 import { ArrowRight, Settings, Factory, ShieldCheck, Zap, Truck } from 'lucide-react';
 import Link from 'next/link';
@@ -134,6 +135,7 @@ export default function BespokeBuildsPage() {
           </section>
         </div>
       </div>
+      <Footer />
     </main>
   );
 }

@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import Footer from '@/components/Footer';
 import { getProductBySlug, getProducts, CANONICAL_CATEGORIES } from '@/lib/products';
 import { 
   Droplets, 
@@ -515,6 +516,7 @@ export default async function MachineDetailPage({ params }: MachineDetailPagePro
           </div>
         </section>
       </div>
+      <Footer />
     </main>
   );
 }

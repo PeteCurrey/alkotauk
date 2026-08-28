@@ -1,4 +1,5 @@
 import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { BookOpen, Shield, Wrench, Settings, HelpCircle, GraduationCap, ClipboardList, Book } from 'lucide-react';
 
@@ -20,15 +21,15 @@ export default function SupportHubPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-alkota-black pt-32 pb-24 text-white">
+    <main className="min-h-screen bg-alkota-black pt-32 pb-0 text-white flex flex-col justify-between">
       <Navigation />
-      <div className="container mx-auto max-w-7xl px-6">
+      <div className="container mx-auto max-w-7xl px-6 flex-1 mb-24">
         <div className="mb-20 text-center">
           <h1 className="mb-6 text-5xl font-black uppercase italic tracking-tighter sm:text-7xl">
             ALKOTA UK <span className="text-alkota-orange">SUPPORT.</span>
           </h1>
           <p className="mx-auto max-w-2xl text-lg text-alkota-silver">
-            Direct access to manuals, service dispatch, and technical resources to keep your Platinum Standard equipment running flawlessly.
+            Direct access to manuals, service dispatch, and technical resources to keep your equipment running flawlessly.
           </p>
         </div>
 
@@ -54,6 +55,7 @@ export default function SupportHubPage() {
           ))}
         </div>
       </div>
+      <Footer />
     </main>
   );
 }

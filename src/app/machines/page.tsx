@@ -5,6 +5,8 @@ import MachineCard from '@/components/MachineCard';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
+import Footer from '@/components/Footer';
+
 export default async function MachinesPage() {
   // Fetch all machines from Supabase products table
   const { data } = await supabaseAdmin
@@ -146,6 +148,7 @@ export default async function MachinesPage() {
           </section>
         </div>
       </div>
+      <Footer />
     </main>
   );
 }

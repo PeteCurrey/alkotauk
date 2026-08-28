@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, ChevronLeft, Loader2, CheckCircle2, Factory, Car, Paintbrush, TestTube, Zap, Battery, Wind, AlertTriangle, Cloud, Target, Trash2, Box } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
+import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 
 type StepStatus = 'intro' | 'form' | 'generating' | 'results';
 
@@ -184,8 +186,9 @@ export default function MachineMatchPage() {
   };
 
   return (
-    <main className="min-h-screen bg-alkota-black pt-24 pb-20">
-      <div className="max-w-4xl mx-auto px-6">
+    <main className="min-h-screen bg-alkota-black pt-32 pb-0 text-white flex flex-col justify-between">
+      <Navigation />
+      <div className="max-w-4xl mx-auto px-6 flex-1 w-full">
         <AnimatePresence mode="wait">
           
           {/* STATE 1: INTRO */}
@@ -432,6 +435,9 @@ export default function MachineMatchPage() {
           )}
 
         </AnimatePresence>
+      </div>
+      <div className="mt-20">
+        <Footer />
       </div>
     </main>
   );

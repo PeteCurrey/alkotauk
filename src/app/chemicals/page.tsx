@@ -1,6 +1,7 @@
 import { supabaseAdmin } from '@/lib/supabase/server';
 import Navigation from '@/components/Navigation';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import Footer from '@/components/Footer';
 import { Beaker, ShieldCheck, ArrowRight, Droplets, Truck, Factory, Zap, Cloud, Trash2, Plane, Anchor, Settings, Sun, Home } from 'lucide-react';
 import Link from 'next/link';
 
@@ -110,6 +111,7 @@ export default async function ChemicalsHub() {
           </section>
         </div>
       </div>
+      <Footer />
     </main>
   );
 }

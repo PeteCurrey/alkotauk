@@ -4,11 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useSession } from 'next-auth/react';
 import Logo from './Logo';
-import { supabase } from '@/lib/supabase/client';
-import { resolveMachineImage } from '@/lib/images';
-import canonicalData from '../../scripts/data/alkota-canonical-catalogue.json';
 
 interface NavLink {
   name: string;
@@ -17,43 +13,12 @@ interface NavLink {
   data?: any[];
 }
 
-function mapMachinesToCategories(items: any[]) {
-  const seriesMap = new Map();
-  items.forEach(m => {
-    let cat = m.category || m.type || 'other';
-    // Normalize category slug for DB vs static array differences
-    if (cat === 'parts-washers') cat = 'parts-washer';
-    if (cat === 'wash-plants') cat = 'wash-plant';
-
-    const ser = m.series || 'Other';
-    const key = `${cat}-${ser}`;
-    if (!seriesMap.has(key)) {
-      const modelCode = m.model_code || m.id || m.slug?.replace('alkota-', '').toUpperCase() || m.name;
-      const imgPath = resolveMachineImage(m.primary_image_url || m.image_url, modelCode, cat);
-      const urlCategory = cat === 'parts-washer' ? 'parts-washers' : cat;
-
-      seriesMap.set(key, {
-        category: cat,
-        series: ser,
-        name: `${ser} Series`,
-        href: `/machines/${urlCategory}?series=${ser}`,
-        image: imgPath,
-        desc: `${cat.replace('-', ' ')} // Industrial Power`
-      });
-    }
-  });
-  return Array.from(seriesMap.values());
-}
-
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
-  const [sanityCategories, setSanityCategories] = useState<any[]>(() => mapMachinesToCategories(canonicalData));
   const navRef = useRef<HTMLDivElement>(null);
 
-  const { data: session } = useSession() as any;
-  
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
@@ -70,25 +35,20 @@ export default function Navigation() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [navRef]);
 
-  // Fetch real products from Supabase for the mega menu
-  useEffect(() => {
-    async function fetchMachines() {
-      const { data, error } = await supabase
-        .from('products')
-        .select('*')
-        .eq('active', true)
-        .order('sort_order', { ascending: true });
+  const machineCategories = [
+    { name: 'Hot Water Washers', href: '/machines/hot-water', image: '/assets/products/420x4.png', desc: 'Schedule 80 coils, up to 345 bar and 95°C.' },
+    { name: 'Cold Water Industrial', href: '/machines/cold-water', image: '/assets/products/4305xd4.png', desc: 'Heavy plunger pumps for site washdown.' },
+    { name: 'Dry Steam Cleaners', href: '/machines/steam', image: '/assets/products/steam-oil.png', desc: '140°C vapour sanitisation and food hygiene.' },
+    { name: 'Aqueous Parts Washers', href: '/machines/parts-washers', image: '/assets/products/stationary-gas-fired.png', desc: 'Automated turntable component degreasing.' },
+    { name: 'Bespoke Mobile Trailers', href: '/machines/trailers', image: '/assets/products/trailer-single.png', desc: 'Highway-certified turnkey wash plants.' },
+    { name: 'Water Recovery Skids', href: '/water-treatment', image: '/assets/products/ged-12v-skid.png', desc: 'Closed-loop Environment Agency compliance.' },
+  ];
 
-      if (error) {
-        console.error('Mega menu fetch failed:', error);
-      }
-
-      if (data && !error && data.length > 0) {
-        setSanityCategories(mapMachinesToCategories(data));
-      }
-    }
-    fetchMachines();
-  }, []);
+  const dealerCategories = [
+    { name: 'Find a Dealer', href: '/dealers', image: '/assets/industries/fleet.png', desc: 'Locate your regional authorised sales & service centre.' },
+    { name: 'Book a Demonstration', href: '/dealers/demo-request', image: '/assets/products/420x4.png', desc: 'On-site mobile performance verification on your yard.' },
+    { name: 'Become a Dealer', href: '/dealers/become-a-dealer', image: '/assets/industries/manufacturing.png', desc: 'Commercial distributor & service partner opportunities.' },
+  ];
 
   const buildCategories = [
     { name: 'Bespoke Trailers', href: '/machines/trailers', image: '/assets/products/trailer-single.png', desc: 'Custom mobile cleaning rigs built to order.' },
@@ -100,14 +60,8 @@ export default function Navigation() {
   const chemicalCategories = [
     { name: 'All Chemicals', href: '/chemicals', image: '/assets/products/industrial-pump.png', desc: 'The complete Hydrus formulated range.' },
     { name: 'Degreasers', href: '/chemicals/degreasers', image: '/assets/products/whirl-away-surface-cleaner.png', desc: 'Extreme grime and oil removal.' },
-    { name: 'Industrial', href: '/chemicals/industrial', image: '/assets/products/spray-nozzles.png', desc: 'Agricultural and heavy duty detergents.' },
-    { name: 'Parts Washers', href: '/chemicals/parts-washer', image: '/assets/products/jetter-series.png', desc: 'Aqueous, non-foaming, multi-metal.' },
-  ];
-
-  const dealerCategories = [
-    { name: 'Find a Dealer', href: '/dealers', image: '/assets/industries/fleet.png', desc: 'Locate your regional authorised sales & service centre.' },
-    { name: 'Book a Demonstration', href: '/dealers/demo-request', image: '/assets/products/420x4.png', desc: 'On-site mobile performance verification on your yard.' },
-    { name: 'Become a Dealer', href: '/dealers/become-a-dealer', image: '/assets/industries/manufacturing.png', desc: 'Commercial distributor & service partner opportunities.' },
+    { name: 'Industrial Detergents', href: '/chemicals/industrial', image: '/assets/products/spray-nozzles.png', desc: 'Agricultural and heavy duty formulations.' },
+    { name: 'Parts Washer Chemistry', href: '/chemicals/parts-washer', image: '/assets/products/jetter-series.png', desc: 'Aqueous, non-foaming, multi-metal safe.' },
   ];
 
   const resourceCategories = [
@@ -118,7 +72,7 @@ export default function Navigation() {
   ];
 
   const navLinks: NavLink[] = [
-    { name: 'Machines', href: '/machines', hasMega: true, data: sanityCategories.length > 0 ? sanityCategories : [] },
+    { name: 'Machines', href: '/machines', hasMega: true, data: machineCategories },
     { name: 'Dealers', href: '/dealers', hasMega: true, data: dealerCategories },
     { name: 'Bespoke', href: '/bespoke', hasMega: true, data: buildCategories },
     { name: 'Chemicals', href: '/chemicals', hasMega: true, data: chemicalCategories },
@@ -129,17 +83,17 @@ export default function Navigation() {
   return (
     <nav 
       ref={navRef}
-      className={`fixed top-0 z-50 w-full transition-all duration-500 ${
-        isScrolled ? 'bg-alkota-bg/90 py-3 shadow-xl border-b border-alkota-iron/50 backdrop-blur-md' : 'bg-transparent py-8'
+      className={`fixed top-0 z-50 w-full transition-all duration-300 ${
+        isScrolled ? 'bg-white/95 py-3 shadow-md border-b border-[#E0E0DE] backdrop-blur-md' : 'bg-transparent py-6'
       }`}
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 sm:px-12">
         <Link href="/" className="flex items-center group">
-          <Logo className={isScrolled ? "h-8" : "h-11"} />
+          <Logo className={isScrolled ? "h-8" : "h-9"} />
         </Link>
 
-        {/* Desktop Nav */}
-        <div className="hidden items-center gap-10 lg:flex">
+        {/* Desktop Nav Links */}
+        <div className="hidden items-center gap-8 lg:flex">
           {navLinks.map((link) => (
             <div 
               key={link.name} 
@@ -150,43 +104,49 @@ export default function Navigation() {
               {!link.hasMega ? (
                 <Link
                   href={link.href}
-                  className="flex items-center gap-1.5 text-[13px] font-bold uppercase tracking-[0.15em] transition-all text-alkota-black hover:text-alkota-orange no-underline"
+                  className="flex items-center gap-1 text-[12px] font-bold uppercase tracking-[0.18em] transition-colors text-alkota-black hover:text-alkota-orange no-underline"
                 >
                   {link.name}
                 </Link>
               ) : (
                 <button
-                  className="flex items-center gap-1.5 text-[13px] font-bold uppercase tracking-[0.15em] transition-all text-alkota-black hover:text-alkota-orange bg-transparent border-none cursor-pointer"
+                  onClick={() => setActiveMenu(activeMenu === link.name ? null : link.name)}
+                  className="flex items-center gap-1.5 text-[12px] font-bold uppercase tracking-[0.18em] transition-colors text-alkota-black hover:text-alkota-orange bg-transparent border-none cursor-pointer p-0"
                 >
-                  {link.name}
-                  {link.hasMega && <ChevronDown className={`h-3 w-3 transition-transform duration-300 ${activeMenu === link.name ? 'rotate-180' : ''}`} />}
+                  <span>{link.name}</span>
+                  <ChevronDown className={`h-3 w-3 transition-transform duration-200 ${activeMenu === link.name ? 'rotate-180 text-alkota-orange' : 'text-[#888]'}`} />
                 </button>
               )}
-              <span className={`absolute -bottom-1 left-0 h-[2px] bg-alkota-orange transition-all duration-300 ${activeMenu === link.name ? 'w-full' : 'w-0 group-hover/nav:w-full'}`} />
+              <span className={`absolute -bottom-0.5 left-0 h-[2px] bg-alkota-orange transition-all duration-200 ${activeMenu === link.name ? 'w-full' : 'w-0 group-hover/nav:w-full'}`} />
 
               <AnimatePresence>
                 {link.hasMega && activeMenu === link.name && (link.data?.length ?? 0) > 0 && (
                   <motion.div
-                    initial={{ opacity: 0, y: 10 }}
+                    initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 10 }}
-                    className="absolute left-1/2 -translate-x-1/2 top-[calc(100%+12px)] w-[900px] bg-white border border-alkota-iron shadow-2xl z-50 p-2"
+                    exit={{ opacity: 0, y: 8 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute left-1/2 -translate-x-1/2 top-[calc(100%+8px)] w-[880px] bg-white border border-[#D5D5D2] shadow-2xl z-50 p-6"
                   >
-                    <div className={`grid ${link.data?.length === 3 ? 'grid-cols-3' : 'grid-cols-4'} p-4 gap-4`}>
+                    <div className={`grid ${link.data?.length === 3 ? 'grid-cols-3' : link.data?.length === 6 ? 'grid-cols-3' : 'grid-cols-4'} gap-4`}>
                       {link.data?.map((cat: any) => (
                         <Link 
                           key={cat.name} 
                           href={cat.href}
                           onClick={() => setActiveMenu(null)}
-                          className="group/item flex flex-col bg-alkota-steel/30 border border-transparent p-4 transition-all hover:border-alkota-orange/50 no-underline"
+                          className="group/item flex flex-col bg-[#F7F7F5] border border-transparent p-4 transition-all hover:border-alkota-orange/40 hover:bg-white no-underline"
                         >
-                          <div className="aspect-video overflow-hidden mb-4 grayscale group-hover/item:grayscale-0 transition-all duration-500 bg-alkota-bg">
-                            <img src={cat.image} alt={cat.name} className="h-full w-full object-cover transition-transform duration-700 group-hover/item:scale-110" />
+                          <div className="aspect-[4/3] overflow-hidden mb-3 bg-[#EBEBE8] flex items-center justify-center p-2">
+                            <img
+                              src={cat.image}
+                              alt={cat.name}
+                              className="h-full w-full object-contain filter drop-shadow-sm transition-transform duration-500 group-hover/item:scale-105"
+                            />
                           </div>
-                          <h4 className="font-barlow-condensed text-lg font-bold uppercase tracking-tight text-alkota-black mb-1 group-hover/item:text-alkota-orange">
+                          <h4 className="font-barlow-condensed text-base font-bold uppercase tracking-tight text-alkota-black mb-1 group-hover/item:text-alkota-orange">
                             {cat.name}
                           </h4>
-                          <p className="text-[9px] text-alkota-silver uppercase tracking-wider leading-relaxed">
+                          <p className="font-inter text-[10px] text-[#777] leading-relaxed line-clamp-2">
                             {cat.desc}
                           </p>
                         </Link>
@@ -199,46 +159,59 @@ export default function Navigation() {
           ))}
         </div>
 
+        {/* Action CTAs */}
         <div className="flex items-center gap-3 sm:gap-4">
           <Link
             href="/lobby"
-            className="hidden md:inline-flex items-center gap-2 bg-alkota-black text-white px-4 py-2.5 text-[11px] font-black uppercase tracking-[0.2em] transition-all hover:bg-alkota-orange no-underline group shadow-sm"
+            className="hidden md:inline-flex items-center gap-2 bg-alkota-black text-white px-4 py-2 font-ibm-plex-mono text-[10px] font-bold uppercase tracking-[0.2em] transition-all hover:bg-alkota-orange no-underline group shadow-sm"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-alkota-orange group-hover:bg-white animate-pulse" />
             <span>The Lobby</span>
           </Link>
           <Link
             href="/tools/configurator"
-            className="hidden border border-alkota-orange px-5 py-2.5 text-[11px] font-black uppercase tracking-[0.2em] transition-all hover:bg-alkota-orange hover:text-white md:block text-alkota-black no-underline"
+            className="hidden sm:inline-flex border border-[#333] px-4 py-2 font-ibm-plex-mono text-[10px] font-bold uppercase tracking-[0.2em] transition-all hover:border-alkota-orange hover:text-alkota-orange text-alkota-black no-underline"
           >
             Configurator
           </Link>
-          <button className="lg:hidden text-alkota-black p-2" onClick={() => setMobileMenuOpen(!mobileMenuOpen)} aria-label="Toggle navigation menu">
-            {mobileMenuOpen ? <X className="h-7 w-7" /> : <Menu className="h-7 w-7" />}
+          <button
+            className="lg:hidden text-alkota-black p-2 cursor-pointer"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle navigation menu"
+          >
+            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Drawer */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 20 }}
-            className="fixed inset-0 z-50 bg-alkota-bg pt-24 px-8 lg:hidden overflow-y-auto"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="fixed inset-0 z-50 bg-[#F7F7F5] pt-20 px-6 sm:px-8 lg:hidden overflow-y-auto"
           >
-            <button className="absolute top-8 right-8 text-alkota-black" onClick={() => setMobileMenuOpen(false)}>
-              <X className="h-8 w-8" />
-            </button>
-            <div className="flex flex-col gap-8 pb-12">
+            <div className="flex items-center justify-between border-b border-[#DCDCD8] pb-4 mb-6">
+              <Logo className="h-8" />
+              <button
+                className="text-alkota-black p-2 cursor-pointer"
+                onClick={() => setMobileMenuOpen(false)}
+                aria-label="Close menu"
+              >
+                <X className="h-6 w-6" />
+              </button>
+            </div>
+
+            <div className="flex flex-col gap-6 pb-12">
               {navLinks.map((link) => (
-                <div key={link.name} className="flex flex-col">
+                <div key={link.name} className="flex flex-col border-b border-[#E5E5E2] pb-4">
                   <div className="flex items-center justify-between">
                     <Link
                       href={link.href}
                       onClick={() => setMobileMenuOpen(false)}
-                      className="font-barlow-condensed text-5xl font-black uppercase tracking-tighter text-alkota-black hover:text-alkota-orange no-underline"
+                      className="font-barlow-condensed text-3xl font-black uppercase tracking-tight text-alkota-black hover:text-alkota-orange no-underline"
                     >
                       {link.name}
                     </Link>
@@ -248,7 +221,7 @@ export default function Navigation() {
                         className="p-2 text-alkota-black bg-transparent border-none cursor-pointer"
                         aria-label={`Toggle ${link.name} submenu`}
                       >
-                        <ChevronDown className={`h-8 w-8 transition-transform duration-300 ${activeMenu === link.name ? 'rotate-180 text-alkota-orange' : ''}`} />
+                        <ChevronDown className={`h-5 w-5 transition-transform duration-200 ${activeMenu === link.name ? 'rotate-180 text-alkota-orange' : ''}`} />
                       </button>
                     )}
                   </div>
@@ -258,14 +231,14 @@ export default function Navigation() {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="flex flex-col gap-4 pl-6 pt-4 border-l-2 border-alkota-orange/30 overflow-hidden"
+                        className="flex flex-col gap-3 pl-4 pt-3 mt-2 border-l-2 border-alkota-orange overflow-hidden"
                       >
                         {link.data.map((sub: any) => (
                           <Link
                             key={sub.name}
                             href={sub.href}
                             onClick={() => setMobileMenuOpen(false)}
-                            className="font-barlow-condensed text-2xl font-bold uppercase tracking-tight text-alkota-black/70 hover:text-alkota-orange no-underline py-1"
+                            className="font-inter text-sm font-semibold text-[#555] hover:text-alkota-orange no-underline py-1"
                           >
                             {sub.name}
                           </Link>
@@ -275,6 +248,23 @@ export default function Navigation() {
                   </AnimatePresence>
                 </div>
               ))}
+
+              <div className="pt-4 flex flex-col gap-3">
+                <Link
+                  href="/lobby"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full text-center bg-alkota-black text-white py-3.5 font-ibm-plex-mono text-xs font-bold uppercase tracking-[0.2em] no-underline"
+                >
+                  Enter The Lobby
+                </Link>
+                <Link
+                  href="/tools/configurator"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full text-center border border-[#333] bg-white text-alkota-black py-3.5 font-ibm-plex-mono text-xs font-bold uppercase tracking-[0.2em] no-underline"
+                >
+                  Build Configurator
+                </Link>
+              </div>
             </div>
           </motion.div>
         )}

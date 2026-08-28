@@ -80,16 +80,20 @@ export default function Navigation() {
     { name: 'Contact', href: '/contact', hasMega: false },
   ];
 
+  const textColorClass = isScrolled ? 'text-alkota-black hover:text-alkota-orange' : 'text-white hover:text-alkota-orange';
+
   return (
     <nav 
       ref={navRef}
       className={`fixed top-0 z-50 w-full transition-all duration-300 ${
-        isScrolled ? 'bg-white/95 py-3 shadow-md border-b border-[#E0E0DE] backdrop-blur-md' : 'bg-transparent py-6'
+        isScrolled 
+          ? 'bg-white/95 py-3 shadow-md border-b border-[#E0E0DE] backdrop-blur-md text-alkota-black' 
+          : 'bg-gradient-to-b from-black/85 via-black/40 to-transparent py-6 text-white'
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 sm:px-12">
         <Link href="/" className="flex items-center group">
-          <Logo className={isScrolled ? "h-8" : "h-9"} />
+          <Logo className={`${isScrolled ? "h-8 text-alkota-black" : "h-9 text-white"} transition-colors duration-300`} />
         </Link>
 
         {/* Desktop Nav Links */}
@@ -104,17 +108,17 @@ export default function Navigation() {
               {!link.hasMega ? (
                 <Link
                   href={link.href}
-                  className="flex items-center gap-1 text-[12px] font-bold uppercase tracking-[0.18em] transition-colors text-alkota-black hover:text-alkota-orange no-underline"
+                  className={`flex items-center gap-1 text-[12px] font-bold uppercase tracking-[0.18em] transition-colors no-underline ${textColorClass}`}
                 >
                   {link.name}
                 </Link>
               ) : (
                 <button
                   onClick={() => setActiveMenu(activeMenu === link.name ? null : link.name)}
-                  className="flex items-center gap-1.5 text-[12px] font-bold uppercase tracking-[0.18em] transition-colors text-alkota-black hover:text-alkota-orange bg-transparent border-none cursor-pointer p-0"
+                  className={`flex items-center gap-1.5 text-[12px] font-bold uppercase tracking-[0.18em] transition-colors bg-transparent border-none cursor-pointer p-0 ${textColorClass}`}
                 >
                   <span>{link.name}</span>
-                  <ChevronDown className={`h-3 w-3 transition-transform duration-200 ${activeMenu === link.name ? 'rotate-180 text-alkota-orange' : 'text-[#888]'}`} />
+                  <ChevronDown className={`h-3 w-3 transition-transform duration-200 ${activeMenu === link.name ? 'rotate-180 text-alkota-orange' : isScrolled ? 'text-[#888]' : 'text-white/70'}`} />
                 </button>
               )}
               <span className={`absolute -bottom-0.5 left-0 h-[2px] bg-alkota-orange transition-all duration-200 ${activeMenu === link.name ? 'w-full' : 'w-0 group-hover/nav:w-full'}`} />
@@ -126,7 +130,7 @@ export default function Navigation() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 8 }}
                     transition={{ duration: 0.15 }}
-                    className="absolute left-1/2 -translate-x-1/2 top-[calc(100%+8px)] w-[880px] bg-white border border-[#D5D5D2] shadow-2xl z-50 p-6"
+                    className="absolute left-1/2 -translate-x-1/2 top-[calc(100%+8px)] w-[880px] bg-white border border-[#D5D5D2] shadow-2xl z-50 p-6 text-alkota-black"
                   >
                     <div className={`grid ${link.data?.length === 3 ? 'grid-cols-3' : link.data?.length === 6 ? 'grid-cols-3' : 'grid-cols-4'} gap-4`}>
                       {link.data?.map((cat: any) => (
@@ -134,7 +138,7 @@ export default function Navigation() {
                           key={cat.name} 
                           href={cat.href}
                           onClick={() => setActiveMenu(null)}
-                          className="group/item flex flex-col bg-[#F7F7F5] border border-transparent p-4 transition-all hover:border-alkota-orange/40 hover:bg-white no-underline"
+                          className="group/item flex flex-col bg-[#F7F7F5] border border-transparent p-4 transition-all hover:border-alkota-orange/40 hover:bg-white no-underline text-alkota-black"
                         >
                           <div className="aspect-[4/3] overflow-hidden mb-3 bg-[#EBEBE8] flex items-center justify-center p-2">
                             <img
@@ -163,19 +167,23 @@ export default function Navigation() {
         <div className="flex items-center gap-3 sm:gap-4">
           <Link
             href="/lobby"
-            className="hidden md:inline-flex items-center gap-2 bg-alkota-black text-white px-4 py-2 font-ibm-plex-mono text-[10px] font-bold uppercase tracking-[0.2em] transition-all hover:bg-alkota-orange no-underline group shadow-sm"
+            className="hidden md:inline-flex items-center gap-2 bg-black text-white px-4 py-2 font-ibm-plex-mono text-[10px] font-bold uppercase tracking-[0.2em] transition-all hover:bg-alkota-orange no-underline group shadow-sm border border-white/20"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-alkota-orange group-hover:bg-white animate-pulse" />
             <span>The Lobby</span>
           </Link>
           <Link
             href="/tools/configurator"
-            className="hidden sm:inline-flex border border-[#333] px-4 py-2 font-ibm-plex-mono text-[10px] font-bold uppercase tracking-[0.2em] transition-all hover:border-alkota-orange hover:text-alkota-orange text-alkota-black no-underline"
+            className={`hidden sm:inline-flex px-4 py-2 font-ibm-plex-mono text-[10px] font-bold uppercase tracking-[0.2em] transition-all no-underline ${
+              isScrolled 
+                ? 'border border-[#333] text-alkota-black hover:border-alkota-orange hover:text-alkota-orange' 
+                : 'border border-white/60 bg-black/40 backdrop-blur-sm text-white hover:border-white hover:bg-white hover:text-black'
+            }`}
           >
             Configurator
           </Link>
           <button
-            className="lg:hidden text-alkota-black p-2 cursor-pointer"
+            className={`${isScrolled ? 'text-alkota-black' : 'text-white'} lg:hidden p-2 cursor-pointer transition-colors`}
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle navigation menu"
           >
@@ -191,12 +199,12 @@ export default function Navigation() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="fixed inset-0 z-50 bg-[#F7F7F5] pt-20 px-6 sm:px-8 lg:hidden overflow-y-auto"
+            className="fixed inset-0 z-50 bg-[#121210] pt-20 px-6 sm:px-8 lg:hidden overflow-y-auto text-white"
           >
-            <div className="flex items-center justify-between border-b border-[#DCDCD8] pb-4 mb-6">
-              <Logo className="h-8" />
+            <div className="flex items-center justify-between border-b border-white/15 pb-4 mb-6">
+              <Logo className="h-8 text-white" />
               <button
-                className="text-alkota-black p-2 cursor-pointer"
+                className="text-white p-2 cursor-pointer"
                 onClick={() => setMobileMenuOpen(false)}
                 aria-label="Close menu"
               >
@@ -206,19 +214,19 @@ export default function Navigation() {
 
             <div className="flex flex-col gap-6 pb-12">
               {navLinks.map((link) => (
-                <div key={link.name} className="flex flex-col border-b border-[#E5E5E2] pb-4">
+                <div key={link.name} className="flex flex-col border-b border-white/10 pb-4">
                   <div className="flex items-center justify-between">
                     <Link
                       href={link.href}
                       onClick={() => setMobileMenuOpen(false)}
-                      className="font-barlow-condensed text-3xl font-black uppercase tracking-tight text-alkota-black hover:text-alkota-orange no-underline"
+                      className="font-barlow-condensed text-3xl font-black uppercase tracking-tight text-white hover:text-alkota-orange no-underline"
                     >
                       {link.name}
                     </Link>
                     {link.hasMega && (
                       <button
                         onClick={() => setActiveMenu(activeMenu === link.name ? null : link.name)}
-                        className="p-2 text-alkota-black bg-transparent border-none cursor-pointer"
+                        className="p-2 text-white bg-transparent border-none cursor-pointer"
                         aria-label={`Toggle ${link.name} submenu`}
                       >
                         <ChevronDown className={`h-5 w-5 transition-transform duration-200 ${activeMenu === link.name ? 'rotate-180 text-alkota-orange' : ''}`} />
@@ -238,7 +246,7 @@ export default function Navigation() {
                             key={sub.name}
                             href={sub.href}
                             onClick={() => setMobileMenuOpen(false)}
-                            className="font-inter text-sm font-semibold text-[#555] hover:text-alkota-orange no-underline py-1"
+                            className="font-inter text-sm font-semibold text-[#ccc] hover:text-alkota-orange no-underline py-1"
                           >
                             {sub.name}
                           </Link>
@@ -253,14 +261,14 @@ export default function Navigation() {
                 <Link
                   href="/lobby"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center bg-alkota-black text-white py-3.5 font-ibm-plex-mono text-xs font-bold uppercase tracking-[0.2em] no-underline"
+                  className="w-full text-center bg-alkota-orange text-white py-3.5 font-ibm-plex-mono text-xs font-bold uppercase tracking-[0.2em] no-underline shadow-lg"
                 >
                   Enter The Lobby
                 </Link>
                 <Link
                   href="/tools/configurator"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center border border-[#333] bg-white text-alkota-black py-3.5 font-ibm-plex-mono text-xs font-bold uppercase tracking-[0.2em] no-underline"
+                  className="w-full text-center border border-white/30 bg-black/60 text-white py-3.5 font-ibm-plex-mono text-xs font-bold uppercase tracking-[0.2em] no-underline"
                 >
                   Build Configurator
                 </Link>

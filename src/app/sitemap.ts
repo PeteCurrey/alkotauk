@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
 import { supabaseAdmin } from '@/lib/supabase/server';
+import { getLobbyArticles } from '@/lib/lobby';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://alkota.co.uk';
@@ -15,11 +16,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .select('slug, updated_at')
     .eq('active', true);
 
+  const lobbyArticles = await getLobbyArticles();
+
   const machineUrls = (machines || []).map((m: any) => ({
     url: `${baseUrl}/machines/${m.category}/${m.slug}`,
     lastModified: new Date(m.updated_at || new Date()),
     changeFrequency: 'weekly' as const,
     priority: 0.8,
+  }));
+
+  const lobbyUrls = lobbyArticles.map((a) => ({
+    url: `${baseUrl}/lobby/${a.category_slug}/${a.slug}`,
+    lastModified: new Date(a.published_at || new Date()),
+    changeFrequency: 'monthly' as const,
+    priority: 0.85,
   }));
 
   const categoryUrls = ['hot-water', 'cold-water', 'parts-washers', 'water-treatment'].map(cat => ({
@@ -42,6 +52,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 1,
+    },
+    {
+      url: `${baseUrl}/lobby`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
     },
     {
       url: `${baseUrl}/machines`,
@@ -76,5 +92,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...categoryUrls,
     ...machineUrls,
     ...industryUrls,
+    ...lobbyUrls,
   ];
 }

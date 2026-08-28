@@ -106,15 +106,17 @@ export default function Navigation() {
   ];
 
   const resourceCategories = [
-    { name: 'Mess Quest', href: '/mess-quest', image: '/assets/industries/construction.png', desc: 'Interactive cleaning challenges and extreme grime removal.' },
-    { name: 'About', href: '/about', image: '/assets/industries/manufacturing.png', desc: 'Our heritage, master craftsmanship, and industrial power.' },
-    { name: 'Support', href: '/support', image: '/assets/products/whirl-away-surface-cleaner.png', desc: 'Technical documentation, service, and expert assistance.' },
+    { name: 'The Lobby', href: '/lobby', image: '/assets/industries/manufacturing.png', desc: 'Engineering intelligence, whitepapers & UK compliance.' },
+    { name: 'Machine Matcher', href: '/tools/machine-match', image: '/assets/industries/construction.png', desc: 'Interactive cleaning requirements and equipment selector.' },
+    { name: 'About Alkota', href: '/about', image: '/assets/industries/manufacturing.png', desc: 'Our heritage, master craftsmanship, and industrial power.' },
+    { name: 'Support & Docs', href: '/support', image: '/assets/products/whirl-away-surface-cleaner.png', desc: 'Technical documentation, service, and expert assistance.' },
   ];
 
   const navLinks: NavLink[] = [
     { name: 'Machines', href: '/machines', hasMega: true, data: sanityCategories.length > 0 ? sanityCategories : [] },
     { name: 'Bespoke Builds', href: '/bespoke', hasMega: true, data: buildCategories },
     { name: 'Chemicals', href: '/chemicals', hasMega: true, data: chemicalCategories },
+    { name: 'The Lobby', href: '/lobby', hasMega: false },
     { name: 'Resources', href: '/resources', hasMega: true, data: resourceCategories },
     { name: 'Contact', href: '/contact', hasMega: false },
   ];

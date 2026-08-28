@@ -42,7 +42,8 @@ const NAV = [
   {
     section: 'CONTENT',
     items: [
-      { icon: BookOpen, label: 'Blog & Resources', href: '/admin/posts' },
+      { icon: BookOpen, label: 'The Lobby CMS', href: '/admin/lobby' },
+      { icon: PenSquare, label: 'Blog & Resources', href: '/admin/posts' },
     ],
   },
   {

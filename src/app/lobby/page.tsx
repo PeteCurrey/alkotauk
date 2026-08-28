@@ -17,7 +17,11 @@ import {
   BarChart3,
   ExternalLink,
   ChevronRight,
+  ChevronDown,
   Sparkles,
+  ArrowUpRight,
+  Layers,
+  CheckCircle2,
 } from 'lucide-react';
 
 export const revalidate = 3600; // 1 hour ISR
@@ -34,64 +38,129 @@ export default async function LobbyHubPage() {
 
   return (
     <div className="relative pb-24">
-      {/* ─── MASTHEAD HERO SECTION ────────────────────────────────────────── */}
-      <section className="relative border-b border-[#1F1F1F] bg-gradient-to-b from-[#111111] to-[#0A0A0A] px-6 pt-12 pb-16 sm:px-12 lg:pt-16 lg:pb-20">
-        <div className="mx-auto max-w-7xl">
+      {/* ─── FULL-SCREEN CINEMATIC MASTHEAD HERO SECTION ─────────────────────── */}
+      <section className="relative min-h-[calc(100vh-74px)] flex flex-col justify-between border-b border-[#222] bg-gradient-to-b from-[#0F0F0F] via-[#0A0A0A] to-[#050505] px-6 py-12 sm:px-12 lg:py-16 overflow-hidden">
+        {/* Ambient background grid lines */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#161616_1px,transparent_1px),linear-gradient(to_bottom,#161616_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_40%,#000_70%,transparent_100%)] opacity-40 pointer-events-none" />
+
+        <div className="relative z-10 mx-auto max-w-7xl w-full">
           {/* Top Label */}
-          <div className="flex items-center gap-3 mb-6">
-            <span className="h-[2px] w-8 bg-[#FF6900]" />
-            <span className="font-ibm-plex-mono text-[10px] font-bold uppercase tracking-[0.3em] text-[#FF6900]">
-              ALKOTA UK // INDUSTRY INTELLIGENCE & ENGINEERING PLATFORM
+          <div className="flex items-center gap-3 mb-8">
+            <span className="h-[2px] w-10 bg-[#FF6900]" />
+            <span className="font-ibm-plex-mono text-[10px] font-bold uppercase tracking-[0.35em] text-[#FF6900]">
+              ALKOTA UK // INDUSTRY AUTHORITY & ENGINEERING REPOSITORY
             </span>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-end">
             <div className="lg:col-span-8">
-              <h1 className="font-barlow-condensed text-5xl sm:text-7xl lg:text-8xl font-black uppercase italic tracking-tight text-white leading-[0.88]">
+              <h1 className="font-barlow-condensed text-6xl sm:text-8xl lg:text-9xl font-black uppercase italic tracking-tight text-white leading-[0.84]">
                 THE LOBBY.
               </h1>
-              <p className="mt-4 font-inter text-base sm:text-lg text-[#aaa] max-w-2xl leading-relaxed">
-                Technical teardowns, environmental compliance briefings, and thermal fluid mechanics for industrial cleaning specifiers, plant engineers, and fleet directors.
+              <p className="mt-6 font-inter text-base sm:text-xl text-[#ccc] max-w-2xl leading-relaxed">
+                The authoritative engineering destination for high-temperature fluid dynamics, Schedule 80 coil metallurgy, UK wash bay environmental regulations, and heavy industrial plant specification.
               </p>
+
+              {/* Action Links */}
+              <div className="mt-8 flex flex-wrap items-center gap-4">
+                <a
+                  href="#featured"
+                  className="inline-flex items-center gap-2 bg-[#FF6900] px-6 py-3.5 font-ibm-plex-mono text-xs font-bold uppercase tracking-widest text-white transition-all hover:bg-white hover:text-black"
+                >
+                  <span>Explore Featured Research</span>
+                  <ArrowRight className="h-4 w-4" />
+                </a>
+                <Link
+                  href="/machines"
+                  className="inline-flex items-center gap-2 border border-[#333] bg-[#111] px-6 py-3.5 font-ibm-plex-mono text-xs uppercase tracking-widest text-[#ccc] transition-all hover:border-white hover:text-white"
+                >
+                  <span>Commercial Catalogue</span>
+                  <ArrowUpRight className="h-4 w-4 text-[#FF6900]" />
+                </Link>
+              </div>
             </div>
 
             {/* Quick Stats / Scope */}
-            <div className="lg:col-span-4 border-l border-[#222] pl-6 hidden lg:block">
-              <p className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#666] mb-3">
-                // ARCHIVE STATUS
+            <div className="lg:col-span-4 border-l border-[#222] pl-8 hidden lg:block">
+              <p className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#666] mb-4">
+                // ARCHIVE SPECIFICATION
               </p>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <span className="font-barlow-condensed text-3xl font-black text-white">
-                    {articles.length}
-                  </span>
-                  <p className="font-ibm-plex-mono text-[9px] text-[#888] uppercase">
-                    Research Papers
-                  </p>
+              <div className="space-y-4 font-ibm-plex-mono text-xs text-[#aaa]">
+                <div className="flex items-center justify-between border-b border-[#1A1A1A] pb-2">
+                  <span className="text-[#666]">AUTHORITY:</span>
+                  <span className="text-white font-bold">Alkota Engineering UK</span>
                 </div>
-                <div>
-                  <span className="font-barlow-condensed text-3xl font-black text-[#FF6900]">
-                    100%
-                  </span>
-                  <p className="font-ibm-plex-mono text-[9px] text-[#888] uppercase">
-                    UK Regulatory Vetted
-                  </p>
+                <div className="flex items-center justify-between border-b border-[#1A1A1A] pb-2">
+                  <span className="text-[#666]">COIL STANDARD:</span>
+                  <span className="text-[#FF6900] font-bold">ASTM A53 Schedule 80</span>
+                </div>
+                <div className="flex items-center justify-between border-b border-[#1A1A1A] pb-2">
+                  <span className="text-[#666]">REGULATORY FOCUS:</span>
+                  <span className="text-white font-bold">EA PPG3 & BS EN 858</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-[#666]">MACHINE MODELS:</span>
+                  <span className="text-white font-bold">127 UK Documented</span>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Lower Hero: Category Ribbon & Scroll Down Prompt */}
+        <div className="relative z-10 mx-auto max-w-7xl w-full pt-12 mt-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 border-t border-[#1F1F1F] pt-8">
+            {categories.map((cat) => {
+              const Icon =
+                cat.icon_name === 'Cpu'
+                  ? Cpu
+                  : cat.icon_name === 'ShieldCheck'
+                  ? ShieldCheck
+                  : cat.icon_name === 'Flame'
+                  ? Flame
+                  : BarChart3;
+              return (
+                <a
+                  key={cat.slug}
+                  href={`#${cat.slug}`}
+                  className="group flex items-center gap-3 border border-[#222] bg-[#0C0C0C]/80 p-4 hover:border-[#FF6900] transition-colors"
+                >
+                  <Icon className="h-5 w-5 text-[#FF6900] shrink-0 transition-transform group-hover:scale-110" />
+                  <div className="overflow-hidden">
+                    <p className="font-ibm-plex-mono text-[8px] font-bold uppercase tracking-wider text-[#666]">
+                      {cat.badge_label || 'DISCIPLINE'}
+                    </p>
+                    <p className="font-barlow-condensed text-base font-bold uppercase text-white truncate group-hover:text-[#FF6900] transition-colors">
+                      {cat.name}
+                    </p>
+                  </div>
+                </a>
+              );
+            })}
+          </div>
+
+          <div className="mt-8 flex items-center justify-between text-[9px] font-ibm-plex-mono text-[#555]">
+            <span>// CONTINUOUS INDUSTRIAL KNOWLEDGE FEED</span>
+            <a
+              href="#featured"
+              className="flex items-center gap-1.5 text-[#888] hover:text-[#FF6900] transition-colors"
+            >
+              <span>Scroll to Papers</span>
+              <ChevronDown className="h-3 w-3 animate-bounce" />
+            </a>
           </div>
         </div>
       </section>
 
       {/* ─── LEAD STORY SPOTLIGHT (HERO ARTICLE) ─────────────────────────── */}
       {featuredArticle && (
-        <section className="border-b border-[#1F1F1F] px-6 py-12 sm:px-12 lg:py-16">
+        <section id="featured" className="border-b border-[#1F1F1F] px-6 py-16 sm:px-12 lg:py-20">
           <div className="mx-auto max-w-7xl">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-2">
                 <span className="h-2 w-2 rounded-full bg-[#FF6900]" />
                 <span className="font-ibm-plex-mono text-[10px] font-bold uppercase tracking-widest text-white">
-                  FEATURED INVESTIGATION
+                  LEAD TECHNICAL INVESTIGATION
                 </span>
               </div>
               <span className="font-ibm-plex-mono text-[10px] text-[#666] uppercase tracking-wider">
@@ -186,7 +255,7 @@ export default async function LobbyHubPage() {
       )}
 
       {/* ─── CATEGORY HUBS & ARTICLES GRID ──────────────────────────────── */}
-      <section className="px-6 py-12 sm:px-12 lg:py-16">
+      <section className="px-6 py-16 sm:px-12 lg:py-20">
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between border-b border-[#222] pb-6 mb-12 gap-4">
             <div>
@@ -199,13 +268,13 @@ export default async function LobbyHubPage() {
             </div>
             <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0">
               {categories.map((cat) => (
-                <Link
+                <a
                   key={cat.slug}
                   href={`#${cat.slug}`}
                   className="whitespace-nowrap border border-[#262626] bg-[#111] px-3 py-1.5 text-[10px] font-ibm-plex-mono uppercase tracking-wider text-[#999] hover:border-[#FF6900] hover:text-white transition-colors"
                 >
                   {cat.name}
-                </Link>
+                </a>
               ))}
             </div>
           </div>

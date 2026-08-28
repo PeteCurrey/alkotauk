@@ -194,10 +194,17 @@ export default function Navigation() {
           ))}
         </div>
 
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-3 sm:gap-4">
+          <Link
+            href="/lobby"
+            className="hidden md:inline-flex items-center gap-2 bg-alkota-black text-white px-4 py-2.5 text-[11px] font-black uppercase tracking-[0.2em] transition-all hover:bg-alkota-orange no-underline group shadow-sm"
+          >
+            <span className="h-1.5 w-1.5 rounded-full bg-alkota-orange group-hover:bg-white animate-pulse" />
+            <span>The Lobby</span>
+          </Link>
           <Link
             href="/tools/configurator"
-            className={`hidden border border-alkota-orange px-6 py-2.5 text-[11px] font-black uppercase tracking-[0.2em] transition-all hover:bg-alkota-orange hover:text-white md:block text-alkota-black no-underline`}
+            className="hidden border border-alkota-orange px-5 py-2.5 text-[11px] font-black uppercase tracking-[0.2em] transition-all hover:bg-alkota-orange hover:text-white md:block text-alkota-black no-underline"
           >
             Configurator
           </Link>

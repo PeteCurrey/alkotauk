@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Search, ArrowUpRight, BookOpen, Layers, ShieldCheck, Cpu, Flame, BarChart3, Menu, X } from 'lucide-react';
+import { Search, ArrowUpRight, BookOpen, Layers, ShieldCheck, Cpu, Flame, BarChart3, Menu, X, ArrowLeft } from 'lucide-react';
 
 const CATEGORIES = [
   { name: 'Engineering & Metallurgy', slug: 'engineering-design', icon: Cpu },
@@ -32,6 +32,14 @@ export default function LobbyHeader() {
             </span>
           </div>
           <div className="flex items-center gap-4">
+            <Link
+              href="/"
+              className="group flex items-center gap-1 uppercase tracking-widest text-[#bbb] transition-colors hover:text-[#FF6900]"
+            >
+              <ArrowLeft className="h-3 w-3 text-[#FF6900] transition-transform group-hover:-translate-x-0.5" />
+              <span>Return to Main Site</span>
+            </Link>
+            <span className="text-[#333]">|</span>
             <Link
               href="/machines"
               className="group flex items-center gap-1 uppercase tracking-widest text-[#888] transition-colors hover:text-white"
@@ -86,6 +94,13 @@ export default function LobbyHeader() {
         {/* Right Actions */}
         <div className="flex items-center gap-3">
           <Link
+            href="/"
+            className="hidden md:inline-flex items-center gap-1.5 border border-[#333] bg-[#111] px-3.5 py-1.5 text-[10px] font-ibm-plex-mono uppercase tracking-widest text-[#ccc] transition-colors hover:border-[#FF6900] hover:text-white"
+          >
+            <ArrowLeft className="h-3 w-3 text-[#FF6900]" />
+            <span>Alkota Main Site</span>
+          </Link>
+          <Link
             href="/tools/machine-match"
             className="hidden sm:inline-flex items-center gap-2 border border-[#333] bg-[#111] px-3.5 py-1.5 text-[10px] font-ibm-plex-mono uppercase tracking-widest text-[#ccc] transition-colors hover:border-[#FF6900] hover:text-white"
           >
@@ -114,6 +129,14 @@ export default function LobbyHeader() {
       {mobileMenuOpen && (
         <div className="border-t border-[#222] bg-[#0D0D0D] px-6 py-4 lg:hidden">
           <div className="flex flex-col gap-3">
+            <Link
+              href="/"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-2 py-2 text-xs font-ibm-plex-mono font-bold uppercase tracking-wider text-[#FF6900] border-b border-[#222]"
+            >
+              <ArrowLeft className="h-3.5 w-3.5" />
+              <span>← Back to Alkota UK Main Site</span>
+            </Link>
             {CATEGORIES.map(cat => {
               const Icon = cat.icon;
               return (
@@ -134,7 +157,7 @@ export default function LobbyHeader() {
                 onClick={() => setMobileMenuOpen(false)}
                 className="text-xs font-ibm-plex-mono uppercase tracking-wider text-[#FF6900]"
               >
-                ← Return to Machine Catalogue
+                → View Machine Catalogue
               </Link>
             </div>
           </div>

@@ -161,7 +161,7 @@ export default function WaterTreatmentSection() {
               <div className="flex items-center gap-3 mb-4">
                 <Shield className="h-5 w-5 text-cyan-400" />
                 <span className="font-ibm-plex-mono text-[10px] font-black uppercase tracking-[0.2em] text-cyan-400">
-                  EPA Regulatory Compliance Verified
+                  Discharge Compliance — UK Environment Agency
                 </span>
               </div>
               
@@ -170,7 +170,7 @@ export default function WaterTreatmentSection() {
               </h3>
               
               <p className="text-alkota-grey text-sm leading-relaxed max-w-2xl">
-                Alkota systems help you comply with strict local utility and Environmental Agency regulations. By recovering, filtering, and cycling wash water, you prevent toxic runoffs from entering public sewers or surface streams.
+                Alkota systems help operators comply with UK Environment Agency and local authority requirements governing trade effluent discharge. By recovering, filtering, and recycling wash water, you prevent contaminated runoff from entering surface drains or watercourses.
               </p>
             </div>
             

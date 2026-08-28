@@ -73,8 +73,25 @@ export default async function MachineDetailPage({ params }: { params: Promise<{ 
   const modelCode = machine.model_code || machine.slug?.replace('alkota-', '').toUpperCase() || machine.name;
   const imageUrl = resolveMachineImage(machine.primary_image_url || machine.image_url, modelCode, machine.category);
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: `Alkota ${machine.name}`,
+    image: imageUrl,
+    description: machine.tagline || machine.description || 'Industrial pressure washing equipment',
+    brand: {
+      '@type': 'Brand',
+      name: 'Alkota'
+    },
+    manufacturer: {
+      '@type': 'Organization',
+      name: 'Alkota'
+    }
+  };
+
   return (
     <main className="min-h-screen bg-alkota-bg pt-32 pb-0 overflow-x-hidden relative">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Navigation />
       
       {/* Background Watermark */}

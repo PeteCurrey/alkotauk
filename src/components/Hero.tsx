@@ -110,7 +110,7 @@ export default function Hero() {
           <div className="mx-auto grid max-w-7xl grid-cols-2 lg:grid-cols-4">
             {[
               { label: 'COIL WARRANTY', value: '7', suffix: 'YEARS' },
-              { label: 'MAX PRESSURE', value: '5000', suffix: 'PSI' },
+              { label: 'MAX PRESSURE', value: '345', suffix: 'BAR' },
               { label: 'UK SUPPORT', value: '24/7', suffix: 'TECH' },
               { label: 'HERITAGE', value: '60', suffix: 'YEARS' },
             ].map((stat, i) => (

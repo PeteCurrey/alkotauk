@@ -1,16 +1,23 @@
 import { MetadataRoute } from 'next';
-import { client } from '@/sanity/client';
+import { supabaseAdmin } from '@/lib/supabase/server';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://alkota.co.uk';
 
-  // Fetch live products for sitemap
-  const machines = await client.fetch(`*[_type == "machine"]`);
-  const industries = await client.fetch(`*[_type == "industry"]`);
+  // Fetch live products for sitemap from Supabase
+  const { data: machines } = await supabaseAdmin
+    .from('products')
+    .select('slug, category, updated_at')
+    .eq('active', true);
+
+  const { data: industries } = await supabaseAdmin
+    .from('industries')
+    .select('slug, updated_at')
+    .eq('active', true);
 
   const machineUrls = (machines || []).map((m: any) => ({
-    url: `${baseUrl}/machines/${m.category}/${m.slug?.current || m.slug}`,
-    lastModified: new Date(),
+    url: `${baseUrl}/machines/${m.category}/${m.slug}`,
+    lastModified: new Date(m.updated_at || new Date()),
     changeFrequency: 'weekly' as const,
     priority: 0.8,
   }));
@@ -23,8 +30,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   const industryUrls = (industries || []).map((i: any) => ({
-    url: `${baseUrl}/industries/${i.slug?.current || i.slug}`,
-    lastModified: new Date(),
+    url: `${baseUrl}/industries/${i.slug}`,
+    lastModified: new Date(i.updated_at || new Date()),
     changeFrequency: 'monthly' as const,
     priority: 0.6,
   }));

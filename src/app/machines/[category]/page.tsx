@@ -5,15 +5,26 @@ import MachineCard from '@/components/MachineCard';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
+import { Metadata } from 'next';
+
 interface MachineCategoryPageProps {
-  params: {
+  params: Promise<{
     category: string;
+  }>;
+}
+
+export async function generateMetadata({ params }: MachineCategoryPageProps): Promise<Metadata> {
+  const { category } = await params;
+  const categoryName = category.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  
+  return {
+    title: `Alkota ${categoryName} Equipment | Premium Industrial Cleaning`,
+    description: `Browse Alkota's range of premium industrial ${categoryName.toLowerCase()} systems. Engineered in South Dakota, built for the UK market.`,
   };
 }
 
 export default async function MachineCategoryPage({ params }: MachineCategoryPageProps) {
-  const resolvedParams = await params;
-  const categorySlug = resolvedParams.category;
+  const { category: categorySlug } = await params;
   const dbCategory = categorySlug === 'parts-washers' ? 'parts-washer' : categorySlug;
   
   // Fetch machines for this category from Supabase products table
@@ -112,9 +123,9 @@ export default async function MachineCategoryPage({ params }: MachineCategoryPag
                     Wash Bay Series — Fixed Installation
                   </h2>
                   <p className="font-inter text-sm text-alkota-silver leading-relaxed uppercase tracking-widest max-w-4xl">
-                    The Wash Bay Cabinet Series is Alkota's fixed-installation cold water range — built for permanent wash bay environments. Self-contained enclosed cabinet. Stable welded frame. Belt-driven triplex pump. ETL certified to UL-1776. 
+                    The Wash Bay Cabinet Series is Alkota's fixed-installation cold water range — built for permanent wash bay environments. Self-contained enclosed cabinet. Stable welded frame. Belt-driven triplex pump. Manufactured to the same exacting standards as the full Alkota range.
                     <br /><br />
-                    Sixteen models covering 2 GPM to 10 GPM. Auto start/stop available. The professional's choice for fleet depots, food processing, and agricultural buildings.
+                    Sixteen models covering 7.6 to 37.9 L/min (2–10 GPM). Auto start/stop available. The professional's choice for fleet depots, food processing, and agricultural buildings. UK voltage configurations available.
                   </p>
                 </div>
                 

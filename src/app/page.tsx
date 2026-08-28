@@ -43,8 +43,33 @@ export default function Home() {
     return () => ctx.revert();
   }, []);
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Organization',
+        '@id': 'https://alkota.co.uk/#organization',
+        name: 'Alkota UK',
+        url: 'https://alkota.co.uk',
+        logo: 'https://alkota.co.uk/logo.png',
+        description: 'Premium industrial cleaning equipment, pressure washers, and custom trailers built for the UK market.',
+        sameAs: []
+      },
+      {
+        '@type': 'WebSite',
+        '@id': 'https://alkota.co.uk/#website',
+        url: 'https://alkota.co.uk',
+        name: 'Alkota UK',
+        publisher: {
+          '@id': 'https://alkota.co.uk/#organization'
+        }
+      }
+    ]
+  };
+
   return (
     <main ref={containerRef} className="flex min-h-screen flex-col overflow-x-hidden" style={{ backgroundColor: '#0D0D0D' }}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Navigation />
       
       <Hero />

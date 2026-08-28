@@ -20,7 +20,7 @@ export default function PartsWashersHub() {
       id: 'al2424',
       name: 'Model AL2424',
       type: 'Top Load',
-      specs: '50 PSI | 26 GPM | 500 lbs Capacity',
+      specs: '3.4 BAR | 98 L/min | 227 kg Capacity',
       description: 'Gear-driven 24 inch turntable. Oil skimmer, debris screen, low water shutoff. For truck and automotive repair shops, equipment repair, machine shops.',
       icon: Layers,
     },
@@ -28,7 +28,7 @@ export default function PartsWashersHub() {
       id: 'al3040',
       name: 'Model AL3040',
       type: 'Front Load',
-      specs: '30" Turntable | 1000 lbs Capacity',
+      specs: '762 mm Turntable | 454 kg Capacity',
       description: 'Front load industrial cabinet washer for heavy continuous use. Gear-driven turntable, hot water and biodegradable detergent.',
       icon: Settings,
     },
@@ -36,8 +36,8 @@ export default function PartsWashersHub() {
       id: 'al3654',
       name: 'Model AL3654',
       type: 'Front Load',
-      specs: '75 PSI | 60 GPM | 1500 lbs Capacity',
-      description: 'The flagship front load parts washer. 36 inch gear-driven turntable, oil skimmer, debris screen, low water shutoff, turntable jog switch. For intensive continuous industrial use.',
+      specs: '5.2 BAR | 227 L/min | 680 kg Capacity',
+      description: 'The flagship front load parts washer. 914 mm gear-driven turntable, oil skimmer, debris screen, low water shutoff, turntable jog switch. For intensive continuous industrial use.',
       icon: Settings,
     },
     {
@@ -98,9 +98,9 @@ export default function PartsWashersHub() {
           {/* Industrial Logic Stats */}
           <section className="mb-40 grid grid-cols-1 md:grid-cols-4 gap-px bg-alkota-iron border border-alkota-iron">
              {[
-               { label: 'Labor Reduction', value: '85%' },
-               { label: 'Cleaning Temp', value: '80C+' },
-               { label: 'Spray Pressure', value: '50 PSI' },
+               { label: 'Labour Reduction', value: '85%' },
+               { label: 'Cleaning Temp', value: '80°C+' },
+               { label: 'Spray Pressure', value: '3.4 BAR' },
                { label: 'Filter Rating', value: '100 MIC' },
              ].map((stat, i) => (
                 <div key={i} className="bg-alkota-black p-10 flex flex-col items-center justify-center text-center">

@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next';
 import { supabaseAdmin } from '@/lib/supabase/server';
 import { getLobbyArticles } from '@/lib/lobby';
+import { getDealers } from '@/lib/dealers';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://alkota.co.uk';
@@ -17,6 +18,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .eq('active', true);
 
   const lobbyArticles = await getLobbyArticles();
+  const dealers = await getDealers({ onlyActive: true });
 
   const machineUrls = (machines || []).map((m: any) => ({
     url: `${baseUrl}/machines/${m.category}/${m.slug}`,
@@ -30,6 +32,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: new Date(a.published_at || new Date()),
     changeFrequency: 'monthly' as const,
     priority: 0.85,
+  }));
+
+  const dealerUrls = dealers.map((d) => ({
+    url: `${baseUrl}/dealers/${d.slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.8,
   }));
 
   const categoryUrls = ['hot-water', 'cold-water', 'parts-washers', 'water-treatment'].map(cat => ({
@@ -58,6 +67,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/dealers`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/dealers/demo-request`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.85,
+    },
+    {
+      url: `${baseUrl}/dealers/become-a-dealer`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
     },
     {
       url: `${baseUrl}/machines`,
@@ -93,5 +120,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...machineUrls,
     ...industryUrls,
     ...lobbyUrls,
+    ...dealerUrls,
   ];
 }

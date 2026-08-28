@@ -32,8 +32,8 @@
 * [x] **Phase 01**: Technical Foundation, SEO Architecture & UK Localisation (Completed & Pushed)
 * [x] **Phase 02**: Product Platform, Clean Database, Ingestion Engine & 7+5 Machine Detail Layout (Completed & Pushed)
 * [x] **Phase 03**: The Lobby, Editorial CMS, Whitepaper Publishing & Dynamic Sitemap (Completed & Pushed)
-* [x] **Phase 03.5**: Digital Flagship — Homepage Transformation, Brand Storytelling, Mess Quest & Site-Wide Visual Polish (Completed)
-* [ ] **Phase 04**: Dealer Network, Ownership Experience, Lead Routing Engine & Dealer Portal
+* [x] **Phase 03.5**: Digital Flagship — Homepage Transformation, Brand Storytelling, Mess Quest & Site-Wide Visual Polish (Completed & Pushed)
+* [x] **Phase 04**: Dealer Network, Ownership Experience, Lead Routing Engine & Dealer Portal (Completed)
 * [ ] **Phase 05**: The Configurator & Application Matching Engines
 
 ---

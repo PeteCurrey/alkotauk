@@ -104,6 +104,12 @@ export default function Navigation() {
     { name: 'Parts Washers', href: '/chemicals/parts-washer', image: '/assets/products/jetter-series.png', desc: 'Aqueous, non-foaming, multi-metal.' },
   ];
 
+  const dealerCategories = [
+    { name: 'Find a Dealer', href: '/dealers', image: '/assets/industries/fleet.png', desc: 'Locate your regional authorised sales & service centre.' },
+    { name: 'Book a Demonstration', href: '/dealers/demo-request', image: '/assets/products/420x4.png', desc: 'On-site mobile performance verification on your yard.' },
+    { name: 'Become a Dealer', href: '/dealers/become-a-dealer', image: '/assets/industries/manufacturing.png', desc: 'Commercial distributor & service partner opportunities.' },
+  ];
+
   const resourceCategories = [
     { name: 'The Lobby', href: '/lobby', image: '/assets/industries/manufacturing.png', desc: 'Engineering intelligence, whitepapers & UK compliance.' },
     { name: 'Machine Matcher', href: '/tools/machine-match', image: '/assets/industries/construction.png', desc: 'Interactive cleaning requirements and equipment selector.' },
@@ -113,9 +119,9 @@ export default function Navigation() {
 
   const navLinks: NavLink[] = [
     { name: 'Machines', href: '/machines', hasMega: true, data: sanityCategories.length > 0 ? sanityCategories : [] },
-    { name: 'Bespoke Builds', href: '/bespoke', hasMega: true, data: buildCategories },
+    { name: 'Dealers', href: '/dealers', hasMega: true, data: dealerCategories },
+    { name: 'Bespoke', href: '/bespoke', hasMega: true, data: buildCategories },
     { name: 'Chemicals', href: '/chemicals', hasMega: true, data: chemicalCategories },
-    { name: 'The Lobby', href: '/lobby', hasMega: false },
     { name: 'Resources', href: '/resources', hasMega: true, data: resourceCategories },
     { name: 'Contact', href: '/contact', hasMega: false },
   ];

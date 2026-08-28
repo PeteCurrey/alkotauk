@@ -9,7 +9,7 @@ import { useSession } from 'next-auth/react';
 import Logo from './Logo';
 import { supabase } from '@/lib/supabase/client';
 import { resolveMachineImage } from '@/lib/images';
-import { MACHINES } from '@/lib/machines';
+import canonicalData from '../../scripts/data/alkota-canonical-catalogue.json';
 
 interface NavLink {
   name: string;
@@ -50,7 +50,7 @@ export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
-  const [sanityCategories, setSanityCategories] = useState<any[]>(() => mapMachinesToCategories(MACHINES));
+  const [sanityCategories, setSanityCategories] = useState<any[]>(() => mapMachinesToCategories(canonicalData));
   const navRef = useRef<HTMLDivElement>(null);
 
   const { data: session } = useSession() as any;

@@ -1,65 +1,40 @@
-import { client } from '@/sanity/client';
 import Link from 'next/link';
+import { ArrowRight, Database } from 'lucide-react';
 
-export default async function AdminMachinesPage() {
-  const machinesData = await client.fetch(`*[_type == "machine"]`);
-  
-  const byCategory = (machinesData || []).reduce((acc: any, m: any) => {
-    if (!acc[m.category]) acc[m.category] = [];
-    acc[m.category].push(m);
-    return acc;
-  }, {} as Record<string, any[]>);
-
+export default function AdminMachinesPage() {
   return (
     <div className="text-white">
       <div className="mb-8">
         <h1 className="font-barlow-condensed text-4xl font-black uppercase italic">Machines</h1>
         <p className="font-ibm-plex-mono text-[10px] text-[#555] uppercase tracking-widest mt-1">
-          // {(machinesData?.length || 0)} machines — sourced from <code className="text-[#FF6900]">Supabase Inventory</code>
+          // Redirected — machine management moved to Products CMS
         </p>
       </div>
 
-      <div className="border border-[#333] bg-[#0D0D0D] p-5 mb-6">
-        <p className="font-ibm-plex-mono text-[10px] text-[#F59E0B] uppercase tracking-widest mb-1">// Data Source</p>
-        <p className="font-inter text-[13px] text-[#888]">
-          Machine data is served from the static TypeScript file <strong className="text-white">src/lib/machines.ts</strong>.
-          To add or edit machines, update that file and push to GitHub — no database required.
-          A future migration can move this to Supabase when needed.
-        </p>
-      </div>
-
-      {Object.entries(byCategory).map(([category, machines]) => (
-        <div key={category} className="mb-6">
-          <p className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#444] mb-2">{category.replace('-', ' ')}</p>
-          <div className="border border-[#222]">
-            <table className="w-full">
-              <thead>
-                <tr style={{ background: '#1A1A1A', borderBottom: '1px solid #222' }}>
-                  {['Name', 'Series', 'Pressure', 'Flow', 'Power', 'View'].map(h => (
-                    <th key={h} className="text-left px-4 py-3 font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#555]">{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {machines.map((m, i) => (
-                  <tr key={m.id} style={{ borderBottom: '1px solid #1A1A1A', background: i % 2 === 0 ? '#111' : '#0D0D0D' }}>
-                    <td className="px-4 py-3 font-inter text-[13px] text-white">{m.name}</td>
-                    <td className="px-4 py-3 font-ibm-plex-mono text-[10px] text-[#888]">{m.series}</td>
-                    <td className="px-4 py-3 font-ibm-plex-mono text-[11px] text-[#FF6900]">{m.specs.pressureBar} bar</td>
-                    <td className="px-4 py-3 font-ibm-plex-mono text-[11px] text-[#888]">{m.specs.flowLPM} lpm</td>
-                    <td className="px-4 py-3 font-ibm-plex-mono text-[10px] text-[#666]">{m.specs.powerSource}</td>
-                    <td className="px-4 py-3">
-                      <Link href={m.slug} target="_blank" className="font-ibm-plex-mono text-[9px] text-[#FF6900] hover:underline uppercase tracking-widest">
-                        View →
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+      <div className="border border-[#F59E0B]/40 bg-[#F59E0B]/5 p-6 mb-8 flex items-start gap-4">
+        <Database className="h-5 w-5 text-[#F59E0B] shrink-0 mt-0.5" />
+        <div>
+          <p className="font-ibm-plex-mono text-[10px] text-[#F59E0B] uppercase tracking-widest mb-2">
+            // Architecture Updated
+          </p>
+          <p className="font-inter text-sm text-[#aaa] leading-relaxed">
+            Machine management has moved to the{' '}
+            <strong className="text-white">Products CMS</strong>. The legacy{' '}
+            <code className="text-[#FF6900]">machines.ts</code> static file has been superseded by a
+            database-driven catalogue imported from the Alkota USA product range.
+          </p>
+          <p className="font-inter text-sm text-[#aaa] leading-relaxed mt-2">
+            All 127 products are now managed via the Products admin. Use the button below to go there.
+          </p>
         </div>
-      ))}
+      </div>
+
+      <Link
+        href="/admin/products"
+        className="inline-flex items-center gap-3 bg-[#FF6900] text-white px-6 py-4 font-ibm-plex-mono text-[10px] uppercase tracking-widest hover:bg-white hover:text-[#FF6900] transition-colors"
+      >
+        Go to Products CMS <ArrowRight className="h-4 w-4" />
+      </Link>
     </div>
   );
 }

@@ -1,10 +1,9 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { supabaseAdmin } from '@/lib/supabase/server';
 import Navigation from '@/components/Navigation';
-import HubSpotForm from '@/components/HubSpotForm';
-import { generateSeo } from '@/lib/seo';
+import Breadcrumbs from '@/components/Breadcrumbs';
+import { getProductBySlug, getProducts, CANONICAL_CATEGORIES } from '@/lib/products';
 import { 
   Droplets, 
   ShieldCheck, 
@@ -15,77 +14,92 @@ import {
   ArrowRight,
   Thermometer,
   Gauge,
-  Truck
+  Truck,
+  FileText,
+  Download,
+  CheckCircle2,
+  Cpu,
+  Layers,
+  Flame
 } from "lucide-react";
-import Breadcrumbs from '@/components/Breadcrumbs';
-import { auth } from '@/auth';
-import { calculateDealerPrice, formatCurrency } from '@/lib/pricing';
 import { resolveMachineImage } from '@/lib/images';
 
-export const dynamic = 'force-dynamic';
-
-async function getMachine(slug: string) {
-  const { data } = await supabaseAdmin
-    .from('products')
-    .select('*')
-    .eq('slug', slug)
-    .single();
-  return data;
+interface MachineDetailPageProps {
+  params: Promise<{
+    category: string;
+    slug: string;
+  }>;
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const { slug } = await params;
-  const machine = await getMachine(slug);
+export async function generateMetadata({ params }: MachineDetailPageProps): Promise<Metadata> {
+  const { category, slug } = await params;
+  const machine = await getProductBySlug(slug);
   if (!machine) return {};
 
-  return generateSeo({
-    title: `Alkota ${machine.name} | Industrial Specification`,
-    description: machine.tagline || 'Industrial pressure washing equipment.',
-    image: machine.primary_image_url || machine.image_url || undefined,
-  });
+  const bar = machine.pressure_bar ? `${machine.pressure_bar} Bar` : '';
+  const lpm = machine.flow_rate_lpm ? `${machine.flow_rate_lpm} L/min` : '';
+  const specSummary = [bar, lpm].filter(Boolean).join(' • ');
+
+  return {
+    title: `Alkota ${machine.model_code || machine.name} | ${specSummary ? `${specSummary} ` : ''}Industrial Specification | Alkota UK`,
+    description: machine.uk_description || machine.description || `Industrial ${machine.category} cleaning machine engineered by Alkota.`,
+    alternates: {
+      canonical: `https://alkota.co.uk/machines/${category}/${slug}`,
+    },
+    openGraph: {
+      title: `Alkota ${machine.model_code || machine.name} — Industrial Specification`,
+      description: machine.tagline || machine.description || 'Industrial cleaning equipment built in South Dakota for the UK.',
+      images: machine.primary_image_url ? [{ url: machine.primary_image_url }] : [],
+    }
+  };
 }
 
-export default async function MachineDetailPage({ params }: { params: Promise<{ category: string; slug: string }> }) {
-  const { slug } = await params;
-  const machine = await getMachine(slug);
-  const { data: siteSettings } = await supabaseAdmin
-    .from('site_settings')
-    .select('*')
-    .then((res: any) => ({ data: (res.data || []).reduce((acc: any, s: any) => ({ ...acc, [s.key]: s.value }), {}) }));
-    
-  const session = await auth();
-  const user = session?.user as any;
-  const isDealer = user?.role === 'dealer' || user?.role === 'admin';
+export default async function MachineDetailPage({ params }: MachineDetailPageProps) {
+  const { category, slug } = await params;
+  const machine = await getProductBySlug(slug);
 
   if (!machine) {
     notFound();
   }
 
-  const dealerPrice = isDealer ? calculateDealerPrice(5000, user.tier) : null;
-  const hubspotPortalId = siteSettings?.hubspot_portal_id;
-  const hubspotQuoteFormId = siteSettings?.hubspot_quote_form_id;
+  // Fetch related machines from the same category
+  const relatedMachines = (await getProducts({ category: machine.category, limit: 4 }))
+    .filter(m => m.slug !== machine.slug)
+    .slice(0, 3);
 
-  const gpm = machine.flow_rate_gpm !== undefined && machine.flow_rate_gpm !== null ? machine.flow_rate_gpm : (machine.gpm || 0);
-  const lpm = machine.flow_rate_lpm !== undefined && machine.flow_rate_lpm !== null ? machine.flow_rate_lpm : (gpm * 3.785).toFixed(1);
-  const psi = machine.pressure_psi || machine.psi || 0;
-  const bar = machine.pressure_bar || (psi / 14.5).toFixed(0);
+  const catInfo = CANONICAL_CATEGORIES[machine.category];
+  const categoryLabel = catInfo?.name || category.replace('-', ' ');
 
-  const modelCode = machine.model_code || machine.slug?.replace('alkota-', '').toUpperCase() || machine.name;
-  const imageUrl = resolveMachineImage(machine.primary_image_url || machine.image_url, modelCode, machine.category);
+  const gpm = machine.flow_rate_gpm || 0;
+  const lpm = machine.flow_rate_lpm || (gpm ? Number((gpm * 3.785).toFixed(1)) : '—');
+  const psi = machine.pressure_psi || 0;
+  const bar = machine.pressure_bar || (psi ? Math.round(psi / 14.5) : '—');
 
+  const modelCode = machine.model_code || machine.name.replace(/^Alkota\s+/i, '');
+  const imageUrl = resolveMachineImage(machine.primary_image_url, modelCode, machine.category);
+
+  // Structured Data (Schema.org Product)
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Product',
-    name: `Alkota ${machine.name}`,
+    name: `Alkota ${modelCode}`,
+    model: modelCode,
     image: imageUrl,
-    description: machine.tagline || machine.description || 'Industrial pressure washing equipment',
+    description: machine.uk_description || machine.description || 'Industrial pressure washing equipment',
     brand: {
       '@type': 'Brand',
       name: 'Alkota'
     },
     manufacturer: {
       '@type': 'Organization',
-      name: 'Alkota'
+      name: 'Alkota Cleaning Systems Inc.'
+    },
+    category: categoryLabel,
+    offers: {
+      '@type': 'AggregateOffer',
+      priceCurrency: 'GBP',
+      availability: 'https://schema.org/InStock',
+      url: `https://alkota.co.uk/machines/${category}/${slug}`
     }
   };
 
@@ -95,237 +109,410 @@ export default async function MachineDetailPage({ params }: { params: Promise<{ 
       <Navigation />
       
       {/* Background Watermark */}
-      <div className="absolute top-40 left-0 pointer-events-none select-none opacity-[0.05] z-0">
-        <span className="font-barlow-condensed text-[50vw] font-black uppercase italic leading-none text-alkota-black whitespace-nowrap">
-          {machine.name.split(' ')[0]}
+      <div className="absolute top-40 left-0 pointer-events-none select-none opacity-[0.04] z-0">
+        <span className="font-barlow-condensed text-[45vw] font-black uppercase italic leading-none text-alkota-black whitespace-nowrap">
+          {modelCode}
         </span>
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl px-6">
-        <div className="mb-20">
+        {/* Breadcrumbs */}
+        <div className="mb-16">
           <Breadcrumbs 
             items={[
               { label: 'Machines', href: '/machines' },
-              { label: machine.category?.replace('-', ' ') || 'Industrial', href: `/machines/${machine.category}` },
-              { label: machine.name }
+              { label: categoryLabel, href: `/machines/${category}` },
+              { label: modelCode }
             ]} 
           />
         </div>
 
-        <div className="grid grid-cols-1 gap-16 lg:grid-cols-12 lg:items-start">
-          {/* Left Column: Visuals */}
-          <div className="lg:col-span-7">
-            <div className="relative aspect-[16/11] overflow-hidden border border-alkota-iron bg-white group">
-                <img 
-                  src={imageUrl} 
-                  alt={machine.name}
-                  className="h-full w-full object-cover grayscale transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-white/40 to-transparent" />
-                <div className="absolute bottom-6 left-6 flex items-center gap-3">
-                  <div className="h-2 w-2 rounded-full bg-alkota-orange animate-pulse" />
-                  <span className="font-ibm-plex-mono text-[9px] font-black uppercase tracking-[0.2em] text-alkota-black">Industrial specification // verified</span>
+        {/* ── 1. PRODUCT HERO ──────────────────────────────────────────────── */}
+        <div className="grid grid-cols-1 gap-16 lg:grid-cols-12 lg:gap-20 items-center">
+          {/* Visual Showcase (7 cols) */}
+          <div className="lg:col-span-7 flex flex-col justify-center">
+            <div className="relative aspect-[4/3] w-full overflow-hidden bg-gradient-to-b from-white to-alkota-steel/40 border border-alkota-iron flex items-center justify-center p-8 shadow-sm">
+              {machine.is_elite_series && (
+                <div className="absolute top-6 left-6 z-20 bg-alkota-orange px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.25em] text-white shadow-md">
+                  Elite Series Specification
                 </div>
+              )}
+              <img 
+                src={imageUrl} 
+                alt={`Alkota ${modelCode} Industrial Cleaning Machine`} 
+                className="max-h-[85%] max-w-[85%] object-contain filter drop-shadow-2xl transition-transform duration-700 hover:scale-105"
+              />
+              <div className="absolute bottom-6 right-6">
+                <span className="font-ibm-plex-mono text-[9px] font-bold text-alkota-silver uppercase tracking-[0.3em]">
+                  MADE IN SOUTH DAKOTA, USA
+                </span>
+              </div>
             </div>
 
-            {/* Feature Tags */}
-            <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
-              {[
-                  { label: 'COIL', value: `7YR WARRANTY`, icon: ShieldCheck },
-                  { label: 'BUILD', value: 'FORGED STEEL', icon: Settings },
-                  { label: 'ORIGIN', value: 'HANDCRAFTED USA', icon: Trophy },
-                  { label: 'SPEC', value: 'UK CERTIFIED', icon: Zap },
-              ].map((tag, i) => (
-                <div key={i} className="border border-alkota-iron bg-white p-4 flex flex-col gap-2 shadow-sm">
-                  <tag.icon className="h-4 w-4 text-alkota-orange" />
-                  <span className="font-ibm-plex-mono text-[8px] text-alkota-silver uppercase tracking-widest">{tag.label}</span>
-                  <span className="font-barlow-condensed text-sm font-black text-alkota-black uppercase italic">{tag.value}</span>
+            {/* Document / Brochure Links */}
+            {machine.pdf_spec_url && (
+              <div className="mt-4 flex items-center justify-between bg-white border border-alkota-iron p-4 px-6">
+                <div className="flex items-center gap-3">
+                  <FileText className="h-4 w-4 text-alkota-orange" />
+                  <span className="font-ibm-plex-mono text-[10px] font-bold uppercase tracking-widest text-alkota-black">
+                    Official Technical Data Sheet
+                  </span>
+                </div>
+                <a 
+                  href={machine.pdf_spec_url} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-[10px] font-black text-alkota-orange uppercase tracking-widest hover:underline"
+                >
+                  Download PDF <Download className="h-3 w-3" />
+                </a>
+              </div>
+            )}
+          </div>
+
+          {/* Core Machine Details & Positioning (5 cols) */}
+          <div className="lg:col-span-5 flex flex-col justify-center">
+            <div className="mb-4 flex items-center gap-3">
+              <span className="font-ibm-plex-mono text-[10px] font-black uppercase tracking-[0.3em] text-alkota-orange">
+                {machine.series || categoryLabel}
+              </span>
+            </div>
+
+            <h1 className="font-barlow-condensed mb-6 text-6xl font-black text-alkota-black uppercase italic tracking-tighter leading-[0.85] md:text-8xl">
+              {modelCode}
+            </h1>
+
+            <p className="font-inter mb-8 text-sm leading-relaxed text-alkota-silver uppercase tracking-wider">
+              {machine.tagline || machine.short_description || `${modelCode} — Precision engineered for continuous heavy industrial duty.`}
+            </p>
+
+            {/* Glanceable Hero Metric Grid */}
+            <div className="mb-10 grid grid-cols-2 gap-px bg-alkota-iron border border-alkota-iron">
+              <div className="bg-white p-5">
+                <span className="font-ibm-plex-mono text-[8px] font-black uppercase tracking-widest text-alkota-smoke block mb-1">
+                  Operating Pressure
+                </span>
+                <div className="flex items-baseline gap-1.5">
+                  <span className="font-barlow-condensed text-4xl font-black italic text-alkota-black">{bar}</span>
+                  <span className="font-ibm-plex-mono text-xs font-bold text-alkota-orange">BAR</span>
+                  <span className="text-[10px] text-alkota-silver ml-1">({psi} PSI)</span>
+                </div>
+              </div>
+              <div className="bg-white p-5">
+                <span className="font-ibm-plex-mono text-[8px] font-black uppercase tracking-widest text-alkota-smoke block mb-1">
+                  Water Flow Rate
+                </span>
+                <div className="flex items-baseline gap-1.5">
+                  <span className="font-barlow-condensed text-4xl font-black italic text-alkota-black">{lpm}</span>
+                  <span className="font-ibm-plex-mono text-xs font-bold text-alkota-orange">L/MIN</span>
+                  <span className="text-[10px] text-alkota-silver ml-1">({gpm} GPM)</span>
+                </div>
+              </div>
+              <div className="bg-white p-5">
+                <span className="font-ibm-plex-mono text-[8px] font-black uppercase tracking-widest text-alkota-smoke block mb-1">
+                  Power Source
+                </span>
+                <span className="font-barlow-condensed text-xl font-black italic text-alkota-black uppercase">
+                  {machine.power_source || machine.voltage || 'Industrial Spec'}
+                </span>
+              </div>
+              <div className="bg-white p-5">
+                <span className="font-ibm-plex-mono text-[8px] font-black uppercase tracking-widest text-alkota-smoke block mb-1">
+                  Heating / Thermal
+                </span>
+                <span className="font-barlow-condensed text-xl font-black italic text-alkota-black uppercase">
+                  {machine.heating_fuel || (machine.category === 'hot-water' ? 'Diesel Fired' : 'Cold Water')}
+                </span>
+              </div>
+            </div>
+
+            {/* CTAs */}
+            <div className="flex flex-col sm:flex-row gap-4">
+              <a 
+                href="#quote"
+                className="flex-1 flex items-center justify-center gap-3 bg-alkota-orange p-5 text-xs font-black uppercase tracking-[0.25em] text-white hover:bg-alkota-orange-hover transition-all"
+              >
+                Request Quotation
+                <ArrowRight className="h-4 w-4" />
+              </a>
+              <Link 
+                href={`/contact?enquiry=consultation&product=${machine.slug}&model=${modelCode}`}
+                className="flex-1 flex items-center justify-center gap-3 bg-alkota-black p-5 text-xs font-black uppercase tracking-[0.25em] text-white hover:bg-neutral-800 transition-all"
+              >
+                Technical Consultation
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* ── 2. ENGINEERING STORY & HERITAGE ───────────────────────────────── */}
+        <section className="mt-40 border-t border-alkota-iron pt-24">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            <div className="lg:col-span-4">
+              <span className="font-ibm-plex-mono text-[10px] font-black uppercase tracking-[0.3em] text-alkota-orange block mb-4">
+                // ENGINEERING RATIONALE
+              </span>
+              <h2 className="font-barlow-condensed text-4xl md:text-5xl font-black uppercase italic text-alkota-black tracking-tight leading-none">
+                BUILT FOR SERIOUS OPERATORS.
+              </h2>
+            </div>
+            <div className="lg:col-span-8 space-y-6 font-inter text-sm text-alkota-silver leading-relaxed">
+              <p>
+                {machine.uk_description || machine.description}
+              </p>
+              <p>
+                {machine.engineering_story}
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* ── 3. ENGINEERING PILLARS / COMPONENT DEEP DIVE ─────────────────── */}
+        <section className="mt-32">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-alkota-iron border border-alkota-iron">
+            <div className="bg-white p-8">
+              <Layers className="h-6 w-6 text-alkota-orange mb-6" />
+              <h4 className="font-barlow-condensed text-2xl font-black uppercase italic text-alkota-black mb-2">
+                {machine.pump_type?.split('|')[0] || 'Ceramic Plunger Pump'}
+              </h4>
+              <p className="font-inter text-xs text-alkota-silver leading-relaxed">
+                Oil-bath crankcase and ceramic plungers running at lower RPM for cooler, vibration-damped longevity.
+              </p>
+            </div>
+
+            <div className="bg-white p-8">
+              <Flame className="h-6 w-6 text-alkota-orange mb-6" />
+              <h4 className="font-barlow-condensed text-2xl font-black uppercase italic text-alkota-black mb-2">
+                {machine.coil_type || 'Schedule 80 Coil'}
+              </h4>
+              <p className="font-inter text-xs text-alkota-silver leading-relaxed">
+                Hydro-insulated cold water wrap pre-heats water, protects operators, and eliminates thermal coil stress.
+              </p>
+            </div>
+
+            <div className="bg-white p-8">
+              <Trophy className="h-6 w-6 text-alkota-orange mb-6" />
+              <h4 className="font-barlow-condensed text-2xl font-black uppercase italic text-alkota-black mb-2">
+                7-Year Coil Warranty
+              </h4>
+              <p className="font-inter text-xs text-alkota-silver leading-relaxed">
+                The benchmark in industrial heating reliability. While competitors offer 1–2 years, Alkota guarantees 7.
+              </p>
+            </div>
+
+            <div className="bg-white p-8">
+              <ShieldCheck className="h-6 w-6 text-alkota-orange mb-6" />
+              <h4 className="font-barlow-condensed text-2xl font-black uppercase italic text-alkota-black mb-2">
+                Welded Steel Chassis
+              </h4>
+              <p className="font-inter text-xs text-alkota-silver leading-relaxed">
+                Heavy-gauge welded structural steel frame with powder coat finish built to survive demanding site environments.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* ── 4. COMPLETE STRUCTURED TECHNICAL SPECIFICATION TABLE ─────────── */}
+        <section className="mt-40">
+          <div className="mb-12 flex items-center justify-between border-b border-alkota-iron pb-6">
+            <div>
+              <span className="font-ibm-plex-mono text-[9px] font-black uppercase tracking-[0.3em] text-alkota-orange block mb-2">
+                // COMPREHENSIVE DATA
+              </span>
+              <h3 className="font-barlow-condensed text-4xl font-black uppercase italic text-alkota-black">
+                Full Technical Specifications
+              </h3>
+            </div>
+            <span className="font-ibm-plex-mono text-xs text-alkota-silver uppercase tracking-widest">
+              MODEL: {modelCode}
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-alkota-iron border border-alkota-iron bg-white">
+            <table className="w-full text-left border-collapse">
+              <tbody className="divide-y divide-alkota-iron">
+                <tr className="hover:bg-alkota-bg transition-colors">
+                  <td className="p-4 px-6 font-ibm-plex-mono text-xs font-bold text-alkota-silver uppercase tracking-wider">Water Flow Rate</td>
+                  <td className="p-4 px-6 font-barlow-condensed text-xl font-black text-alkota-black italic text-right">{lpm} L/min ({gpm} GPM)</td>
+                </tr>
+                <tr className="hover:bg-alkota-bg transition-colors">
+                  <td className="p-4 px-6 font-ibm-plex-mono text-xs font-bold text-alkota-silver uppercase tracking-wider">Operating Pressure</td>
+                  <td className="p-4 px-6 font-barlow-condensed text-xl font-black text-alkota-black italic text-right">{bar} bar ({psi} PSI)</td>
+                </tr>
+                <tr className="hover:bg-alkota-bg transition-colors">
+                  <td className="p-4 px-6 font-ibm-plex-mono text-xs font-bold text-alkota-silver uppercase tracking-wider">Power Supply / Voltage</td>
+                  <td className="p-4 px-6 font-barlow-condensed text-xl font-black text-alkota-black italic text-right">{machine.voltage || '230V / 1PH'}</td>
+                </tr>
+                {machine.motor_hp && (
+                  <tr className="hover:bg-alkota-bg transition-colors">
+                    <td className="p-4 px-6 font-ibm-plex-mono text-xs font-bold text-alkota-silver uppercase tracking-wider">Motor Output</td>
+                    <td className="p-4 px-6 font-barlow-condensed text-xl font-black text-alkota-black italic text-right">{machine.motor_kw ? `${machine.motor_kw} kW` : ''} ({machine.motor_hp} HP)</td>
+                  </tr>
+                )}
+                {machine.burner_btu && (
+                  <tr className="hover:bg-alkota-bg transition-colors">
+                    <td className="p-4 px-6 font-ibm-plex-mono text-xs font-bold text-alkota-silver uppercase tracking-wider">Thermal Heat Output</td>
+                    <td className="p-4 px-6 font-barlow-condensed text-xl font-black text-alkota-black italic text-right">{machine.burner_btu.toLocaleString()} BTU</td>
+                  </tr>
+                )}
+                {machine.heating_fuel && (
+                  <tr className="hover:bg-alkota-bg transition-colors">
+                    <td className="p-4 px-6 font-ibm-plex-mono text-xs font-bold text-alkota-silver uppercase tracking-wider">Heating Fuel Type</td>
+                    <td className="p-4 px-6 font-barlow-condensed text-xl font-black text-alkota-black italic text-right">{machine.heating_fuel}</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+
+            <table className="w-full text-left border-collapse">
+              <tbody className="divide-y divide-alkota-iron">
+                <tr className="hover:bg-alkota-bg transition-colors">
+                  <td className="p-4 px-6 font-ibm-plex-mono text-xs font-bold text-alkota-silver uppercase tracking-wider">Unit Weight</td>
+                  <td className="p-4 px-6 font-barlow-condensed text-xl font-black text-alkota-black italic text-right">{machine.weight_kg ? `${machine.weight_kg} kg` : ''} ({machine.weight_lbs || '—'} lbs)</td>
+                </tr>
+                {machine.dimensions_mm && (
+                  <tr className="hover:bg-alkota-bg transition-colors">
+                    <td className="p-4 px-6 font-ibm-plex-mono text-xs font-bold text-alkota-silver uppercase tracking-wider">Dimensions</td>
+                    <td className="p-4 px-6 font-barlow-condensed text-lg font-black text-alkota-black italic text-right">{machine.dimensions_mm}</td>
+                  </tr>
+                )}
+                <tr className="hover:bg-alkota-bg transition-colors">
+                  <td className="p-4 px-6 font-ibm-plex-mono text-xs font-bold text-alkota-silver uppercase tracking-wider">Mobility / Mounting</td>
+                  <td className="p-4 px-6 font-barlow-condensed text-xl font-black text-alkota-black italic text-right">{machine.mobility || (machine.portable ? 'Portable' : 'Stationary')}</td>
+                </tr>
+                <tr className="hover:bg-alkota-bg transition-colors">
+                  <td className="p-4 px-6 font-ibm-plex-mono text-xs font-bold text-alkota-silver uppercase tracking-wider">Coil Warranty</td>
+                  <td className="p-4 px-6 font-barlow-condensed text-xl font-black text-alkota-black italic text-right">7 Years (Hydro-Insulated)</td>
+                </tr>
+                <tr className="hover:bg-alkota-bg transition-colors">
+                  <td className="p-4 px-6 font-ibm-plex-mono text-xs font-bold text-alkota-silver uppercase tracking-wider">Pump Style</td>
+                  <td className="p-4 px-6 font-barlow-condensed text-base font-black text-alkota-black italic text-right">{machine.pump_type || 'Triplex Ceramic'}</td>
+                </tr>
+                <tr className="hover:bg-alkota-bg transition-colors">
+                  <td className="p-4 px-6 font-ibm-plex-mono text-xs font-bold text-alkota-silver uppercase tracking-wider">Duty Rating</td>
+                  <td className="p-4 px-6 font-barlow-condensed text-xl font-black text-alkota-black italic text-right">Continuous Industrial Duty</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        {/* ── 5. APPLICATIONS & FEATURES ───────────────────────────────────── */}
+        <section className="mt-32 grid grid-cols-1 md:grid-cols-2 gap-12">
+          {/* Applications */}
+          <div className="bg-white border border-alkota-iron p-10">
+            <span className="font-ibm-plex-mono text-[9px] font-black uppercase tracking-[0.3em] text-alkota-orange block mb-4">
+              // APPLICATION SUITABILITY
+            </span>
+            <h4 className="font-barlow-condensed text-3xl font-black uppercase italic text-alkota-black mb-6">
+              Primary Industrial Use Cases
+            </h4>
+            <div className="space-y-3">
+              {(machine.applications || ['Heavy Fleet Degreasing', 'Machinery Washdown', 'Facility Maintenance']).map((app, i) => (
+                <div key={i} className="flex items-center gap-3">
+                  <CheckCircle2 className="h-4 w-4 text-alkota-orange shrink-0" />
+                  <span className="font-inter text-xs text-alkota-black font-semibold uppercase tracking-wider">{app}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Right Column: Specs & CTA */}
-          <div className="lg:col-span-5 lg:sticky lg:top-40">
-            <div className="mb-6 flex items-center gap-3">
-              <span className="font-ibm-plex-mono text-[10px] font-black uppercase tracking-[0.4em] text-alkota-orange">
-                {machine.series || machine.category?.replace('-', ' ')}
-              </span>
-              {machine.is_elite_series && (
-                <div className="h-1 w-12 bg-alkota-iron" />
-              )}
-            </div>
-            
-            <h1 className="font-barlow-condensed mb-8 text-7xl font-black text-alkota-black md:text-8xl lg:text-9xl uppercase italic leading-[0.8] tracking-tighter">
-              {machine.name}
-            </h1>
-            
-            <p className="font-inter mb-12 text-lg text-alkota-silver leading-relaxed uppercase tracking-wider">
-              {machine.tagline}
-            </p>
-
-            {/* Price / Status */}
-            <div className="mb-12 border-y border-alkota-iron py-8">
-              {isDealer && machine.ecommerce?.price ? (
-                <div>
-                  <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-alkota-orange mb-3">
-                    <Trophy className="h-3 w-3" />
-                    Exclusive {user.tier} Dealer Assets
-                  </div>
-                  <div className="flex items-baseline gap-4">
-                    <span className="font-barlow-condensed text-6xl font-black text-alkota-black italic">
-                      {formatCurrency(dealerPrice || 0)}
-                    </span>
-                    <span className="font-ibm-plex-mono text-sm text-alkota-silver line-through">
-                      RRP {formatCurrency(machine.ecommerce.price)}
-                    </span>
-                  </div>
+          {/* Key Features */}
+          <div className="bg-white border border-alkota-iron p-10">
+            <span className="font-ibm-plex-mono text-[9px] font-black uppercase tracking-[0.3em] text-alkota-orange block mb-4">
+              // FACTORY INCLUSIONS
+            </span>
+            <h4 className="font-barlow-condensed text-3xl font-black uppercase italic text-alkota-black mb-6">
+              Standard Engineering Features
+            </h4>
+            <div className="space-y-3">
+              {(machine.features || ['Schedule 80 Hydro-Insulated Coil', 'Soft Damping System', 'Ceramic Plungers']).slice(0, 5).map((feat, i) => (
+                <div key={i} className="flex items-center gap-3">
+                  <CheckCircle2 className="h-4 w-4 text-alkota-black shrink-0" />
+                  <span className="font-inter text-xs text-alkota-silver uppercase tracking-wider">{feat}</span>
                 </div>
-              ) : (
-                <div className="flex items-center justify-between">
-                   <div>
-                     <p className="font-ibm-plex-mono text-[10px] text-alkota-silver uppercase tracking-widest mb-2">Build Availability</p>
-                     <p className="font-barlow-condensed text-4xl font-black text-alkota-black uppercase italic">Current Build Status</p>
-                   </div>
-                   <div className="text-right">
-                     <p className="font-ibm-plex-mono text-[10px] text-alkota-silver uppercase tracking-widest mb-2">Price Estimate</p>
-                     <p className="font-barlow-condensed text-4xl font-black text-alkota-orange uppercase italic">Price on request</p>
-                   </div>
-                </div>
-              )}
+              ))}
             </div>
-
-            <div className="flex flex-col gap-4">
-              <a 
-                href="#quote"
-                className="flex items-center justify-center gap-4 bg-alkota-orange p-6 text-xs font-black uppercase tracking-[0.3em] text-white hover:bg-alkota-orange-hover transition-all group"
-              >
-                Request a Quote
-                <ArrowRight className="h-4 w-4 transform group-hover:translate-x-2 transition-transform" />
-              </a>
-            </div>
-          </div>
-        </div>
-
-        {/* Deep Tech Specs Section */}
-        <section className="mt-60">
-          <div className="mb-24 flex items-center gap-8">
-            <h2 className="font-barlow-condensed text-6xl font-black text-alkota-black uppercase italic tracking-tighter md:text-8xl">
-              SPECIFICATIONS <span className="text-alkota-orange">.</span>
-            </h2>
-            <div className="flex-1 h-[2px] bg-alkota-iron/30" />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-alkota-iron border border-alkota-iron">
-            {[
-              { label: 'WATER FLOW', value: `${lpm} LPM`, unit: 'Liters Per Minute', icon: Droplets },
-              { label: 'PRESSURE', value: `${bar} BAR`, unit: 'Operational Pressure', icon: Gauge },
-              { label: 'TEMPERATURE', value: machine.category === 'hot-water' ? '98°C / 200°F' : 'Ambient', unit: 'Cleaning Temp', icon: Thermometer },
-              { label: 'POWER', value: machine.voltage || 'Industrial', unit: 'Primary Power', icon: Zap }
-            ].map((spec, i) => (
-              <div key={i} className="bg-white p-12 transition-all hover:bg-alkota-steel/40 group">
-                <spec.icon className="h-8 w-8 text-alkota-orange mb-8 transition-transform group-hover:scale-110" />
-                <span className="font-ibm-plex-mono text-[9px] font-black text-alkota-silver uppercase tracking-[0.3em] block mb-4">{spec.label}</span>
-                <div className="flex items-baseline gap-2">
-                  <span className="font-barlow-condensed text-5xl font-black text-alkota-black italic">{spec.value}</span>
-                </div>
-                <p className="font-ibm-plex-mono text-[8px] text-alkota-silver uppercase tracking-widest mt-4">{spec.unit}</p>
-              </div>
-            ))}
           </div>
         </section>
 
-        {/* ── COIL TECHNOLOGY CALLOUT — hot water machines only ─────────── */}
-        {machine.category === 'hot-water' && (
-          <section className="mt-12">
-            <div
-              style={{
-                background: 'rgba(255, 105, 0, 0.06)',
-                borderLeft: '3px solid #FF6900',
-                padding: '24px',
-              }}
-            >
-              <span
-                style={{ fontFamily: 'var(--font-ibm-plex-mono, monospace)', fontSize: '10px', fontWeight: 900, letterSpacing: '0.3em', color: '#FF6900', textTransform: 'uppercase', display: 'block', marginBottom: '10px' }}
-              >
-                // ALKOTA COIL TECHNOLOGY
-              </span>
-              <h4
-                className="font-barlow-condensed font-black uppercase italic text-alkota-black"
-                style={{ fontSize: '1.4rem', lineHeight: 1.15, marginBottom: '12px' }}
-              >
-                The 7-Year Coil Warranty.{' '}
-                <span className="text-alkota-orange">Industry standard is 1–2 years.</span>
-              </h4>
-              <p
-                className="font-inter text-alkota-silver"
-                style={{ fontSize: '14px', lineHeight: 1.65, marginBottom: '14px', maxWidth: '72ch' }}
-              >
-                Every Alkota hot water machine uses the proprietary hydro-insulated Schedule 80 coil — a cold water wrap around the coil that protects the operator, pre-heats incoming water, and eliminates the thermal stress that kills standard coils. Combined with the Soft Damping System and Wayne Combustion burner partnership, this is the engineering behind machines that are still running at 15–20 years of daily industrial use.
-              </p>
-              <Link
-                href="/technology"
-                className="font-inter text-alkota-orange hover:underline"
-                style={{ fontSize: '13px', fontWeight: 600 }}
-              >
-                Read about the technology →
+        {/* ── 6. RELATED MACHINES ──────────────────────────────────────────── */}
+        {relatedMachines.length > 0 && (
+          <section className="mt-40">
+            <div className="mb-12 flex items-center justify-between border-b border-alkota-iron pb-6">
+              <div>
+                <span className="font-ibm-plex-mono text-[9px] font-black uppercase tracking-[0.3em] text-alkota-orange block mb-2">
+                  // FLEET ALTERNATIVES
+                </span>
+                <h3 className="font-barlow-condensed text-4xl font-black uppercase italic text-alkota-black">
+                  Related {categoryLabel}
+                </h3>
+              </div>
+              <Link href={`/machines/${category}`} className="text-xs font-black uppercase tracking-widest text-alkota-orange hover:underline">
+                View All {categoryLabel} →
               </Link>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-alkota-iron border border-alkota-iron">
+              {relatedMachines.map((rel, i) => (
+                <div key={rel.slug} className="bg-white p-8 flex flex-col justify-between group hover:bg-alkota-steel/40 transition-colors">
+                  <div>
+                    <span className="font-ibm-plex-mono text-[9px] font-bold text-alkota-orange uppercase tracking-widest block mb-2">
+                      {rel.model_code}
+                    </span>
+                    <h5 className="font-barlow-condensed text-3xl font-black uppercase italic text-alkota-black mb-4">
+                      {rel.name}
+                    </h5>
+                    <p className="font-inter text-[11px] text-alkota-silver line-clamp-2 uppercase tracking-wider mb-6">
+                      {rel.tagline || rel.description}
+                    </p>
+                  </div>
+                  <Link 
+                    href={`/machines/${rel.category}/${rel.slug}`}
+                    className="flex items-center justify-between border border-alkota-iron p-3 text-[10px] font-black uppercase tracking-widest text-alkota-black group-hover:bg-alkota-orange group-hover:text-white group-hover:border-alkota-orange transition-colors"
+                  >
+                    <span>View Specifications</span>
+                    <ArrowRight className="h-3 w-3" />
+                  </Link>
+                </div>
+              ))}
             </div>
           </section>
         )}
 
-        {/* Quote Architecture */}
-        <section id="quote" className="mt-60 py-40 border-t border-alkota-iron relative">
-           <div className="absolute top-0 right-0 w-1/2 h-full bg-alkota-orange/5 skew-x-12 transform translate-x-1/2" />
-           
-           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-24">
-              <div>
-                <div className="mb-8 flex items-center gap-4">
-                  <div className="h-[2px] w-12 bg-alkota-orange" />
-                  <span className="text-[10px] font-black uppercase tracking-[0.4em] text-alkota-orange">Acquisition Channel</span>
-                </div>
-                <h2 className="font-barlow-condensed text-7xl font-black text-alkota-black uppercase italic tracking-tighter leading-[0.8] mb-12">
-                   REQUEST A <br />
-                   <span className="text-alkota-orange [text-stroke:1.5px_rgba(0,0,0,0.1)]">QUOTE.</span>
-                </h2>
-                <div className="space-y-8 max-w-md">
-                   <div className="flex gap-6 group">
-                      <div className="h-12 w-12 shrink-0 border border-alkota-iron flex items-center justify-center text-alkota-orange group-hover:bg-alkota-orange group-hover:text-white transition-colors">
-                        <Truck className="h-5 w-5" />
-                      </div>
-                      <div>
-                        <h4 className="font-barlow-condensed text-xl font-black text-alkota-black uppercase italic mb-1">Standard Delivery</h4>
-                        <p className="font-inter text-xs text-alkota-silver uppercase tracking-wider">Fast-track delivery across the UK & Ireland from central stock.</p>
-                      </div>
-                   </div>
-                   <div className="flex gap-6 group">
-                      <div className="h-12 w-12 shrink-0 border border-alkota-iron flex items-center justify-center text-alkota-orange group-hover:bg-alkota-orange group-hover:text-white transition-colors">
-                        <Phone className="h-5 w-5" />
-                      </div>
-                      <div>
-                        <h4 className="font-barlow-condensed text-xl font-black text-alkota-black uppercase italic mb-1">Technical Consultation</h4>
-                        <p className="font-inter text-xs text-alkota-silver uppercase tracking-wider">Speak with an application engineer to verify your precise flow requirements.</p>
-                      </div>
-                   </div>
-                </div>
+        {/* ── 7. QUOTE & CONSULTATION CHANNEL ──────────────────────────────── */}
+        <section id="quote" className="mt-40 py-32 border-t border-alkota-iron">
+          <div className="bg-alkota-black text-white p-12 md:p-16 border border-alkota-iron">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+              <div className="lg:col-span-7">
+                <span className="font-ibm-plex-mono text-[10px] font-black uppercase tracking-[0.3em] text-alkota-orange block mb-4">
+                  // DIRECT ACQUISITION & CONSULTATION
+                </span>
+                <h3 className="font-barlow-condensed text-5xl md:text-6xl font-black uppercase italic text-white leading-none mb-6">
+                  SPECIFY THE <span className="text-alkota-orange">{modelCode}.</span>
+                </h3>
+                <p className="font-inter text-sm text-alkota-smoke leading-relaxed max-w-xl">
+                  Connect directly with Alkota UK application engineers to verify flow rates, power supplies, wash bay layouts, or trailer integration. We provide direct factory quotations and technical advice.
+                </p>
               </div>
 
-              <div className="bg-white border border-alkota-iron p-1 px-1 shadow-2xl">
-                <div className="bg-alkota-bg/40 p-12">
-                   {hubspotPortalId && hubspotQuoteFormId ? (
-                    <HubSpotForm 
-                      portalId={hubspotPortalId} 
-                      formId={hubspotQuoteFormId} 
-                    />
-                  ) : (
-                    <div className="py-12 text-center">
-                       <p className="text-alkota-silver uppercase tracking-widest text-[10px] mb-4">Live Quote System Pending</p>
-                       <button className="bg-alkota-black text-white px-8 py-4 uppercase tracking-widest font-black text-[10px]">Call for Specifications</button>
-                    </div>
-                  )}
-                </div>
+              <div className="lg:col-span-5 flex flex-col sm:flex-row lg:flex-col gap-4">
+                <Link 
+                  href={`/contact?enquiry=quote&product=${machine.slug}&model=${modelCode}`}
+                  className="flex items-center justify-center gap-4 bg-alkota-orange p-6 text-xs font-black uppercase tracking-[0.25em] text-white hover:bg-alkota-orange-hover transition-colors"
+                >
+                  <span>Request Factory Quote</span>
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link 
+                  href={`/contact?enquiry=service&product=${machine.slug}`}
+                  className="flex items-center justify-center gap-4 border border-white/20 p-6 text-xs font-black uppercase tracking-[0.25em] text-white hover:bg-white hover:text-alkota-black transition-colors"
+                >
+                  <span>Book Engineering Review</span>
+                </Link>
               </div>
-           </div>
+            </div>
+          </div>
         </section>
       </div>
     </main>

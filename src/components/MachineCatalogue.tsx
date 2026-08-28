@@ -6,134 +6,67 @@ import MachineCard from './MachineCard';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import canonicalData from '../../scripts/data/alkota-canonical-catalogue.json';
 
-function padMachines(seriesName: string, machines: any[]): any[] {
-  if (!machines || machines.length === 0) return [];
-  if (machines.length >= 3) return machines.slice(0, 3);
+// Group initial canonical catalogue machines
+function groupInitialMachines() {
+  const grouped: Record<string, any[]> = {
+    'Hot Water Belt Drive': [],
+    'Hot Water Direct Drive': [],
+    'Cold Water Industrial': [],
+    'Steam Cleaners': [],
+    'Aqueous Parts Washers': []
+  };
 
-  const padded = [...machines];
-  const base = machines[0];
-  const basePsi = base.pressure_psi || base.psi || 0;
-  const baseGpm = base.flow_rate_gpm || base.gpm || 0;
-
-  if (machines.length === 1) {
-    // Generate 2 companion machines with premium specs variations
-    padded.push({
-      ...base,
-      id: `${base.id}-v1`,
-      slug: `${base.slug}-v1`,
-      name: `${base.name} Pro`,
-      model_code: base.model_code ? `${base.model_code}-PRO` : undefined,
-      tagline: `Enhanced high-performance edition of the ${base.name}.`,
-      pressure_psi: Math.round(basePsi * 1.2),
-      psi: Math.round(basePsi * 1.2),
-      flow_rate_gpm: Number((baseGpm * 1.15).toFixed(1)),
-      gpm: Number((baseGpm * 1.15).toFixed(1)),
-      sort_order: base.sort_order + 1
-    });
-    padded.push({
-      ...base,
-      id: `${base.id}-v2`,
-      slug: `${base.slug}-v2`,
-      name: `${base.name} Max`,
-      model_code: base.model_code ? `${base.model_code}-MAX` : undefined,
-      tagline: `Maximum volume and industrial pressure output upgrade.`,
-      pressure_psi: Math.round(basePsi * 1.4),
-      psi: Math.round(basePsi * 1.4),
-      flow_rate_gpm: Number((baseGpm * 1.3).toFixed(1)),
-      gpm: Number((baseGpm * 1.3).toFixed(1)),
-      sort_order: base.sort_order + 2
-    });
-  } else if (machines.length === 2) {
-    // Generate 1 companion machine based on the second one
-    const second = machines[1];
-    const secondPsi = second.pressure_psi || second.psi || 0;
-    const secondGpm = second.flow_rate_gpm || second.gpm || 0;
-    padded.push({
-      ...second,
-      id: `${second.id}-v1`,
-      slug: `${second.slug}-v1`,
-      name: `${second.name} Max`,
-      model_code: second.model_code ? `${second.model_code}-MAX` : undefined,
-      tagline: `Maximum output upgrade for the ${second.name} configuration.`,
-      pressure_psi: Math.round(secondPsi * 1.25),
-      psi: Math.round(secondPsi * 1.25),
-      flow_rate_gpm: Number((secondGpm * 1.2).toFixed(1)),
-      gpm: Number((secondGpm * 1.2).toFixed(1)),
-      sort_order: second.sort_order + 1
-    });
+  const list = canonicalData as any[];
+  for (const m of list) {
+    if (m.category === 'hot-water') {
+      if (m.series?.toLowerCase().includes('direct') || m.model_code?.includes('XD')) {
+        if (grouped['Hot Water Direct Drive'].length < 3) grouped['Hot Water Direct Drive'].push(m);
+      } else {
+        if (grouped['Hot Water Belt Drive'].length < 3) grouped['Hot Water Belt Drive'].push(m);
+      }
+    } else if (m.category === 'cold-water') {
+      if (grouped['Cold Water Industrial'].length < 3) grouped['Cold Water Industrial'].push(m);
+    } else if (m.category === 'steam') {
+      if (grouped['Steam Cleaners'].length < 3) grouped['Steam Cleaners'].push(m);
+    } else if (m.category === 'parts-washer') {
+      if (grouped['Aqueous Parts Washers'].length < 3) grouped['Aqueous Parts Washers'].push(m);
+    }
   }
 
-  return padded;
+  return grouped;
 }
 
 export default function MachineCatalogue() {
-  const [groupedMachines, setGroupedMachines] = useState<Record<string, any[]>>({});
-  const [loading, setLoading] = useState(true);
+  const [groupedMachines, setGroupedMachines] = useState<Record<string, any[]>>(groupInitialMachines);
 
   useEffect(() => {
-    async function fetchMachines() {
-      const { data, error } = await supabase
-        .from('products')
-        .select('*')
-        .eq('active', true)
-        .order('sort_order', { ascending: true });
+    async function fetchLiveMachines() {
+      try {
+        const { data, error } = await supabase
+          .from('products')
+          .select('*')
+          .eq('active', true)
+          .eq('status', 'published')
+          .order('sort_order', { ascending: true });
 
-      if (data && !error) {
-        const grouped = data.reduce((acc: any, machine) => {
-          let series = machine.series || 'Other';
-          const lower = series.toLowerCase();
-          
-          if (lower.includes('ax4')) {
-            series = 'AX4 Series';
-          } else if (lower.includes('x4')) {
-            series = 'X4 Series';
-          } else if (lower.includes('xd4')) {
-            series = 'XD4 Series';
-          } else if (lower.includes('ged')) {
-            series = 'GED Series';
-          } else if (lower.includes('ded')) {
-            series = 'DED Series';
-          } else if (lower.includes('steam')) {
-            series = 'Steam Series';
-          } else if (lower.includes('parts washer') || lower.includes('partswasher')) {
-            series = 'Parts Washers';
-          } else {
-            series = series.replace(/\s*—\s*.*$/, '').trim();
-            if (!series.toLowerCase().endsWith('series')) {
-              series = `${series} Series`;
+        if (data && !error && data.length > 0) {
+          const grouped: Record<string, any[]> = {};
+          data.forEach((m: any) => {
+            const series = m.series || 'Industrial Series';
+            if (!grouped[series]) grouped[series] = [];
+            if (grouped[series].length < 3) {
+              grouped[series].push(m);
             }
-          }
-
-          if (!acc[series]) acc[series] = [];
-          acc[series].push(machine);
-          return acc;
-        }, {});
-
-        // Build processed list to match requested ranges
-        const processedGrouped: Record<string, any[]> = {};
-        const activeCategories = [
-          'AX4 Series',
-          'X4 Series',
-          'XD4 Series',
-          'GED Series',
-          'DED Series',
-          'Steam Series',
-          'Parts Washers'
-        ];
-
-        for (const category of activeCategories) {
-          const machines = grouped[category] || [];
-          if (machines.length > 0) {
-            processedGrouped[category] = padMachines(category, machines);
-          }
+          });
+          setGroupedMachines(grouped);
         }
-        
-        setGroupedMachines(processedGrouped);
+      } catch (err) {
+        // Fallback already rendered synchronously
       }
-      setLoading(false);
     }
-    fetchMachines();
+    fetchLiveMachines();
   }, []);
 
   return (
@@ -169,8 +102,8 @@ export default function MachineCatalogue() {
         </div>
 
         <div className="space-y-24">
-          {Object.entries(groupedMachines).map(([series, machines], groupIndex) => {
-            const displayMachines = machines.slice(0, 3);
+          {Object.entries(groupedMachines).map(([series, machines]) => {
+            if (machines.length === 0) return null;
             return (
               <div key={series}>
                 <div className="mb-10 flex items-center gap-6">
@@ -181,25 +114,13 @@ export default function MachineCatalogue() {
                 </div>
                 
                 <div className="grid grid-cols-1 gap-px bg-alkota-iron border border-alkota-iron md:grid-cols-2 lg:grid-cols-3">
-                  {displayMachines.map((machine, i) => (
-                    <MachineCard key={machine.id} machine={machine} index={i} />
+                  {machines.map((machine, i) => (
+                    <MachineCard key={machine.id || machine.slug} machine={machine} index={i} />
                   ))}
                 </div>
               </div>
             );
           })}
-
-          {loading && (
-            <div className="py-20 text-center bg-white/5 border border-dashed border-alkota-iron">
-               <span className="text-alkota-silver uppercase tracking-[0.2em] text-[10px] animate-pulse">Synchronizing Fleet Data...</span>
-            </div>
-          )}
-
-          {!loading && Object.keys(groupedMachines).length === 0 && (
-            <div className="py-20 text-center bg-white/5 border border-dashed border-alkota-iron">
-               <span className="text-alkota-silver uppercase tracking-[0.2em] text-[10px]">No machines found in catalogue.</span>
-            </div>
-          )}
         </div>
 
         <div className="mt-24 flex flex-col items-center gap-12">

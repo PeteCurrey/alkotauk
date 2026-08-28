@@ -1,237 +1,175 @@
-'use client';
-
-import { useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, ChevronRight, Flame, Droplets, Wind, RotateCw, Truck, Layers } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
-interface ProductFamily {
-  id: string;
-  name: string;
-  categorySlug: string;
-  headline: string;
-  statement: string;
-  specs: { label: string; value: string }[];
-  image: string;
-  icon: any;
-  accent: string;
-}
-
-const FAMILIES: ProductFamily[] = [
+const FAMILIES = [
   {
     id: 'hot-water',
-    name: 'Hot Water Pressure Washers',
     categorySlug: 'hot-water',
-    headline: 'THERMAL POWER FOR HEAVY OIL & ROAD FILM.',
-    statement: 'Engineered with Schedule 80 continuous-wound heating coils and high-output burners delivering water temperatures up to 95°C and pressures up to 345 bar.',
-    specs: [
-      { label: 'Max Pressure', value: '345 BAR (5,000 PSI)' },
-      { label: 'Flow Rates', value: 'Up to 38 L/MIN' },
-      { label: 'Coil Metallurgy', value: 'Schedule 80 Seamless' },
-      { label: 'Warranty', value: '7-Year Coil Standard' },
-    ],
+    label: 'HOT WATER',
+    heading: 'THERMAL POWER.',
+    statement: 'Schedule 80 continuous-wound heating coils delivering water temperatures up to 95°C at pressures to 345 bar. The engine of serious fleet and industrial degreasing.',
+    specs: ['Up to 345 BAR', 'Up to 38 L/MIN', 'Schedule 80 ASTM A53', '7-Year Coil Warranty'],
     image: '/assets/products/420x4.png',
-    icon: Flame,
+    bg: '#1A1A18',
     accent: '#FF6900',
   },
   {
     id: 'cold-water',
-    name: 'Cold Water Industrial',
     categorySlug: 'cold-water',
-    headline: 'UNCOMPROMISING WATER VOLUME FOR SITE CLEANING.',
-    statement: 'Aircraft-grade aluminium and heavy-gauge steel frames housing industrial triplex plunger pumps driven by Honda, Kohler, Vanguard, or TEFC electric motors.',
-    specs: [
-      { label: 'Operating Range', value: '100 – 350 BAR' },
-      { label: 'Drive Options', value: 'Electric / Petrol / Diesel' },
-      { label: 'Frame Build', value: 'Welded Structural Steel' },
-      { label: 'Duty Cycle', value: 'Continuous Industrial' },
-    ],
+    label: 'COLD WATER',
+    heading: 'RAW VOLUME.',
+    statement: 'Industrial triplex plunger pumps on welded structural steel frames. Honda, Kohler, Vanguard, or TEFC electric drives — built for continuous high-duty cleaning.',
+    specs: ['100–350 BAR Range', 'Electric / Petrol / Diesel', 'Welded Steel Frame', 'Continuous Duty Cycle'],
     image: '/assets/products/4305xd4.png',
-    icon: Droplets,
-    accent: '#0EA5E9',
+    bg: '#F5F4F0',
+    accent: '#FF6900',
   },
   {
     id: 'steam',
-    name: 'Dry Vapour Steam Cleaners',
     categorySlug: 'steam',
-    headline: '140°C LATENT HEAT SANITISATION & DEGREASING.',
-    statement: 'Low water volume, high-temperature saturated dry steam melts heavy grease matrices instantly without excessive surface runoff or chemical saturation.',
-    specs: [
-      { label: 'Steam Temperature', value: 'Up to 140°C Vapour' },
-      { label: 'Operating Mode', value: 'Dry & Wet Steam' },
-      { label: 'Ideal Environment', value: 'Food Processing / HACCP' },
-      { label: 'Moisture Level', value: 'Ultra-Low Splatter' },
-    ],
+    label: 'DRY STEAM',
+    heading: 'MOLECULAR HEAT.',
+    statement: '140°C saturated dry vapour steam. Melts heavy grease matrices instantly with ultra-low water volume — purpose-built for food processing, HACCP zones, and biofilm elimination.',
+    specs: ['Up to 140°C Vapour', 'Dry & Wet Steam Modes', 'HACCP Zone Compliant', 'Ultra-Low Runoff'],
     image: '/assets/products/steam-oil.png',
-    icon: Wind,
-    accent: '#10B981',
+    bg: '#1A1A18',
+    accent: '#FF6900',
   },
   {
     id: 'parts-washers',
-    name: 'Aqueous Parts Washers',
     categorySlug: 'parts-washers',
-    headline: 'AUTOMATED ROTARY COMPONENT DEGREASING.',
-    statement: 'Eliminate solvent sink liabilities with heated alkaline aqueous turntable cabinet washers featuring high-velocity 3D wash jets and built-in disc oil skimmers.',
-    specs: [
-      { label: 'Wash Temp', value: 'Up to 80°C Heated' },
-      { label: 'Turntable Drive', value: 'Heavy Gear-Driven' },
-      { label: 'Oil Management', value: 'Integrated Disc Skimmer' },
-      { label: 'Compliance', value: 'Zero VOC Emissions' },
-    ],
+    label: 'PARTS WASHERS',
+    heading: 'AUTOMATED DEGREASING.',
+    statement: 'Heated alkaline aqueous turntable cabinet washers eliminate solvent liabilities. High-velocity 3D wash jets, integrated disc oil skimmers, 80°C operating temperature.',
+    specs: ['Up to 80°C Heated', 'Gear-Driven Turntable', 'Disc Oil Skimmer', 'Zero VOC Emissions'],
     image: '/assets/products/stationary-gas-fired.png',
-    icon: RotateCw,
-    accent: '#F59E0B',
+    bg: '#F5F4F0',
+    accent: '#FF6900',
   },
   {
     id: 'trailers',
-    name: 'Bespoke Trailer & Van Rigs',
     categorySlug: 'trailers',
-    headline: 'TURNKEY SELF-CONTAINED MOBILE CLEANING.',
-    statement: 'Custom-built single and tandem-axle mobile wash plants engineered with on-board baffled water tanks, hose reels, generator power, and dual-gun feeds.',
-    specs: [
-      { label: 'Water Capacity', value: 'Up to 1,000 Litres' },
-      { label: 'Mounting', value: 'Road-Tow / Van / Skid' },
-      { label: 'Hose Storage', value: 'Integrated Stainless Reels' },
-      { label: 'Build Spec', value: 'Bespoke to Application' },
-    ],
+    label: 'MOBILE RIGS',
+    heading: 'SELF-CONTAINED.',
+    statement: 'Custom single and tandem-axle mobile wash plants with on-board baffled water tanks up to 1,000L, dual-gun feeds, generator power, and spring-rewind hose reels.',
+    specs: ['Up to 1,000L On-Board', 'Tow / Van / Skid Mount', 'Integrated Hose Reels', 'Bespoke to Application'],
     image: '/assets/products/trailer-single.png',
-    icon: Truck,
-    accent: '#6366F1',
-  },
-  {
-    id: 'water-treatment',
-    name: 'Water Recycling & Treatment',
-    categorySlug: 'water-treatment',
-    headline: 'ENVIRONMENT AGENCY COMPLIANT WASH BAYS.',
-    statement: 'Closed-loop hydro-cyclonic separation and biological filtration systems that treat and recycle wash effluent, drastically cutting water utility bills.',
-    specs: [
-      { label: 'Filtration Type', value: 'Multi-Stage Hydro-Cyclone' },
-      { label: 'Water Recovery', value: 'Up to 90% Recycled' },
-      { label: 'Drainage Status', value: 'Zero Trade Discharge' },
-      { label: 'Compliance', value: 'PPG3 & BS EN 858 Aligned' },
-    ],
-    image: '/assets/products/ged-12v-skid.png',
-    icon: Layers,
-    accent: '#14B8A6',
+    bg: '#1A1A18',
+    accent: '#FF6900',
   },
 ];
 
 export default function ProductUniverse() {
-  const [activeFamilyIndex, setActiveFamilyIndex] = useState(0);
-  const activeFamily = FAMILIES[activeFamilyIndex];
-
   return (
-    <section className="py-24 sm:py-32 px-6 sm:px-12 bg-[#F8F8F7] border-b border-[#D8D8D6] overflow-hidden">
-      <div className="mx-auto max-w-7xl">
-        {/* Section Header */}
-        <div className="mb-16 flex flex-col md:flex-row md:items-end justify-between border-b border-[#D8D8D6] pb-8 gap-4">
+    <section aria-label="Product Families">
+      {/* Section introduction */}
+      <div className="bg-white px-8 sm:px-12 lg:px-16 pt-20 pb-12 border-b border-[#E0E0DE]">
+        <div className="mx-auto max-w-7xl flex flex-col sm:flex-row sm:items-end justify-between gap-6">
           <div>
-            <div className="flex items-center gap-3 mb-3">
-              <span className="h-[2px] w-8 bg-alkota-orange" />
-              <span className="font-ibm-plex-mono text-[10px] font-bold uppercase tracking-[0.35em] text-alkota-orange">
-                // THE ALKOTA PRODUCT UNIVERSE
-              </span>
-            </div>
-            <h2 className="font-barlow-condensed text-5xl sm:text-7xl font-black uppercase italic tracking-tight text-alkota-black leading-none">
-              BUILT FOR THE WORK.
+            <span className="font-ibm-plex-mono text-[9px] font-bold uppercase tracking-[0.4em] text-[#999] block mb-3">
+              The Equipment
+            </span>
+            <h2 className="font-barlow-condensed text-5xl sm:text-6xl lg:text-7xl font-black uppercase italic tracking-tight text-alkota-black leading-none">
+              BUILT FOR<br className="sm:hidden" /> THE WORK.
             </h2>
           </div>
           <Link
             href="/machines"
-            className="inline-flex items-center gap-2 font-ibm-plex-mono text-xs font-bold uppercase tracking-widest text-alkota-black hover:text-alkota-orange transition-colors"
+            className="inline-flex items-center gap-2 font-ibm-plex-mono text-xs font-bold uppercase tracking-widest text-alkota-black hover:text-alkota-orange transition-colors no-underline shrink-0 pb-1"
           >
-            <span>View Full Machine Index (127 Models)</span>
-            <ChevronRight className="h-4 w-4" />
+            <span>View Full Machine Index</span>
+            <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
+      </div>
 
-        {/* Family Selector Tabs */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 mb-12">
-          {FAMILIES.map((family, idx) => {
-            const isSelected = idx === activeFamilyIndex;
-            const Icon = family.icon;
-            return (
-              <button
-                key={family.id}
-                onClick={() => setActiveFamilyIndex(idx)}
-                className={`p-4 text-left border transition-all cursor-pointer ${
-                  isSelected
-                    ? 'bg-white border-alkota-black shadow-md border-l-4 border-l-alkota-orange'
-                    : 'bg-[#EDEDEB] border-[#DCDCDA] hover:bg-white text-[#777] hover:text-alkota-black'
-                }`}
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <Icon className={`h-4 w-4 ${isSelected ? 'text-alkota-orange' : 'text-[#888]'}`} />
-                  <span className="font-ibm-plex-mono text-[9px] font-bold text-[#888]">
-                    0{idx + 1}
-                  </span>
-                </div>
-                <p className="font-barlow-condensed text-lg font-bold uppercase tracking-tight text-alkota-black leading-tight">
-                  {family.name.split(' ')[0]} {family.name.split(' ')[1] || ''}
-                </p>
-              </button>
-            );
-          })}
-        </div>
+      {/* Full-width alternating product reveals */}
+      {FAMILIES.map((family, i) => {
+        const isDark = family.bg === '#1A1A18';
+        const isReversed = i % 2 !== 0;
 
-        {/* Featured Family Showcase Card (Hero Presentation) */}
-        <div className="bg-white border border-[#D5D5D3] p-8 sm:p-12 lg:p-16 shadow-xl">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            {/* Left: Engineering Narrative */}
-            <div className="lg:col-span-6 flex flex-col justify-between">
-              <div>
-                <span className="font-ibm-plex-mono text-[10px] font-bold uppercase tracking-widest text-alkota-orange mb-3 block">
-                  CATEGORY {activeFamilyIndex + 1} OF 6 // {activeFamily.name.toUpperCase()}
-                </span>
-                <h3 className="font-barlow-condensed text-4xl sm:text-6xl font-black uppercase italic tracking-tight text-alkota-black leading-[0.9] mb-6">
-                  {activeFamily.headline}
-                </h3>
-                <p className="font-inter text-base text-[#555] leading-relaxed mb-8">
-                  {activeFamily.statement}
-                </p>
+        return (
+          <div
+            key={family.id}
+            className={`relative flex flex-col ${isReversed ? 'lg:flex-row-reverse' : 'lg:flex-row'} min-h-[70vh] lg:min-h-[80vh] overflow-hidden`}
+            style={{ backgroundColor: family.bg }}
+          >
+            {/* Machine Visual — fills 55% */}
+            <div className="relative w-full lg:w-[55%] min-h-[50vw] lg:min-h-full flex items-center justify-center overflow-hidden"
+              style={{ backgroundColor: isDark ? '#141412' : '#EDEDEB' }}
+            >
+              <div className="absolute inset-0 flex items-center justify-center p-12 lg:p-20">
+                <img
+                  src={family.image}
+                  alt={`Alkota ${family.label} — ${family.heading}`}
+                  className="w-full h-full object-contain transition-transform duration-700 hover:scale-105"
+                  style={{
+                    filter: isDark
+                      ? 'drop-shadow(0 40px 80px rgba(0,0,0,0.8))'
+                      : 'drop-shadow(0 30px 60px rgba(0,0,0,0.25))',
+                  }}
+                  loading="lazy"
+                />
               </div>
+              {/* Category label overlay */}
+              <div className={`absolute top-8 ${isReversed ? 'right-8' : 'left-8'} font-ibm-plex-mono`}>
+                <span className={`text-[9px] font-bold uppercase tracking-widest px-3 py-1.5 ${isDark ? 'text-alkota-orange bg-black/60' : 'text-[#666] bg-white/80'}`}>
+                  {family.label}
+                </span>
+              </div>
+            </div>
 
-              {/* Glanceable Specs Grid */}
-              <div className="grid grid-cols-2 gap-4 border-t border-b border-[#EAEAEA] py-6 mb-8 font-ibm-plex-mono text-xs">
-                {activeFamily.specs.map((spec, sIdx) => (
-                  <div key={sIdx}>
-                    <span className="text-[#888] text-[9px] block uppercase">{spec.label}</span>
-                    <span className="font-bold text-alkota-black text-sm">{spec.value}</span>
+            {/* Content Panel — 45% */}
+            <div className={`relative z-10 flex flex-col justify-center w-full lg:w-[45%] px-8 sm:px-12 lg:px-16 py-16 lg:py-24 ${isDark ? 'text-white' : 'text-alkota-black'}`}>
+              {/* Step number */}
+              <span className={`font-ibm-plex-mono text-[9px] font-bold uppercase tracking-[0.4em] mb-6 block ${isDark ? 'text-alkota-orange' : 'text-[#999]'}`}>
+                0{i + 1} / {String(FAMILIES.length).padStart(2, '0')}
+              </span>
+
+              {/* Large product category heading */}
+              <h3 className="font-barlow-condensed font-black uppercase italic tracking-tight leading-[0.88] mb-6"
+                style={{ fontSize: 'clamp(3rem, 5vw, 4.5rem)' }}
+              >
+                {family.heading}
+              </h3>
+
+              {/* Statement */}
+              <p className={`font-inter leading-relaxed mb-10 font-normal ${isDark ? 'text-[#aaa]' : 'text-[#555]'}`}
+                style={{ fontSize: 'clamp(0.9rem, 1.2vw, 1.05rem)', maxWidth: '38ch' }}
+              >
+                {family.statement}
+              </p>
+
+              {/* Spec strip */}
+              <div className={`grid grid-cols-2 gap-x-8 gap-y-4 border-t pt-8 mb-10 font-ibm-plex-mono text-xs ${isDark ? 'border-[#2F2F2B]' : 'border-[#E0E0DE]'}`}>
+                {family.specs.map((spec, si) => (
+                  <div key={si}>
+                    <span className={`text-[9px] uppercase block mb-0.5 ${isDark ? 'text-[#666]' : 'text-[#888]'}`}>
+                      {['Pressure', 'Flow', 'Metallurgy', 'Protection', 'Pressure Range', 'Drive', 'Frame', 'Duty', 'Temperature', 'Mode', 'Hygiene', 'Water', 'Heating', 'Turntable', 'Oil Mgmt', 'Emissions', 'Capacity', 'Mounting', 'Storage', 'Spec'][si * 4 + i] || `Spec ${si + 1}`}
+                    </span>
+                    <span className={`font-bold ${isDark ? 'text-white' : 'text-alkota-black'}`}>{spec}</span>
                   </div>
                 ))}
               </div>
 
-              {/* Direct Category Route CTA */}
-              <div className="flex flex-wrap items-center gap-4">
+              {/* CTA */}
+              <div>
                 <Link
-                  href={`/machines/${activeFamily.categorySlug}`}
-                  className="inline-flex items-center gap-3 bg-alkota-black text-white px-8 py-4 font-ibm-plex-mono text-xs font-bold uppercase tracking-[0.2em] transition-all hover:bg-alkota-orange no-underline group"
+                  href={`/machines/${family.categorySlug}`}
+                  className={`inline-flex items-center gap-3 px-8 py-4 font-ibm-plex-mono text-xs font-bold uppercase tracking-[0.2em] transition-all no-underline group ${
+                    isDark
+                      ? 'bg-alkota-orange text-white hover:bg-white hover:text-black'
+                      : 'bg-alkota-black text-white hover:bg-alkota-orange'
+                  }`}
                 >
-                  <span>Explore {activeFamily.name}</span>
+                  <span>Explore {family.label}</span>
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Link>
-                <Link
-                  href="/tools/configurator"
-                  className="inline-flex items-center gap-2 border border-[#333] px-6 py-4 font-ibm-plex-mono text-xs font-bold uppercase tracking-widest text-alkota-black hover:border-alkota-orange hover:text-alkota-orange transition-colors no-underline"
-                >
-                  Configure Build
-                </Link>
-              </div>
-            </div>
-
-            {/* Right: Substantial Machine Cutout Visual */}
-            <div className="lg:col-span-6 relative aspect-square sm:aspect-[4/3] bg-gradient-to-br from-[#F5F5F3] to-[#EBEBE8] border border-[#E0E0DE] p-8 flex items-center justify-center overflow-hidden">
-              <img
-                src={activeFamily.image}
-                alt={activeFamily.name}
-                className="max-h-full max-w-full object-contain filter drop-shadow-2xl transition-transform duration-700 hover:scale-105"
-              />
-              <div className="absolute bottom-4 right-4 font-ibm-plex-mono text-[9px] text-[#999] uppercase tracking-widest">
-                // HANDCRAFTED IN USA
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        );
+      })}
     </section>
   );
 }

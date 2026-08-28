@@ -1,208 +1,87 @@
-'use client';
-
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import { urlFor, getMockIndustries, safeFetch } from '@/sanity/client';
-import { 
-  Leaf, 
-  Truck, 
-  Utensils, 
-  Factory, 
-  Anchor, 
-  HardHat, 
-  Trash2, 
-  Layers,
-  Cloud, 
-  Zap, 
-  Layout, 
-  Car, 
-  Box, 
-  Target 
-} from 'lucide-react';
-import BorderBeam from './ui/BorderBeam';
-import { motion } from 'framer-motion';
-
-const iconMap: Record<string, any> = {
-  Leaf,
-  Truck,
-  Utensils,
-  Factory,
-  Anchor,
-  HardHat,
-  Trash2,
-  Layers,
-  Cloud,
-  Zap,
-  Layout,
-  Car,
-  Box,
-  Target,
-};
+import { ArrowRight } from 'lucide-react';
 
 export default function IndustryGrid() {
-  const [industries, setIndustries] = useState<any[]>([]);
-
-  useEffect(() => {
-    async function fetchIndustries() {
-      const query = `*[_type == "industry"] | order(name asc) {
-        _id,
-        name,
-        slug,
-        icon,
-        image,
-        description
-      }`;
-      const data = await safeFetch(query, []);
-      
-      const fallbackData = [
-        { _id: '1', name: 'Agriculture', slug: 'agriculture', icon: 'Leaf', description: 'Specialised cleaning for tractors, combines, and livestock housing. Keeping precision machinery in peak condition.' },
-        { _id: '2', name: 'Transport & Fleet', slug: 'transport-fleet', icon: 'Truck', description: 'Rapid turnaround for HGV fleets, distribution centres, and logistics hubs. Eliminating road film and corrosive salt.' },
-        { _id: '3', name: 'Food & Beverage', slug: 'food-beverage', icon: 'Utensils', description: 'Food-safe cleaning solutions for production lines and kitchens. High-temperature steam for deep sanitization.' },
-        { _id: '4', name: 'Industrial & Manufacturing', slug: 'industrial', icon: 'Factory', description: 'Heavy-duty equipment cleaning for factories and floor bays. Built for continuous use in the toughest environments.' },
-        { _id: '5', name: 'Maritime & Offshore', slug: 'maritime', icon: 'Anchor', description: 'Salt-resistant machinery for docks, shipyards, and offshore platforms. Engineering that withstands coastal corrosion.' },
-        { _id: '6', name: 'Construction & Demolition', slug: 'construction', icon: 'HardHat', description: 'Powerful mud, concrete, and debris removal for earthmovers, scaffolding, and active sites.' },
-        { _id: '7', name: 'Waste & Recycling', slug: 'waste-management', icon: 'Trash2', description: 'Sanitization and grease removal for refuse fleets, recycling facilities, and waste containers.' },
-        { _id: '8', name: 'Mining & Quarrying', slug: 'mining', icon: 'Layers', description: 'High-pressure descaling and ore dust removal for extraction machinery and heavy conveyors.' }
-      ];
-
-      if (data && data.length > 0) {
-        const merged = [...data];
-        fallbackData.forEach((fallbackItem) => {
-          const exists = merged.some(
-            (item) => (item.slug?.current || item.slug) === fallbackItem.slug
-          );
-          if (!exists) {
-            merged.push({
-              ...fallbackItem,
-              slug: { current: fallbackItem.slug }
-            });
-          }
-        });
-        setIndustries(merged.slice(0, 8));
-      } else {
-        setIndustries(fallbackData);
-      }
-    }
-    fetchIndustries();
-  }, []);
+  const industries = [
+    { name: 'Agriculture', slug: 'agriculture', image: '/assets/industries/agriculture.png', statement: 'Combines, livestock housing, irrigation systems. Where a clean machine runs longer.' },
+    { name: 'Transport & Fleet', slug: 'transport-fleet', image: '/assets/industries/fleet.png', statement: 'HGV fleets, logistics hubs, vehicle preparation. Road film and corrosive salt removed at scale.' },
+    { name: 'Food & Beverage', slug: 'food-beverage', image: '/assets/industries/food-processing.png', statement: 'HACCP-compliant steam sanitisation for production lines, cold stores and prep kitchens.' },
+    { name: 'Manufacturing', slug: 'industrial', image: '/assets/industries/manufacturing.png', statement: 'Factory floor bays, press tools, conveyor lines. Continuous-duty industrial degreasing.' },
+    { name: 'Construction', slug: 'construction', image: '/assets/industries/construction.png', statement: 'Earthmovers, scaffolding, concrete plant. High-pressure mud and debris removal on live sites.' },
+    { name: 'Mining & Quarrying', slug: 'mining', image: '/assets/industries/mining.png', statement: 'Extraction machinery, conveyors, heavy loaders. Descaling and ore-dust management.' },
+    { name: 'Waste & Recycling', slug: 'waste-management', image: '/assets/industries/waste-management.png', statement: 'Refuse fleets, skip lorries, recycling facilities. Sanitisation and grease removal at depot scale.' },
+    { name: 'Oil & Gas', slug: 'oil-gas', image: '/assets/industries/oil-gas.png', statement: 'Offshore platforms, subsea equipment, terminal yards. Corrosion-resistant performance in hostile environments.' },
+  ];
 
   return (
-    <section className="bg-alkota-bg py-48 px-6 relative overflow-hidden">
-      {/* Cinematic background label */}
-      <div className="absolute top-20 left-10 pointer-events-none select-none opacity-[0.05]">
-        <span className="font-barlow-condensed text-[30vw] font-black uppercase italic leading-none text-alkota-black whitespace-nowrap">
-          SECTORS
-        </span>
-      </div>
-
-      <div className="mx-auto max-w-7xl relative z-10">
-        <div className="mb-32 flex flex-col lg:flex-row items-end justify-between gap-12">
-          <div className="max-w-4xl">
-            <motion.div 
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="mb-8 flex items-center gap-4"
-            >
-              <div className="h-[2px] w-12 bg-alkota-orange" />
-              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-alkota-orange">
-                Operational Environments
-              </span>
-            </motion.div>
-            <h2 className="font-barlow-condensed text-6xl font-black text-alkota-black md:text-8xl lg:text-9xl uppercase italic leading-[0.8] tracking-tighter">
-              BUILT FOR YOUR <br />
-              <span className="text-alkota-orange">INDUSTRY.</span>
+    <section className="bg-[#111110]" aria-label="Industry Applications">
+      {/* Section Header */}
+      <div className="px-8 sm:px-12 lg:px-16 pt-20 pb-12 border-b border-[#222]">
+        <div className="mx-auto max-w-7xl flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+          <div>
+            <span className="font-ibm-plex-mono text-[9px] font-bold uppercase tracking-[0.4em] text-[#666] block mb-3">
+              Operational Environments
+            </span>
+            <h2 className="font-barlow-condensed text-5xl sm:text-6xl lg:text-7xl font-black uppercase italic tracking-tight text-white leading-none">
+              BUILT FOR<br className="sm:hidden" /> YOUR INDUSTRY.
             </h2>
           </div>
-          <div className="max-w-md pb-4">
-            <p className="font-inter text-xs uppercase tracking-[0.15em] text-alkota-silver leading-relaxed">
-              Alkota systems are engineered for the world's most aggressive environments. Choose your sector to filter the fleet.
-            </p>
-          </div>
+          <Link
+            href="/industries"
+            className="inline-flex items-center gap-2 font-ibm-plex-mono text-xs font-bold uppercase tracking-widest text-[#888] hover:text-alkota-orange transition-colors no-underline shrink-0 pb-1"
+          >
+            <span>All Applications</span>
+            <ArrowRight className="h-4 w-4" />
+          </Link>
         </div>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-alkota-iron border border-alkota-iron">
-          {industries.map((industry: any, index: number) => {
-            const Icon = iconMap[industry.icon] || Factory;
-            const industrySlug = industry.slug?.current || industry.slug;
-            
-            // Per-industry fallback images mapped to exact database slugs
-            const fallbackImages: Record<string, string> = {
-              'agriculture': '/assets/industries/agriculture.png',
-              'transport-fleet': '/assets/industries/fleet.png',
-              'food-beverage': '/assets/industries/food-processing.png',
-              'industrial': '/assets/industries/manufacturing.png',
-              'maritime': '/assets/industries/oil-gas.png',
-              'construction': '/assets/industries/construction.png',
-              'waste-management': '/assets/industries/waste-management.png',
-              'mining': '/assets/industries/mining.png',
-              // Legacy keys for backward compatibility
-              'oil-gas': '/assets/industries/oil-gas.png',
-              'fleet': '/assets/industries/fleet.png',
-              'manufacturing': '/assets/industries/manufacturing.png',
-              'food-processing': '/assets/industries/food-processing.png'
-            };
+      {/* 4-column industry grid — full images, dramatic reveal on hover */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-[#222]">
+        {industries.map((ind, i) => (
+          <Link
+            key={ind.slug}
+            href={`/industries/${ind.slug}`}
+            className="relative group overflow-hidden bg-[#111110] aspect-[3/4] lg:aspect-auto lg:h-[520px] flex flex-col no-underline"
+          >
+            {/* Full-bleed industry photograph */}
+            <div className="absolute inset-0">
+              <img
+                src={ind.image}
+                alt={ind.name}
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                loading="lazy"
+                style={{ filter: 'brightness(0.45) contrast(1.1)' }}
+              />
+              {/* Gradient: ensures text is always readable */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+              {/* Hover — reveal more image */}
+              <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-0 transition-opacity duration-500" />
+            </div>
 
-            const imageSrc = industry.image 
-              ? (typeof industry.image === 'string' ? industry.image : urlFor(industry.image).url())
-              : (fallbackImages[industrySlug] || '/assets/industries/construction.png');
+            {/* Content always at bottom */}
+            <div className="relative z-10 mt-auto p-8">
+              <div className="mb-4 overflow-hidden">
+                <div className="h-px w-0 bg-alkota-orange transition-all duration-500 group-hover:w-12 mb-4" />
+                <h3 className="font-barlow-condensed text-3xl font-black uppercase italic text-white leading-tight group-hover:text-alkota-orange transition-colors duration-300">
+                  {ind.name}
+                </h3>
+              </div>
+              <p className="font-inter text-xs text-[#999] leading-relaxed max-w-[28ch] translate-y-4 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-400">
+                {ind.statement}
+              </p>
+              <div className="mt-4 flex items-center gap-2 font-ibm-plex-mono text-[10px] text-alkota-orange font-bold uppercase tracking-widest translate-y-4 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">
+                <span>Explore</span>
+                <ArrowRight className="h-3 w-3" />
+              </div>
+            </div>
 
-            return (
-              <Link 
-                key={industry._id || industry.name}
-                href={`/industries/${industrySlug}`}
-                className="group relative h-[450px] overflow-hidden bg-white transition-all duration-500 hover:bg-alkota-bg"
-              >
-                {/* Background Image Reveal */}
-                <div className="absolute inset-0 z-0 opacity-25 grayscale transition-all duration-1000 ease-out group-hover:opacity-80 group-hover:grayscale-0 group-hover:scale-110">
-                  <Image 
-                    src={imageSrc}
-                    alt={industry.name}
-                    fill
-                    className="object-cover"
-                    unoptimized={imageSrc.startsWith('http') || imageSrc.startsWith('/')}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-alkota-bg via-transparent to-transparent" />
-                </div>
-
-                <BorderBeam 
-                  className="opacity-0 group-hover:opacity-100 transition-opacity duration-700"
-                  size={400}
-                  duration={12}
-                  colorFrom="var(--color-alkota-orange)"
-                  colorTo="var(--color-alkota-iron)"
-                />
-
-                <div className="relative z-10 flex h-full flex-col p-10 justify-between">
-                  <div className="flex justify-between items-start">
-                    <div className="border border-alkota-iron bg-alkota-bg/50 p-5 transition-all group-hover:border-alkota-orange/50 group-hover:bg-alkota-orange/10">
-                      <Icon className="h-6 w-6 text-alkota-silver transition-colors group-hover:text-alkota-orange" />
-                    </div>
-                    <span className="font-ibm-plex-mono text-[10px] font-bold text-alkota-smoke group-hover:text-alkota-orange/40 transition-colors">
-                      [ SEC_{index + 1} ]
-                    </span>
-                  </div>
-
-                  <div>
-                    <h3 className="font-barlow-condensed text-3xl font-black text-alkota-black uppercase italic tracking-tight mb-4 group-hover:text-alkota-orange transition-colors duration-300">
-                      {industry.name}
-                    </h3>
-                    <div className="h-1 w-0 bg-alkota-orange transition-all duration-500 group-hover:w-full" />
-                    <p className="mt-6 text-[9px] font-black uppercase tracking-[0.3em] text-alkota-silver opacity-0 transform translate-y-4 transition-all duration-500 group-hover:opacity-100 group-hover:translate-y-0">
-                      Access Infrastructure →
-                    </p>
-                  </div>
-                </div>
-
-                {/* Subtle ID watermark */}
-                <div className="absolute bottom-4 right-4 text-[4vw] font-black text-alkota-black/5 italic select-none">
-                    0{index + 1}
-                </div>
-              </Link>
-            );
-          })}
-        </div>
+            {/* Index number watermark */}
+            <div className="absolute top-6 right-6 font-ibm-plex-mono text-[11px] font-bold text-white/20">
+              0{i + 1}
+            </div>
+          </Link>
+        ))}
       </div>
     </section>
   );

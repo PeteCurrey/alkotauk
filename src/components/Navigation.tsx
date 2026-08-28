@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import CartIndicator from './CartIndicator';
 import { useSession } from 'next-auth/react';
 import Logo from './Logo';
 import { supabase } from '@/lib/supabase/client';
@@ -208,8 +207,7 @@ export default function Navigation() {
           >
             Configurator
           </Link>
-          <CartIndicator />
-          <button className="lg:hidden text-alkota-black" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+          <button className="lg:hidden text-alkota-black p-2" onClick={() => setMobileMenuOpen(!mobileMenuOpen)} aria-label="Toggle navigation menu">
             {mobileMenuOpen ? <X className="h-7 w-7" /> : <Menu className="h-7 w-7" />}
           </button>
         </div>

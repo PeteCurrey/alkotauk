@@ -1,160 +1,164 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { Play } from 'lucide-react';
+import Image from 'next/image';
+import { Play, ArrowRight, Film, Clock, MapPin, Gauge, Shield, Wrench } from 'lucide-react';
 import { messQuestEpisodes } from '@/lib/messQuestEpisodes';
+import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 
 export const metadata: Metadata = {
-  title: 'Mess Quest — The Series | Alkota UK',
-  description: 'Mess Quest is Alkota UK\'s original video series. Real industrial messes. Real Alkota machines. Watch the team take on the dirtiest, most challenging cleaning jobs they could find.',
+  title: 'Mess Quest — The Original Series | Alkota UK',
+  description:
+    'Mess Quest is Alkota’s original video series: Real industrial messes. Real Alkota machines. Real results. Watch our heavy cleaning equipment tackle the dirtiest jobs in the field.',
   alternates: {
-    canonical: 'https://www.alkota.co.uk/mess-quest',
+    canonical: 'https://alkota.co.uk/mess-quest',
   },
 };
 
 export default function MessQuestHubPage() {
+  const featured = messQuestEpisodes[0];
+  const episodes = messQuestEpisodes.slice(1);
+
   return (
-    <main className="min-h-screen bg-alkota-bg">
-      {/* HERO SECTION */}
-      <section className="relative bg-alkota-black pt-32 pb-24 md:pt-48 md:pb-32 overflow-hidden border-b border-alkota-iron">
-        {/* Diamond plate texture overlay */}
-        <div 
-          className="absolute inset-0 z-0 opacity-[0.03] mix-blend-overlay pointer-events-none"
-          style={{
-            backgroundImage: `url('https://www.transparenttextures.com/patterns/diamond-upholstery.png')`,
-            backgroundRepeat: 'repeat'
-          }}
-        />
-        
-        <div className="max-w-7xl mx-auto px-6 relative z-10 text-center">
-          <p className="font-ibm-plex-mono text-alkota-orange font-bold tracking-[0.2em] uppercase text-sm mb-6">
-            // THE ORIGINAL SERIES
-          </p>
-          <h1 className="font-barlow-condensed text-7xl md:text-9xl font-black italic tracking-tighter text-white uppercase mb-6 drop-shadow-lg">
-            MESS QUEST
-          </h1>
-          <p className="font-inter text-xl md:text-2xl text-alkota-silver font-medium max-w-3xl mx-auto mb-8">
-            We went looking for the worst messes we could find. Armed with Alkota machines, we cleaned every single one.
-          </p>
-          <div className="w-24 h-[2px] bg-alkota-orange mx-auto mb-8" />
-          <p className="font-inter text-alkota-smoke max-w-2xl mx-auto leading-relaxed">
-            Mess Quest is Alkota's original video series — real industrial cleaning challenges, real machines, real results. No studio. No staged messes. Just genuinely filthy jobs and the equipment built to handle them.
-          </p>
-        </div>
-      </section>
+    <div className="min-h-screen bg-[#0A0A0A] text-white flex flex-col justify-between">
+      <Navigation />
 
-      {/* EPISODE GRID SECTION */}
-      <section className="py-24 px-6 bg-alkota-black">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="font-ibm-plex-mono text-alkota-orange font-bold tracking-[0.2em] uppercase text-2xl mb-12 border-b border-alkota-iron pb-6">
-            // THE EPISODES
-          </h2>
+      <main className="pt-32 pb-24">
+        {/* Hero Section */}
+        <section className="px-6 sm:px-12 pb-16 max-w-7xl mx-auto border-b border-[#222]">
+          <div className="flex items-center gap-3 mb-6">
+            <span className="h-[2px] w-8 bg-[#FF6900]" />
+            <span className="font-ibm-plex-mono text-[10px] font-bold uppercase tracking-[0.35em] text-[#FF6900]">
+              ALKOTA ORIGINAL SERIES // FIELD PROOF
+            </span>
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-            {messQuestEpisodes.map((episode) => (
-              <div key={episode.id} className="group flex flex-col bg-alkota-steel border border-alkota-iron rounded-sm overflow-hidden transition-all hover:border-alkota-orange/50">
-                {/* Video Container (16:9 aspect ratio) */}
-                <div className="relative w-full aspect-video bg-alkota-iron border-b border-alkota-iron overflow-hidden">
-                  {episode.youtubeId === 'PENDING' ? (
-                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-alkota-iron">
-                      <Play className="w-16 h-16 text-alkota-orange opacity-40 mb-4" />
-                      <span className="font-ibm-plex-mono text-xs uppercase tracking-widest text-alkota-smoke font-bold">
-                        Episode Coming Soon
-                      </span>
-                    </div>
-                  ) : (
-                    <iframe
-                      src={`https://www.youtube.com/embed/${episode.youtubeId}`}
-                      title={episode.title}
-                      className="absolute top-0 left-0 w-full h-full"
-                      allowFullScreen
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      loading="lazy"
-                    />
-                  )}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-end">
+            <div className="lg:col-span-8">
+              <h1 className="font-barlow-condensed text-6xl sm:text-8xl lg:text-9xl font-black uppercase italic tracking-tight text-white leading-[0.85]">
+                MESS QUEST.
+              </h1>
+              <p className="mt-4 font-inter text-base sm:text-xl text-[#ccc] max-w-2xl leading-relaxed">
+                We went looking for the most extreme industrial cleaning challenges we could find. Armed with Alkota hot water pressure washers and steam units, we put our engineering to the test on real jobs.
+              </p>
+            </div>
+            <div className="lg:col-span-4 border-l border-[#222] pl-6 font-ibm-plex-mono text-xs text-[#888]">
+              <p className="text-white font-bold mb-1">// UNSTAGED INDUSTRIAL CHALLENGES</p>
+              <p>No clean studio setups. Just heavy grease, road tar, agricultural mud, and Schedule 80 heat exchangers at work.</p>
+            </div>
+          </div>
+        </section>
+
+        {/* Featured Episode Hero Player */}
+        {featured && (
+          <section className="px-6 sm:px-12 py-16 max-w-7xl mx-auto border-b border-[#222]">
+            <div className="bg-[#111] border border-[#222] p-8 sm:p-12">
+              <div className="flex items-center justify-between mb-6">
+                <span className="text-[10px] font-ibm-plex-mono font-bold uppercase tracking-widest text-[#FF6900] bg-[#FF6900]/10 px-3 py-1 border border-[#FF6900]/20">
+                  EPISODE 01 // SPOTLIGHT
+                </span>
+                <span className="text-xs font-ibm-plex-mono text-[#888]">
+                  Duration: {featured.duration}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <div className="lg:col-span-7 aspect-video relative bg-black border border-[#222] overflow-hidden">
+                  <iframe
+                    src={`https://www.youtube.com/embed/${featured.youtubeId}?rel=0`}
+                    title={featured.title}
+                    className="w-full h-full border-0"
+                    allowFullScreen
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  />
                 </div>
 
-                {/* Content */}
-                <div className="p-8 flex flex-col flex-grow">
-                  <div className="flex items-center gap-4 mb-4">
-                    <span className="font-ibm-plex-mono text-xs font-black tracking-widest text-alkota-orange bg-alkota-orange/10 px-2 py-1 uppercase">
-                      EP. {episode.id.toString().padStart(2, '0')}
-                    </span>
-                    <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-smoke">
-                      {episode.industry !== 'TBC' ? episode.industry : 'INDUSTRY PENDING'}
-                    </span>
+                <div className="lg:col-span-5 flex flex-col justify-between">
+                  <div>
+                    <h2 className="font-barlow-condensed text-3xl sm:text-4xl font-black uppercase italic text-white leading-tight mb-2">
+                      {featured.title}
+                    </h2>
+                    <p className="font-inter text-sm text-[#aaa] leading-relaxed mb-6">
+                      {featured.description}
+                    </p>
+
+                    <div className="space-y-2.5 font-ibm-plex-mono text-xs text-[#888] border-t border-[#222] pt-4 mb-6">
+                      <div className="flex items-center justify-between">
+                        <span>MACHINE USED:</span>
+                        <span className="text-white font-bold">{featured.machine}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span>OPERATING SPEC:</span>
+                        <span className="text-[#FF6900] font-bold">{featured.operatingSpec}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span>INDUSTRY:</span>
+                        <span className="text-white font-bold">{featured.industry}</span>
+                      </div>
+                    </div>
                   </div>
 
-                  <h3 className="font-barlow-condensed text-3xl font-bold uppercase text-white mb-4 italic tracking-tight">
-                    {episode.title}
-                  </h3>
+                  <Link
+                    href="/machines"
+                    className="inline-flex items-center justify-center gap-2 bg-[#FF6900] text-white px-6 py-3.5 font-ibm-plex-mono text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-colors"
+                  >
+                    <span>View {featured.machine}</span>
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
 
-                  <p className="font-inter text-sm text-alkota-silver leading-relaxed line-clamp-3 mb-6 flex-grow">
-                    {episode.description}
+        {/* All Episodes Grid */}
+        <section className="px-6 sm:px-12 py-16 max-w-7xl mx-auto">
+          <h3 className="font-barlow-condensed text-4xl sm:text-5xl font-black uppercase italic text-white mb-12 border-b border-[#222] pb-4">
+            MORE EPISODES IN THE SERIES
+          </h3>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {episodes.map((ep) => (
+              <div
+                key={ep.id}
+                className="border border-[#222] bg-[#0E0E0E] flex flex-col justify-between p-6 hover:border-[#FF6900] transition-colors"
+              >
+                <div>
+                  <div className="aspect-video relative bg-black border border-[#222] mb-6 overflow-hidden">
+                    <iframe
+                      src={`https://www.youtube.com/embed/${ep.youtubeId}?rel=0`}
+                      title={ep.title}
+                      className="w-full h-full border-0"
+                      allowFullScreen
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-between text-[9px] font-ibm-plex-mono text-[#888] mb-2">
+                    <span className="text-[#FF6900] font-bold">EP. 0{ep.id}</span>
+                    <span>{ep.industry}</span>
+                  </div>
+
+                  <h4 className="font-barlow-condensed text-2xl font-bold uppercase italic text-white leading-tight mb-2">
+                    {ep.title}
+                  </h4>
+
+                  <p className="font-inter text-xs text-[#888] line-clamp-3 leading-relaxed mb-4">
+                    {ep.description}
                   </p>
+                </div>
 
-                  <div className="mt-auto pt-6 border-t border-alkota-iron/50">
-                    <span className="inline-flex items-center rounded-sm bg-alkota-iron px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-alkota-silver border border-alkota-steel">
-                      Machine: {episode.machine}
-                    </span>
-                  </div>
+                <div className="border-t border-[#1C1C1C] pt-3 font-ibm-plex-mono text-[10px] text-[#666] flex items-center justify-between">
+                  <span>{ep.machine}</span>
+                  <span className="text-[#FF6900]">{ep.duration}</span>
                 </div>
               </div>
             ))}
           </div>
-        </div>
-      </section>
+        </section>
+      </main>
 
-      {/* SERIES STATEMENT SECTION */}
-      <section className="py-24 px-6 bg-alkota-black border-y border-alkota-iron relative overflow-hidden">
-        {/* Abstract background graphics */}
-        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-alkota-orange/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3 pointer-events-none" />
-        
-        <div className="max-w-5xl mx-auto text-center relative z-10">
-          <h2 className="font-barlow-condensed text-5xl md:text-7xl font-black uppercase text-white tracking-tighter italic mb-12 drop-shadow-md">
-            "If it makes a mess, an Alkota cleans it."
-          </h2>
-          
-          <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12 w-full border-t border-alkota-iron pt-12">
-            <div className="flex flex-col gap-2 w-full md:w-auto text-center">
-               <span className="font-barlow-condensed font-black text-3xl text-alkota-orange uppercase tracking-tight italic">Multiple Episodes</span>
-            </div>
-            <div className="hidden md:block w-px h-12 bg-alkota-iron" />
-            <div className="flex flex-col gap-2 w-full md:w-auto text-center">
-               <span className="font-barlow-condensed font-black text-3xl text-alkota-orange uppercase tracking-tight italic">Real Industrial Jobs</span>
-            </div>
-            <div className="hidden md:block w-px h-12 bg-alkota-iron" />
-            <div className="flex flex-col gap-2 w-full md:w-auto text-center">
-               <span className="font-barlow-condensed font-black text-3xl text-alkota-orange uppercase tracking-tight italic">Zero Staged Messes</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA SECTION */}
-      <section className="py-32 px-6 bg-alkota-steel text-center border-b border-alkota-iron">
-        <div className="max-w-3xl mx-auto">
-          <h2 className="font-barlow-condensed text-5xl md:text-6xl font-black italic uppercase tracking-tighter text-white mb-6 drop-shadow-md">
-            Got a mess that needs meeting?
-          </h2>
-          <p className="font-inter text-lg text-alkota-silver font-medium leading-relaxed mb-12">
-            If you've got a cleaning challenge that belongs in the series — or just need the right machine for a serious job — we want to hear about it.
-          </p>
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-6">
-            <Link 
-              href="/tools/machine-match"
-              className="bg-alkota-orange hover:bg-alkota-orange-bright text-white uppercase font-black tracking-widest text-sm px-10 py-5 rounded-sm transition-all shadow-[0_4px_20px_rgba(255,105,0,0.3)] hover:shadow-[0_6px_25px_rgba(255,105,0,0.4)] hover:-translate-y-0.5"
-            >
-              Find Your Machine →
-            </Link>
-            <Link 
-              href="/quote"
-              className="bg-alkota-black border border-alkota-iron hover:border-alkota-silver text-white uppercase font-bold tracking-widest text-sm px-10 py-5 rounded-sm transition-all"
-            >
-              Request a Quote
-            </Link>
-          </div>
-        </div>
-      </section>
-    </main>
+      <Footer />
+    </div>
   );
 }

@@ -1,111 +1,135 @@
 import Link from 'next/link';
-import { Globe, Mail, Phone, MapPin } from 'lucide-react';
+import { Globe, Mail, Phone, MapPin, ArrowUpRight, ShieldCheck, Sparkles } from 'lucide-react';
 import Logo from './Logo';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-alkota-bg border-t border-alkota-iron/50 pt-24 pb-12 text-alkota-black text-[11px] uppercase tracking-widest">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="grid grid-cols-1 gap-16 md:grid-cols-2 lg:grid-cols-6">
-          {/* Brand Identity */}
-          <div className="flex flex-col gap-8 lg:col-span-1">
-            <Link href="/" className="group">
-              <Logo className="h-10 text-alkota-black" />
+    <footer className="bg-[#0A0A0A] text-white border-t border-[#222] pt-20 pb-12 text-xs">
+      <div className="mx-auto max-w-7xl px-6 sm:px-12">
+        {/* Top Brand Banner */}
+        <div className="pb-16 mb-16 border-b border-[#1F1F1F] grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div className="lg:col-span-8">
+            <Link href="/" className="inline-block group mb-4">
+              <Logo className="h-9 text-white" />
             </Link>
-            <p className="font-inter text-[13px] leading-relaxed text-alkota-silver max-w-xs">
-              EST. 1964. Handcrafted in South Dakota, USA. Engineered for the UK's most demanding industrial environments.
-            </p>
-            <p className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-smoke mt-3">
-              // CLEANING SINCE 1964
-
+            <p className="font-inter text-sm text-[#888] max-w-2xl leading-relaxed">
+              Alkota UK represents Alkota Cleaning Systems Inc. (Est. 1964, Alcester, South Dakota, USA). Engineered for the UK’s most aggressive industrial, fleet, agricultural, and manufacturing environments.
             </p>
           </div>
-
-          {/* Company */}
-          <div>
-            <h4 className="font-barlow-condensed text-xl font-black text-alkota-orange mb-8">Company</h4>
-            <ul className="flex flex-col gap-4 font-inter font-bold text-alkota-silver">
-              <li><Link href="/about" className="hover:text-alkota-black transition-all hover:pl-2">About Alkota UK</Link></li>
-              <li><Link href="/technology" className="hover:text-alkota-black transition-all hover:pl-2">Technology</Link></li>
-              <li><Link href="/about#origin" className="hover:text-alkota-black transition-all hover:pl-2">Heritage</Link></li>
-              <li><Link href="/contact" className="hover:text-alkota-black transition-all hover:pl-2">Contact</Link></li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-barlow-condensed text-xl font-black text-alkota-orange mb-8">Industrial Machines</h4>
-            <ul className="flex flex-col gap-4 font-inter font-bold text-alkota-silver">
-              <li><Link href="/machines/hot-water" className="hover:text-alkota-black transition-all hover:pl-2">Hot Water Elite</Link></li>
-              <li><Link href="/machines/cold-water" className="hover:text-alkota-black transition-all hover:pl-2">Cold Water Industrial</Link></li>
-              <li><Link href="/machines/wash-plants" className="hover:text-alkota-black transition-all hover:pl-2">Wash Plants & Bay Systems</Link></li>
-              <li><Link href="/machines/parts-washers" className="hover:text-alkota-black transition-all hover:pl-2">Automatic Parts Washers</Link></li>
-              <li><Link href="/machines/trailers" className="hover:text-alkota-black transition-all hover:pl-2">Bespoke Trailers</Link></li>
-              <li><Link href="/bespoke" className="hover:text-alkota-black transition-all hover:pl-2">Bespoke Builds</Link></li>
-            </ul>
-          </div>
-
-          {/* Industrial Systems */}
-          <div>
-            <h4 className="font-barlow-condensed text-xl font-black text-alkota-orange mb-8">Industrial Systems</h4>
-            <ul className="flex flex-col gap-4 font-inter font-bold text-alkota-silver">
-              <li><Link href="/industrial/mat-wash-plants" className="hover:text-alkota-black transition-all hover:pl-2">Access Mat Wash Plants</Link></li>
-              <li><Link href="/industrial/containerised" className="hover:text-alkota-black transition-all hover:pl-2">Containerised Systems</Link></li>
-              <li><Link href="/industrial/wash-installations" className="hover:text-alkota-black transition-all hover:pl-2">Multi-Bay Installations</Link></li>
-              <li><Link href="/industrial/brief" className="hover:text-alkota-black transition-all hover:pl-2">Engineering Brief</Link></li>
-            </ul>
-          </div>
-
-          {/* Chemicals Hub */}
-          <div>
-            <h4 className="font-barlow-condensed text-xl font-black text-alkota-orange mb-8">Specialized Chemicals</h4>
-            <ul className="flex flex-col gap-4 font-inter font-bold text-alkota-silver">
-              <li><Link href="/chemicals/degreasers" className="hover:text-alkota-black transition-all hover:pl-2">Industrial Degreasers</Link></li>
-              <li><Link href="/chemicals/auto-truck-wash" className="hover:text-alkota-black transition-all hover:pl-2">Auto & Truck Wash</Link></li>
-              <li><Link href="/chemicals/parts-washer" className="hover:text-alkota-black transition-all hover:pl-2">Parts Washer Formulations</Link></li>
-              <li><Link href="/chemicals/food-processing" className="hover:text-alkota-black transition-all hover:pl-2">Food Safe Detergents</Link></li>
-              <li><Link href="/chemicals/additives" className="hover:text-alkota-black transition-all hover:pl-2">Scale Stop & Additives</Link></li>
-            </ul>
-          </div>
-
-          {/* Contact UK */}
-          <div>
-            <h4 className="font-barlow-condensed text-xl font-black text-alkota-orange mb-8">Contact Alkota UK</h4>
-            <ul className="flex flex-col gap-8 text-alkota-silver">
-              <li className="flex gap-4">
-                <MapPin className="h-5 w-5 shrink-0 text-alkota-orange" />
-                <span className="leading-relaxed text-alkota-black">Chesterfield, Derbyshire, UK</span>
-              </li>
-              <li className="flex gap-4">
-                <Phone className="h-5 w-5 shrink-0 text-alkota-orange" />
-                <Link href="/contact" className="text-alkota-black hover:text-alkota-orange transition-colors">Contact us for enquiries</Link>
-              </li>
-              <li className="flex gap-4">
-                <Mail className="h-5 w-5 shrink-0 text-alkota-orange" />
-                <span className="text-alkota-black">sales@alkota.co.uk</span>
-              </li>
-            </ul>
+          <div className="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col gap-3 justify-end">
+            <Link
+              href="/tools/configurator"
+              className="inline-flex items-center justify-center gap-2 bg-[#FF6900] px-6 py-3.5 font-ibm-plex-mono text-xs font-bold uppercase tracking-widest text-white hover:bg-white hover:text-black transition-colors"
+            >
+              <span>Launch Build Configurator</span>
+              <ArrowUpRight className="h-4 w-4" />
+            </Link>
           </div>
         </div>
 
-        {/* Global Footer Bottom */}
-        <div className="mt-24 border-t border-alkota-iron pt-12 flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="flex flex-col items-center md:items-start gap-2">
-            <p className="text-[10px] font-bold text-alkota-smoke">
-              © {currentYear} ALKOTA UK • Industrial Cleaning Systems
-            </p>
-            <div className="flex items-center gap-2 text-[9px] text-alkota-smoke">
-              <span>Engineered Excellence Since 1964</span>
-              <span className="text-alkota-iron">|</span>
-              <a href="https://avorria.com" target="_blank" rel="noopener noreferrer" className="hover:text-alkota-orange transition-colors font-bold uppercase tracking-[0.2em]">
-                An Avorria Signature Build
-              </a>
+        {/* 5-Column Sitemap Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-10 mb-16">
+          {/* Col 1: Machines */}
+          <div>
+            <h4 className="font-ibm-plex-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[#FF6900] mb-4">
+              // Equipment Fleet
+            </h4>
+            <ul className="space-y-2.5 font-inter text-[#999]">
+              <li><Link href="/machines/hot-water" className="hover:text-white transition-colors">Hot Water Pressure Washers</Link></li>
+              <li><Link href="/machines/cold-water" className="hover:text-white transition-colors">Cold Water Industrial</Link></li>
+              <li><Link href="/machines/steam" className="hover:text-white transition-colors">Dry Vapour Steam Cleaners</Link></li>
+              <li><Link href="/machines/parts-washers" className="hover:text-white transition-colors">Aqueous Parts Washers</Link></li>
+              <li><Link href="/machines/trailers" className="hover:text-white transition-colors">Bespoke Mobile Trailers</Link></li>
+              <li><Link href="/machines" className="text-white font-bold hover:text-[#FF6900] transition-colors mt-2 inline-block">All 127 Machines →</Link></li>
+            </ul>
+          </div>
+
+          {/* Col 2: Solutions & Industries */}
+          <div>
+            <h4 className="font-ibm-plex-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[#FF6900] mb-4">
+              // Sectors & Systems
+            </h4>
+            <ul className="space-y-2.5 font-inter text-[#999]">
+              <li><Link href="/industries/agriculture" className="hover:text-white transition-colors">Agriculture & Farming</Link></li>
+              <li><Link href="/industries/transport-fleet" className="hover:text-white transition-colors">Transport & Fleet Washing</Link></li>
+              <li><Link href="/industries/food-beverage" className="hover:text-white transition-colors">Food & Hygiene Sanitisation</Link></li>
+              <li><Link href="/industries/industrial" className="hover:text-white transition-colors">Heavy Plant & Manufacturing</Link></li>
+              <li><Link href="/water-treatment" className="hover:text-white transition-colors">Water Treatment & Recycling</Link></li>
+              <li><Link href="/chemicals" className="hover:text-white transition-colors">Hydrus Chemical Formulations</Link></li>
+            </ul>
+          </div>
+
+          {/* Col 3: Knowledge & The Lobby */}
+          <div>
+            <h4 className="font-ibm-plex-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[#FF6900] mb-4">
+              // Knowledge Base
+            </h4>
+            <ul className="space-y-2.5 font-inter text-[#999]">
+              <li><Link href="/lobby" className="hover:text-white text-[#FF6900] font-bold transition-colors">The Lobby (Knowledge Hub)</Link></li>
+              <li><Link href="/mess-quest" className="hover:text-white transition-colors">Mess Quest Video Series</Link></li>
+              <li><Link href="/lobby#engineering-design" className="hover:text-white transition-colors">Schedule 80 Metallurgy</Link></li>
+              <li><Link href="/lobby#regulatory-compliance" className="hover:text-white transition-colors">Wash Bay Water Regs</Link></li>
+              <li><Link href="/tools/machine-match" className="hover:text-white transition-colors">Machine Matcher AI</Link></li>
+              <li><Link href="/tools/tco-calculator" className="hover:text-white transition-colors">TCO Fleet Calculator</Link></li>
+            </ul>
+          </div>
+
+          {/* Col 4: Support & Ownership */}
+          <div>
+            <h4 className="font-ibm-plex-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[#FF6900] mb-4">
+              // Ownership & Support
+            </h4>
+            <ul className="space-y-2.5 font-inter text-[#999]">
+              <li><Link href="/support/service" className="hover:text-white transition-colors">Service & Breakdown Support</Link></li>
+              <li><Link href="/support/warranty" className="hover:text-white transition-colors">7-Year Warranty Registration</Link></li>
+              <li><Link href="/support/replacement-parts" className="hover:text-white transition-colors">Genuine Replacement Parts</Link></li>
+              <li><Link href="/support/manuals" className="hover:text-white transition-colors">Technical Manuals & Schematics</Link></li>
+              <li><Link href="/portal" className="hover:text-white transition-colors">Dealer Portal Access</Link></li>
+            </ul>
+          </div>
+
+          {/* Col 5: Company & Contact */}
+          <div>
+            <h4 className="font-ibm-plex-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[#FF6900] mb-4">
+              // Alkota UK
+            </h4>
+            <div className="space-y-3 font-inter text-[#888]">
+              <p className="flex items-start gap-2">
+                <MapPin className="h-4 w-4 text-[#FF6900] shrink-0 mt-0.5" />
+                <span>UK National Distribution & Support</span>
+              </p>
+              <p className="flex items-center gap-2">
+                <Phone className="h-4 w-4 text-[#FF6900] shrink-0" />
+                <a href="tel:+447912506738" className="text-white font-bold hover:text-[#FF6900]">+44 7912 506738</a>
+              </p>
+              <p className="flex items-center gap-2">
+                <Mail className="h-4 w-4 text-[#FF6900] shrink-0" />
+                <a href="mailto:sales@alkota.co.uk" className="text-white hover:underline">sales@alkota.co.uk</a>
+              </p>
+              <div className="pt-2">
+                <Link
+                  href="/contact"
+                  className="inline-block text-[10px] font-ibm-plex-mono uppercase tracking-widest text-[#FF6900] hover:underline"
+                >
+                  Contact Applications Team →
+                </Link>
+              </div>
             </div>
           </div>
-          <div className="flex gap-10 text-[9px] font-black text-alkota-smoke">
-            <Link href="/privacy" className="hover:text-alkota-black transition-colors">Privacy</Link>
-            <Link href="/terms" className="hover:text-alkota-black transition-colors">Terms</Link>
-            <Link href="/sitemap" className="hover:text-alkota-black transition-colors">Sitemap</Link>
+        </div>
+
+        {/* Global Legal & Copyright Bar */}
+        <div className="pt-8 border-t border-[#1C1C1C] flex flex-col md:flex-row items-center justify-between gap-4 font-ibm-plex-mono text-[10px] text-[#666]">
+          <div>
+            <span>© {currentYear} Alkota UK. All rights reserved. Handcrafted in South Dakota, USA.</span>
+          </div>
+          <div className="flex items-center gap-6">
+            <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-white transition-colors">Terms of Supply</Link>
+            <Link href="/sitemap.xml" className="hover:text-white transition-colors">XML Sitemap</Link>
+            <Link href="/admin" className="text-[#444] hover:text-[#777] transition-colors">Admin Login</Link>
           </div>
         </div>
       </div>

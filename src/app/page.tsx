@@ -1,5 +1,7 @@
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
+import BrandStatement from "@/components/homepage/BrandStatement";
+import HeroMachineReveal from "@/components/homepage/HeroMachineReveal";
 import ProductUniverse from "@/components/homepage/ProductUniverse";
 import IndustryGrid from "@/components/IndustryGrid";
 import MessQuestFeature from "@/components/homepage/MessQuestFeature";
@@ -44,139 +46,94 @@ export default function Home() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col overflow-x-hidden bg-white text-alkota-black">
+    <main className="flex min-h-screen flex-col overflow-x-hidden bg-[#F8F7F4] text-alkota-black">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <Navigation />
 
-      {/* ── 01: HERO ─────────────────────────────────────────────────── */}
+      {/* ── 01: FULL-SCREEN CINEMATIC HERO ──────────────────────────── */}
       <Hero />
 
-      {/* ── 02: BRAND INTRODUCTION ──────────────────────────────────── */}
-      <section className="bg-white border-b border-[#E0E0DE]">
-        <div className="flex flex-col lg:flex-row">
-          {/* Left — quiet credentials */}
-          <div className="w-full lg:w-[30%] bg-[#F5F4F0] px-8 sm:px-12 lg:px-14 py-14 flex flex-col justify-center border-r border-[#E0E0DE]">
-            <span className="font-ibm-plex-mono text-[9px] font-bold uppercase tracking-[0.4em] text-[#999] block mb-6">
-              Est. 1964
-            </span>
-            <div className="space-y-4 font-ibm-plex-mono text-xs text-alkota-black">
-              <div className="border-b border-[#E0E0DE] pb-4">
-                <span className="text-[#888] block text-[9px] uppercase mb-1">Origin</span>
-                <span className="font-bold">Alcester, South Dakota, USA</span>
-              </div>
-              <div className="border-b border-[#E0E0DE] pb-4">
-                <span className="text-[#888] block text-[9px] uppercase mb-1">UK Representation</span>
-                <span className="font-bold">Alkota UK · Est. 2020</span>
-              </div>
-              <div className="border-b border-[#E0E0DE] pb-4">
-                <span className="text-[#888] block text-[9px] uppercase mb-1">Machine Range</span>
-                <span className="font-bold">Hot Water · Cold Water · Steam · Parts Washers · Trailers</span>
-              </div>
-              <div>
-                <span className="text-[#888] block text-[9px] uppercase mb-1">Primary Protection</span>
-                <span className="font-bold text-alkota-orange">7-Year Heating Coil Warranty</span>
-              </div>
-            </div>
-          </div>
+      {/* ── 02: QUIET BRAND STATEMENT ────────────────────────────────── */}
+      <BrandStatement />
 
-          {/* Right — editorial statement */}
-          <div className="w-full lg:w-[70%] px-8 sm:px-12 lg:px-16 py-16 lg:py-20 flex flex-col justify-center">
-            <p className="font-barlow-condensed font-black uppercase italic tracking-tight text-alkota-black leading-[0.9] mb-8"
-              style={{ fontSize: 'clamp(1.75rem, 3.5vw, 3rem)' }}
-            >
-              ALKOTA DOES NOT MANUFACTURE LIGHT CONSUMER PRESSURE WASHERS.
-            </p>
-            <p className="font-inter text-[#444] leading-relaxed mb-6 font-normal"
-              style={{ fontSize: 'clamp(0.95rem, 1.3vw, 1.1rem)', maxWidth: '60ch' }}
-            >
-              For over 60 years, every machine has been handcrafted in Alcester, South Dakota — from heavy cold-rolled steel, industrial ceramic triplex pumps, and Schedule 80 seamless heating coils. These machines are engineered for organisations where cleaning failure halts production.
-            </p>
-            <p className="font-inter text-[#666] leading-relaxed text-sm"
-              style={{ maxWidth: '56ch' }}
-            >
-              When a brewery production line, a fleet transport depot, an offshore platform, or an abattoir needs to be cleaned completely and reliably — this is the equipment they specify.
-            </p>
-          </div>
-        </div>
-      </section>
+      {/* ── 03: ONE HERO MACHINE (GALLERY REVEAL) ────────────────────── */}
+      <HeroMachineReveal />
 
-      {/* ── 03: PRODUCT UNIVERSE ─────────────────────────────────────── */}
+      {/* ── 04: PRODUCT UNIVERSE (INTERACTIVE PANORAMIC SELECTOR) ────── */}
       <ProductUniverse />
 
-      {/* ── 04: INDUSTRIES ───────────────────────────────────────────── */}
+      {/* ── 05: REAL WORLD (IMMERSIVE INDUSTRY APPLICATIONS) ─────────── */}
       <IndustryGrid />
 
-      {/* ── 05: MESS QUEST ───────────────────────────────────────────── */}
+      {/* ── 06: MESS QUEST (DOCUMENTARY FILM CHAPTER) ────────────────── */}
       <MessQuestFeature />
 
-      {/* ── 06: ENGINEERING ──────────────────────────────────────────── */}
+      {/* ── 07: ENGINEERING DETAIL (MACRO ASYMMETRIC STORYTELLING) ───── */}
       <EngineeringTeardown />
 
-      {/* ── 07: HERITAGE / ANTARCTIC ─────────────────────────────────── */}
+      {/* ── 08: HERITAGE & ANTARCTIC EXPLORATION ─────────────────────── */}
       <AntarcticStory />
 
-      {/* ── 08: BESPOKE & WATER RECOVERY ─────────────────────────────── */}
+      {/* ── 09: BESPOKE MOBILE PLANTS & WATER TREATMENT ──────────────── */}
       <BespokeAndWaterSection />
 
-      {/* ── 09: THE LOBBY ────────────────────────────────────────────── */}
+      {/* ── 10: THE LOBBY (EMBEDDED JOURNAL) ─────────────────────────── */}
       <LobbyIntroduction />
 
-      {/* ── 10: MACHINE MATCH ────────────────────────────────────────── */}
+      {/* ── 11: MACHINE MATCH UTILITY ────────────────────────────────── */}
       <MachineMatchBanner />
 
-      {/* ── 11: OWNERSHIP & UK SUPPORT ───────────────────────────────── */}
+      {/* ── 12: OWNERSHIP & UK LIFECYCLE ─────────────────────────────── */}
       <OwnershipSection />
 
-      {/* ── 12: FINAL BRAND MOMENT ───────────────────────────────────── */}
-      <section className="relative bg-[#0C0C0A] overflow-hidden py-24 sm:py-32 px-8 sm:px-12 lg:px-16">
-        {/* Giant background wordmark */}
+      {/* ── 13: FINAL BRAND SIGNATURE ────────────────────────────────── */}
+      <section className="relative bg-[#0C0C0A] overflow-hidden py-24 sm:py-32 px-6 sm:px-12 text-white">
+        {/* Subtle background wordmark */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
           <span
-            className="font-barlow-condensed font-black uppercase italic text-white/[0.025] whitespace-nowrap"
-            style={{ fontSize: 'clamp(8rem, 20vw, 18rem)' }}
+            className="font-barlow-condensed font-black uppercase italic text-white/[0.02] whitespace-nowrap"
+            style={{ fontSize: 'clamp(8rem, 22vw, 20rem)' }}
           >
             ALKOTA
           </span>
         </div>
 
-        <div className="relative z-10 mx-auto max-w-5xl text-center">
-          <span className="font-ibm-plex-mono text-[9px] font-bold uppercase tracking-[0.4em] text-alkota-orange block mb-8">
-            Since 1964 · Handcrafted in South Dakota
+        <div className="relative z-10 mx-auto max-w-4xl text-center">
+          <span className="font-ibm-plex-mono text-[10px] font-bold uppercase tracking-[0.35em] text-alkota-orange block mb-6">
+            Est. 1964 · Alcester, South Dakota · UK Direct
           </span>
-          <h2 className="font-barlow-condensed font-black uppercase italic tracking-tight text-white leading-[0.88] mb-8"
-            style={{ fontSize: 'clamp(3rem, 7vw, 6rem)' }}
+          <h2
+            className="font-barlow-condensed font-black uppercase italic tracking-tight text-white leading-[0.9] mb-8"
+            style={{ fontSize: 'clamp(3rem, 7vw, 5.5rem)' }}
           >
-            SERIOUS EQUIPMENT.<br />
-            <span className="text-alkota-orange">SERIOUS WARRANTY.</span><br />
-            SERIOUS SUPPORT.
+            ENGINEERED FOR CONTINUOUS DUTY.<br />
+            <span className="text-alkota-orange">BACKED BY 60 YEARS OF BUILD.</span>
           </h2>
-          <p className="font-inter text-[#888] leading-relaxed mb-12 font-normal text-lg mx-auto"
-            style={{ maxWidth: '48ch' }}
-          >
-            If you are specifying industrial cleaning equipment for a UK operation — you have found the right company.
+          <p className="font-inter text-[#aaa] leading-relaxed mb-12 font-normal text-base sm:text-lg max-w-xl mx-auto">
+            Specify your industrial cleaning setup with confidence. Connect directly with Alkota technical specialists for advice, on-site demonstrations, or custom rig design.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/machines"
-              className="inline-flex items-center gap-3 bg-alkota-orange text-white px-10 py-5 font-ibm-plex-mono text-xs font-bold uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all no-underline group"
+              className="inline-flex items-center gap-3 bg-alkota-orange text-white px-9 py-4 font-ibm-plex-mono text-xs font-bold uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all no-underline group shadow-xl"
             >
-              <span>Explore the Full Fleet</span>
+              <span>Explore Machine Fleet</span>
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
             <Link
               href="/contact"
-              className="inline-flex items-center gap-3 border border-[#444] text-white px-10 py-5 font-ibm-plex-mono text-xs font-bold uppercase tracking-[0.2em] hover:border-white transition-colors no-underline"
+              className="inline-flex items-center gap-3 border border-white/30 bg-black/40 text-white px-8 py-4 font-ibm-plex-mono text-xs font-bold uppercase tracking-[0.2em] hover:border-white hover:bg-white hover:text-black transition-colors no-underline"
             >
-              Contact Alkota UK
+              <span>Contact Alkota UK</span>
             </Link>
           </div>
         </div>
       </section>
 
-      {/* ── 13: FOOTER ───────────────────────────────────────────────── */}
+      {/* ── GLOBAL CORPORATE FOOTER ──────────────────────────────────── */}
       <Footer />
     </main>
   );

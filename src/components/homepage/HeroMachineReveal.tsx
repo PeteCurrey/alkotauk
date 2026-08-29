@@ -3,19 +3,19 @@ import { ArrowRight, ShieldCheck } from 'lucide-react';
 
 export default function HeroMachineReveal() {
   return (
-    <section className="relative bg-[#F8F7F4] pt-4 pb-28 sm:pb-36 overflow-hidden" aria-label="Featured Machine Showcase">
+    <section className="relative bg-[#F8F7F4] pt-4 pb-28 sm:pb-36 overflow-hidden font-normal" aria-label="Featured Machine Showcase">
       <div className="mx-auto max-w-7xl px-6 sm:px-12">
         {/* Machine Header */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
           <div>
-            <span className="font-ibm-plex-mono text-[10px] font-bold uppercase tracking-[0.35em] text-alkota-orange block mb-2">
+            <span className="text-[11px] uppercase tracking-[0.3em] text-alkota-orange block mb-2 font-light">
               Featured Flagship System
             </span>
-            <h2 className="font-barlow-condensed text-4xl sm:text-5xl lg:text-6xl font-black uppercase italic tracking-tight text-alkota-black leading-none">
-              420X4 HOT WATER PRESSURE WASHER
+            <h2 className="font-extralight text-3xl sm:text-4xl lg:text-5xl uppercase tracking-tight text-alkota-black leading-tight">
+              420X4 Hot Water Pressure Washer
             </h2>
           </div>
-          <span className="font-ibm-plex-mono text-xs font-bold text-[#777] uppercase tracking-wider">
+          <span className="text-xs text-[#777] uppercase tracking-wider font-light">
             200 BAR · 90°C · SCHEDULE 80 COIL
           </span>
         </div>
@@ -34,49 +34,49 @@ export default function HeroMachineReveal() {
           />
 
           {/* Precision Factory Badge */}
-          <div className="absolute bottom-6 left-6 sm:bottom-8 sm:left-8 z-20 bg-white/90 backdrop-blur-sm border border-[#D8D8D5] px-5 py-3 shadow-sm font-ibm-plex-mono">
+          <div className="absolute bottom-6 left-6 sm:bottom-8 sm:left-8 z-20 bg-white/90 backdrop-blur-sm border border-[#D8D8D5] px-5 py-3 shadow-sm font-normal">
             <div className="flex items-center gap-2 text-alkota-orange mb-1">
               <ShieldCheck className="h-4 w-4" />
-              <span className="text-[9px] font-bold uppercase tracking-widest">7-Year Coil Guarantee</span>
+              <span className="text-[10px] uppercase tracking-widest font-light">7-Year Coil Guarantee</span>
             </div>
-            <span className="text-xs font-bold text-alkota-black block">Schedule 80 Seamless Steel</span>
+            <span className="text-xs text-alkota-black block font-normal">Schedule 80 Seamless Steel</span>
           </div>
 
           {/* Quick Spec Strip */}
-          <div className="absolute bottom-6 right-6 sm:bottom-8 sm:right-8 z-20 hidden md:flex items-center gap-6 bg-white/90 backdrop-blur-sm border border-[#D8D8D5] px-6 py-3 shadow-sm font-ibm-plex-mono text-xs">
+          <div className="absolute bottom-6 right-6 sm:bottom-8 sm:right-8 z-20 hidden md:flex items-center gap-6 bg-white/90 backdrop-blur-sm border border-[#D8D8D5] px-6 py-3 shadow-sm text-xs font-normal">
             <div>
-              <span className="text-[8px] text-[#888] uppercase block">Pressure</span>
-              <span className="font-bold text-alkota-black">200 BAR</span>
+              <span className="text-[9px] text-[#888] uppercase block font-light">Pressure</span>
+              <span className="text-alkota-black font-normal">200 BAR</span>
             </div>
             <div className="h-6 w-px bg-[#E0E0DC]" />
             <div>
-              <span className="text-[8px] text-[#888] uppercase block">Water Temp</span>
-              <span className="font-bold text-alkota-black">90°C Hot Water</span>
+              <span className="text-[9px] text-[#888] uppercase block font-light">Water Temp</span>
+              <span className="text-alkota-black font-normal">90°C Hot Water</span>
             </div>
             <div className="h-6 w-px bg-[#E0E0DC]" />
             <div>
-              <span className="text-[8px] text-[#888] uppercase block">Plunger Drive</span>
-              <span className="font-bold text-alkota-black">Ceramic Triplex</span>
+              <span className="text-[9px] text-[#888] uppercase block font-light">Plunger Drive</span>
+              <span className="text-alkota-black font-normal">Ceramic Triplex</span>
             </div>
           </div>
         </div>
 
         {/* Narrative & Navigation */}
-        <div className="mt-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-          <p className="font-inter text-sm text-[#666] max-w-xl leading-relaxed">
+        <div className="mt-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6 font-normal">
+          <p className="text-sm text-[#666] max-w-xl leading-relaxed font-normal">
             The workhorse of UK fleet depots and heavy industrial plant. Schedule 80 continuous-wound spiral heating coil with dual-pass burner delivers instant thermal breakdown of heavy road film, bitumen, grease, and hydraulic oil.
           </p>
-          <div className="flex items-center gap-4 shrink-0">
+          <div className="flex items-center gap-4 shrink-0 font-normal">
             <Link
               href="/machines/hot-water/alkota-420x4"
-              className="inline-flex items-center gap-3 bg-alkota-black text-white px-7 py-3.5 font-ibm-plex-mono text-xs font-bold uppercase tracking-[0.2em] hover:bg-alkota-orange transition-colors no-underline group"
+              className="inline-flex items-center gap-3 bg-alkota-black text-white px-7 py-3.5 text-xs uppercase tracking-[0.2em] hover:bg-alkota-orange transition-colors no-underline group font-normal"
             >
               <span>View Machine Details</span>
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
             <Link
               href="/machines"
-              className="inline-flex items-center gap-2 font-ibm-plex-mono text-xs font-bold uppercase tracking-widest text-[#666] hover:text-alkota-black transition-colors no-underline"
+              className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-[#666] hover:text-alkota-black transition-colors no-underline font-normal"
             >
               <span>All Machines</span>
             </Link>

@@ -1,28 +1,7 @@
 import type { Metadata } from "next";
-import { Inter, Barlow_Condensed, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import { SessionProvider } from "@/components/SessionProvider";
 import { CartProvider } from "@/context/CartContext";
-
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-inter",
-});
-
-const barlowCondensed = Barlow_Condensed({
-  weight: ["400", "700", "900"],
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-barlow-condensed",
-});
-
-const ibmPlexMono = IBM_Plex_Mono({
-  weight: ["400", "700"],
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-ibm-plex-mono",
-});
 
 export const metadata: Metadata = {
   title: "Alkota UK | The Platinum Standard in Industrial Cleaning",
@@ -35,8 +14,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${barlowCondensed.variable} ${ibmPlexMono.variable}`}>
-      <body className="bg-alkota-bg text-alkota-black min-h-screen flex flex-col antialiased">
+    <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@200;300;400&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className="bg-alkota-bg text-alkota-black min-h-screen flex flex-col font-normal antialiased">
         <SessionProvider>
           <CartProvider>
             <div className="flex-1 flex flex-col">
@@ -48,4 +35,3 @@ export default function RootLayout({
     </html>
   );
 }
-

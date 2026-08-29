@@ -34,7 +34,7 @@ export default function MachineCard({ machine, index }: MachineCardProps) {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       viewport={{ once: true }}
-      className="group relative flex flex-col bg-white border border-alkota-iron transition-all duration-500 hover:border-alkota-orange/50 hover:bg-white"
+      className="group relative flex flex-col bg-white border border-alkota-iron transition-all duration-500 hover:border-alkota-orange/50 hover:bg-white font-normal"
     >
       <BorderBeam 
         className="opacity-0 group-hover:opacity-100 transition-opacity duration-700"
@@ -46,7 +46,7 @@ export default function MachineCard({ machine, index }: MachineCardProps) {
 
       {/* Elite Series Indicator */}
       {machine.series?.toLowerCase().includes('elite') || machine.is_elite_series ? (
-        <div className="absolute left-0 top-6 z-20 bg-alkota-orange px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-white shadow-xl">
+        <div className="absolute left-0 top-6 z-20 bg-alkota-orange px-4 py-1.5 text-[10px] uppercase tracking-[0.2em] text-white shadow-xl font-light">
           Elite Series
         </div>
       ) : null}
@@ -59,41 +59,41 @@ export default function MachineCard({ machine, index }: MachineCardProps) {
           alt={machine.name}
           className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110 grayscale-[0.8] group-hover:grayscale-0"
         />
-        <div className="absolute bottom-6 left-6 z-20">
-          <span className="font-ibm-plex-mono text-[10px] font-bold uppercase tracking-[0.3em] text-alkota-orange">
+        <div className="absolute bottom-6 left-6 z-20 font-normal">
+          <span className="text-[10px] uppercase tracking-[0.3em] text-alkota-orange font-light">
             {modelCode}
           </span>
         </div>
       </div>
 
       {/* Content */}
-      <div className="flex flex-1 flex-col p-8">
-        <h3 className="mb-2 font-barlow-condensed text-3xl font-black uppercase italic tracking-tight text-alkota-black group-hover:text-alkota-orange transition-colors duration-300">
+      <div className="flex flex-1 flex-col p-8 font-normal">
+        <h3 className="mb-2 text-2xl font-light uppercase tracking-tight text-alkota-black group-hover:text-alkota-orange transition-colors duration-300">
           {machine.name}
         </h3>
-        <p className="mb-8 font-inter text-[11px] leading-relaxed text-alkota-silver uppercase tracking-wider line-clamp-2">
+        <p className="mb-8 text-xs leading-relaxed text-alkota-silver uppercase tracking-wider line-clamp-2 font-normal">
           {machine.tagline || 'Industrial engineering for the toughest environments.'}
         </p>
 
         {/* Technical Specification Grid */}
-        <div className="mt-auto grid grid-cols-2 gap-px bg-alkota-iron border border-alkota-iron">
+        <div className="mt-auto grid grid-cols-2 gap-px bg-alkota-iron border border-alkota-iron font-normal">
           <div className="bg-alkota-steel/40 p-4">
-            <div className="flex items-center gap-2 mb-1">
+            <div className="flex items-center gap-2 mb-1 font-normal">
               <Zap className="h-3 w-3 text-alkota-orange" />
-              <span className="text-[9px] font-bold uppercase tracking-widest text-alkota-smoke">Flow Rate</span>
+              <span className="text-[9px] uppercase tracking-widest text-alkota-smoke font-light">Flow Rate</span>
             </div>
-            <div className="font-ibm-plex-mono text-sm font-bold text-alkota-black">
+            <div className="text-sm text-alkota-black font-normal">
               {gpm} <span className="text-[10px] text-alkota-silver">GPM</span>
               <span className="mx-2 text-alkota-iron">|</span>
               {lpm} <span className="text-[10px] text-alkota-silver">LPM</span>
             </div>
           </div>
           <div className="bg-alkota-steel/40 p-4">
-            <div className="flex items-center gap-2 mb-1">
+            <div className="flex items-center gap-2 mb-1 font-normal">
               <Gauge className="h-3 w-3 text-alkota-orange" />
-              <span className="text-[9px] font-bold uppercase tracking-widest text-alkota-smoke">Pressure</span>
+              <span className="text-[9px] uppercase tracking-widest text-alkota-smoke font-light">Pressure</span>
             </div>
-            <div className="font-ibm-plex-mono text-sm font-bold text-alkota-black">
+            <div className="text-sm text-alkota-black font-normal">
               {bar} <span className="text-[10px] text-alkota-silver">BAR</span>
               <span className="mx-2 text-alkota-iron">|</span>
               {psi} <span className="text-[10px] text-alkota-silver">PSI</span>
@@ -101,25 +101,26 @@ export default function MachineCard({ machine, index }: MachineCardProps) {
           </div>
         </div>
 
-        {/* Action Button */}
-        <Link
-          href={`/machines/${machine.category}/${machine.slug}`}
-          className="mt-8 flex w-full items-center justify-between border border-alkota-iron bg-transparent px-6 py-4 text-[11px] font-black uppercase tracking-[0.2em] text-alkota-black transition-all hover:bg-alkota-orange hover:border-alkota-orange hover:text-white group/btn"
-        >
-          <span>View Specifications</span>
-          <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
-        </Link>
-
-        {isDealer && (
-          <div className="mt-4 border-l-2 border-alkota-amber bg-alkota-amber/10 p-3">
-             <div className="flex flex-col">
-               <span className="text-[8px] font-black uppercase tracking-widest text-alkota-amber leading-none mb-1">
-                 Dealer Net Price
-               </span>
-               <span className="font-ibm-plex-mono text-lg font-bold text-alkota-black">{formatCurrency(dealerPrice || 0)}</span>
-             </div>
+        {/* Action Link & Dealer Pricing */}
+        <div className="mt-8 flex items-center justify-between border-t border-alkota-iron/40 pt-6 font-normal">
+          <div>
+            {dealerPrice ? (
+              <div>
+                <span className="text-[9px] uppercase tracking-widest text-alkota-smoke block font-light">Dealer Spec</span>
+                <span className="text-sm text-alkota-orange font-normal">{formatCurrency(dealerPrice)}</span>
+              </div>
+            ) : (
+              <span className="text-[10px] uppercase tracking-widest text-alkota-silver font-light">UK Spec Platform</span>
+            )}
           </div>
-        )}
+          <Link
+            href={`/machines/${machine.category || 'hot-water'}/${machine.slug}`}
+            className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-alkota-black group-hover:text-alkota-orange transition-colors font-normal no-underline"
+          >
+            <span>Technical Spec</span>
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </Link>
+        </div>
       </div>
     </motion.div>
   );

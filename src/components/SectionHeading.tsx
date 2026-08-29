@@ -18,21 +18,21 @@ export default function SectionHeading({
   };
 
   return (
-    <div className={`flex flex-col gap-4 ${alignmentClasses[align]}`}>
+    <div className={`flex flex-col gap-4 font-normal ${alignmentClasses[align]}`}>
       {badge && (
-        <span className="inline-block rounded-sm bg-alkota-orange/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-alkota-orange border border-alkota-orange/20 w-fit">
+        <span className="inline-block rounded-sm bg-alkota-orange/10 px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-alkota-orange border border-alkota-orange/20 w-fit font-light">
           {badge}
         </span>
       )}
-      <h2 className="max-w-4xl text-3xl font-black uppercase leading-tight tracking-tighter text-white md:text-5xl lg:text-5xl">
+      <h2 className="max-w-4xl text-3xl font-extralight uppercase leading-tight tracking-tight text-white md:text-5xl lg:text-5xl">
         {title}
       </h2>
       {subtitle && (
-        <p className="max-w-2xl text-lg text-secondary leading-relaxed">
+        <p className="max-w-2xl text-lg text-secondary leading-relaxed font-normal">
           {subtitle}
         </p>
       )}
-      <div className={`h-1 w-20 bg-alkota-orange mt-2 ${align === 'center' ? 'mx-auto' : ''}`} />
+      <div className={`h-0.5 w-16 bg-alkota-orange mt-2 ${align === 'center' ? 'mx-auto' : ''}`} />
     </div>
   );
 }

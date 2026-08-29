@@ -26,38 +26,38 @@ export default function OwnershipSection() {
   ];
 
   return (
-    <section className="bg-white text-alkota-black py-24 sm:py-32 border-t border-[#E0E0DC]" aria-label="Ownership Lifecycle">
+    <section className="bg-white text-alkota-black py-24 sm:py-32 border-t border-[#E0E0DC] font-normal" aria-label="Ownership Lifecycle">
       <div className="mx-auto max-w-7xl px-6 sm:px-12">
-        <div className="max-w-3xl mb-16 sm:mb-20">
-          <span className="font-ibm-plex-mono text-[10px] font-bold uppercase tracking-[0.35em] text-alkota-orange block mb-3">
+        <div className="max-w-3xl mb-16 sm:mb-20 font-normal">
+          <span className="text-[11px] uppercase tracking-[0.3em] text-alkota-orange block mb-3 font-light">
             Lifecycle & Support
           </span>
-          <h2 className="font-barlow-condensed text-4xl sm:text-5xl lg:text-6xl font-black uppercase italic tracking-tight text-alkota-black leading-none mb-6">
-            OWNERSHIP IS JUST THE START.
+          <h2 className="font-extralight text-4xl sm:text-5xl lg:text-6xl uppercase tracking-tight text-alkota-black leading-none mb-6">
+            Ownership is Just the Start.
           </h2>
-          <p className="font-inter text-base sm:text-lg text-[#555] leading-relaxed font-normal">
+          <p className="text-base sm:text-lg text-[#555] leading-relaxed font-normal">
             When you invest in an Alkota machine, you are backed by over six decades of manufacturing expertise and dedicated UK technical infrastructure.
           </p>
         </div>
 
         {/* 4 Clean Corporate Pillars — No Boxed Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 sm:gap-12 border-t border-[#E0E0DC] pt-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 sm:gap-12 border-t border-[#E0E0DC] pt-12 font-normal">
           {pillars.map((pillar, idx) => (
-            <div key={idx} className="flex flex-col justify-between">
+            <div key={idx} className="flex flex-col justify-between font-normal">
               <div>
-                <span className="font-ibm-plex-mono text-[10px] font-bold uppercase text-alkota-orange block mb-2">
+                <span className="text-xs uppercase text-alkota-orange block mb-2 font-light">
                   0{idx + 1}
                 </span>
-                <h3 className="font-inter font-bold text-lg text-alkota-black mb-3 leading-snug">
+                <h3 className="font-light text-lg text-alkota-black mb-3 leading-snug">
                   {pillar.title}
                 </h3>
-                <p className="font-inter text-xs sm:text-sm text-[#666] leading-relaxed mb-6 font-normal">
+                <p className="text-xs sm:text-sm text-[#666] leading-relaxed mb-6 font-normal">
                   {pillar.desc}
                 </p>
               </div>
               <Link
                 href={pillar.href}
-                className="inline-flex items-center gap-2 font-ibm-plex-mono text-xs font-bold uppercase tracking-wider text-alkota-black hover:text-alkota-orange transition-colors no-underline group"
+                className="inline-flex items-center gap-2 text-xs uppercase tracking-wider text-alkota-black hover:text-alkota-orange transition-colors no-underline group font-normal"
               >
                 <span>Learn More</span>
                 <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />

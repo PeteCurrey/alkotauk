@@ -46,7 +46,7 @@ export default function Home() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col overflow-x-hidden bg-[#F8F7F4] text-alkota-black">
+    <main className="flex min-h-screen flex-col overflow-x-hidden bg-[#F8F7F4] text-alkota-black font-normal">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -90,42 +90,42 @@ export default function Home() {
       <OwnershipSection />
 
       {/* ── 13: FINAL BRAND SIGNATURE ────────────────────────────────── */}
-      <section className="relative bg-[#0C0C0A] overflow-hidden py-24 sm:py-32 px-6 sm:px-12 text-white">
+      <section className="relative bg-[#0C0C0A] overflow-hidden py-24 sm:py-32 px-6 sm:px-12 text-white font-normal">
         {/* Subtle background wordmark */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
           <span
-            className="font-barlow-condensed font-black uppercase italic text-white/[0.02] whitespace-nowrap"
+            className="font-extralight uppercase text-white/[0.02] whitespace-nowrap"
             style={{ fontSize: 'clamp(8rem, 22vw, 20rem)' }}
           >
             ALKOTA
           </span>
         </div>
 
-        <div className="relative z-10 mx-auto max-w-4xl text-center">
-          <span className="font-ibm-plex-mono text-[10px] font-bold uppercase tracking-[0.35em] text-alkota-orange block mb-6">
+        <div className="relative z-10 mx-auto max-w-4xl text-center font-normal">
+          <span className="text-[11px] uppercase tracking-[0.3em] text-alkota-orange block mb-6 font-light">
             Est. 1964 · Alcester, South Dakota · UK Direct
           </span>
           <h2
-            className="font-barlow-condensed font-black uppercase italic tracking-tight text-white leading-[0.9] mb-8"
-            style={{ fontSize: 'clamp(3rem, 7vw, 5.5rem)' }}
+            className="font-extralight uppercase tracking-tight text-white leading-none mb-8"
+            style={{ fontSize: 'clamp(2.5rem, 6vw, 5rem)' }}
           >
-            ENGINEERED FOR CONTINUOUS DUTY.<br />
-            <span className="text-alkota-orange">BACKED BY 60 YEARS OF BUILD.</span>
+            Engineered for Continuous Duty.<br />
+            <span className="text-alkota-orange">Backed by 60 Years of Build.</span>
           </h2>
-          <p className="font-inter text-[#aaa] leading-relaxed mb-12 font-normal text-base sm:text-lg max-w-xl mx-auto">
+          <p className="text-[#aaa] leading-relaxed mb-12 font-normal text-base sm:text-lg max-w-xl mx-auto">
             Specify your industrial cleaning setup with confidence. Connect directly with Alkota technical specialists for advice, on-site demonstrations, or custom rig design.
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 font-normal">
             <Link
               href="/machines"
-              className="inline-flex items-center gap-3 bg-alkota-orange text-white px-9 py-4 font-ibm-plex-mono text-xs font-bold uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all no-underline group shadow-xl"
+              className="inline-flex items-center gap-3 bg-alkota-orange text-white px-9 py-4 text-xs uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all no-underline group shadow-xl font-normal"
             >
               <span>Explore Machine Fleet</span>
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
             <Link
               href="/contact"
-              className="inline-flex items-center gap-3 border border-white/30 bg-black/40 text-white px-8 py-4 font-ibm-plex-mono text-xs font-bold uppercase tracking-[0.2em] hover:border-white hover:bg-white hover:text-black transition-colors no-underline"
+              className="inline-flex items-center gap-3 border border-white/30 bg-black/40 text-white px-8 py-4 text-xs uppercase tracking-[0.2em] hover:border-white hover:bg-white hover:text-black transition-colors no-underline font-normal"
             >
               <span>Contact Alkota UK</span>
             </Link>

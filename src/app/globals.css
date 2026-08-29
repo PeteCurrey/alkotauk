@@ -16,9 +16,11 @@
   --color-alkota-blue: #1E40AF;
   --color-alkota-green: #16A34A;
 
-  --font-inter: var(--font-inter);
-  --font-barlow-condensed: var(--font-barlow-condensed);
-  --font-ibm-plex-mono: var(--font-ibm-plex-mono);
+  --font-sans: 'Work Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-work-sans: 'Work Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-inter: 'Work Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-barlow-condensed: 'Work Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-ibm-plex-mono: 'Work Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
   --animate-spin-slow: spin 3s linear infinite;
 }
@@ -29,18 +31,52 @@
     --foreground: #121212;
   }
 
+  *, *::before, *::after {
+    font-family: 'Work Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  }
+
   body {
     background-color: var(--background);
     color: var(--foreground);
+    font-family: 'Work Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-weight: 400;
     @apply antialiased selection:bg-alkota-orange/30;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-barlow-condensed);
-    @apply uppercase tracking-tight;
+  /* Main headings: Extra Light (weight 200) */
+  h1, h2, .font-extralight {
+    font-family: 'Work Sans', sans-serif !important;
+    font-weight: 200 !important;
+    letter-spacing: -0.01em;
   }
 
-  h1 {
-    letter-spacing: 0.02em;
+  /* Sub headings: Light (weight 300) */
+  h3, h4, h5, h6, .font-light {
+    font-family: 'Work Sans', sans-serif !important;
+    font-weight: 300 !important;
+    letter-spacing: -0.005em;
+  }
+
+  /* Normal for everything else (weight 400) */
+  p, span, a, button, input, textarea, select, label, li, td, th, div {
+    font-weight: 400;
+  }
+
+  /* Strict rule: Do not use Bold anywhere */
+  b, strong, .font-bold, .font-semibold, .font-black, .font-extrabold, .font-medium {
+    font-weight: 400 !important;
+  }
+
+  /* Explicit utility weight helpers */
+  .font-extralight {
+    font-weight: 200 !important;
+  }
+
+  .font-light {
+    font-weight: 300 !important;
+  }
+
+  .font-normal {
+    font-weight: 400 !important;
   }
 }

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, ChevronRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface ProductFamily {
@@ -99,21 +99,21 @@ export default function ProductUniverse() {
   const activeFamily = FAMILIES.find((f) => f.id === activeTab) || FAMILIES[0];
 
   return (
-    <section className="bg-[#141412] text-white py-24 sm:py-32 overflow-hidden" aria-label="Product Families Universe">
+    <section className="bg-[#141412] text-white py-24 sm:py-32 overflow-hidden font-normal" aria-label="Product Families Universe">
       <div className="mx-auto max-w-7xl px-6 sm:px-12">
         {/* Section Header */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 pb-12 border-b border-white/10">
           <div>
-            <span className="font-ibm-plex-mono text-[10px] font-bold uppercase tracking-[0.35em] text-alkota-orange block mb-3">
+            <span className="text-[11px] uppercase tracking-[0.3em] text-alkota-orange block mb-3 font-light">
               Equipment Range
             </span>
-            <h2 className="font-barlow-condensed text-4xl sm:text-5xl lg:text-6xl font-black uppercase italic tracking-tight text-white leading-none">
-              ENGINEERED BY CATEGORY.
+            <h2 className="font-extralight text-4xl sm:text-5xl lg:text-6xl uppercase tracking-tight text-white leading-none">
+              Engineered by Category.
             </h2>
           </div>
           <Link
             href="/machines"
-            className="inline-flex items-center gap-2 font-ibm-plex-mono text-xs font-bold uppercase tracking-widest text-[#aaa] hover:text-alkota-orange transition-colors no-underline shrink-0"
+            className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-[#aaa] hover:text-alkota-orange transition-colors no-underline shrink-0 font-normal"
           >
             <span>Complete Machine Index</span>
             <ArrowRight className="h-4 w-4" />
@@ -121,16 +121,16 @@ export default function ProductUniverse() {
         </div>
 
         {/* Horizontal Category Selector */}
-        <div className="flex items-center gap-2 sm:gap-4 overflow-x-auto py-6 border-b border-white/10 scrollbar-none">
+        <div className="flex items-center gap-2 sm:gap-4 overflow-x-auto py-6 border-b border-white/10 scrollbar-none font-normal">
           {FAMILIES.map((family) => {
             const isActive = family.id === activeTab;
             return (
               <button
                 key={family.id}
                 onClick={() => setActiveTab(family.id)}
-                className={`whitespace-nowrap px-5 py-3 font-ibm-plex-mono text-xs font-bold uppercase tracking-[0.18em] transition-all cursor-pointer border-b-2 ${
+                className={`whitespace-nowrap px-5 py-3 text-xs uppercase tracking-[0.18em] transition-all cursor-pointer border-b-2 font-normal ${
                   isActive
-                    ? 'border-alkota-orange text-white bg-white/5'
+                    ? 'border-alkota-orange text-white bg-white/5 font-normal'
                     : 'border-transparent text-[#888] hover:text-white hover:bg-white/[0.02]'
                 }`}
               >
@@ -143,7 +143,7 @@ export default function ProductUniverse() {
         {/* Interactive Showcase Canvas */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center pt-12 sm:pt-16 min-h-[520px]">
           {/* Left Column: Family Narrative */}
-          <div className="lg:col-span-5 flex flex-col justify-center">
+          <div className="lg:col-span-5 flex flex-col justify-center font-normal">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeFamily.id}
@@ -152,29 +152,29 @@ export default function ProductUniverse() {
                 exit={{ opacity: 0, y: -12 }}
                 transition={{ duration: 0.25 }}
               >
-                <span className="font-ibm-plex-mono text-[10px] font-bold uppercase tracking-widest text-alkota-orange block mb-2">
+                <span className="text-[11px] uppercase tracking-widest text-alkota-orange block mb-2 font-light">
                   {activeFamily.subtitle}
                 </span>
-                <h3 className="font-barlow-condensed text-3xl sm:text-4xl font-black uppercase italic text-white leading-tight mb-4">
+                <h3 className="font-light text-2xl sm:text-3xl text-white leading-tight mb-4">
                   {activeFamily.tagline}
                 </h3>
-                <p className="font-inter text-[#aaa] text-sm sm:text-base leading-relaxed mb-8 font-normal">
+                <p className="text-[#aaa] text-sm sm:text-base leading-relaxed mb-8 font-normal">
                   {activeFamily.description}
                 </p>
 
                 {/* Specs Strip */}
-                <div className="grid grid-cols-2 gap-x-6 gap-y-4 pt-6 border-t border-white/10 mb-8 font-ibm-plex-mono text-xs">
+                <div className="grid grid-cols-2 gap-x-6 gap-y-4 pt-6 border-t border-white/10 mb-8 text-xs font-normal">
                   {activeFamily.specs.map((spec, idx) => (
                     <div key={idx}>
-                      <span className="text-[9px] text-[#777] uppercase block mb-0.5">{spec.label}</span>
-                      <span className="font-bold text-white text-sm">{spec.value}</span>
+                      <span className="text-[10px] text-[#777] uppercase block mb-0.5 font-light">{spec.label}</span>
+                      <span className="text-white text-sm font-normal">{spec.value}</span>
                     </div>
                   ))}
                 </div>
 
                 <Link
                   href={`/machines/${activeFamily.slug}`}
-                  className="inline-flex items-center gap-3 bg-alkota-orange text-white px-7 py-3.5 font-ibm-plex-mono text-xs font-bold uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all no-underline group shadow-lg"
+                  className="inline-flex items-center gap-3 bg-alkota-orange text-white px-7 py-3.5 text-xs uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all no-underline group shadow-lg font-normal"
                 >
                   <span>Explore {activeFamily.name} Series</span>
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />

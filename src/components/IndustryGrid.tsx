@@ -77,7 +77,7 @@ export default function IndustryGrid() {
   const activeSector = SECTORS.find((s) => s.slug === activeSlug) || SECTORS[0];
 
   return (
-    <section className="relative bg-[#0F0F0D] text-white overflow-hidden py-24 sm:py-32" aria-label="Industry Applications">
+    <section className="relative bg-[#0F0F0D] text-white overflow-hidden py-24 sm:py-32 font-normal" aria-label="Industry Applications">
       {/* Dynamic Full-Bleed Background Photograph */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <AnimatePresence mode="wait">
@@ -105,16 +105,16 @@ export default function IndustryGrid() {
         {/* Section Header */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 pb-10 border-b border-white/15">
           <div>
-            <span className="font-ibm-plex-mono text-[10px] font-bold uppercase tracking-[0.35em] text-alkota-orange block mb-3">
+            <span className="text-[11px] uppercase tracking-[0.3em] text-alkota-orange block mb-3 font-light">
               Application Environments
             </span>
-            <h2 className="font-barlow-condensed text-4xl sm:text-5xl lg:text-6xl font-black uppercase italic tracking-tight text-white leading-none">
-              BUILT FOR YOUR INDUSTRY.
+            <h2 className="font-extralight text-4xl sm:text-5xl lg:text-6xl uppercase tracking-tight text-white leading-none">
+              Built for Your Industry.
             </h2>
           </div>
           <Link
             href="/industries"
-            className="inline-flex items-center gap-2 font-ibm-plex-mono text-xs font-bold uppercase tracking-widest text-[#aaa] hover:text-alkota-orange transition-colors no-underline shrink-0"
+            className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-[#aaa] hover:text-alkota-orange transition-colors no-underline shrink-0 font-normal"
           >
             <span>All Industry Sectors</span>
             <ArrowRight className="h-4 w-4" />
@@ -122,14 +122,14 @@ export default function IndustryGrid() {
         </div>
 
         {/* Sector Selector Tabs */}
-        <div className="flex items-center gap-2 overflow-x-auto py-6 border-b border-white/10 scrollbar-none">
+        <div className="flex items-center gap-2 overflow-x-auto py-6 border-b border-white/10 scrollbar-none font-normal">
           {SECTORS.map((sector) => {
             const isActive = sector.slug === activeSlug;
             return (
               <button
                 key={sector.slug}
                 onClick={() => setActiveSlug(sector.slug)}
-                className={`whitespace-nowrap px-4 py-2.5 font-ibm-plex-mono text-xs font-bold uppercase tracking-[0.16em] transition-all cursor-pointer ${
+                className={`whitespace-nowrap px-4 py-2.5 text-xs uppercase tracking-[0.16em] transition-all cursor-pointer font-normal ${
                   isActive
                     ? 'bg-alkota-orange text-white'
                     : 'bg-black/50 text-[#999] hover:text-white border border-white/10'
@@ -142,7 +142,7 @@ export default function IndustryGrid() {
         </div>
 
         {/* Sector Information Canvas */}
-        <div className="pt-12 sm:pt-16 max-w-2xl">
+        <div className="pt-12 sm:pt-16 max-w-2xl font-normal">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeSector.slug}
@@ -151,17 +151,17 @@ export default function IndustryGrid() {
               exit={{ opacity: 0, y: -12 }}
               transition={{ duration: 0.3 }}
             >
-              <span className="font-ibm-plex-mono text-[10px] font-bold uppercase tracking-widest text-alkota-orange block mb-2">
+              <span className="text-[11px] uppercase tracking-widest text-alkota-orange block mb-2 font-light">
                 Operational Scope // {activeSector.name}
               </span>
-              <h3 className="font-inter text-2xl sm:text-3xl font-bold text-white leading-tight mb-6">
+              <h3 className="font-light text-2xl sm:text-3xl text-white leading-tight mb-6">
                 {activeSector.statement}
               </h3>
 
               {/* Key Applications List */}
-              <div className="space-y-3 mb-8">
+              <div className="space-y-3 mb-8 font-normal">
                 {activeSector.applications.map((app, idx) => (
-                  <div key={idx} className="flex items-center gap-3 font-ibm-plex-mono text-xs text-[#ddd]">
+                  <div key={idx} className="flex items-center gap-3 text-xs text-[#ddd] font-normal">
                     <span className="h-1.5 w-1.5 bg-alkota-orange" />
                     <span>{app}</span>
                   </div>
@@ -170,7 +170,7 @@ export default function IndustryGrid() {
 
               <Link
                 href={`/industries/${activeSector.slug}`}
-                className="inline-flex items-center gap-3 bg-white text-black px-7 py-3.5 font-ibm-plex-mono text-xs font-bold uppercase tracking-[0.2em] hover:bg-alkota-orange hover:text-white transition-all no-underline group shadow-lg"
+                className="inline-flex items-center gap-3 bg-white text-black px-7 py-3.5 text-xs uppercase tracking-[0.2em] hover:bg-alkota-orange hover:text-white transition-all no-underline group shadow-lg font-normal"
               >
                 <span>View {activeSector.name} Solutions</span>
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />

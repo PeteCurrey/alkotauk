@@ -85,7 +85,7 @@ export default function Navigation() {
   return (
     <nav 
       ref={navRef}
-      className={`fixed top-0 z-50 w-full transition-all duration-300 ${
+      className={`fixed top-0 z-50 w-full transition-all duration-300 font-normal ${
         isScrolled 
           ? 'bg-white/95 py-3 shadow-md border-b border-[#E0E0DE] backdrop-blur-md text-alkota-black' 
           : 'bg-gradient-to-b from-black/85 via-black/40 to-transparent py-6 text-white'
@@ -108,14 +108,14 @@ export default function Navigation() {
               {!link.hasMega ? (
                 <Link
                   href={link.href}
-                  className={`flex items-center gap-1 text-[12px] font-bold uppercase tracking-[0.18em] transition-colors no-underline ${textColorClass}`}
+                  className={`flex items-center gap-1 text-[12px] uppercase tracking-[0.18em] transition-colors no-underline font-normal ${textColorClass}`}
                 >
                   {link.name}
                 </Link>
               ) : (
                 <button
                   onClick={() => setActiveMenu(activeMenu === link.name ? null : link.name)}
-                  className={`flex items-center gap-1.5 text-[12px] font-bold uppercase tracking-[0.18em] transition-colors bg-transparent border-none cursor-pointer p-0 ${textColorClass}`}
+                  className={`flex items-center gap-1.5 text-[12px] uppercase tracking-[0.18em] transition-colors bg-transparent border-none cursor-pointer p-0 font-normal ${textColorClass}`}
                 >
                   <span>{link.name}</span>
                   <ChevronDown className={`h-3 w-3 transition-transform duration-200 ${activeMenu === link.name ? 'rotate-180 text-alkota-orange' : isScrolled ? 'text-[#888]' : 'text-white/70'}`} />
@@ -130,7 +130,7 @@ export default function Navigation() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 8 }}
                     transition={{ duration: 0.15 }}
-                    className="absolute left-1/2 -translate-x-1/2 top-[calc(100%+8px)] w-[880px] bg-white border border-[#D5D5D2] shadow-2xl z-50 p-6 text-alkota-black"
+                    className="absolute left-1/2 -translate-x-1/2 top-[calc(100%+8px)] w-[880px] bg-white border border-[#D5D5D2] shadow-2xl z-50 p-6 text-alkota-black font-normal"
                   >
                     <div className={`grid ${link.data?.length === 3 ? 'grid-cols-3' : link.data?.length === 6 ? 'grid-cols-3' : 'grid-cols-4'} gap-4`}>
                       {link.data?.map((cat: any) => (
@@ -147,10 +147,10 @@ export default function Navigation() {
                               className="h-full w-full object-contain filter drop-shadow-sm transition-transform duration-500 group-hover/item:scale-105"
                             />
                           </div>
-                          <h4 className="font-barlow-condensed text-base font-bold uppercase tracking-tight text-alkota-black mb-1 group-hover/item:text-alkota-orange">
+                          <h4 className="text-sm font-light uppercase tracking-tight text-alkota-black mb-1 group-hover/item:text-alkota-orange">
                             {cat.name}
                           </h4>
-                          <p className="font-inter text-[10px] text-[#777] leading-relaxed line-clamp-2">
+                          <p className="text-[11px] text-[#777] leading-relaxed line-clamp-2 font-normal">
                             {cat.desc}
                           </p>
                         </Link>
@@ -164,17 +164,17 @@ export default function Navigation() {
         </div>
 
         {/* Action CTAs */}
-        <div className="flex items-center gap-3 sm:gap-4">
+        <div className="flex items-center gap-3 sm:gap-4 font-normal">
           <Link
             href="/lobby"
-            className="hidden md:inline-flex items-center gap-2 bg-black text-white px-4 py-2 font-ibm-plex-mono text-[10px] font-bold uppercase tracking-[0.2em] transition-all hover:bg-alkota-orange no-underline group shadow-sm border border-white/20"
+            className="hidden md:inline-flex items-center gap-2 bg-black text-white px-4 py-2 text-[11px] uppercase tracking-[0.2em] transition-all hover:bg-alkota-orange no-underline group shadow-sm border border-white/20 font-normal"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-alkota-orange group-hover:bg-white animate-pulse" />
             <span>The Lobby</span>
           </Link>
           <Link
             href="/tools/configurator"
-            className={`hidden sm:inline-flex px-4 py-2 font-ibm-plex-mono text-[10px] font-bold uppercase tracking-[0.2em] transition-all no-underline ${
+            className={`hidden sm:inline-flex px-4 py-2 text-[11px] uppercase tracking-[0.2em] transition-all no-underline font-normal ${
               isScrolled 
                 ? 'border border-[#333] text-alkota-black hover:border-alkota-orange hover:text-alkota-orange' 
                 : 'border border-white/60 bg-black/40 backdrop-blur-sm text-white hover:border-white hover:bg-white hover:text-black'
@@ -199,7 +199,7 @@ export default function Navigation() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="fixed inset-0 z-50 bg-[#121210] pt-20 px-6 sm:px-8 lg:hidden overflow-y-auto text-white"
+            className="fixed inset-0 z-50 bg-[#121210] pt-20 px-6 sm:px-8 lg:hidden overflow-y-auto text-white font-normal"
           >
             <div className="flex items-center justify-between border-b border-white/15 pb-4 mb-6">
               <Logo className="h-8 text-white" />
@@ -219,7 +219,7 @@ export default function Navigation() {
                     <Link
                       href={link.href}
                       onClick={() => setMobileMenuOpen(false)}
-                      className="font-barlow-condensed text-3xl font-black uppercase tracking-tight text-white hover:text-alkota-orange no-underline"
+                      className="text-2xl font-light uppercase tracking-tight text-white hover:text-alkota-orange no-underline"
                     >
                       {link.name}
                     </Link>
@@ -246,7 +246,7 @@ export default function Navigation() {
                             key={sub.name}
                             href={sub.href}
                             onClick={() => setMobileMenuOpen(false)}
-                            className="font-inter text-sm font-semibold text-[#ccc] hover:text-alkota-orange no-underline py-1"
+                            className="text-sm font-normal text-[#ccc] hover:text-alkota-orange no-underline py-1"
                           >
                             {sub.name}
                           </Link>
@@ -257,18 +257,18 @@ export default function Navigation() {
                 </div>
               ))}
 
-              <div className="pt-4 flex flex-col gap-3">
+              <div className="pt-4 flex flex-col gap-3 font-normal">
                 <Link
                   href="/lobby"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center bg-alkota-orange text-white py-3.5 font-ibm-plex-mono text-xs font-bold uppercase tracking-[0.2em] no-underline shadow-lg"
+                  className="w-full text-center bg-alkota-orange text-white py-3.5 text-xs uppercase tracking-[0.2em] no-underline shadow-lg font-normal"
                 >
                   Enter The Lobby
                 </Link>
                 <Link
                   href="/tools/configurator"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center border border-white/30 bg-black/60 text-white py-3.5 font-ibm-plex-mono text-xs font-bold uppercase tracking-[0.2em] no-underline"
+                  className="w-full text-center border border-white/30 bg-black/60 text-white py-3.5 text-xs uppercase tracking-[0.2em] no-underline font-normal"
                 >
                   Build Configurator
                 </Link>

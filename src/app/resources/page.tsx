@@ -12,7 +12,7 @@ export default function ResourcesHubPage() {
     { title: 'Good Clean News (Blog)', desc: 'The latest updates, tips, and industry news.', href: '/resources/blog', icon: <Newspaper className="h-8 w-8 text-alkota-orange" /> },
     { title: 'Testimonials & Case Studies', desc: 'Real-world examples of Alkota power.', href: '/resources/case-studies', icon: <FileText className="h-8 w-8 text-alkota-orange" /> },
     { title: 'Document Library', desc: 'Brochures, catalogs, and technical downloads.', href: '/resources/downloads', icon: <HardDrive className="h-8 w-8 text-alkota-orange" /> },
-    { title: 'Video Vault', desc: 'Demonstrations and instructional videos.', href: '/resources/videos', icon: <Video className="h-8 w-8 text-alkota-orange" /> },
+    { title: 'Mess Quest', desc: 'Original documentary series. Proof of capability on extreme cleaning jobs.', href: '/mess-quest', icon: <Video className="h-8 w-8 text-alkota-orange" /> },
     { title: 'Buying Guide', desc: 'How to choose the right industrial washer.', href: '/resources/buying-guide', icon: <HelpCircle className="h-8 w-8 text-alkota-orange" /> },
     { title: 'Financial Solutions', desc: 'Leasing, rental, and TCO breakdowns.', href: '/resources/financing', icon: <Banknote className="h-8 w-8 text-alkota-orange" /> },
     { title: 'Plaque Rental Programme', desc: 'Long-term corporate rental solutions.', href: '/resources/rent', icon: <Clock className="h-8 w-8 text-alkota-orange" /> },

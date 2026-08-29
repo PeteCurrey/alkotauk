@@ -1,10 +1,11 @@
 import { client } from '@/sanity/client';
 import Navigation from '@/components/Navigation';
 import MachineCard from '@/components/MachineCard';
-import { ShieldCheck, Zap } from 'lucide-react';
+import { ShieldCheck, Zap, ArrowRight, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import Footer from '@/components/Footer';
+import SeenInRealWorld from '@/components/mess-quest/SeenInRealWorld';
 
 interface IndustryDetailPageProps {
   params: Promise<{
@@ -15,10 +16,8 @@ interface IndustryDetailPageProps {
 export default async function IndustryDetailPage({ params }: IndustryDetailPageProps) {
   const { slug } = await params;
   
-  // Fetch real industry data from Sanity
   const industry = await client.fetch(`*[_type == "industry" && slug.current == $slug][0]`, { slug });
 
-  // Fetch machines related to this industry (for now, fetching first 6 machines as fallback)
   const machines = await client.fetch(`*[_type == "machine"][0...6] {
     _id,
     name,
@@ -34,113 +33,116 @@ export default async function IndustryDetailPage({ params }: IndustryDetailPageP
 
   if (!industry) {
     return (
-      <main className="min-h-screen bg-alkota-black pt-32 text-center text-white">
-        <h1 className="text-4xl uppercase font-barlow-condensed italic font-black">Industry not found</h1>
-        <Link href="/" className="mt-8 inline-block text-alkota-orange underline uppercase tracking-widest text-xs">Back to Home</Link>
+      <main className="min-h-screen bg-white pt-32 text-center text-[#1A1A18]">
+        <h1 className="text-4xl uppercase font-light">Industry not found</h1>
+        <Link href="/industries" className="mt-8 inline-block text-[#FF6900] underline uppercase tracking-widest text-xs">Back to Industries</Link>
       </main>
     );
   }
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Service",
-    "name": industry.name,
-    "description": industry.description,
-    "provider": {
-      "@type": "Organization",
-      "name": "Alkota UK",
-      "url": "https://alkota.co.uk"
-    },
-    "areaServed": "United Kingdom"
-  };
-
   return (
-    <main className="min-h-screen bg-alkota-black pt-32 pb-24 relative overflow-hidden">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+    <main className="min-h-screen bg-white text-[#1A1A18] font-normal pb-0">
       <Navigation />
-      
-      {/* Background Watermark */}
-      {industry.name && (
-        <div className="absolute top-40 right-0 pointer-events-none select-none opacity-[0.02] z-0">
-          <span className="font-barlow-condensed text-[50vw] font-black uppercase italic leading-none text-white whitespace-nowrap">
-            {industry.name.split(' ')[0]}
-          </span>
+
+      {/* ─── 01. FULL-VIEWPORT HERO ────────────────────────────────────────── */}
+      <section className="relative min-h-[75vh] flex flex-col justify-between bg-[#0A0A0A] text-white border-b border-[#222] px-6 sm:px-12 pt-28 sm:pt-32 pb-16 overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0A] via-[#0A0A0A]/85 to-transparent z-10" />
+          <div 
+            className="w-full h-full bg-cover bg-center opacity-35"
+            style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=2000&q=80)' }}
+          />
         </div>
-      )}
 
-      <div className="mx-auto max-w-7xl px-6 relative z-10">
-        <Breadcrumbs items={[
-          { label: 'Industries', href: '/' },
-          { label: industry.name }
-        ]} />
+        <div className="relative z-10 mx-auto max-w-7xl w-full">
+          <Breadcrumbs items={[
+            { label: 'Industries', href: '/industries' },
+            { label: industry.name }
+          ]} />
+        </div>
 
-        {/* Hero Section */}
-        <section className="mb-24 mt-12 grid grid-cols-1 gap-12 lg:grid-cols-2 lg:items-center">
-          <div>
-            <span className="mb-4 inline-block text-[10px] font-black uppercase tracking-[0.4em] text-alkota-orange">
-              Industry Technical Specification
+        <div className="relative z-10 mx-auto max-w-7xl w-full my-auto py-10">
+          <div className="max-w-3xl">
+            <span className="inline-block text-xs font-mono uppercase tracking-[0.25em] text-[#FF6900] mb-4 font-medium">
+              Industry Focus · UK Specification
             </span>
-            <h1 className="mb-8 text-6xl font-black text-white md:text-8xl lg:text-9xl italic uppercase tracking-tighter leading-[0.8] font-barlow-condensed">
-              {industry.name} <br />
-              <span className="text-alkota-orange">SOLUTIONS.</span>
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extralight uppercase tracking-tight text-white leading-[1.0] mb-6">
+              {industry.name}
             </h1>
-            <p className="mb-12 text-lg text-alkota-silver leading-relaxed uppercase tracking-wider max-w-xl font-inter">
-              {industry.description} Alkota provides the industrial-grade power required for the most demanding cleaning tasks in the {industry.name} sector.
+            <p className="text-base sm:text-xl text-[#CCC] leading-relaxed font-light max-w-2xl mb-8">
+              {industry.description}
             </p>
-            
-            <div className="grid grid-cols-2 gap-8 border-y border-alkota-iron py-10">
-              <div className="flex gap-4">
-                <ShieldCheck className="h-6 w-6 text-alkota-orange shrink-0" />
-                <div>
-                  <h4 className="text-[10px] font-black uppercase tracking-widest text-white mb-2">Safety Certified</h4>
-                  <p className="text-[8px] text-alkota-silver uppercase tracking-[0.2em] font-ibm-plex-mono">Built to UL-1776 Standards</p>
-                </div>
-              </div>
-              <div className="flex gap-4">
-                <Zap className="h-6 w-6 text-alkota-orange shrink-0" />
-                <div>
-                  <h4 className="text-[10px] font-black uppercase tracking-widest text-white mb-2">Elite Power</h4>
-                  <p className="text-[8px] text-alkota-silver uppercase tracking-[0.2em] font-ibm-plex-mono">Up to 40,000 cleaning units</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="relative aspect-video overflow-hidden border border-alkota-iron bg-alkota-steel/50 lg:aspect-square group">
-            <img 
-              src={industry.image || "https://images.unsplash.com/photo-1541888941259-7727ebe1476e?q=80&w=2070&auto=format&fit=crop"} 
-              alt={industry.name}
-              className="h-full w-full object-cover opacity-60 grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000" 
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-alkota-black via-transparent to-transparent" />
-            <div className="absolute bottom-6 left-6 flex items-center gap-3">
-               <div className="h-2 w-2 rounded-full bg-alkota-orange animate-pulse" />
-               <span className="font-ibm-plex-mono text-[8px] font-bold text-white uppercase tracking-widest leading-none">Sector Context // Verified</span>
-            </div>
-          </div>
-        </section>
 
-        {/* Featured Machines for this Industry */}
-        <section className="mt-40">
-          <div className="mb-12 flex items-end justify-between border-b border-alkota-iron pb-12">
-            <h2 className="font-barlow-condensed text-5xl font-black text-white uppercase italic tracking-tighter md:text-7xl">
-              SECTOR <span className="text-alkota-orange">FLEET.</span>
-            </h2>
-            <Link href="/machines" className="text-[10px] font-black uppercase tracking-widest text-alkota-silver hover:text-white transition-colors">
-              Full Inventory →
-            </Link>
+            <div className="flex flex-wrap gap-4">
+              <a
+                href="#machinery"
+                className="inline-flex items-center gap-2 bg-[#FF6900] hover:bg-[#E05800] text-white px-8 py-4 text-xs uppercase tracking-widest transition-all font-medium no-underline shadow-lg"
+              >
+                <span>View Recommended Machinery</span>
+                <ArrowRight className="h-4 w-4" />
+              </a>
+              <Link
+                href="/contact"
+                className="inline-flex items-center gap-2 border border-white/20 bg-white/10 hover:bg-white/20 text-white px-6 py-4 text-xs uppercase tracking-widest transition-all font-medium no-underline backdrop-blur-sm"
+              >
+                <span>Consult an Engineer</span>
+              </Link>
+            </div>
           </div>
-          
-          <div className="grid grid-cols-1 gap-px bg-alkota-iron border border-alkota-iron md:grid-cols-2 lg:grid-cols-3">
-            {machines.map((machine: any, i: number) => (
-              <MachineCard key={machine._id} machine={machine} index={i} />
+        </div>
+      </section>
+
+      {/* ─── 02. RECOMMENDED SYSTEMS (LIGHT) ───────────────────────────────── */}
+      <section id="machinery" className="py-24 bg-[#FAFAF8] border-b border-[#E5E5E0] px-6 sm:px-12">
+        <div className="mx-auto max-w-7xl">
+          <div className="max-w-3xl mb-12">
+            <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#FF6900] block mb-2 font-medium">
+              RECOMMENDED PLATFORMS
+            </span>
+            <h2 className="text-3xl sm:text-5xl font-extralight uppercase tracking-tight text-[#1A1A18] leading-tight">
+              Machinery for {industry.name}
+            </h2>
+            <p className="text-xs sm:text-sm text-[#666] leading-relaxed font-normal mt-3">
+              Standard and bespoke cleaning systems engineered to satisfy the duty cycle and contamination requirements of this sector.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {machines?.map((machine: any) => (
+              <MachineCard key={machine._id} machine={machine} />
             ))}
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
+
+      {/* ─── 02B. SEEN IN THE REAL WORLD // MESS QUEST ─────────────────────── */}
+      <SeenInRealWorld category={slug} />
+
+      {/* ─── 03. ON-SITE TRIAL CTA (DARK) ──────────────────────────────────── */}
+      <section className="bg-[#0A0A0A] text-white py-20 px-6 sm:px-12 border-b border-[#222]">
+        <div className="mx-auto max-w-7xl flex flex-col md:flex-row md:items-center justify-between gap-8">
+          <div>
+            <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#FF6900] block mb-2 font-medium">
+              ON-SITE DEMONSTRATION
+            </span>
+            <h2 className="font-extralight text-3xl sm:text-4xl uppercase tracking-tight text-white mb-2">
+              Test on Your Facility
+            </h2>
+            <p className="text-sm text-[#AAA] max-w-xl font-light">
+              We bring Alkota machinery directly to your depot or facility to test performance on your exact contamination.
+            </p>
+          </div>
+
+          <Link
+            href="/contact?enquiry=industry-demo"
+            className="inline-flex items-center gap-2 bg-[#FF6900] hover:bg-[#E05800] text-white px-8 py-4 text-xs font-medium uppercase tracking-widest transition-all no-underline shadow-lg shrink-0"
+          >
+            <span>Request Demonstration</span>
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+      </section>
+
       <Footer />
     </main>
   );

@@ -15,6 +15,7 @@ import CategoryEngineering from '@/components/category/CategoryEngineering';
 import CategoryApplications from '@/components/category/CategoryApplications';
 import CategoryLobbyKnowledge from '@/components/category/CategoryLobbyKnowledge';
 import CategoryDemoCTA from '@/components/category/CategoryDemoCTA';
+import SeenInRealWorld from '@/components/mess-quest/SeenInRealWorld';
 
 interface CategoryPageProps {
   params: Promise<{
@@ -316,6 +317,9 @@ export default async function MachineCategoryPage({ params }: CategoryPageProps)
         categoryName={config.title}
         allProducts={allProducts}
       />
+
+      {/* ─── 06B. SEEN IN THE REAL WORLD // MESS QUEST ─────────────────────── */}
+      <SeenInRealWorld category={categorySlug} />
 
       {/* ─── 07. REAL-WORLD SECTOR APPLICATIONS ───────────────────────────── */}
       <CategoryApplications categorySlug={categorySlug} />

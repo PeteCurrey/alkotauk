@@ -1048,10 +1048,10 @@ export default function Navigation() {
                       className="block p-3 bg-[#F7F7F5] hover:bg-white border border-[#E8E8E4] hover:border-alkota-orange transition-all no-underline group"
                     >
                       <h4 className="text-xs uppercase tracking-wider text-alkota-black group-hover:text-alkota-orange font-normal">
-                        Mess Quest Documentary Series →
+                        Mess Quest →
                       </h4>
                       <p className="text-[11px] text-[#777] font-normal mt-0.5">
-                        Real-world industrial cleaning performance tests.
+                        Authentic industrial cleaning proof-of-capability & case studies.
                       </p>
                     </Link>
                     <Link
@@ -1212,7 +1212,7 @@ export default function Navigation() {
                           <>
                             <Link href="/support" onClick={() => setMobileMenuOpen(false)} className="text-sm text-[#ccc] hover:text-alkota-orange no-underline py-0.5">Technical Manuals & Spares</Link>
                             <Link href="/support/warranty" onClick={() => setMobileMenuOpen(false)} className="text-sm text-[#ccc] hover:text-alkota-orange no-underline py-0.5">7-Year Coil Warranty</Link>
-                            <Link href="/mess-quest" onClick={() => setMobileMenuOpen(false)} className="text-sm text-[#ccc] hover:text-alkota-orange no-underline py-0.5">Mess Quest Documentary</Link>
+                            <Link href="/mess-quest" onClick={() => setMobileMenuOpen(false)} className="text-sm text-[#ccc] hover:text-alkota-orange no-underline py-0.5">Mess Quest</Link>
                             <Link href="/about" onClick={() => setMobileMenuOpen(false)} className="text-sm text-[#ccc] hover:text-alkota-orange no-underline py-0.5">About Alkota</Link>
                           </>
                         )}

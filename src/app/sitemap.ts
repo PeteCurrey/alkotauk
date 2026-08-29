@@ -4,6 +4,7 @@ import { getLobbyArticles } from '@/lib/lobby';
 import { getDealers } from '@/lib/dealers';
 import { REAL_BUILDS } from '@/lib/trailers/real-builds-data';
 import { TRAILER_APPLICATIONS } from '@/lib/trailers/applications-data';
+import { getAllMessQuestEpisodes } from '@/lib/messQuestEpisodes';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://alkota.co.uk';
@@ -260,6 +261,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'weekly',
       priority: 0.85,
     },
+    {
+      url: `${baseUrl}/mess-quest`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    ...getAllMessQuestEpisodes().map((ep) => ({
+      url: `${baseUrl}/mess-quest/${ep.slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.85,
+    })),
     ...baselineWashPlantSlugs,
     ...washPlantProjectUrls,
     ...categoryUrls,

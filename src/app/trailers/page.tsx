@@ -562,15 +562,15 @@ export default function TrailersPage() {
       </section>
 
       {/* ─── 05. COMPLETE MOBILE SYSTEM — INTERACTIVE DIAGRAM ──────────────── */}
-      <section className="py-32 px-6 bg-alkota-steel border-t border-alkota-iron">
+      <section className="py-32 px-6 bg-white border-t border-[#E5E5E0] text-[#1A1A18]">
         <div className="max-w-7xl mx-auto">
           <FadeSection>
             <ChapterLabel number="05" label="The Complete System" />
-            <h2 className="font-barlow-condensed text-5xl md:text-6xl font-black uppercase italic text-white leading-tight tracking-tight mb-4 max-w-3xl">
+            <h2 className="font-extralight text-4xl md:text-6xl uppercase tracking-tight text-[#1A1A18] leading-tight mb-4 max-w-3xl">
               EVERY ELEMENT.<br />
               <span className="text-alkota-orange">ENGINEERED TOGETHER.</span>
             </h2>
-            <p className="text-alkota-silver text-lg max-w-2xl leading-relaxed mb-16">
+            <p className="text-[#555] text-base sm:text-lg max-w-2xl leading-relaxed mb-16 font-light">
               An Alkota trailer is not assembled — it is engineered. Each subsystem is specified, positioned, plumbed, and wired in relation to every other. Select any component below to understand its role in the complete system.
             </p>
           </FadeSection>
@@ -667,7 +667,7 @@ export default function TrailersPage() {
       </section>
 
       {/* ─── 06. CONFIGURATOR ENTRY ─────────────────────────────────────────── */}
-      <section className="py-40 px-6 bg-alkota-black border-t border-alkota-iron relative overflow-hidden">
+      <section className="py-32 px-6 bg-[#FAFAF8] border-t border-[#E5E5E0] text-[#1A1A18] relative overflow-hidden">
         {/* Background accent */}
         <div className="absolute top-0 right-0 w-2/3 h-full bg-alkota-orange/[0.03] -skew-x-12 translate-x-1/4 pointer-events-none" />
 
@@ -676,12 +676,12 @@ export default function TrailersPage() {
             <ChapterLabel number="06" label="Build Your Alkota" />
             <div className="grid lg:grid-cols-2 gap-20 items-center">
               <div>
-                <h2 className="font-barlow-condensed text-6xl md:text-7xl font-black uppercase italic text-white leading-tight tracking-tight mb-8">
+                <h2 className="font-extralight text-4xl md:text-6xl uppercase tracking-tight text-[#1A1A18] leading-tight mb-8">
                   BUILD THE<br />
                   SYSTEM YOUR<br />
                   <span className="text-alkota-orange">OPERATION NEEDS.</span>
                 </h2>
-                <p className="text-alkota-silver text-lg leading-relaxed mb-10 max-w-xl">
+                <p className="text-[#555] text-base sm:text-lg leading-relaxed mb-10 max-w-xl font-light">
                   The Alkota configurator works like configuring a premium vehicle — except the result is a production-ready specification for a real industrial cleaning system, sent directly to our engineering team.
                 </p>
                 <div className="grid grid-cols-2 gap-4 mb-10">
@@ -691,7 +691,7 @@ export default function TrailersPage() {
                     { v: 'Live', l: 'Weight calculation' },
                     { v: '100%', l: 'UK engineering spec' },
                   ].map(({ v, l }) => (
-                    <div key={l} className="border border-alkota-iron p-4">
+                    <div key={l} className="border border-[#E5E5E0] bg-white p-4">
                       <div className="font-barlow-condensed text-3xl font-black text-alkota-orange mb-1">{v}</div>
                       <div className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#666]">{l}</div>
                     </div>
@@ -727,12 +727,12 @@ export default function TrailersPage() {
                 ].map((step, i) => (
                   <div
                     key={step}
-                    className="flex items-center gap-4 border-b border-alkota-iron pb-3 group"
+                    className="flex items-center gap-4 border-b border-[#E5E5E0] pb-3 group"
                   >
                     <span className="font-ibm-plex-mono text-[10px] text-alkota-orange font-bold w-6 shrink-0">
                       {String(i + 1).padStart(2, '0')}
                     </span>
-                    <span className="text-alkota-grey text-sm font-medium">{step}</span>
+                    <span className="text-[#333] text-sm font-medium">{step}</span>
                     <ChevronRight className="h-3.5 w-3.5 text-[#333] ml-auto" />
                   </div>
                 ))}
@@ -743,11 +743,11 @@ export default function TrailersPage() {
       </section>
 
       {/* ─── 07. WATER / POWER / RECOVERY ENGINEERING ──────────────────────── */}
-      <section className="py-32 px-6 bg-alkota-steel border-t border-alkota-iron">
+      <section className="py-32 px-6 bg-white border-t border-[#E5E5E0] text-[#1A1A18]">
         <div className="max-w-7xl mx-auto">
           <FadeSection>
             <ChapterLabel number="07" label="System Engineering" />
-            <h2 className="font-barlow-condensed text-5xl md:text-6xl font-black uppercase italic text-white leading-tight tracking-tight mb-8 max-w-3xl">
+            <h2 className="font-extralight text-4xl md:text-6xl uppercase tracking-tight text-[#1A1A18] leading-tight mb-8 max-w-3xl">
               FROM WATER IN<br />
               <span className="text-alkota-orange">TO WATER BACK<br />UNDER CONTROL.</span>
             </h2>

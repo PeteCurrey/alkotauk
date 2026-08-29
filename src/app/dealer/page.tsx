@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import {
@@ -18,10 +20,7 @@ import {
   Sparkles
 } from 'lucide-react';
 
-export const metadata = {
-  title: 'Dealer Partner Portal | Alkota UK',
-  description: 'Authorised Alkota Dealer Portal for managing assigned leads, on-site demonstration requests, customer service records, and wholesale price sheets.',
-};
+
 
 export default function DealerPortalPage() {
   // Sample dealer session data for Peak Industrial Pressure Systems

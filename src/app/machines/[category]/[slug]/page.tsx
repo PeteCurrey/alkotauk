@@ -24,6 +24,7 @@ import {
   Flame
 } from "lucide-react";
 import { resolveMachineImage } from '@/lib/images';
+import SeenInRealWorld from '@/components/mess-quest/SeenInRealWorld';
 
 interface MachineDetailPageProps {
   params: Promise<{
@@ -480,6 +481,9 @@ export default async function MachineDetailPage({ params }: MachineDetailPagePro
             </div>
           </section>
         )}
+
+        {/* ── 6B. SEEN IN THE REAL WORLD // MESS QUEST ────────────────────── */}
+        <SeenInRealWorld category={machine.category} className="mt-24" />
 
         {/* ── 7. QUOTE & CONSULTATION CHANNEL ──────────────────────────────── */}
         <section id="quote" className="mt-40 py-32 border-t border-alkota-iron">

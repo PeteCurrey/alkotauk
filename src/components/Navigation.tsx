@@ -473,92 +473,172 @@ export default function Navigation() {
               {/* 3. BESPOKE MEGA MENU */}
               {activeMenu === 'Bespoke' && (
                 <div className="grid grid-cols-12 gap-8 items-stretch">
-                  <div className="col-span-5 space-y-3 pr-6">
-                    <span className="text-[11px] uppercase tracking-[0.25em] text-alkota-orange block mb-2 font-light">
-                      Custom Engineering
+                  {/* Left Column: Navigation Taxonomy */}
+                  <div className="col-span-6 space-y-4 pr-6 border-r border-[#EBEBE8]">
+                    <span className="text-[11px] uppercase tracking-[0.25em] text-alkota-orange block mb-1 font-light">
+                      Custom Engineering & Infrastructure
                     </span>
-                    <h3 className="font-extralight text-2xl uppercase tracking-tight text-alkota-black leading-tight mb-4">
+                    <h3 className="font-extralight text-2xl uppercase tracking-tight text-alkota-black leading-tight mb-3">
                       Engineered Around the Job.
                     </h3>
-                    <div className="space-y-2">
-                      <Link
-                        href="/trailers"
-                        onClick={() => setActiveMenu(null)}
-                        className="block p-3 bg-[#F7F7F5] hover:bg-white border border-[#E8E8E4] hover:border-alkota-orange transition-all no-underline group"
-                      >
-                        <h4 className="text-xs uppercase tracking-wider text-alkota-black group-hover:text-alkota-orange font-normal">
-                          Alkota Trailers & Mobile Systems →
-                        </h4>
-                        <p className="text-[11px] text-[#777] font-normal mt-0.5">
-                          Open deck & enclosed mobile plant rooms with live rig configurator.
-                        </p>
-                      </Link>
-                      <Link
-                        href="/trailers/configure"
-                        onClick={() => setActiveMenu(null)}
-                        className="block p-3 bg-alkota-orange/5 hover:bg-alkota-orange/10 border border-alkota-orange/30 hover:border-alkota-orange transition-all no-underline group"
-                      >
-                        <h4 className="text-xs uppercase tracking-wider text-alkota-orange font-bold">
-                          Launch Rig Configurator →
-                        </h4>
-                        <p className="text-[11px] text-[#777] font-normal mt-0.5">
-                          Interactive 13-step mobile cleaning system builder.
-                        </p>
-                      </Link>
-                      <Link
-                        href="/bespoke#skid"
-                        onClick={() => setActiveMenu(null)}
-                        className="block p-3 bg-[#F7F7F5] hover:bg-white border border-[#E8E8E4] hover:border-alkota-orange transition-all no-underline group"
-                      >
-                        <h4 className="text-xs uppercase tracking-wider text-alkota-black group-hover:text-alkota-orange font-normal">
-                          Custom Skid Units →
-                        </h4>
-                        <p className="text-[11px] text-[#777] font-normal mt-0.5">
-                          Van, truck, and flatbed mounting configurations.
-                        </p>
-                      </Link>
-                      <Link
-                        href="/wash-plant"
-                        onClick={() => setActiveMenu(null)}
-                        className="block p-3 bg-[#F7F7F5] hover:bg-white border border-[#E8E8E4] hover:border-alkota-orange transition-all no-underline group"
-                      >
-                        <h4 className="text-xs uppercase tracking-wider text-alkota-black group-hover:text-alkota-orange font-normal">
-                          Bespoke Wash Plants →
-                        </h4>
-                        <p className="text-[11px] text-[#777] font-normal mt-0.5">
-                          Multi-bay fixed installations, automated mat washers & plant hubs.
-                        </p>
-                      </Link>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      {/* Sub-column 1: Mobile Rigs & Skids */}
+                      <div className="space-y-2">
+                        <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-alkota-silver block mb-1">
+                          MOBILE CLEANING RIGS
+                        </span>
+                        <Link
+                          href="/trailers"
+                          onClick={() => setActiveMenu(null)}
+                          className="block p-2.5 bg-[#F7F7F5] hover:bg-white border border-[#E8E8E4] hover:border-alkota-orange transition-all no-underline group"
+                        >
+                          <h4 className="text-xs uppercase tracking-wider text-alkota-black group-hover:text-alkota-orange font-normal">
+                            Alkota Trailers →
+                          </h4>
+                          <p className="text-[10px] text-[#777] font-normal mt-0.5">
+                            Highway-certified mobile rigs.
+                          </p>
+                        </Link>
+                        <Link
+                          href="/trailers/configure"
+                          onClick={() => setActiveMenu(null)}
+                          className="block p-2.5 bg-alkota-orange/5 hover:bg-alkota-orange/10 border border-alkota-orange/30 hover:border-alkota-orange transition-all no-underline group"
+                        >
+                          <h4 className="text-xs uppercase tracking-wider text-alkota-orange font-normal">
+                            Rig Configurator →
+                          </h4>
+                          <p className="text-[10px] text-[#777] font-normal mt-0.5">
+                            13-step trailer builder.
+                          </p>
+                        </Link>
+                        <Link
+                          href="/bespoke#skid"
+                          onClick={() => setActiveMenu(null)}
+                          className="block p-2.5 bg-[#F7F7F5] hover:bg-white border border-[#E8E8E4] hover:border-alkota-orange transition-all no-underline group"
+                        >
+                          <h4 className="text-xs uppercase tracking-wider text-alkota-black group-hover:text-alkota-orange font-normal">
+                            Custom Skid Units →
+                          </h4>
+                          <p className="text-[10px] text-[#777] font-normal mt-0.5">
+                            Flatbed & van configurations.
+                          </p>
+                        </Link>
+                      </div>
+
+                      {/* Sub-column 2: Wash Plant Division */}
+                      <div className="space-y-2">
+                        <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-alkota-orange block mb-1">
+                          WASH PLANT INFRASTRUCTURE
+                        </span>
+                        <Link
+                          href="/wash-plant"
+                          onClick={() => setActiveMenu(null)}
+                          className="block p-2.5 bg-[#F7F7F5] hover:bg-white border border-[#E8E8E4] hover:border-alkota-orange transition-all no-underline group"
+                        >
+                          <h4 className="text-xs uppercase tracking-wider text-alkota-black group-hover:text-alkota-orange font-normal">
+                            Wash Plant Overview →
+                          </h4>
+                          <p className="text-[10px] text-[#777] font-normal mt-0.5">
+                            Fixed multi-bay & conveyors.
+                          </p>
+                        </Link>
+                        <Link
+                          href="/wash-plant/architect"
+                          onClick={() => setActiveMenu(null)}
+                          className="block p-2.5 bg-alkota-orange/5 hover:bg-alkota-orange/10 border border-alkota-orange/30 hover:border-alkota-orange transition-all no-underline group"
+                        >
+                          <h4 className="text-xs uppercase tracking-wider text-alkota-orange font-normal">
+                            Wash Plant Architect →
+                          </h4>
+                          <p className="text-[10px] text-[#777] font-normal mt-0.5">
+                            9-step capital scoping tool.
+                          </p>
+                        </Link>
+                        <Link
+                          href="/wash-plant/service-maintenance"
+                          onClick={() => setActiveMenu(null)}
+                          className="block p-2.5 bg-[#F7F7F5] hover:bg-white border border-[#E8E8E4] hover:border-alkota-orange transition-all no-underline group"
+                        >
+                          <h4 className="text-xs uppercase tracking-wider text-alkota-black group-hover:text-alkota-orange font-normal">
+                            Service & PPM →
+                          </h4>
+                          <p className="text-[10px] text-[#777] font-normal mt-0.5">
+                            Lifecycle maintenance & SLA.
+                          </p>
+                        </Link>
+                        <Link
+                          href="/wash-plant/refurbishment-upgrades"
+                          onClick={() => setActiveMenu(null)}
+                          className="block p-2.5 bg-[#F7F7F5] hover:bg-white border border-[#E8E8E4] hover:border-alkota-orange transition-all no-underline group"
+                        >
+                          <h4 className="text-xs uppercase tracking-wider text-alkota-black group-hover:text-alkota-orange font-normal">
+                            Refurbishment →
+                          </h4>
+                          <p className="text-[10px] text-[#777] font-normal mt-0.5">
+                            Brownfield plant life extension.
+                          </p>
+                        </Link>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="col-span-7 bg-[#F8F7F4] border border-[#E8E8E4] p-6 grid grid-cols-12 gap-6 items-center">
-                    <div className="col-span-6">
-                      <div className="aspect-[4/3] flex items-center justify-center p-2">
-                        <img
-                          src="/assets/products/trailer-single.png"
-                          alt="Alkota Bespoke Mobile Trailer"
-                          className="h-full w-full object-contain filter drop-shadow-md"
-                        />
+                  {/* Right Column: Wash Plant & Trailer Showcase */}
+                  <div className="col-span-6 flex flex-col justify-between space-y-4">
+                    {/* Top: Wash Plant Division Spotlight */}
+                    <div className="bg-[#121212] text-white p-6 border border-[#2A2A2A] flex flex-col justify-between flex-1">
+                      <div>
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-[9px] uppercase tracking-[0.25em] text-alkota-orange font-ibm-plex-mono">
+                            CAPITAL INFRASTRUCTURE
+                          </span>
+                          <span className="text-[9px] font-ibm-plex-mono text-[#777]">
+                            £100k–£1m+ CAPEX
+                          </span>
+                        </div>
+                        <h4 className="text-lg font-light uppercase tracking-tight text-white mb-2">
+                          Industrial Cleaning Engineered as Infrastructure.
+                        </h4>
+                        <p className="text-xs text-[#aaa] leading-relaxed mb-4">
+                          Permanent multi-bay vehicle wash installations, automated 360° mat conveyors, and closed-loop water treatment recycling.
+                        </p>
+                      </div>
+                      <div className="flex items-center justify-between pt-3 border-t border-white/10">
+                        <Link
+                          href="/wash-plant/projects"
+                          onClick={() => setActiveMenu(null)}
+                          className="text-xs font-ibm-plex-mono uppercase text-[#ccc] hover:text-white"
+                        >
+                          View Projects Archive →
+                        </Link>
+                        <Link
+                          href="/wash-plant/architect"
+                          onClick={() => setActiveMenu(null)}
+                          className="inline-flex items-center gap-1.5 bg-alkota-orange text-white px-4 py-2 text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-colors"
+                        >
+                          <span>Start Scoping Brief</span>
+                          <ArrowRight className="h-3 w-3" />
+                        </Link>
                       </div>
                     </div>
-                    <div className="col-span-6 space-y-4">
-                      <span className="text-[10px] uppercase tracking-wider text-alkota-orange font-light">
-                        Turnkey Mobile Rigs
-                      </span>
-                      <h4 className="text-lg font-light uppercase tracking-tight text-alkota-black leading-snug">
-                        Highway-Certified Cleaning Plants.
-                      </h4>
-                      <p className="text-xs text-[#666] leading-relaxed font-normal">
-                        Designed around your payload, site power, and water supply requirements.
-                      </p>
+
+                    {/* Bottom: Mobile Rig Configurator Link */}
+                    <div className="bg-[#F8F7F4] p-4 border border-[#E8E8E4] flex items-center justify-between">
+                      <div className="space-y-0.5">
+                        <span className="text-[9px] uppercase tracking-wider text-alkota-orange font-ibm-plex-mono">
+                          MOBILE HIGH-PRESSURE RIGS
+                        </span>
+                        <h5 className="text-xs uppercase text-alkota-black font-normal">
+                          Need Highway-Certified Trailer Systems?
+                        </h5>
+                      </div>
                       <Link
-                        href="/tools/configurator"
+                        href="/trailers/configure"
                         onClick={() => setActiveMenu(null)}
-                        className="inline-flex items-center gap-2 bg-alkota-black text-white px-5 py-2.5 text-xs uppercase tracking-widest hover:bg-alkota-orange transition-colors no-underline font-normal"
+                        className="inline-flex items-center gap-1.5 bg-alkota-black text-white px-4 py-2 text-xs uppercase tracking-widest hover:bg-alkota-orange transition-colors"
                       >
-                        <span>Launch Configurator</span>
-                        <ArrowRight className="h-3.5 w-3.5" />
+                        <span>Rig Builder</span>
+                        <ArrowRight className="h-3 w-3" />
                       </Link>
                     </div>
                   </div>
@@ -568,88 +648,169 @@ export default function Navigation() {
               {/* 4. CHEMICALS MEGA MENU */}
               {activeMenu === 'Chemicals' && (
                 <div className="grid grid-cols-12 gap-8 items-stretch">
-                  <div className="col-span-7 space-y-4 pr-6">
+                  {/* Left Column: Category Taxonomy (6 cols) */}
+                  <div className="col-span-5 border-r border-[#EBEBE8] pr-6">
                     <span className="text-[11px] uppercase tracking-[0.25em] text-alkota-orange block mb-2 font-light">
-                      Hydrus Formulated Chemistry
+                      Engineered Industrial Chemistry
                     </span>
-                    <h3 className="font-extralight text-2xl uppercase tracking-tight text-alkota-black leading-tight mb-4">
-                      Formulated for Thermal Breakdown.
+                    <h3 className="font-extralight text-2xl uppercase tracking-tight text-alkota-black leading-tight mb-3">
+                      Pressure + Flow + Heat + Chemistry
                     </h3>
-                    <p className="text-xs text-[#666] leading-relaxed font-normal mb-4">
-                      Alkota chemical formulations are engineered specifically for high-temperature and steam applications to dissolve grime without eroding seals, coils, or pumps.
-                    </p>
-                    <div className="grid grid-cols-2 gap-3 font-normal">
+                    <div className="grid grid-cols-1 gap-1.5 font-normal">
                       <Link
-                        href="/chemicals/industrial"
+                        href="/chemicals/fleet-vehicle"
                         onClick={() => setActiveMenu(null)}
-                        className="p-3 bg-[#F7F7F5] border border-[#E8E8E4] hover:border-alkota-orange hover:bg-white transition-all no-underline group"
+                        className="p-2 bg-[#F7F7F5] hover:bg-white border border-[#E8E8E4] hover:border-alkota-orange transition-all no-underline group flex items-center justify-between"
                       >
-                        <h4 className="text-xs uppercase tracking-wider text-alkota-black group-hover:text-alkota-orange font-normal">
-                          Industrial Detergents →
-                        </h4>
-                        <p className="text-[11px] text-[#777] font-normal mt-0.5">
-                          Agricultural & heavy plant formulations.
-                        </p>
+                        <div>
+                          <h4 className="text-xs uppercase tracking-wider text-alkota-black group-hover:text-alkota-orange font-normal">
+                            Fleet & Commercial Vehicle →
+                          </h4>
+                          <p className="text-[10px] text-[#777] font-normal leading-tight">
+                            Road film, diesel soot, touchless wash & aluminium safety.
+                          </p>
+                        </div>
                       </Link>
                       <Link
                         href="/chemicals/degreasers"
                         onClick={() => setActiveMenu(null)}
-                        className="p-3 bg-[#F7F7F5] border border-[#E8E8E4] hover:border-alkota-orange hover:bg-white transition-all no-underline group"
+                        className="p-2 bg-[#F7F7F5] hover:bg-white border border-[#E8E8E4] hover:border-alkota-orange transition-all no-underline group flex items-center justify-between"
                       >
-                        <h4 className="text-xs uppercase tracking-wider text-alkota-black group-hover:text-alkota-orange font-normal">
-                          Heavy Degreasers →
-                        </h4>
-                        <p className="text-[11px] text-[#777] font-normal mt-0.5">
-                          Extreme bitumen, grease & oil removal.
-                        </p>
+                        <div>
+                          <h4 className="text-xs uppercase tracking-wider text-alkota-black group-hover:text-alkota-orange font-normal">
+                            Industrial Degreasers →
+                          </h4>
+                          <p className="text-[10px] text-[#777] font-normal leading-tight">
+                            Fifth-wheel, bitumen, crude grease & machinery degreasing.
+                          </p>
+                        </div>
                       </Link>
                       <Link
-                        href="/chemicals/parts-washer"
+                        href="/chemicals/industrial"
                         onClick={() => setActiveMenu(null)}
-                        className="p-3 bg-[#F7F7F5] border border-[#E8E8E4] hover:border-alkota-orange hover:bg-white transition-all no-underline group"
+                        className="p-2 bg-[#F7F7F5] hover:bg-white border border-[#E8E8E4] hover:border-alkota-orange transition-all no-underline group flex items-center justify-between"
+                      >
+                        <div>
+                          <h4 className="text-xs uppercase tracking-wider text-alkota-black group-hover:text-alkota-orange font-normal">
+                            Agriculture & Heavy Plant →
+                          </h4>
+                          <p className="text-[10px] text-[#777] font-normal leading-tight">
+                            Farm Soap TR-440, paint restoration & clay/slurry removal.
+                          </p>
+                        </div>
+                      </Link>
+                      <Link
+                        href="/chemicals/parts-washers"
+                        onClick={() => setActiveMenu(null)}
+                        className="p-2 bg-[#F7F7F5] hover:bg-white border border-[#E8E8E4] hover:border-alkota-orange transition-all no-underline group flex items-center justify-between"
+                      >
+                        <div>
+                          <h4 className="text-xs uppercase tracking-wider text-alkota-black group-hover:text-alkota-orange font-normal">
+                            Parts Washing Chemistry →
+                          </h4>
+                          <p className="text-[10px] text-[#777] font-normal leading-tight">
+                            Low-foaming aqueous degreasing & 60-day rust inhibition.
+                          </p>
+                        </div>
+                      </Link>
+                      <Link
+                        href="/chemicals/specialty"
+                        onClick={() => setActiveMenu(null)}
+                        className="p-2 bg-[#F7F7F5] hover:bg-white border border-[#E8E8E4] hover:border-alkota-orange transition-all no-underline group flex items-center justify-between"
+                      >
+                        <div>
+                          <h4 className="text-xs uppercase tracking-wider text-alkota-black group-hover:text-alkota-orange font-normal">
+                            Scale Stop & Coil Care →
+                          </h4>
+                          <p className="text-[10px] text-[#777] font-normal leading-tight">
+                            Hard water scale prevention preserving 7-year coil warranty.
+                          </p>
+                        </div>
+                      </Link>
+                    </div>
+                  </div>
+
+                  {/* Centre Column: Chemical Match Signature System (4 cols) */}
+                  <div className="col-span-4 bg-[#141412] text-white p-6 flex flex-col justify-between">
+                    <div>
+                      <span className="text-[10px] uppercase tracking-[0.25em] text-alkota-orange block mb-2 font-light">
+                        Signature Diagnostic Engine
+                      </span>
+                      <h4 className="text-xl font-light uppercase tracking-tight text-white mb-2">
+                        Chemical Match
+                      </h4>
+                      <p className="text-xs text-[#bbb] leading-relaxed font-normal mb-4">
+                        Match your exact contamination, surface metallurgy, and hot/cold wash parameters against structured compatibility rules.
+                      </p>
+                      <div className="space-y-1.5 text-[11px] text-[#888] font-normal">
+                        <div className="flex items-center gap-2">
+                          <span className="h-1 w-1 rounded-full bg-alkota-orange" />
+                          <span>Surface exclusion safety checks</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="h-1 w-1 rounded-full bg-alkota-orange" />
+                          <span>Water recovery & recycling compatibility</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="h-1 w-1 rounded-full bg-alkota-orange" />
+                          <span>Verified dosing & dilution ratios</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="pt-6">
+                      <Link
+                        href="/chemicals/match"
+                        onClick={() => setActiveMenu(null)}
+                        className="inline-flex items-center justify-between w-full bg-alkota-orange text-white px-4 py-2.5 text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-colors no-underline font-normal shadow"
+                      >
+                        <span>Launch Chemical Match</span>
+                        <ArrowRight className="h-3.5 w-3.5" />
+                      </Link>
+                    </div>
+                  </div>
+
+                  {/* Right Column: Safety Data & Quick Links (3 cols) */}
+                  <div className="col-span-3 bg-[#F8F7F4] border border-[#E8E8E4] p-5 flex flex-col justify-between">
+                    <div className="space-y-3">
+                      <span className="text-[10px] uppercase tracking-wider text-alkota-orange font-light block">
+                        Compliance & Support
+                      </span>
+                      <Link
+                        href="/chemicals/safety-data"
+                        onClick={() => setActiveMenu(null)}
+                        className="block p-3 bg-white border border-[#DDD] hover:border-alkota-orange transition-all no-underline group"
                       >
                         <h4 className="text-xs uppercase tracking-wider text-alkota-black group-hover:text-alkota-orange font-normal">
-                          Parts Washer Chemistry →
+                          Safety Data (SDS) Library →
                         </h4>
-                        <p className="text-[11px] text-[#777] font-normal mt-0.5">
-                          Aqueous, non-foaming, multi-metal safe.
+                        <p className="text-[10px] text-[#777] font-normal mt-0.5">
+                          Download current GB CLP compliant Safety Data Sheets.
                         </p>
                       </Link>
                       <Link
                         href="/chemicals"
                         onClick={() => setActiveMenu(null)}
-                        className="p-3 bg-[#F7F7F5] border border-[#E8E8E4] hover:border-alkota-orange hover:bg-white transition-all no-underline group"
+                        className="block p-3 bg-white border border-[#DDD] hover:border-alkota-orange transition-all no-underline group"
                       >
                         <h4 className="text-xs uppercase tracking-wider text-alkota-black group-hover:text-alkota-orange font-normal">
-                          All Formulations →
+                          Explore Complete Range →
                         </h4>
-                        <p className="text-[11px] text-[#777] font-normal mt-0.5">
-                          Complete Hydrus chemical catalog.
+                        <p className="text-[10px] text-[#777] font-normal mt-0.5">
+                          View all UK verified industrial formulations.
                         </p>
                       </Link>
                     </div>
-                  </div>
-
-                  <div className="col-span-5 bg-[#F8F7F4] border border-[#E8E8E4] p-6 flex flex-col justify-between">
-                    <div>
-                      <span className="text-[10px] uppercase tracking-wider text-alkota-orange font-light block mb-2">
-                        Technical Application Support
+                    <div className="pt-3 border-t border-[#E8E8E4]">
+                      <span className="text-[10px] text-[#888] font-normal block leading-tight">
+                        Need bulk IBC supply or dealer allocation?
                       </span>
-                      <h4 className="text-lg font-light uppercase tracking-tight text-alkota-black leading-snug mb-2">
-                        Chemical Compatibility Advice.
-                      </h4>
-                      <p className="text-xs text-[#666] leading-relaxed font-normal">
-                        Speak directly with our chemists and application engineers to specify the exact dilution rates and formulations for your effluent compliance.
-                      </p>
-                    </div>
-                    <div className="pt-6">
                       <Link
-                        href="/contact"
+                        href="/contact?subject=Chemicals"
                         onClick={() => setActiveMenu(null)}
-                        className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-alkota-black hover:text-alkota-orange transition-colors font-normal no-underline"
+                        className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider text-alkota-orange hover:text-black transition-colors font-normal mt-1 no-underline"
                       >
-                        <span>Contact Technical Support</span>
-                        <ArrowRight className="h-3.5 w-3.5" />
+                        <span>Request Bulk Pricing</span>
+                        <ArrowRight className="h-3 w-3" />
                       </Link>
                     </div>
                   </div>

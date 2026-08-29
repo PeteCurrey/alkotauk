@@ -32,7 +32,7 @@ export default function AlkotaAdvisor() {
   useEffect(() => {
     async function fetchPersona() {
       try {
-        const settings = await client.fetch(`*[_type == "siteSettings"][0].aiChatGroup`);
+        const settings: any = await client.fetch<any>(`*[_type == "siteSettings"][0].aiChatGroup`);
         if (settings?.teamMembers?.length > 0) {
           const randomMember = settings.teamMembers[Math.floor(Math.random() * settings.teamMembers.length)];
           setPersona({

@@ -9,7 +9,7 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 export const dynamic = 'force-dynamic';
 
 async function getPart(slug: string) {
-  return await client.fetch(`*[_type == "part" && slug.current == $slug][0] {
+  return await client.fetch<any>(`*[_type == "part" && slug.current == $slug][0] {
     _id,
     name,
     sku,

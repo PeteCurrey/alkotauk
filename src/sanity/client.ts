@@ -3,22 +3,22 @@
 // This file is kept as a stub to prevent import errors during migration.
 
 export const client = {
-  fetch: async (query: string, params?: any) => {
+  fetch: async <T = any>(query: string, params?: any): Promise<T> => {
     console.log('Sanity Client stub: fetching', query);
-    return [];
+    return [] as any;
   }
 };
 
 export const sanityClient = client;
 
-export const safeFetch = async (query: string, params?: any) => {
-  return [];
+export const safeFetch = async <T = any>(query: string, params?: any): Promise<T> => {
+  return [] as any;
 };
 
 export const urlFor = (source: any) => {
   const builder = {
-    width: () => builder,
-    height: () => builder,
+    width: (_w?: number) => builder,
+    height: (_h?: number) => builder,
     url: () => '',
   };
   return builder;

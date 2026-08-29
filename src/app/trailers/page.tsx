@@ -14,12 +14,12 @@ import { APPLICATION_PRESETS, UK_CHASSIS_OPTIONS, WATER_RECOVERY_OPTIONS } from 
 
 // ─── ANIMATION VARIANTS ──────────────────────────────────────────────────────
 
-const fadeUp = {
+const fadeUp: any = {
   hidden: { opacity: 0, y: 32 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } }
 };
 
-const stagger = {
+const stagger: any = {
   visible: { transition: { staggerChildren: 0.1 } }
 };
 

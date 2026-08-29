@@ -5,7 +5,7 @@ import Image from 'next/image';
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const query = `*[_type == "blogPost" && slug.current == $slug][0] { title, seo }`;
-  const post = await safeFetch(query, { slug });
+  const post: any = await safeFetch<any>(query, { slug });
   if (!post) return { title: 'Post Not Found' };
   return {
     title: post.seo?.metaTitle || `${post.title} | Good Clean News`,
@@ -21,7 +21,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     body
   }`;
   
-  const post = await safeFetch(query, {
+  const post: any = await safeFetch<any>(query, {
     slug,
     title: 'Dummy Post Placeholder',
     publishedAt: new Date().toISOString(),

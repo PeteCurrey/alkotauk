@@ -25,11 +25,18 @@ const NAV = [
       { icon: Flame, label: 'Hot Water Machines', href: '/admin/products?category=hot-water' },
       { icon: Waves, label: 'Cold Water Machines', href: '/admin/products?category=cold-water' },
       { icon: Wind, label: 'Steam Cleaners', href: '/admin/products?category=steam' },
-      { icon: Truck, label: 'Trailers & Bespoke', href: '/admin/bespoke' },
-      { icon: Factory, label: 'Wash Plants', href: '/admin/bespoke?type=wash-plant' },
+      { icon: Truck, label: 'Trailers & Skids', href: '/admin/bespoke' },
       { icon: Wrench, label: 'Parts Washers', href: '/admin/products?category=parts-washer' },
       { icon: Droplets, label: 'Water Treatment', href: '/admin/products?category=water-treatment' },
       { icon: FlaskConical, label: 'Chemicals', href: '/admin/chemicals' },
+    ],
+  },
+  {
+    section: 'WASH PLANT',
+    items: [
+      { icon: Factory, label: 'WP Projects Pipeline', href: '/admin/wash-plant' },
+      { icon: Zap, label: 'Installed Assets', href: '/admin/wash-plant/assets' },
+      { icon: FileText, label: 'Project Media', href: '/admin/wash-plant/media' },
     ],
   },
   {

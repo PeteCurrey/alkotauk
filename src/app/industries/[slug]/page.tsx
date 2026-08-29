@@ -7,9 +7,9 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 import Footer from '@/components/Footer';
 
 interface IndustryDetailPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export default async function IndustryDetailPage({ params }: IndustryDetailPageProps) {

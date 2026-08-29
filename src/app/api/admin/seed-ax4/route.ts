@@ -57,7 +57,7 @@ export async function GET(req: NextRequest) {
     }
   ];
 
-  const results = [];
+  const results: any[] = [];
   for (const machine of machines) {
     const { data, error } = await supabaseAdmin
       .from('products')

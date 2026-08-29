@@ -404,7 +404,7 @@ function TrailerConfiguratorInner() {
       ...c,
       site_options: c.site_options.includes(id)
         ? c.site_options.filter(s => s !== id)
-        : [...c.site_options, s],
+        : [...c.site_options, id],
     }));
   };
 

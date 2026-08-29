@@ -5,8 +5,8 @@ export const dynamic = 'force-dynamic';
 
 export async function GET(req: NextRequest) {
   const token = req.cookies.get(COOKIE_NAME)?.value;
-  let payload = null;
-  let error = null;
+  let payload: any = null;
+  let error: any = null;
   if (token) {
     try {
       payload = await verifyToken(token);

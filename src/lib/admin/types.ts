@@ -67,12 +67,27 @@ export type Product = {
 export type ProductInsert = Omit<Product, 'id' | 'created_at' | 'updated_at'>;
 export type ProductUpdate = Partial<ProductInsert>;
 
+export type ChemicalUKStatus = 
+  | 'draft'
+  | 'needs_uk_review'
+  | 'uk_approved'
+  | 'published'
+  | 'archived';
+
 export type ChemicalCategory =
+  | 'fleet-vehicle'
+  | 'degreasers'
+  | 'industrial'
+  | 'parts-washers'
+  | 'food-processing'
+  | 'masonry'
+  | 'aviation'
+  | 'specialty'
+  | 'scale-stop'
   | 'degreaser'
   | 'farm-ag'
   | 'transportation-fleet'
   | 'heavy-industrial'
-  | 'scale-stop'
   | 'parts-washer-solution'
   | 'aluminium-brightener'
   | 'aircraft-specialist';
@@ -87,20 +102,66 @@ export type Chemical = {
   description: string | null;
   active: boolean;
   featured: boolean;
+  uk_status?: ChemicalUKStatus;
 
-  // Properties
+  // Physical & Chemistry
+  form?: string | null;
+  appearance?: string | null;
+  ph_level?: string | null;
+  specific_gravity?: string | null;
+  active_ingredients?: string[] | null;
+  voc_content?: string | null;
+  biodegradability_claim?: string | null;
+  biodegradable: boolean;
+  hazardous: boolean;
+  food_safe?: boolean;
+  food_process_status?: 'non_food' | 'rinse_required' | 'validated_contact' | 'under_review';
+
+  // Compatibility
   use_cases: string[] | null;
   compatible_surfaces: string[] | null;
   not_suitable_for: string[] | null;
-  biodegradable: boolean;
-  hazardous: boolean;
+  contamination_types?: string[] | null;
+  application_methods?: string[] | null;
+  compatible_equipment_types?: string[] | null;
 
-  // Sizes
+  // Application & Dilution
+  dilution_hot?: string | null;
+  dilution_cold?: string | null;
+  surface_notes?: string | null;
+  application_notes?: string | null;
+
+  // Water Treatment
+  water_recovery_compatible?: boolean;
+  separator_compatible?: boolean;
+  recycling_compatible?: boolean;
+  water_recovery_notes?: string | null;
+
+  // Safety & GB CLP / COSHH
+  hazard_classification?: string | null;
+  signal_word?: 'DANGER' | 'WARNING' | 'NONE';
+  hazard_pictograms?: string[] | null;
+  hazard_statements?: string[] | null;
+  precautionary_statements?: string[] | null;
+
+  // Sizes & Storage
   available_sizes: string[] | null;
+  storage_notes?: string | null;
+  shelf_life?: string | null;
+  manufacturer?: string | null;
+  country_of_origin?: string | null;
+  features?: string[] | null;
 
-  // Media
+  // Documents & Media
+  sds_url?: string | null;
+  sds_revision_date?: string | null;
+  tds_url?: string | null;
+  tds_revision_date?: string | null;
+  label_url?: string | null;
   primary_image_url: string | null;
+  image_url?: string | null;
   pdf_datasheet_url: string | null;
+  media_status?: 'media_required' | 'placeholder_active' | 'media_verified';
 
   // SEO
   meta_title: string | null;
@@ -303,12 +364,20 @@ export const PRODUCT_CATEGORY_LABELS: Record<ProductCategory, string> = {
 };
 
 export const CHEMICAL_CATEGORY_LABELS: Record<ChemicalCategory, string> = {
-  'degreaser': 'Degreaser',
-  'farm-ag': 'Farm & Ag',
-  'transportation-fleet': 'Transportation & Fleet',
-  'heavy-industrial': 'Heavy Industrial',
-  'scale-stop': 'Scale Stop',
-  'parts-washer-solution': 'Parts Washer Solution',
-  'aluminium-brightener': 'Aluminium Brightener',
-  'aircraft-specialist': 'Aircraft & Specialist',
+  'fleet-vehicle': 'Fleet & Commercial Vehicle',
+  'degreasers': 'Industrial Degreasing',
+  'industrial': 'Heavy Industrial & Agriculture',
+  'parts-washers': 'Parts Washing & Metal Treatment',
+  'food-processing': 'Food & Process Hygiene',
+  'masonry': 'Masonry & Surface Restoration',
+  'aviation': 'Aviation & Ground Support',
+  'specialty': 'Specialty Chemistry & Additives',
+  'scale-stop': 'Scale Stop & Coil Protection',
+  'degreaser': 'Industrial Degreasing (Legacy)',
+  'farm-ag': 'Farm & Ag (Legacy)',
+  'transportation-fleet': 'Fleet & Transport (Legacy)',
+  'heavy-industrial': 'Heavy Industrial (Legacy)',
+  'parts-washer-solution': 'Parts Washer (Legacy)',
+  'aluminium-brightener': 'Aluminium Brightener (Legacy)',
+  'aircraft-specialist': 'Aircraft Specialist (Legacy)',
 };

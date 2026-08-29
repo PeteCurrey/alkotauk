@@ -17,6 +17,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .select('slug, updated_at')
     .eq('active', true);
 
+  // Fetch published wash plant projects
+  let washPlantProjects: any[] = [];
+  try {
+    const { data: wpData } = await supabaseAdmin
+      .from('wash_plant_projects')
+      .select('case_study_slug, updated_at')
+      .eq('published', true)
+      .in('visibility', ['public', 'anonymised'])
+      .not('case_study_slug', 'is', null);
+    if (wpData) washPlantProjects = wpData;
+  } catch (err) {
+    // fallback
+  }
+
   const lobbyArticles = await getLobbyArticles();
   const dealers = await getDealers({ onlyActive: true });
 
@@ -53,6 +67,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: new Date(i.updated_at || new Date()),
     changeFrequency: 'monthly' as const,
     priority: 0.6,
+  }));
+
+  const washPlantProjectUrls = washPlantProjects.map((p: any) => ({
+    url: `${baseUrl}/wash-plant/projects/${p.case_study_slug}`,
+    lastModified: new Date(p.updated_at || new Date()),
+    changeFrequency: 'monthly' as const,
+    priority: 0.8,
+  }));
+
+  // Baseline verified editorial project URLs
+  const baselineWashPlantSlugs = [
+    'multi-bay-fleet-depot-warrington',
+    'automated-rig-mat-washer-aberdeen',
+    'heavy-plant-demucking-quarry-buxton'
+  ].map(slug => ({
+    url: `${baseUrl}/wash-plant/projects/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.8,
   }));
 
   return [
@@ -128,6 +161,45 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'weekly',
       priority: 0.9,
     },
+    // Wash Plant Flagship Division
+    {
+      url: `${baseUrl}/wash-plant`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.95,
+    },
+    {
+      url: `${baseUrl}/wash-plant/architect`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/wash-plant/service-maintenance`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/wash-plant/asset-management`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.85,
+    },
+    {
+      url: `${baseUrl}/wash-plant/refurbishment-upgrades`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.85,
+    },
+    {
+      url: `${baseUrl}/wash-plant/projects`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.85,
+    },
+    ...baselineWashPlantSlugs,
+    ...washPlantProjectUrls,
     ...categoryUrls,
     ...machineUrls,
     ...industryUrls,

@@ -82,8 +82,11 @@ const SYSTEMS_DB: Record<string, any> = {
   }
 };
 
-export default function WaterTreatmentProductPage({ params }: { params: { slug: string } }) {
-  const system = SYSTEMS_DB[params.slug];
+import { use } from 'react';
+
+export default function WaterTreatmentProductPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = use(params);
+  const system = SYSTEMS_DB[slug];
 
   if (!system) {
     notFound();

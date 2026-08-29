@@ -262,7 +262,7 @@ async function scrapeSeriesPage(url: string): Promise<RawExtractedProduct[]> {
   const pMatches = [...html.matchAll(/<p[^>]*class=[\"\x27][^\"\x27]*description[^\"\x27]*[\"\x27][^>]*>(.*?)<\/p>/gi)];
   let seriesDescription = pMatches[0] ? pMatches[0][1].replace(/<[^>]+>/g, '').trim() : '';
   if (!seriesDescription) {
-    const genericP = [...html.matchAll(/<p[^>]*>(.*?)<\/p>/gis)].map(m => m[1].replace(/<[^>]+>/g, '').trim()).filter(p => p.length > 60 && !p.includes('Alkota') && !p.includes('distributor'));
+    const genericP = [...html.matchAll(/<p[^>]*>([\s\S]*?)<\/p>/gi)].map(m => m[1].replace(/<[^>]+>/g, '').trim()).filter(p => p.length > 60 && !p.includes('Alkota') && !p.includes('distributor'));
     seriesDescription = genericP[0] || 'Engineered for continuous heavy-duty industrial cleaning operations.';
   }
   
@@ -279,7 +279,7 @@ async function scrapeSeriesPage(url: string): Promise<RawExtractedProduct[]> {
   const seriesFeatures = [...new Set(featureMatches)].slice(0, 8);
   
   // Extract models by H2 specifications
-  const modelSections = [...html.matchAll(/<h2[^>]*>([A-Za-z0-9\-\s\/]+?)\s+Specifications<\/h2>(.*?)(?=<h2|$)/gis)];
+  const modelSections = [...html.matchAll(/<h2[^>]*>([A-Za-z0-9\-\s\/]+?)\s+Specifications<\/h2>([\s\S]*?)(?=<h2|$)/gi)];
   const extractedProducts: RawExtractedProduct[] = [];
   
   if (modelSections.length > 0) {
@@ -287,7 +287,7 @@ async function scrapeSeriesPage(url: string): Promise<RawExtractedProduct[]> {
       const rawModelCode = m[1].replace(/Specifications/i, '').trim();
       const sectionHtml = m[2];
       
-      const tableRows = [...sectionHtml.matchAll(/<tr>\s*<td[^>]*>(.*?)<\/td>\s*<td[^>]*>(.*?)<\/td>\s*<\/tr>/gis)];
+      const tableRows = [...sectionHtml.matchAll(/<tr>\s*<td[^>]*>([\s\S]*?)<\/td>\s*<td[^>]*>([\s\S]*?)<\/td>\s*<\/tr>/gi)];
       const specs: Record<string, string> = {};
       for (const tr of tableRows) {
         const k = tr[1].replace(/<[^>]+>/g, '').trim();

@@ -178,10 +178,10 @@ Industrial pressure washing, thermal fluid systems, and wash bay facilities requ
           category: a.category_slug,
         }));
 
-        const productsSummary = products.slice(0, 15).map(p => ({
+        const productsSummary = products.slice(0, 15).map((p: any) => ({
           name: p.name,
-          slug: '/machines/' + (p.category_slug || 'hot-water') + '/' + p.slug,
-          specs: p.specifications,
+          slug: '/machines/' + (p.category || 'hot-water') + '/' + p.slug,
+          specs: p.specs || p.specifications,
           desc: p.description,
         }));
 

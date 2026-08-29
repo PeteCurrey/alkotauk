@@ -54,12 +54,12 @@ export default function TrailerPayloadCalculatorPage() {
           </div>
 
           <h1 className="font-barlow-condensed text-5xl md:text-7xl font-black uppercase italic text-white leading-tight mb-4">
-            TRAILER PAYLOAD &<br />
-            <span className="text-alkota-orange">MAM WEIGHT CALCULATOR.</span>
+            TRAILER PAYLOAD &amp;<br />
+            <span className="text-alkota-orange">TOWING ESTIMATOR.</span>
           </h1>
 
           <p className="text-alkota-silver text-base md:text-lg max-w-3xl leading-relaxed font-light mb-6">
-            1,000 litres of water weighs exactly 1,000 kilograms (one metric tonne). Understanding your Maximum Authorised Mass (MAM), unladen tare, and water mass is critical to legal UK road transport.
+            1,000 litres of water weighs exactly 1,000 kilograms (one metric tonne). This tool provides preliminary estimates of Maximum Authorised Mass (MAM), unladen tare mass, and water payload dynamics for UK mobile cleaning operations. Final towing suitability, axle loading, and regulatory compliance must be verified for the specific vehicle/trailer combination.
           </p>
 
           <div className="flex flex-wrap gap-2">
@@ -278,9 +278,13 @@ export default function TrailerPayloadCalculatorPage() {
               </div>
             </div>
 
-            <div className="border border-[#E0E0DC] bg-white p-5 text-[11px] font-mono text-[#666] leading-relaxed shadow-sm">
-              <span className="text-alkota-orange font-bold">Engineering Note: </span>
-              This calculator provides preliminary estimates for educational planning. Exact axle load distribution, tongue weight, and Type Approval validation are confirmed during our formal Alkota UK engineering sign-off.
+            <div className="border border-[#E0E0DC] bg-white p-5 text-xs text-[#555] leading-relaxed shadow-sm space-y-2">
+              <p>
+                <strong className="text-alkota-orange">Important Engineering &amp; Legal Notice:</strong> This estimator provides preliminary calculations based on configured capacities. Axle load distribution, noseweight on the towbar, and specific vehicle Gross Train Weight (GTW) must be verified for the final physical rig.
+              </p>
+              <p className="text-[11px] text-[#777]">
+                For definitive UK driving licence towing entitlement and vehicle limits, consult official <a href="https://www.gov.uk/towing-with-car" target="_blank" rel="noopener noreferrer" className="text-alkota-orange underline">GOV.UK Towing Regulations</a>.
+              </p>
             </div>
           </div>
         </div>

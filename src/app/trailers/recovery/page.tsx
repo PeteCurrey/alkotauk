@@ -84,7 +84,7 @@ export default function TrailerRecoveryPage() {
             </h1>
 
             <p className="text-alkota-silver text-lg md:text-xl leading-relaxed mb-10 max-w-2xl font-light">
-              Mobile industrial cleaning without drainage penalties. Alkota trailer recovery systems capture, filter, and recycle wash-water on-site — meeting stringent UK Environment Agency regulations in marine ports, shopping centres, and remote utility assets.
+              Mobile industrial cleaning engineered for responsible water management. Alkota trailer recovery systems capture surface runoff, filter suspended solids and hydrocarbons, and support closed-loop water reuse — helping operators align with UK environmental guidelines across sensitive sites, urban spaces, and marine infrastructure.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
@@ -118,18 +118,18 @@ export default function TrailerRecoveryPage() {
                 UK ENVIRONMENTAL LAW APPLIES EVERYWHERE.
               </h2>
               <p className="text-[#555] text-base leading-relaxed mb-6 font-light">
-                Allowing wash-water contaminated with hydrocarbons, heavy metals, road salt, or detergents to enter surface stormwater drains is illegal under the UK Environmental Permitting Regulations and Water Resources Act. Fines are severe and reputational damage to commercial clients is immediate.
+                Allowing untreated wash-water contaminated with hydrocarbons, heavy metals, road salt, or detergents to enter surface stormwater drains is regulated under the UK Environmental Permitting Regulations and Water Resources Act. Fines are severe and reputational damage to commercial clients is immediate.
               </p>
               <p className="text-[#777] text-sm leading-relaxed mb-8">
-                Alkota trailer-mounted recovery systems allow contractors and facility managers to clean legally anywhere in the UK, containing 100% of wastewater at the point of impact and treating it on-board.
+                Alkota trailer-mounted recovery systems assist contractors and facility operators by vacuum-capturing surface wastewater directly at the wash point, separating solids, and treating effluent through multi-stage media filtration.
               </p>
 
               <div className="border border-green-800/30 bg-green-50 p-6">
                 <h4 className="font-barlow-condensed text-xl font-bold uppercase text-green-900 mb-2">
-                  BS EN 858 Class 1 Discharge Threshold (&lt;5 mg/L)
+                  BS EN 858 Separation Benchmark (&lt;5 mg/L Hydrocarbon Target)
                 </h4>
                 <p className="text-xs text-green-800 leading-relaxed font-light">
-                  Our VFS continuous negative-void filtration technology removes free hydrocarbons down to under 5 mg/L, exceeding standard trade effluent requirements for closed-loop recycling.
+                  Our VFS multi-stage negative-void filtration technology is engineered to remove free hydrocarbons down to under 5 mg/L, supporting closed-loop recycling and responsible trade effluent management subject to site-specific discharge consents.
                 </p>
               </div>
             </div>

@@ -40,8 +40,8 @@ export default function TrailersLayout({ children }: { children: React.ReactNode
       '@type': 'Country',
       'name': 'United Kingdom',
     },
-    'description': 'Custom design, engineering, IVA certification, and manufacturing of industrial pressure washer trailers, mobile wash plant rooms, and closed-loop wastewater recovery rigs.',
-    'serviceType': 'Custom Industrial Machinery Manufacturing',
+    'description': 'Official Alkota UK operation. Design, custom trailer engineering, Type Approval compliance, and integration of industrial hot water pressure washing machinery, mobile plant rooms, and water treatment systems across the United Kingdom.',
+    'serviceType': 'Bespoke Mobile Cleaning Machinery Engineering & Integration',
     'url': 'https://alkota.co.uk/trailers',
   };
 

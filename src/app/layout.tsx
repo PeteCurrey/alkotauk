@@ -4,6 +4,7 @@ import { SessionProvider } from "@/components/SessionProvider";
 import { CartProvider } from "@/context/CartContext";
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://alkota.co.uk'),
   title: "Alkota UK | The Platinum Standard in Industrial Cleaning",
   description: "Highest quality hot water pressure washers, custom trailers, and industrial cleaning equipment. Born in South Dakota, built for the UK.",
 };

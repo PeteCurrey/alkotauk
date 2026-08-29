@@ -1,6 +1,8 @@
 import Navigation from '@/components/Navigation';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import Footer from '@/components/Footer';
+import WashPlantSubNav from '@/components/wash-plant/WashPlantSubNav';
+import WashPlantSchema from '@/components/wash-plant/WashPlantSchema';
 import { 
   ArrowRight, 
   Wrench, 
@@ -89,10 +91,16 @@ export default function WashPlantServicePage() {
   ];
 
   return (
-    <main className="min-h-screen bg-alkota-bg text-alkota-black pt-32 pb-0">
+    <main className="min-h-screen bg-alkota-bg text-alkota-black pt-20 pb-0">
+      <WashPlantSchema
+        pageTitle="Wash Plant Service & Maintenance | PPM & Repairs | Alkota UK"
+        pageDescription="Planned preventative maintenance, emergency reactive callouts, high-pressure pump overhauls, burner servicing and third-party plant support for industrial wash plants across the UK."
+        pageUrl="https://alkota.co.uk/wash-plant/service-maintenance"
+      />
       <Navigation />
+      <WashPlantSubNav />
 
-      <div className="mx-auto max-w-7xl px-6 sm:px-12">
+      <div className="mx-auto max-w-7xl px-6 sm:px-12 pt-10">
         <Breadcrumbs items={[
           { label: 'Wash Plant Infrastructure', href: '/wash-plant' },
           { label: 'Service & Maintenance' }

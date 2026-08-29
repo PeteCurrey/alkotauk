@@ -4,6 +4,8 @@ import { useState } from 'react';
 import Navigation from '@/components/Navigation';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import Footer from '@/components/Footer';
+import WashPlantSubNav from '@/components/wash-plant/WashPlantSubNav';
+import WashPlantSchema from '@/components/wash-plant/WashPlantSchema';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowRight,
@@ -19,7 +21,9 @@ import {
   Factory,
   ShieldCheck,
   Printer,
-  ChevronRight
+  ChevronRight,
+  AlertCircle,
+  Compass
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -56,7 +60,7 @@ export default function WashPlantArchitectPage() {
     otherContamination: '',
 
     // Step 5: Architecture Preference
-    architecturePreference: 'advise_me', // manual, semi_automated, automated, robotic, advise_me
+    architecturePreference: 'advise_me', // manual, semi_automated, automated, conveyorised, gantry, demucking, sanitary, advise_me
 
     // Step 6: Water & Utilities
     mainsWaterAvailable: 'yes',
@@ -66,23 +70,23 @@ export default function WashPlantArchitectPage() {
     dischargeDestination: 'foul_sewer', // foul_sewer, surface_drain, zero_discharge, tanker_haul
 
     // Step 7: Site & Civils
-    siteType: 'existing_facility', // new_build, existing_facility
+    siteType: 'existing_facility', // new_build, existing_facility, temporary_site
     installationLocation: 'outdoor_covered', // indoor_plant, outdoor_covered, outdoor_open
     availableFootprint: '',
     threePhasePowerAvailable: 'yes',
-    heatingFuelPreference: 'natural_gas', // natural_gas, lpg, diesel, electric
+    heatingFuelPreference: 'natural_gas', // natural_gas, lpg, diesel, electric, cold_only
     civilsRequired: 'unknown',
 
-    // Step 8: Project & Commercial
+    // Step 8: Project Scope Indicators
     budgetBand: '£250k–£500k',
     targetDate: '',
-    procurementRoute: 'direct_award', // direct_award, competitive_tender, consultant_spec
+    procurementRoute: 'direct_award', // direct_award, competitive_tender, consultant_spec, budget_pricing
     projectStage: 'feasibility', // early_concept, feasibility, planning_approved, tender_active
 
     // Step 9: Lifecycle & Service
     serviceRequirements: [
       'Planned Preventative Maintenance (PPM)',
-      'Critical Spares Package',
+      'Critical Spares Site Holding Package',
       'Operator & Safety Training'
     ] as string[],
 
@@ -186,7 +190,6 @@ export default function WashPlantArchitectPage() {
       setSubmitted(true);
     } catch (err) {
       console.error('Submit brief error:', err);
-      // Still show success fallback with local reference
       setReference(`WP-${new Date().getFullYear()}-${Math.floor(Math.random() * 9000) + 1000}`);
       setSubmitted(true);
     } finally {
@@ -199,10 +202,17 @@ export default function WashPlantArchitectPage() {
   };
 
   return (
-    <main className="min-h-screen bg-alkota-bg text-alkota-black pt-32 pb-24">
-      <Navigation />
+    <main className="min-h-screen bg-alkota-bg text-alkota-black pt-20 pb-24">
+      <WashPlantSchema
+        pageTitle="Wash Plant Architect | Industrial Scoping Tool | Alkota UK"
+        pageDescription="Interactive pre-engineering scoping tool for industrial wash plants. Define asset geometries, throughput, soil profiles, water balance, and site utilities to compile a Preliminary Project Brief."
+        pageUrl="https://alkota.co.uk/wash-plant/architect"
+      />
 
-      <div className="mx-auto max-w-5xl px-6">
+      <Navigation />
+      <WashPlantSubNav />
+
+      <div className="mx-auto max-w-5xl px-6 pt-10">
         <Breadcrumbs items={[
           { label: 'Wash Plant Infrastructure', href: '/wash-plant' },
           { label: 'Wash Plant Architect' }
@@ -213,7 +223,7 @@ export default function WashPlantArchitectPage() {
           <div className="flex items-center gap-3 mb-3">
             <div className="h-[2px] w-8 bg-alkota-orange" />
             <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.35em] text-alkota-orange">
-              // PROJECT SCOPING FRAMEWORK
+              // PRE-ENGINEERING SCOPING ENGINE
             </span>
           </div>
           <h1 className="font-extralight text-4xl sm:text-6xl uppercase tracking-tight text-alkota-black leading-tight">
@@ -231,13 +241,13 @@ export default function WashPlantArchitectPage() {
               <span className="text-alkota-black">
                 Step {currentStep} of 10: {
                   currentStep === 1 ? 'Asset Identification' :
-                  currentStep === 2 ? 'Asset Geometry & Data' :
+                  currentStep === 2 ? 'Asset Geometry & Envelope' :
                   currentStep === 3 ? 'Throughput Modelling' :
                   currentStep === 4 ? 'Contamination Profile' :
-                  currentStep === 5 ? 'Cleaning Architecture' :
+                  currentStep === 5 ? 'Architecture Philosophy' :
                   currentStep === 6 ? 'Water & Utilities' :
                   currentStep === 7 ? 'Site & Civils' :
-                  currentStep === 8 ? 'Project Parameters' :
+                  currentStep === 8 ? 'Commercial Scope Indicators' :
                   currentStep === 9 ? 'Lifecycle & Service' : 'Project Brief Summary'
                 }
               </span>
@@ -275,7 +285,7 @@ export default function WashPlantArchitectPage() {
                     {[
                       'Heavy Plant & Earthmoving (Excavators, Dozers)',
                       'Commercial Vehicles & HGVs (Tractor Units, Trailers)',
-                      'Logistics & Delivery Vans',
+                      'Logistics & Delivery Fleet',
                       'Buses & Passenger Coaches',
                       'Rail Rolling Stock & Bogies',
                       'Rig & Access Mats (Timber / Composite)',
@@ -327,7 +337,7 @@ export default function WashPlantArchitectPage() {
                 <div className="space-y-6">
                   <div>
                     <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-orange block mb-1">
-                      STEP 02 // PHYSICAL SPECIFICATIONS
+                      STEP 02 // PHYSICAL ENVELOPE
                     </span>
                     <h2 className="font-extralight text-3xl uppercase tracking-tight text-alkota-black">
                       Asset Data & Geometry.
@@ -414,7 +424,7 @@ export default function WashPlantArchitectPage() {
                       Throughput & Duty Cycle.
                     </h2>
                     <p className="text-xs text-alkota-silver uppercase tracking-wider mt-1">
-                      Throughput dictates pump sizing, heating BTU requirements, and bay count.
+                      Throughput dictates pump sizing, thermal heating BTU capacity, and bay count.
                     </p>
                   </div>
 
@@ -479,7 +489,7 @@ export default function WashPlantArchitectPage() {
                 <div className="space-y-6">
                   <div>
                     <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-orange block mb-1">
-                      STEP 04 // EFFLUENT & CHEMICAL DEMAND
+                      STEP 04 // SOIL & CHEMICAL DEMAND
                     </span>
                     <h2 className="font-extralight text-3xl uppercase tracking-tight text-alkota-black">
                       Contamination Profile.
@@ -544,10 +554,11 @@ export default function WashPlantArchitectPage() {
 
                   <div className="space-y-3">
                     {[
-                      { id: 'manual', title: 'Manual Multi-Operator Bay', desc: 'Centralised high-pressure plant room feeding manual lances and 360° boom arms.' },
+                      { id: 'manual_bay', title: 'Manual Multi-Operator Bay', desc: 'Centralised high-pressure plant room feeding manual lances and 360° boom arms.' },
                       { id: 'semi_automated', title: 'Semi-Automated System', desc: 'Automated underbody/wheel wash with manual lance detail stations.' },
-                      { id: 'automated', title: 'Fully Automated Drive-Through / Gantry', desc: 'Optical/sonar triggered vehicle wash arches with minimal operator involvement.' },
-                      { id: 'conveyorised', title: 'Automated Conveyorised Wash', desc: 'Continuous mechanical conveyor carrying planar or component assets through spray tunnels.' },
+                      { id: 'automated_drive_through', title: 'Fully Automated Drive-Through', desc: 'Optical/sonar triggered vehicle wash arches with minimal operator involvement.' },
+                      { id: 'conveyorised_tunnel', title: 'Automated Conveyorised Tunnel', desc: 'Continuous mechanical conveyor carrying planar or component assets through spray tunnels.' },
+                      { id: 'heavy_demucking', title: 'Heavy Plant De-Mucking System', desc: 'High-volume 80 GPM water monitors and drive-over chassis flush ramps.' },
                       { id: 'advise_me', title: 'Advise Me — Engineering Recommendation', desc: 'Let Alkota engineers evaluate throughput vs CAPEX to recommend the optimal architecture.' }
                     ].map((item) => (
                       <button
@@ -735,7 +746,7 @@ export default function WashPlantArchitectPage() {
                 </div>
               )}
 
-              {/* STEP 8: PROJECT PARAMETERS */}
+              {/* STEP 8: COMMERCIAL SCOPE INDICATORS */}
               {currentStep === 8 && (
                 <div className="space-y-6">
                   <div>
@@ -743,17 +754,17 @@ export default function WashPlantArchitectPage() {
                       STEP 08 // COMMERCIAL PARAMETERS
                     </span>
                     <h2 className="font-extralight text-3xl uppercase tracking-tight text-alkota-black">
-                      Budget & Timeline.
+                      Budget Scope & Timeline.
                     </h2>
                     <p className="text-xs text-alkota-silver uppercase tracking-wider mt-1">
-                      Indicates project scope to match appropriate engineering depth.
+                      Budget bands are project scope indicators to match appropriate engineering depth, NOT fixed Alkota pricing.
                     </p>
                   </div>
 
                   <div className="space-y-4">
                     <div>
                       <label className="block text-xs font-ibm-plex-mono uppercase text-alkota-black mb-2">
-                        Indicative CAPEX Budget Band
+                        Indicative Project Scope Indicator
                       </label>
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                         {['< £100k', '£100k–£250k', '£250k–£500k', '£500k–£1m', '£1m+', 'Not yet established'].map((band) => (
@@ -860,53 +871,58 @@ export default function WashPlantArchitectPage() {
                 <form onSubmit={handleSubmit} className="space-y-8">
                   <div>
                     <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-orange block mb-1">
-                      FINAL STEP // PROJECT BRIEF COMPILATION
+                      COMPILED PRELIMINARY BRIEF // STAGE 10
                     </span>
                     <h2 className="font-extralight text-3xl uppercase tracking-tight text-alkota-black">
-                      Preliminary Wash Plant Brief.
+                      Alkota Wash Plant Preliminary Brief.
                     </h2>
                     <p className="text-xs text-alkota-silver uppercase tracking-wider mt-1">
-                      Enter contact details to send this brief directly to Alkota UK engineering.
+                      Review your scoping summary below. Provide contact details to transmit this brief to Alkota engineering.
                     </p>
                   </div>
 
                   {/* Scoping Summary Card */}
                   <div className="bg-alkota-bg p-6 border border-alkota-iron space-y-4 text-xs font-ibm-plex-mono">
                     <div className="flex items-center justify-between pb-3 border-b border-alkota-iron">
-                      <span className="text-alkota-orange uppercase">PROJECT SCOPE SUMMARY</span>
-                      <span className="text-alkota-silver">BUDGET: {formData.budgetBand}</span>
+                      <span className="text-alkota-orange uppercase">PROJECT SCOPE INDICATOR</span>
+                      <span className="text-alkota-black font-bold">BUDGET: {formData.budgetBand}</span>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <strong className="text-alkota-black block">Assets:</strong>
+                        <strong className="text-alkota-black block">Assets to Clean:</strong>
                         <span className="text-alkota-silver">
                           {formData.assetTypes.length > 0 ? formData.assetTypes.join(', ') : 'Not specified'}
                         </span>
                       </div>
                       <div>
-                        <strong className="text-alkota-black block">Architecture:</strong>
+                        <strong className="text-alkota-black block">Preferred Architecture:</strong>
                         <span className="text-alkota-silver uppercase">{formData.architecturePreference.replace('_', ' ')}</span>
                       </div>
                       <div>
-                        <strong className="text-alkota-black block">Throughput:</strong>
+                        <strong className="text-alkota-black block">Throughput Model:</strong>
                         <span className="text-alkota-silver">
                           {formData.assetsPerHour ? `${formData.assetsPerHour} units/hr` : `${formData.operatingHoursPerDay} hrs/day operation`}
                         </span>
                       </div>
                       <div>
-                        <strong className="text-alkota-black block">Water Strategy:</strong>
+                        <strong className="text-alkota-black block">Water Recovery:</strong>
                         <span className="text-alkota-silver uppercase">
-                          {formData.waterReuseRequired === 'yes' ? 'Closed-Loop Recycling' : 'Direct Discharge'}
+                          {formData.waterReuseRequired === 'yes' ? 'Closed-Loop Recirculation' : 'Consented Discharge'}
                         </span>
                       </div>
+                    </div>
+
+                    {/* Pre-engineering Disclaimer */}
+                    <div className="border-t border-alkota-iron pt-3 text-[10px] text-alkota-silver leading-relaxed">
+                      <em>Notice: This Preliminary Project Brief is generated as an initial scoping baseline. It does not constitute a final engineering design, guaranteed throughput calculation, compliance certification, or formal commercial quotation. Final specifications are issued following site survey and formal engineering review.</em>
                     </div>
                   </div>
 
                   {/* Lead Capture Fields */}
                   <div className="space-y-4 pt-2">
                     <h3 className="font-extralight text-xl uppercase tracking-tight text-alkota-black">
-                      Your Contact Details
+                      Send to Alkota Engineering
                     </h3>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -938,7 +954,7 @@ export default function WashPlantArchitectPage() {
                       </div>
                       <div>
                         <label className="block text-xs font-ibm-plex-mono uppercase text-alkota-black mb-1">
-                          Email Address *
+                          Work Email *
                         </label>
                         <input
                           type="email"
@@ -976,7 +992,7 @@ export default function WashPlantArchitectPage() {
                       </div>
                       <div>
                         <label className="block text-xs font-ibm-plex-mono uppercase text-alkota-black mb-1">
-                          Project Reference / Name
+                          Project Reference / Facility Name
                         </label>
                         <input
                           type="text"
@@ -1008,7 +1024,7 @@ export default function WashPlantArchitectPage() {
                       onClick={handlePrev}
                       className="px-6 py-3 text-xs uppercase tracking-widest text-alkota-black border border-alkota-iron hover:border-alkota-orange"
                     >
-                      ← Back
+                      ← Back to Parameters
                     </button>
                     <button
                       type="submit"
@@ -1016,7 +1032,7 @@ export default function WashPlantArchitectPage() {
                       className="inline-flex items-center gap-3 bg-alkota-orange text-white px-8 py-4 text-xs uppercase tracking-[0.25em] hover:bg-alkota-black transition-colors disabled:opacity-50"
                     >
                       <Send className="h-4 w-4" />
-                      <span>{submitting ? 'Submitting Brief...' : 'Send to Alkota Engineering'}</span>
+                      <span>{submitting ? 'Transmitting Brief...' : 'Send to Alkota Engineering'}</span>
                     </button>
                   </div>
                 </form>
@@ -1038,14 +1054,14 @@ export default function WashPlantArchitectPage() {
                     onClick={handleNext}
                     className="inline-flex items-center gap-2 bg-alkota-black text-white px-8 py-3.5 text-xs uppercase tracking-[0.25em] hover:bg-alkota-orange transition-colors"
                   >
-                    <span>Continue</span>
+                    <span>Continue to Step {currentStep + 1}</span>
                     <ArrowRight className="h-3.5 w-3.5" />
                   </button>
                 </div>
               )}
             </div>
           ) : (
-            /* SUBMISSION CONFIRMATION & PDF PRINT SCREEN */
+            /* SUBMISSION CONFIRMATION & PDF PRINT VIEW */
             <div className="space-y-8 py-6">
               <div className="text-center space-y-3 max-w-xl mx-auto">
                 <div className="h-12 w-12 bg-alkota-orange/10 border border-alkota-orange text-alkota-orange rounded-full flex items-center justify-center mx-auto mb-4">
@@ -1055,10 +1071,10 @@ export default function WashPlantArchitectPage() {
                   PROJECT BRIEF TRANSMITTED
                 </span>
                 <h2 className="font-extralight text-4xl uppercase tracking-tight text-alkota-black">
-                  Project Brief {reference}
+                  Project Reference {reference}
                 </h2>
                 <p className="text-xs sm:text-sm text-alkota-silver leading-relaxed">
-                  Your scoping brief has been routed to our UK application engineering team. A senior project engineer will review asset profiles and utility constraints before contacting you.
+                  Your scoping brief has been routed directly to our UK application engineering team. A project lead will review your asset profiles, throughput demand, and site constraints before contacting you.
                 </p>
               </div>
 
@@ -1077,16 +1093,16 @@ export default function WashPlantArchitectPage() {
 
                 <div className="grid grid-cols-2 gap-6">
                   <div>
-                    <strong className="text-alkota-black block mb-1">CLIENT DETAILS:</strong>
+                    <strong className="text-alkota-black block mb-1">CLIENT STAKEHOLDER:</strong>
                     <p>{formData.clientName} — {formData.clientCompany}</p>
                     <p>{formData.clientEmail} | {formData.clientPhone}</p>
-                    <p>Site: {formData.siteLocation || 'UK'}</p>
+                    <p>Facility Site: {formData.siteLocation || 'UK Location'}</p>
                   </div>
                   <div>
                     <strong className="text-alkota-black block mb-1">COMMERCIAL SCOPE:</strong>
-                    <p>Budget Band: {formData.budgetBand}</p>
+                    <p>Scope Indicator: {formData.budgetBand}</p>
                     <p>Target Date: {formData.targetDate || 'Flexible'}</p>
-                    <p>Procurement: {formData.procurementRoute.replace('_', ' ')}</p>
+                    <p>Procurement: {formData.procurementRoute.replace('_', ' ').toUpperCase()}</p>
                   </div>
                 </div>
 
@@ -1094,11 +1110,11 @@ export default function WashPlantArchitectPage() {
                   <strong className="text-alkota-black block mb-2">TECHNICAL PARAMETERS:</strong>
                   <div className="grid grid-cols-2 gap-4">
                     <p>• Assets: {formData.assetTypes.join(', ') || 'General Fleet'}</p>
-                    <p>• Architecture: {formData.architecturePreference.replace('_', ' ')}</p>
-                    <p>• Contamination: {formData.contamination.join(', ') || 'Industrial'}</p>
-                    <p>• Water Reuse: {formData.waterReuseRequired}</p>
-                    <p>• Site Type: {formData.siteType.replace('_', ' ')}</p>
-                    <p>• Heating Fuel: {formData.heatingFuelPreference.replace('_', ' ')}</p>
+                    <p>• Preferred Architecture: {formData.architecturePreference.replace('_', ' ').toUpperCase()}</p>
+                    <p>• Contamination Profile: {formData.contamination.join(', ') || 'Industrial'}</p>
+                    <p>• Water Reuse Strategy: {formData.waterReuseRequired.toUpperCase()}</p>
+                    <p>• Site Environment: {formData.siteType.replace('_', ' ').toUpperCase()}</p>
+                    <p>• Heating Fuel: {formData.heatingFuelPreference.replace('_', ' ').toUpperCase()}</p>
                   </div>
                 </div>
 

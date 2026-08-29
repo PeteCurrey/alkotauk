@@ -1,6 +1,8 @@
 import Navigation from '@/components/Navigation';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import Footer from '@/components/Footer';
+import WashPlantSubNav from '@/components/wash-plant/WashPlantSubNav';
+import WashPlantSchema from '@/components/wash-plant/WashPlantSchema';
 import { 
   ArrowRight, 
   RefreshCw, 
@@ -32,10 +34,16 @@ export default function WashPlantRefurbishmentPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-alkota-bg text-alkota-black pt-32 pb-0">
+    <main className="min-h-screen bg-alkota-bg text-alkota-black pt-20 pb-0">
+      <WashPlantSchema
+        pageTitle="Wash Plant Refurbishment & Upgrades | Alkota UK"
+        pageDescription="Life-extension engineering, brownfield retrofits, pump overhauls, PLC modernization, and water recycling additions for existing industrial wash plants across the UK."
+        pageUrl="https://alkota.co.uk/wash-plant/refurbishment-upgrades"
+      />
       <Navigation />
+      <WashPlantSubNav />
 
-      <div className="mx-auto max-w-7xl px-6 sm:px-12">
+      <div className="mx-auto max-w-7xl px-6 sm:px-12 pt-10">
         <Breadcrumbs items={[
           { label: 'Wash Plant Infrastructure', href: '/wash-plant' },
           { label: 'Refurbishment & Upgrades' }

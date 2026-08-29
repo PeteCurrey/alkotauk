@@ -1,6 +1,8 @@
 import Navigation from '@/components/Navigation';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import Footer from '@/components/Footer';
+import WashPlantSubNav from '@/components/wash-plant/WashPlantSubNav';
+import WashPlantSchema from '@/components/wash-plant/WashPlantSchema';
 import { supabaseAdmin } from '@/lib/supabase/server';
 import { ArrowRight, Factory, Building2, Droplets, CheckCircle2, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
@@ -67,10 +69,16 @@ export default async function WashPlantProjectsPage() {
   const projectsToDisplay = dbProjects.length > 0 ? dbProjects : editorialProjects;
 
   return (
-    <main className="min-h-screen bg-alkota-bg text-alkota-black pt-32 pb-0">
+    <main className="min-h-screen bg-alkota-bg text-alkota-black pt-20 pb-0">
+      <WashPlantSchema
+        pageTitle="Wash Plant Projects & Case Studies | Alkota UK"
+        pageDescription="Explore Alkota UK industrial wash plant installations across fleet depots, access matting, heavy mining de-mucking, and manufacturing facilities."
+        pageUrl="https://alkota.co.uk/wash-plant/projects"
+      />
       <Navigation />
+      <WashPlantSubNav />
 
-      <div className="mx-auto max-w-7xl px-6 sm:px-12">
+      <div className="mx-auto max-w-7xl px-6 sm:px-12 pt-10">
         <Breadcrumbs items={[
           { label: 'Wash Plant Infrastructure', href: '/wash-plant' },
           { label: 'Project Case Studies' }

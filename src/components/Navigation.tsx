@@ -152,7 +152,7 @@ export default function Navigation() {
         onMouseLeave={handleMouseLeave}
         className={`fixed top-0 z-50 w-full px-6 sm:px-12 transition-all duration-300 font-normal ${
           isScrolled || activeMenu !== null
-            ? 'bg-white py-3 shadow-md border-b border-[#E0E0DE] text-alkota-black'
+            ? 'bg-white/90 backdrop-blur-md py-3 shadow-md border-b border-[#E0E0DE]/80 text-alkota-black'
             : 'bg-gradient-to-b from-black/85 via-black/40 to-transparent py-6 text-white'
         }`}
         aria-label="Main Navigation"

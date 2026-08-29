@@ -9,15 +9,18 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: '*',
         allow: '/',
         disallow: [
-          '/portal/', // Protect dealer portal from being indexed
-          '/api/',    // Protect API routes
-          '/checkout/', // Protect checkout flow
+          '/portal/',
+          '/admin/',
+          '/my-alkota/',
+          '/trailers/build/',
+          '/api/',
+          '/checkout/',
         ],
       },
       {
-        userAgent: 'GPTBot', // Allow AI crawlers for help/info but restrict sensitive areas
+        userAgent: 'GPTBot',
         allow: '/',
-        disallow: ['/portal/'],
+        disallow: ['/portal/', '/admin/', '/my-alkota/', '/trailers/build/', '/api/'],
       }
     ],
     sitemap: `${baseUrl}/sitemap.xml`,

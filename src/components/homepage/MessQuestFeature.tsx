@@ -15,14 +15,11 @@ export default function MessQuestFeature() {
     >
       <div className="mx-auto max-w-7xl px-6 sm:px-12">
         {/* Section Header */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 pb-10 border-b border-white/10 mb-10">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 pb-10">
           <div>
-            <div className="flex items-center gap-3 mb-3">
-              <span className="h-2 w-2 rounded-full bg-alkota-orange animate-pulse" />
-              <span className="text-[11px] uppercase tracking-[0.3em] text-alkota-orange font-light">
-                Original Video Series · Real-World Proof
-              </span>
-            </div>
+            <span className="text-xs uppercase tracking-[0.25em] text-alkota-orange block mb-2 font-light">
+              Documentary Series · Real-World Proof
+            </span>
             <h2 className="font-extralight text-5xl sm:text-6xl lg:text-7xl uppercase tracking-tight text-white leading-none">
               Mess Quest.
             </h2>
@@ -37,7 +34,7 @@ export default function MessQuestFeature() {
         </div>
 
         {/* Cinematic Film Poster / Video Player Canvas */}
-        <div className="relative w-full aspect-[16/9] bg-[#141412] overflow-hidden font-normal">
+        <div className="relative w-full aspect-[16/9] bg-[#141412] overflow-hidden font-normal shadow-2xl">
           {!isPlaying ? (
             <div
               className="relative w-full h-full group cursor-pointer"
@@ -47,23 +44,23 @@ export default function MessQuestFeature() {
               <img
                 src="/assets/industries/manufacturing.png"
                 alt="Mess Quest — Alkota Heavy Degreasing Episode"
-                className="w-full h-full object-cover object-center filter brightness-[0.55] contrast-[1.15] transition-transform duration-1000 group-hover:scale-105"
+                className="w-full h-full object-cover object-center filter brightness-[0.6] contrast-[1.15] transition-transform duration-1000 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
 
               {/* Play Trigger & Episode Information */}
-              <div className="absolute inset-0 flex flex-col justify-between p-6 sm:p-12 font-normal">
-                <div className="self-start bg-black/70 backdrop-blur-sm border border-white/15 px-4 py-2 text-[10px] uppercase font-light text-alkota-orange">
-                  Episode 01 // Extreme Bitumen & Heavy Crude Degreasing
-                </div>
+              <div className="absolute inset-0 flex flex-col justify-between p-8 sm:p-14 font-normal">
+                <span className="self-start text-xs uppercase font-light text-alkota-orange">
+                  Episode 01 // Heavy Industrial Bitumen Breakdown
+                </span>
 
-                <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 font-normal">
+                <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-8 font-normal">
                   <div className="max-w-xl">
-                    <p className="text-2xl sm:text-3xl uppercase font-light text-white leading-tight mb-2">
+                    <p className="text-2xl sm:text-4xl uppercase font-light text-white leading-tight mb-3">
                       "Real industrial messes. Real Alkota machines."
                     </p>
-                    <p className="text-xs sm:text-sm text-[#bbb] leading-relaxed font-normal">
-                      No studio staging. We put standard Alkota hot water pressure washers to work on the toughest industrial contamination in the field.
+                    <p className="text-sm text-[#bbb] leading-relaxed font-normal">
+                      No staging. Standard Alkota hot water pressure washers tested against extreme contamination.
                     </p>
                   </div>
 
@@ -95,21 +92,6 @@ export default function MessQuestFeature() {
               </button>
             </div>
           )}
-        </div>
-
-        {/* Technical Episode Metadata */}
-        <div className="mt-6 flex flex-wrap items-center justify-between gap-6 text-xs text-[#888] font-normal">
-          <div className="flex items-center gap-6">
-            <span>Machine Featured: <span className="text-white font-normal">Alkota 420X4 Hot Water</span></span>
-            <span>Operating Spec: <span className="text-alkota-orange font-normal">200 BAR @ 90°C</span></span>
-          </div>
-          <Link
-            href="/mess-quest"
-            className="inline-flex items-center gap-2 text-white hover:text-alkota-orange transition-colors no-underline uppercase tracking-wider font-normal"
-          >
-            <span>Watch Full Series</span>
-            <ArrowRight className="h-3.5 w-3.5" />
-          </Link>
         </div>
       </div>
     </section>

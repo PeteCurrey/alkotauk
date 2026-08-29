@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { ArrowRight, ShieldCheck, Flame, Gauge, Wrench } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -25,7 +25,7 @@ export default function Hero() {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-screen w-full flex flex-col justify-between overflow-hidden bg-[#0F0F0D] text-white pt-36 sm:pt-40 pb-10 sm:pb-14 font-normal"
+      className="relative h-screen min-h-[720px] w-full flex flex-col justify-center overflow-hidden bg-[#0F0F0D] text-white px-6 sm:px-12 font-normal"
       aria-label="Alkota UK Industrial Cleaning Equipment"
     >
       {/* Full-bleed authentic photography background */}
@@ -34,39 +34,39 @@ export default function Hero() {
           src="/assets/hero-home-header.jpg"
           alt="Alkota industrial hot water pressure washer on site"
           className="h-full w-full object-cover object-center scale-105"
-          style={{ filter: 'brightness(0.68) contrast(1.12)' }}
+          style={{ filter: 'brightness(0.65) contrast(1.12)' }}
         />
-        {/* Soft cinematic tonal shading */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/50 to-transparent" />
+        {/* Cinematic soft vignettes for text clarity */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/45 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0F0F0D] via-transparent to-black/60" />
       </div>
 
       {/* Main hero typography & CTAs */}
-      <div className="relative z-10 mx-auto max-w-7xl w-full px-6 sm:px-12 flex-1 flex flex-col justify-center my-auto">
+      <div className="relative z-10 mx-auto max-w-7xl w-full">
         <div className="max-w-3xl">
-          {/* Subtle monoline tag */}
+          {/* Subtle provenance monoline */}
           <div className="hero-fade-in mb-6 inline-flex items-center gap-3 font-normal">
-            <span className="h-[2px] w-6 bg-alkota-orange" />
-            <span className="text-[11px] uppercase tracking-[0.3em] text-white/80 font-light">
+            <span className="h-[1.5px] w-6 bg-alkota-orange" />
+            <span className="text-xs uppercase tracking-[0.25em] text-white/80 font-light">
               Est. 1964 · Alcester, South Dakota · UK Direct
             </span>
           </div>
 
-          {/* Primary Statement — Extra Light */}
+          {/* Primary Statement — Extra Light Work Sans */}
           <h1
-            className="hero-fade-in font-extralight uppercase tracking-tight text-white leading-[0.92] mb-7 drop-shadow-md"
+            className="hero-fade-in font-extralight uppercase tracking-tight text-white leading-[0.92] mb-8"
             style={{ fontSize: 'clamp(3.5rem, 8vw, 7.5rem)' }}
           >
             Industrial Power.<br />
             <span className="text-alkota-orange">Built to</span> Outlast.
           </h1>
 
-          {/* Supporting paragraph — Normal */}
-          <p className="hero-fade-in text-[#DCDCD8] text-base sm:text-lg leading-relaxed mb-10 max-w-xl font-normal">
-            Six decades of heavy American industrial engineering. Heavy cold-rolled steel chassis, slow-turning ceramic triplex plunger pumps, and continuous-wound Schedule 80 seamless heating coils. Built for continuous duty where equipment failure halts production.
+          {/* Factual supporting paragraph — clean Normal Work Sans */}
+          <p className="hero-fade-in text-[#E0E0DC] text-base sm:text-lg leading-relaxed mb-12 max-w-xl font-normal">
+            Six decades of heavy American industrial engineering. Cold-rolled structural steel, slow-turning ceramic triplex pumps, and continuous-wound Schedule 80 seamless heating coils. Built for continuous duty where equipment failure halts production.
           </p>
 
-          {/* Dual CTAs — Normal weight */}
+          {/* Dual CTAs — Clean and confident */}
           <div className="hero-fade-in flex flex-col sm:flex-row items-stretch sm:items-center gap-4 font-normal">
             <Link
               href="/machines"
@@ -81,43 +81,6 @@ export default function Hero() {
             >
               <span>Book On-Site Demonstration</span>
             </Link>
-          </div>
-        </div>
-      </div>
-
-      {/* Proof strip at base */}
-      <div className="relative z-10 mx-auto max-w-7xl w-full px-6 sm:px-12 pt-8 border-t border-white/15 font-normal">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="flex items-start gap-3">
-            <ShieldCheck className="h-5 w-5 text-alkota-orange shrink-0 mt-0.5" />
-            <div>
-              <span className="text-white text-xs uppercase block font-light">7-Year Warranty</span>
-              <span className="text-[10px] text-[#aaa] uppercase tracking-wider block font-normal">Schedule 80 Heating Coil</span>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-3">
-            <Flame className="h-5 w-5 text-alkota-orange shrink-0 mt-0.5" />
-            <div>
-              <span className="text-white text-xs uppercase block font-light">Up to 140°C Vapour</span>
-              <span className="text-[10px] text-[#aaa] uppercase tracking-wider block font-normal">Thermal Steam Sanitisation</span>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-3">
-            <Gauge className="h-5 w-5 text-alkota-orange shrink-0 mt-0.5" />
-            <div>
-              <span className="text-white text-xs uppercase block font-light">Slow-Turning Ceramic</span>
-              <span className="text-[10px] text-[#aaa] uppercase tracking-wider block font-normal">Low-RPM Triplex Plungers</span>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-3">
-            <Wrench className="h-5 w-5 text-alkota-orange shrink-0 mt-0.5" />
-            <div>
-              <span className="text-white text-xs uppercase block font-light">Open Architecture</span>
-              <span className="text-[10px] text-[#aaa] uppercase tracking-wider block font-normal">Zero Captive Lockouts</span>
-            </div>
           </div>
         </div>
       </div>

@@ -22,6 +22,7 @@ export interface UKChassisOption {
   suitable_for: string[];
   max_tank_litres: number;
   max_machine_count: number;
+  guide_price_gbp?: number;
 }
 
 export interface TrailerMachineOption {
@@ -45,6 +46,7 @@ export interface TrailerMachineOption {
   description: string;
   duty_cycle: string;
   primary_application: string[];
+  guide_price_gbp?: number;
 }
 
 export interface WaterStorageOption {
@@ -59,6 +61,7 @@ export interface WaterStorageOption {
   auto_fill_capable: boolean;
   low_water_shutoff: boolean;
   description: string;
+  guide_price_gbp?: number;
 }
 
 export interface PowerFuelOption {
@@ -70,6 +73,7 @@ export interface PowerFuelOption {
   fuel_capacity_litres?: number;
   description: string;
   compatible_formats: TrailerFormat[];
+  guide_price_gbp?: number;
 }
 
 export interface WaterRecoveryOption {
@@ -84,6 +88,7 @@ export interface WaterRecoveryOption {
   filtration_stages?: string[];
   environmental_standard: string;
   dimensions_mm: string;
+  guide_price_gbp?: number;
 }
 
 export interface HoseStorageOption {
@@ -93,6 +98,7 @@ export interface HoseStorageOption {
   weight_kg: number;
   length_metres?: number;
   description: string;
+  guide_price_gbp?: number;
 }
 
 export interface SiteOption {
@@ -101,6 +107,7 @@ export interface SiteOption {
   category: 'lighting' | 'winterisation' | 'safety' | 'controls';
   weight_kg: number;
   description: string;
+  guide_price_gbp?: number;
 }
 
 export interface FinishLiveryOption {
@@ -111,10 +118,48 @@ export interface FinishLiveryOption {
   color_hex?: string;
   color_name?: string;
   description: string;
+  guide_price_gbp?: number;
+}
+
+export interface StartingConfiguration {
+  id: string;
+  slug: string;
+  name: string;
+  tagline: string;
+  badge?: string;
+  format: TrailerFormat;
+  chassis_id: string;
+  machine_id: string;
+  operator_count: 1 | 2;
+  water_storage_id: string;
+  recovery_option_id: string;
+  power_options: string[];
+  hose_storage_options: string[];
+  site_options: string[];
+  finish_livery_id: string;
+  guide_price_display: string;
+  ideal_for: string[];
+  image_url: string;
+  description: string;
+}
+
+export interface CommercialValueEstimate {
+  price_state: 'verified' | 'guide_range' | 'engineering_quote_only';
+  min_guide_price_gbp?: number;
+  max_guide_price_gbp?: number;
+  guide_price_display: string;
+  price_confidence: 'high' | 'partial' | 'bespoke_costing_required';
+}
+
+export interface TrailerOpportunityScore {
+  score: number; // 0 to 100
+  tier: 'priority' | 'active' | 'developing' | 'configuration_only';
+  signals: string[];
 }
 
 export interface TrailerConfiguration {
   id?: string;
+  schema_version?: string; // e.g. '1.1.0'
   build_code: string;
   format: TrailerFormat;
   chassis_id: string;
@@ -139,6 +184,9 @@ export interface TrailerConfiguration {
     requires_recovery?: boolean;
     tow_vehicle_make_model?: string;
     tow_vehicle_max_braked_kg?: number;
+    purchase_driver?: string;
+    replacing_existing?: string;
+    target_budget?: string;
   };
 
   // User details (optional until enquiry submission)
@@ -148,8 +196,24 @@ export interface TrailerConfiguration {
     email: string;
     phone: string;
     postcode: string;
+    timeline?: string;
+    commercial_intent?: 'engineering_review' | 'request_quote';
+    marketing_consent?: boolean;
     notes?: string;
   };
+
+  // Commercial & Admin Metadata
+  created_by?: 'customer' | 'staff';
+  sales_owner?: string;
+  engineering_owner?: string;
+  engineering_status?: 'technically_approved' | 'revision_required' | 'info_required' | 'non_standard' | 'pending';
+  pipeline_stage?: 'new' | 'qualified' | 'engineering_review' | 'costing' | 'quote_sent' | 'negotiation' | 'won' | 'lost';
+  lost_reason?: string;
+  quote_reference?: string;
+  revision_number?: number;
+  revision_notes?: string;
+  view_count?: number;
+  last_viewed_at?: string;
 
   created_at?: string;
   updated_at?: string;
@@ -171,6 +235,24 @@ export interface ConfigurationWeights {
   payload_utilization_pct: number;
   is_overweight: boolean;
   weight_status: 'optimal' | 'warning' | 'critical-overweight';
+  confidence_status: 'verified' | 'partial-estimate';
+}
+
+export interface ValidationIssue {
+  field: string;
+  code: string;
+  severity: 'hard-error' | 'engineering-review' | 'recommendation';
+  message: string;
+  resolution: string;
+}
+
+export interface ConfigurationValidationResult {
+  isValid: boolean;
+  hardErrors: ValidationIssue[];
+  warnings: ValidationIssue[];
+  recommendations: ValidationIssue[];
+  isDualGunAllowed: boolean;
+  maxAllowedTankLitres: number;
 }
 
 export interface TowVehicleAssessment {

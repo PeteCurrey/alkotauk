@@ -1,10 +1,7 @@
+import React from 'react';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import Navigation from '@/components/Navigation';
-import Footer from '@/components/Footer';
-import Breadcrumbs from '@/components/Breadcrumbs';
-import { getDealerBySlug, getDealers } from '@/lib/dealers';
 import {
   Phone,
   Mail,
@@ -16,13 +13,15 @@ import {
   Calendar,
   Flame,
   Droplets,
-  Wind,
-  Layers,
   ArrowRight,
   ExternalLink,
   Wrench,
   Sparkles,
+  Layers,
+  Building2,
+  FileText
 } from 'lucide-react';
+import canonicalDealers from '../../../../scripts/data/dealers-canonical-seed.json';
 
 interface DealerPageProps {
   params: Promise<{
@@ -31,15 +30,14 @@ interface DealerPageProps {
 }
 
 export async function generateStaticParams() {
-  const dealers = await getDealers({ onlyActive: false });
-  return dealers.map((d) => ({
+  return canonicalDealers.map((d) => ({
     slug: d.slug,
   }));
 }
 
 export async function generateMetadata({ params }: DealerPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const dealer = await getDealerBySlug(slug);
+  const dealer = canonicalDealers.find((d) => d.slug === slug);
   if (!dealer) return {};
 
   return {
@@ -53,256 +51,260 @@ export async function generateMetadata({ params }: DealerPageProps): Promise<Met
 
 export default async function DealerProfilePage({ params }: DealerPageProps) {
   const { slug } = await params;
-  const dealer = await getDealerBySlug(slug);
+  const dealer = canonicalDealers.find((d) => d.slug === slug);
 
   if (!dealer) {
     notFound();
   }
 
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'LocalBusiness',
-    name: dealer.name,
-    description: dealer.description || dealer.short_description,
-    telephone: dealer.phone,
-    email: dealer.email,
-    address: {
-      '@type': 'PostalAddress',
-      streetAddress: dealer.address_line1,
-      addressLocality: dealer.town,
-      addressRegion: dealer.county,
-      postalCode: dealer.postcode,
-      addressCountry: 'GB',
-    },
-    geo: {
-      '@type': 'GeoCoordinates',
-      latitude: dealer.latitude,
-      longitude: dealer.longitude,
-    },
-    url: `https://alkota.co.uk/dealers/${dealer.slug}`,
-  };
-
   return (
-    <main className="min-h-screen bg-[#F8F8F7] text-alkota-black flex flex-col justify-between pt-32">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <Navigation />
-
-      <div className="mx-auto max-w-7xl px-6 sm:px-12 w-full pb-24">
-        <Breadcrumbs
-          items={[
-            { label: 'Dealers', href: '/dealers' },
-            { label: dealer.town },
-            { label: dealer.name },
-          ]}
-        />
-
-        {/* Dealer Hero Header */}
-        <section className="mt-8 mb-16 bg-white border border-[#D5D5D3] p-8 sm:p-12 lg:p-16 shadow-xl">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-            <div className="lg:col-span-8">
-              <div className="flex flex-wrap items-center gap-3 mb-6">
-                <span className="font-ibm-plex-mono text-[9px] font-bold uppercase tracking-widest text-alkota-orange bg-alkota-orange/10 px-3 py-1 border border-alkota-orange/20">
-                  {dealer.tier === 'national_hub' ? 'NATIONAL TECHNICAL CENTER' : 'AUTHORISED DEALER'}
-                </span>
-                <span className="font-ibm-plex-mono text-[10px] text-[#777]">
-                  Coverage: {dealer.county} & Regional Territory
-                </span>
-              </div>
-
-              <h1 className="font-barlow-condensed text-5xl sm:text-7xl font-black uppercase italic tracking-tight text-alkota-black leading-[0.88] mb-6">
-                {dealer.name}
-              </h1>
-
-              <p className="font-inter text-base sm:text-lg text-[#555] leading-relaxed mb-8 max-w-3xl">
-                {dealer.description || dealer.short_description}
-              </p>
-
-              {/* Contact Pill Strip */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 font-ibm-plex-mono text-xs border-t border-[#EAEAEA] pt-6 mb-8">
-                <div className="flex items-center gap-3">
-                  <Phone className="h-4 w-4 text-alkota-orange shrink-0" />
-                  <div>
-                    <span className="text-[#888] block text-[9px]">DIRECT TELEPHONE</span>
-                    <a
-                      href={`tel:${dealer.phone.replace(/\s+/g, '')}`}
-                      className="font-bold text-alkota-black hover:text-alkota-orange"
-                    >
-                      {dealer.phone}
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <Mail className="h-4 w-4 text-alkota-orange shrink-0" />
-                  <div>
-                    <span className="text-[#888] block text-[9px]">DIRECT EMAIL</span>
-                    <a
-                      href={`mailto:${dealer.email}`}
-                      className="font-bold text-alkota-black hover:text-alkota-orange"
-                    >
-                      {dealer.email}
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <MapPin className="h-4 w-4 text-alkota-orange shrink-0" />
-                  <div>
-                    <span className="text-[#888] block text-[9px]">SERVICE BASE</span>
-                    <span className="text-alkota-black">
-                      {dealer.address_line1}, {dealer.town} {dealer.postcode}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <Clock className="h-4 w-4 text-alkota-orange shrink-0" />
-                  <div>
-                    <span className="text-[#888] block text-[9px]">OPERATING HOURS</span>
-                    <span className="text-alkota-black">
-                      {dealer.opening_hours?.mon_fri || '08:00 - 17:30'} (Mon-Fri)
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* CTAs */}
-              <div className="flex flex-wrap items-center gap-4">
-                <Link
-                  href={`/dealers/demo-request?dealer=${dealer.slug}`}
-                  className="inline-flex items-center gap-2 bg-alkota-orange text-white px-8 py-4 font-ibm-plex-mono text-xs font-bold uppercase tracking-widest hover:bg-black transition-colors no-underline"
-                >
-                  <span>Book On-Site Demonstration</span>
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-                <Link
-                  href={`/contact?dealer=${dealer.slug}`}
-                  className="inline-flex items-center gap-2 border border-alkota-black bg-white text-alkota-black px-6 py-4 font-ibm-plex-mono text-xs font-bold uppercase tracking-widest hover:border-alkota-orange hover:text-alkota-orange transition-colors no-underline"
-                >
-                  <span>Direct Technical Enquiry</span>
-                </Link>
-              </div>
-            </div>
-
-            {/* Right Card: Facility & Fleet Snapshot */}
-            <div className="lg:col-span-4 bg-[#F8F8F7] border border-[#D5D5D3] p-8">
-              <span className="font-ibm-plex-mono text-[9px] font-bold uppercase tracking-widest text-[#777] block mb-4">
-                // OPERATIONAL METRICS
-              </span>
-
-              <div className="space-y-4 font-ibm-plex-mono text-xs">
-                <div className="flex items-center justify-between border-b border-[#EAEAEA] pb-3">
-                  <span className="text-[#666]">Mobile Service Vans</span>
-                  <span className="font-bold text-alkota-black">{dealer.mobile_service_vans} Fleet Units</span>
-                </div>
-                <div className="flex items-center justify-between border-b border-[#EAEAEA] pb-3">
-                  <span className="text-[#666]">Demonstration Bay</span>
-                  <span className="font-bold text-alkota-orange">Available On-Site</span>
-                </div>
-                <div className="flex items-center justify-between border-b border-[#EAEAEA] pb-3">
-                  <span className="text-[#666]">Emergency Callout</span>
-                  <span className="font-bold text-alkota-black">Yes</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-[#666]">Stockist Rating</span>
-                  <span className="font-bold text-alkota-black">{dealer.rating} / 5.00</span>
-                </div>
-              </div>
-            </div>
+    <main className="bg-[#FAF9F5] text-alkota-black min-h-screen">
+      {/* ── HERO ── */}
+      <section className="bg-[#0A0A0A] text-white pt-32 pb-20 px-6 sm:px-12 lg:px-24 border-b border-[#222]">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center gap-2 mb-4">
+            <Link href="/dealers" className="text-xs font-ibm-plex-mono text-[#888] hover:text-alkota-orange">
+              Dealer Network
+            </Link>
+            <span className="text-xs text-[#555]">/</span>
+            <Link href="/dealers/find" className="text-xs font-ibm-plex-mono text-[#888] hover:text-alkota-orange">
+              Find
+            </Link>
+            <span className="text-xs text-[#555]">/</span>
+            <span className="text-xs font-ibm-plex-mono text-alkota-orange">{dealer.name}</span>
           </div>
-        </section>
 
-        {/* 2-Column Section: Capabilities & Territories Covered */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
-          {/* Left Column: Services & Product Families */}
-          <div className="lg:col-span-8 space-y-8">
-            {/* Services Grid */}
-            <div className="bg-white border border-[#D5D5D3] p-8 sm:p-10">
-              <h2 className="font-barlow-condensed text-3xl font-black uppercase italic tracking-tight text-alkota-black mb-6 border-b border-[#EAEAEA] pb-4">
-                AUTHORISED CAPABILITIES
+          <div className="flex flex-wrap items-center gap-3 mb-4">
+            <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-orange bg-[#1A1A1A] px-3 py-1 border border-[#333]">
+              {dealer.tier.replace('_', ' ')}
+            </span>
+            <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-emerald-400 bg-emerald-950/80 px-3 py-1 border border-emerald-800">
+              ★ {dealer.rating} Customer Rating
+            </span>
+          </div>
+
+          <h1 className="font-extralight text-4xl sm:text-6xl text-white tracking-tight leading-tight max-w-4xl mb-4">
+            {dealer.name}
+          </h1>
+          <p className="text-base sm:text-lg text-[#AAA] font-normal leading-relaxed max-w-3xl mb-8">
+            {dealer.description}
+          </p>
+
+          <div className="flex flex-wrap items-center gap-4">
+            <Link
+              href={`/dealers/demo-request?dealer=${dealer.slug}`}
+              className="inline-flex items-center gap-2 bg-alkota-orange hover:bg-white hover:text-black text-white px-7 py-3.5 font-ibm-plex-mono text-xs uppercase tracking-widest transition-colors shadow-sm font-medium"
+            >
+              <Calendar className="w-3.5 h-3.5" />
+              Book Demonstration at this Hub
+            </Link>
+
+            <a
+              href={`tel:${dealer.phone}`}
+              className="inline-flex items-center gap-2 border border-[#444] hover:border-white text-white px-7 py-3.5 font-ibm-plex-mono text-xs uppercase tracking-widest transition-colors bg-[#141414]"
+            >
+              <Phone className="w-3.5 h-3.5 text-alkota-orange" />
+              Call {dealer.phone}
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ── PROFILE BODY ── */}
+      <section className="py-20 px-6 sm:px-12 lg:px-24 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          {/* Left Column: Details & Capabilities */}
+          <div className="lg:col-span-8 space-y-12">
+            {/* Approved Capabilities Grid */}
+            <div className="bg-white border border-[#E8E8E4] p-8">
+              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-orange block mb-2">
+                // Factory Accreditation
+              </span>
+              <h2 className="font-extralight text-2xl sm:text-3xl text-alkota-black tracking-tight mb-6">
+                Approved Engineering Capabilities
               </h2>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {dealer.services?.map((svc) => (
-                  <div key={svc.service_key} className="flex items-start gap-3 p-3 bg-[#F8F8F7]">
-                    <CheckCircle2 className="h-4 w-4 text-alkota-orange shrink-0 mt-0.5" />
+                {dealer.services.map((s) => (
+                  <div key={s.service_key} className="p-4 bg-[#FAF9F5] border border-[#E8E8E4] flex items-start gap-3">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                     <div>
-                      <p className="font-barlow-condensed text-lg font-bold uppercase text-alkota-black">
-                        {svc.service_name}
-                      </p>
+                      <h4 className="font-medium text-xs text-alkota-black mb-0.5">{s.service_name}</h4>
+                      <p className="text-[11px] text-[#777]">Certified Alkota standard</p>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Product Specialisms */}
-            <div className="bg-white border border-[#D5D5D3] p-8 sm:p-10">
-              <h2 className="font-barlow-condensed text-3xl font-black uppercase italic tracking-tight text-alkota-black mb-6 border-b border-[#EAEAEA] pb-4">
-                SUPPORTED EQUIPMENT FAMILIES
+            {/* Territory Coverage */}
+            <div className="bg-white border border-[#E8E8E4] p-8">
+              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-orange block mb-2">
+                // Regional Responsibility
+              </span>
+              <h2 className="font-extralight text-2xl sm:text-3xl text-alkota-black tracking-tight mb-4">
+                Territory Coverage &amp; Outcodes
               </h2>
+              <p className="text-xs text-[#666] leading-relaxed mb-6">
+                {dealer.name} operates primary commercial sales and service responsibility across the following regional postcode areas:
+              </p>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 font-ibm-plex-mono text-xs">
-                {dealer.product_categories?.map((cat) => (
-                  <Link
-                    key={cat}
-                    href={`/machines/${cat}`}
-                    className="p-4 border border-[#EAEAEA] bg-[#F8F8F7] hover:border-alkota-orange hover:bg-white transition-colors block text-center"
-                  >
-                    <span className="font-bold text-alkota-black uppercase block">
-                      {cat.replace('-', ' ')}
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {dealer.territories.map((t) => (
+                  <div key={t.postcode_prefix} className="p-3 bg-[#FAF9F5] border border-[#E8E8E4]">
+                    <span className="font-mono text-sm font-bold text-alkota-orange block">
+                      {t.postcode_prefix} Area
                     </span>
-                    <span className="text-[9px] text-[#777] uppercase mt-1 block">
-                      Browse Fleet →
+                    <span className="text-xs text-alkota-black font-medium block">
+                      {t.county_name || t.region_name}
                     </span>
-                  </Link>
+                    <span className="text-[10px] text-[#888] font-ibm-plex-mono">
+                      {t.region_name}
+                    </span>
+                  </div>
                 ))}
+              </div>
+            </div>
+
+            {/* Featured Demonstration Fleet */}
+            <div className="bg-white border border-[#E8E8E4] p-8">
+              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-orange block mb-2">
+                // On-Site Test Capability
+              </span>
+              <h2 className="font-extralight text-2xl sm:text-3xl text-alkota-black tracking-tight mb-4">
+                Featured Demonstration Systems
+              </h2>
+              <p className="text-xs text-[#666] leading-relaxed mb-6">
+                This hub maintains dedicated demonstration models available for on-site trial at your facility:
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                <div className="p-4 bg-[#FAF9F5] border border-[#E8E8E4]">
+                  <h4 className="font-medium text-sm text-alkota-black mb-1">
+                    Alkota 430XH Hot Water Washer
+                  </h4>
+                  <p className="text-[#666] mb-3">
+                    210 BAR @ 15 L/min with Schedule 80 ASTM A53 heating coil. Perfect for heavy plant degreasing.
+                  </p>
+                  <Link
+                    href={`/dealers/demo-request?dealer=${dealer.slug}&model=430XH`}
+                    className="font-ibm-plex-mono text-[10px] uppercase tracking-wider text-alkota-orange hover:underline"
+                  >
+                    Request Demo for 430XH →
+                  </Link>
+                </div>
+
+                <div className="p-4 bg-[#FAF9F5] border border-[#E8E8E4]">
+                  <h4 className="font-medium text-sm text-alkota-black mb-1">
+                    Alkota 5305A Cold Water Stationary
+                  </h4>
+                  <p className="text-[#666] mb-3">
+                    High-volume 20 L/min wash bay unit with low-speed industrial triplex plunger pump.
+                  </p>
+                  <Link
+                    href={`/dealers/demo-request?dealer=${dealer.slug}&model=5305A`}
+                    className="font-ibm-plex-mono text-[10px] uppercase tracking-wider text-alkota-orange hover:underline"
+                  >
+                    Request Demo for 5305A →
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Territory Postcodes Covered */}
-          <div className="lg:col-span-4 bg-white border border-[#D5D5D3] p-8 sm:p-10">
-            <h2 className="font-barlow-condensed text-3xl font-black uppercase italic tracking-tight text-alkota-black mb-6 border-b border-[#EAEAEA] pb-4">
-              POSTCODES COVERED
-            </h2>
+          {/* Right Column: Contact, Hours & Fast Enquiry Box */}
+          <div className="lg:col-span-4 space-y-6 sticky top-28">
+            <div className="bg-white border border-[#E8E8E4] p-6 shadow-sm">
+              <h3 className="font-medium text-base text-alkota-black mb-4">
+                Hub Contact &amp; Operating Hours
+              </h3>
 
-            <p className="font-inter text-xs text-[#666] leading-relaxed mb-6">
-              {dealer.name} holds primary sales and field-service authorization for the following UK postcode outward areas:
-            </p>
-
-            <div className="flex flex-wrap gap-2 mb-8">
-              {dealer.territories?.map((t) => (
-                <div
-                  key={t.postcode_prefix}
-                  className="bg-[#F8F8F7] border border-[#D5D5D3] px-3 py-1.5 font-ibm-plex-mono text-xs"
-                >
-                  <strong className="text-alkota-orange">{t.postcode_prefix}</strong>
-                  <span className="text-[#888] text-[9px] block">{t.county_name || t.region_name}</span>
+              <div className="space-y-3 text-xs text-[#555] mb-6">
+                <div className="flex items-start gap-2.5">
+                  <MapPin className="w-4 h-4 text-alkota-orange shrink-0 mt-0.5" />
+                  <span>
+                    {dealer.address_line1}
+                    {dealer.address_line2 ? `, ${dealer.address_line2}` : ''}
+                    <br />
+                    {dealer.town}, {dealer.county} {dealer.postcode}
+                  </span>
                 </div>
-              ))}
+
+                <div className="flex items-center gap-2.5">
+                  <Phone className="w-4 h-4 text-alkota-orange shrink-0" />
+                  <a href={`tel:${dealer.phone}`} className="text-alkota-black font-medium hover:text-alkota-orange">
+                    {dealer.phone}
+                  </a>
+                </div>
+
+                <div className="flex items-center gap-2.5">
+                  <Mail className="w-4 h-4 text-alkota-orange shrink-0" />
+                  <a href={`mailto:${dealer.email}`} className="text-alkota-black hover:text-alkota-orange truncate">
+                    {dealer.email}
+                  </a>
+                </div>
+
+                {dealer.website && (
+                  <div className="flex items-center gap-2.5">
+                    <ExternalLink className="w-4 h-4 text-alkota-orange shrink-0" />
+                    <a href={dealer.website} target="_blank" rel="noopener noreferrer" className="text-alkota-black hover:underline truncate">
+                      Visit Hub Website
+                    </a>
+                  </div>
+                )}
+              </div>
+
+              <div className="border-t border-[#F0EFEB] pt-4 mb-6">
+                <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#999] block mb-2">
+                  Standard Opening Hours:
+                </span>
+                <div className="text-xs text-[#666] space-y-1">
+                  <div className="flex justify-between">
+                    <span>Monday – Friday:</span>
+                    <span className="font-medium text-alkota-black">{dealer.opening_hours.mon_fri}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Saturday:</span>
+                    <span className="font-medium text-alkota-black">{dealer.opening_hours.sat}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Sunday:</span>
+                    <span className="font-medium text-alkota-black">{dealer.opening_hours.sun}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Link
+                  href={`/dealers/demo-request?dealer=${dealer.slug}`}
+                  className="w-full text-center block bg-alkota-orange hover:bg-black text-white py-3 font-ibm-plex-mono text-xs uppercase tracking-widest transition-colors font-medium"
+                >
+                  Book On-Site Demo
+                </Link>
+                <a
+                  href={`https://maps.google.com/?q=${encodeURIComponent(`${dealer.name}, ${dealer.postcode}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full text-center block border border-[#DDD] hover:border-black text-alkota-black py-2.5 font-ibm-plex-mono text-xs uppercase tracking-widest transition-colors"
+                >
+                  Get Directions →
+                </a>
+              </div>
             </div>
 
-            <div className="p-4 bg-alkota-black text-white font-ibm-plex-mono text-xs">
-              <p className="text-alkota-orange font-bold mb-1">// OUTSIDE THIS REGION?</p>
-              <p className="text-[#aaa] text-[11px]">
-                Search our full national network or contact our central support desk.
+            {/* Alkota Support Guarantee */}
+            <div className="bg-[#FAF9F5] border border-[#E8E8E4] p-5 text-xs text-[#666]">
+              <div className="flex items-center gap-2 mb-2 text-alkota-black font-medium">
+                <ShieldCheck className="w-4 h-4 text-alkota-orange" />
+                <span>Alkota National Guarantee</span>
+              </div>
+              <p className="leading-relaxed">
+                All equipment purchased through {dealer.name} carries the official Alkota 7-Year Heating Coil Warranty and direct access to genuine South Dakota parts.
               </p>
-              <Link
-                href="/dealers"
-                className="mt-3 inline-block text-[10px] text-white underline uppercase tracking-widest hover:text-alkota-orange"
-              >
-                Find Other Dealers →
-              </Link>
             </div>
           </div>
         </div>
-      </div>
-
-      <Footer />
+      </section>
     </main>
   );
 }

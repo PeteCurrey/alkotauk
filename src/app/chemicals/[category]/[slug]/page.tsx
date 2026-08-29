@@ -23,11 +23,15 @@ import {
   RefreshCw,
   Clock,
   Layers,
-  XCircle
+  XCircle,
+  MessageSquare,
+  HelpCircle,
+  Calculator
 } from 'lucide-react';
 import { generateSeo } from '@/lib/seo';
 import { getChemicalBySlug, VERIFIED_CHEMICAL_PRODUCTS, CHEMICAL_CATEGORIES } from '@/lib/chemicals/seed-data';
 import { ChemicalProduct } from '@/lib/types/chemical';
+import ProductDilutionWidget from './ProductDilutionWidget';
 
 interface ChemicalDetailPageProps {
   params: Promise<{
@@ -179,6 +183,21 @@ export default async function ChemicalDetailPage({ params }: ChemicalDetailPageP
                 )}
               </div>
 
+              {/* Surface Exclusions and Prominent Safety Warnings */}
+              {chemical.not_suitable_for && chemical.not_suitable_for.length > 0 && (
+                <div className="p-5 bg-red-950/20 border border-red-800/40 space-y-2">
+                  <div className="flex items-center gap-2 text-red-400">
+                    <AlertTriangle className="h-4 w-4" />
+                    <span className="font-ibm-plex-mono text-xs uppercase tracking-wider font-bold">
+                      Important Surface Restrictions & Metallurgy Cautions
+                    </span>
+                  </div>
+                  <p className="text-xs text-[#DDD] leading-relaxed font-normal">
+                    This formulation is <strong>NOT suitable</strong> for direct application on: {chemical.not_suitable_for.join(', ')}. Contact with sensitive unlacquered aluminium or galvanised coatings may cause permanent chemical etching or discoloration.
+                  </p>
+                </div>
+              )}
+
               {/* Comprehensive Surface Compatibility Matrix */}
               <div className="space-y-4 pt-6 border-t border-[#222]">
                 <div className="flex items-center justify-between">
@@ -237,28 +256,49 @@ export default async function ChemicalDetailPage({ params }: ChemicalDetailPageP
                 </div>
               </div>
 
-              {/* Contamination Removal Matrix */}
-              {chemical.contamination_types && chemical.contamination_types.length > 0 && (
-                <div className="space-y-4 pt-6 border-t border-[#222]">
-                  <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.25em] text-alkota-orange block">
-                    // CONTAMINATION PROFILE
+              {/* Interactive In-Page Dilution Calculator */}
+              <div className="space-y-4 pt-6 border-t border-[#222]">
+                <div className="flex items-center gap-2">
+                  <Calculator className="h-4 w-4 text-alkota-orange" />
+                  <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.25em] text-alkota-orange">
+                    // DOSING & DILUTION CALCULATOR
                   </span>
-                  <h3 className="text-xl uppercase tracking-tight text-white font-light">
-                    Target Soils & Removal Efficiency
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {chemical.contamination_types.map((c, i) => (
-                      <span
-                        key={i}
-                        className="p-2.5 bg-[#141414] border border-[#2A2A2A] text-xs text-[#CCC] font-normal flex items-center gap-2"
-                      >
-                        <span className="h-1.5 w-1.5 rounded-full bg-alkota-orange" />
-                        <span>{c}</span>
-                      </span>
-                    ))}
+                </div>
+                <ProductDilutionWidget
+                  productName={chemical.name}
+                  dilutionHot={chemical.dilution_hot || undefined}
+                  dilutionCold={chemical.dilution_cold || undefined}
+                />
+              </div>
+
+              {/* Contextual Ask The Lobby Support Block */}
+              <div className="p-6 bg-[#141412] border border-[#262626] space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-alkota-orange/10 border border-alkota-orange/30 text-alkota-orange">
+                    <MessageSquare className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-alkota-orange block">
+                      // Contextual Chemical Intelligence
+                    </span>
+                    <h4 className="text-lg uppercase text-white font-light">
+                      Need Technical Verification for this Formulation?
+                    </h4>
                   </div>
                 </div>
-              )}
+                <p className="text-xs text-[#AAA] leading-relaxed font-normal">
+                  Ask our engineering intelligence platform specific questions regarding metallurgy compatibility, water recycling compliance, or dwell times.
+                </p>
+                <div className="pt-1">
+                  <Link
+                    href={`/lobby?q=${encodeURIComponent(`I am reviewing ${chemical.name} (${chemical.code || ''}). What are the surface considerations and proper application dwell times?`)}`}
+                    className="inline-flex items-center gap-2 bg-[#1C1C1C] hover:bg-alkota-orange hover:text-black text-white px-5 py-2.5 text-xs font-ibm-plex-mono uppercase tracking-wider border border-[#333] transition-colors"
+                  >
+                    <span>Ask The Lobby About {chemical.name}</span>
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
+                </div>
+              </div>
             </div>
 
             {/* ─── RIGHT COLUMN: DENSE SPECIFICATION & ORDERING (5 cols) ─── */}

@@ -117,6 +117,7 @@ export default function Navigation() {
 
   const navLinks = [
     { name: 'Machines', href: '/machines', hasMega: true },
+    { name: 'Service', href: '/service', hasMega: true },
     { name: 'Dealers', href: '/dealers', hasMega: true },
     { name: 'Bespoke', href: '/bespoke', hasMega: true },
     { name: 'Chemicals', href: '/chemicals', hasMega: true },
@@ -372,6 +373,153 @@ export default function Navigation() {
                 </div>
               )}
 
+              {/* SERVICE & SUPPORT MEGA MENU */}
+              {activeMenu === 'Service' && (
+                <div className="grid grid-cols-12 gap-8 items-stretch">
+                  <div className="col-span-4 border-r border-[#EBEBE8] pr-8 space-y-1.5 font-normal">
+                    <span className="text-[11px] uppercase tracking-[0.25em] text-alkota-orange block mb-3 font-light">
+                      Lifecycle Support
+                    </span>
+                    <Link
+                      href="/service"
+                      onClick={() => setActiveMenu(null)}
+                      className="block p-2.5 bg-[#F7F7F5] hover:bg-white border border-[#E8E8E4] hover:border-alkota-orange transition-all no-underline group"
+                    >
+                      <h4 className="text-xs uppercase tracking-wider text-alkota-black group-hover:text-alkota-orange font-normal">
+                        Service &amp; Support Hub →
+                      </h4>
+                      <p className="text-[11px] text-[#777] font-normal mt-0.5">
+                        Overview of nationwide lifecycle engineering.
+                      </p>
+                    </Link>
+                    <Link
+                      href="/service/planned-maintenance"
+                      onClick={() => setActiveMenu(null)}
+                      className="block p-2.5 bg-[#F7F7F5] hover:bg-white border border-[#E8E8E4] hover:border-alkota-orange transition-all no-underline group"
+                    >
+                      <h4 className="text-xs uppercase tracking-wider text-alkota-black group-hover:text-alkota-orange font-normal">
+                        Planned Maintenance (PPM) →
+                      </h4>
+                      <p className="text-[11px] text-[#777] font-normal mt-0.5">
+                        Hours-based &amp; annual preventive schedules.
+                      </p>
+                    </Link>
+                    <Link
+                      href="/service/repairs"
+                      onClick={() => setActiveMenu(null)}
+                      className="block p-2.5 bg-[#F7F7F5] hover:bg-white border border-[#E8E8E4] hover:border-alkota-orange transition-all no-underline group"
+                    >
+                      <h4 className="text-xs uppercase tracking-wider text-alkota-black group-hover:text-alkota-orange font-normal">
+                        Breakdown &amp; Repairs →
+                      </h4>
+                      <p className="text-[11px] text-[#777] font-normal mt-0.5">
+                        Priority emergency triage &amp; mobile engineers.
+                      </p>
+                    </Link>
+                    <Link
+                      href="/service/pump-repair"
+                      onClick={() => setActiveMenu(null)}
+                      className="block p-2.5 bg-[#F7F7F5] hover:bg-white border border-[#E8E8E4] hover:border-alkota-orange transition-all no-underline group"
+                    >
+                      <h4 className="text-xs uppercase tracking-wider text-alkota-black group-hover:text-alkota-orange font-normal">
+                        Pump Overhaul Workshop →
+                      </h4>
+                      <p className="text-[11px] text-[#777] font-normal mt-0.5">
+                        General Pump, CAT &amp; Comet strip-down &amp; test.
+                      </p>
+                    </Link>
+                  </div>
+
+                  <div className="col-span-4 space-y-1.5 font-normal">
+                    <span className="text-[11px] uppercase tracking-[0.25em] text-alkota-orange block mb-3 font-light">
+                      Asset Management
+                    </span>
+                    <Link
+                      href="/service/commissioning"
+                      onClick={() => setActiveMenu(null)}
+                      className="block p-2.5 bg-[#F7F7F5] hover:bg-white border border-[#E8E8E4] hover:border-alkota-orange transition-all no-underline group"
+                    >
+                      <h4 className="text-xs uppercase tracking-wider text-alkota-black group-hover:text-alkota-orange font-normal">
+                        Site Commissioning &amp; Handover →
+                      </h4>
+                      <p className="text-[11px] text-[#777] font-normal mt-0.5">
+                        Utilities verification &amp; operator training.
+                      </p>
+                    </Link>
+                    <Link
+                      href="/service/machine-registration"
+                      onClick={() => setActiveMenu(null)}
+                      className="block p-2.5 bg-[#F7F7F5] hover:bg-white border border-[#E8E8E4] hover:border-alkota-orange transition-all no-underline group"
+                    >
+                      <h4 className="text-xs uppercase tracking-wider text-alkota-black group-hover:text-alkota-orange font-normal">
+                        Register Your Alkota Machine →
+                      </h4>
+                      <p className="text-[11px] text-[#777] font-normal mt-0.5">
+                        Activate 7-Year Coil Warranty &amp; digital ledger.
+                      </p>
+                    </Link>
+                    <Link
+                      href="/service/contracts"
+                      onClick={() => setActiveMenu(null)}
+                      className="block p-2.5 bg-[#F7F7F5] hover:bg-white border border-[#E8E8E4] hover:border-alkota-orange transition-all no-underline group"
+                    >
+                      <h4 className="text-xs uppercase tracking-wider text-alkota-black group-hover:text-alkota-orange font-normal">
+                        Fleet Service Contracts →
+                      </h4>
+                      <p className="text-[11px] text-[#777] font-normal mt-0.5">
+                        Multi-site agreements &amp; guaranteed SLA cover.
+                      </p>
+                    </Link>
+                    <Link
+                      href="/service/my-alkota"
+                      onClick={() => setActiveMenu(null)}
+                      className="block p-2.5 bg-[#F7F7F5] hover:bg-white border border-[#E8E8E4] hover:border-alkota-orange transition-all no-underline group"
+                    >
+                      <h4 className="text-xs uppercase tracking-wider text-alkota-black group-hover:text-alkota-orange font-normal">
+                        My Alkota Portal →
+                      </h4>
+                      <p className="text-[11px] text-[#777] font-normal mt-0.5">
+                        Customer asset history &amp; digital certificates.
+                      </p>
+                    </Link>
+                  </div>
+
+                  {/* Right Column: Featured Book Service Callout */}
+                  <div className="col-span-4 bg-[#0D0D0B] text-white p-7 flex flex-col justify-between border border-[#222]">
+                    <div>
+                      <span className="text-[10px] uppercase tracking-[0.25em] text-alkota-orange block mb-2 font-light">
+                        Engineering Dispatch Desk
+                      </span>
+                      <h3 className="text-xl font-light uppercase tracking-tight text-white mb-2">
+                        Book Service or Emergency Triage.
+                      </h3>
+                      <p className="text-xs text-[#AAA] leading-relaxed font-normal mb-4">
+                        Direct intake for planned maintenance, machine breakdowns, workshop pump rebuilds, and commissioning.
+                      </p>
+                    </div>
+
+                    <div className="space-y-2 pt-2 font-normal">
+                      <Link
+                        href="/service/request"
+                        onClick={() => setActiveMenu(null)}
+                        className="flex items-center justify-between w-full bg-alkota-orange text-white px-4 py-3 text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-colors no-underline shadow-xl font-medium"
+                      >
+                        <span>Book Service Online</span>
+                        <ArrowRight className="h-3.5 w-3.5" />
+                      </Link>
+                      <Link
+                        href="/service/request?type=breakdown&urgency=machine_down"
+                        onClick={() => setActiveMenu(null)}
+                        className="flex items-center justify-between w-full border border-red-500/40 bg-red-950/40 text-red-300 px-4 py-2.5 text-xs uppercase tracking-widest hover:border-red-400 hover:bg-red-900/60 transition-all no-underline font-normal"
+                      >
+                        <span>Emergency Machine Down</span>
+                        <ArrowUpRight className="h-3.5 w-3.5 text-red-400" />
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* 2. DEALERS MEGA MENU */}
               {activeMenu === 'Dealers' && (
                 <div className="grid grid-cols-12 gap-8 items-stretch">
@@ -485,45 +633,79 @@ export default function Navigation() {
                     <div className="grid grid-cols-2 gap-4">
                       {/* Sub-column 1: Mobile Rigs & Skids */}
                       <div className="space-y-2">
-                        <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-alkota-silver block mb-1">
-                          MOBILE CLEANING RIGS
+                        <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-alkota-orange block mb-1">
+                          ALKOTA TRAILERS & MOBILE RIGS
                         </span>
                         <Link
                           href="/trailers"
                           onClick={() => setActiveMenu(null)}
-                          className="block p-2.5 bg-[#F7F7F5] hover:bg-white border border-[#E8E8E4] hover:border-alkota-orange transition-all no-underline group"
+                          className="block p-2 bg-[#F7F7F5] hover:bg-white border border-[#E8E8E4] hover:border-alkota-orange transition-all no-underline group"
                         >
-                          <h4 className="text-xs uppercase tracking-wider text-alkota-black group-hover:text-alkota-orange font-normal">
-                            Alkota Trailers →
+                          <h4 className="text-[11px] uppercase tracking-wider text-alkota-black group-hover:text-alkota-orange font-normal">
+                            Alkota Trailers Flagship →
                           </h4>
-                          <p className="text-[10px] text-[#777] font-normal mt-0.5">
-                            Highway-certified mobile rigs.
+                          <p className="text-[9px] text-[#777] font-normal">
+                            Bespoke mobile industrial cleaning systems.
                           </p>
                         </Link>
                         <Link
                           href="/trailers/configure"
                           onClick={() => setActiveMenu(null)}
-                          className="block p-2.5 bg-alkota-orange/5 hover:bg-alkota-orange/10 border border-alkota-orange/30 hover:border-alkota-orange transition-all no-underline group"
+                          className="block p-2 bg-alkota-orange/5 hover:bg-alkota-orange/10 border border-alkota-orange/30 hover:border-alkota-orange transition-all no-underline group"
                         >
-                          <h4 className="text-xs uppercase tracking-wider text-alkota-orange font-normal">
+                          <h4 className="text-[11px] uppercase tracking-wider text-alkota-orange font-bold">
                             Rig Configurator →
                           </h4>
-                          <p className="text-[10px] text-[#777] font-normal mt-0.5">
-                            13-step trailer builder.
+                          <p className="text-[9px] text-[#777] font-normal">
+                            Automotive-grade 13-step builder.
                           </p>
                         </Link>
-                        <Link
-                          href="/bespoke#skid"
-                          onClick={() => setActiveMenu(null)}
-                          className="block p-2.5 bg-[#F7F7F5] hover:bg-white border border-[#E8E8E4] hover:border-alkota-orange transition-all no-underline group"
-                        >
-                          <h4 className="text-xs uppercase tracking-wider text-alkota-black group-hover:text-alkota-orange font-normal">
-                            Custom Skid Units →
-                          </h4>
-                          <p className="text-[10px] text-[#777] font-normal mt-0.5">
-                            Flatbed & van configurations.
-                          </p>
-                        </Link>
+                        <div className="grid grid-cols-2 gap-1.5 pt-1">
+                          <Link
+                            href="/trailers/open"
+                            onClick={() => setActiveMenu(null)}
+                            className="block p-1.5 bg-[#F7F7F5] hover:bg-white border border-[#E8E8E4] hover:border-alkota-orange text-[10px] uppercase font-mono text-[#444] hover:text-alkota-orange no-underline"
+                          >
+                            Open Deck
+                          </Link>
+                          <Link
+                            href="/trailers/enclosed"
+                            onClick={() => setActiveMenu(null)}
+                            className="block p-1.5 bg-[#F7F7F5] hover:bg-white border border-[#E8E8E4] hover:border-alkota-orange text-[10px] uppercase font-mono text-[#444] hover:text-alkota-orange no-underline"
+                          >
+                            Enclosed
+                          </Link>
+                          <Link
+                            href="/trailers/recovery"
+                            onClick={() => setActiveMenu(null)}
+                            className="block p-1.5 bg-[#F7F7F5] hover:bg-white border border-[#E8E8E4] hover:border-alkota-orange text-[10px] uppercase font-mono text-[#444] hover:text-alkota-orange no-underline"
+                          >
+                            Recovery
+                          </Link>
+                          <Link
+                            href="/trailers/multi-operator"
+                            onClick={() => setActiveMenu(null)}
+                            className="block p-1.5 bg-[#F7F7F5] hover:bg-white border border-[#E8E8E4] hover:border-alkota-orange text-[10px] uppercase font-mono text-[#444] hover:text-alkota-orange no-underline"
+                          >
+                            Multi-Gun
+                          </Link>
+                        </div>
+                        <div className="grid grid-cols-2 gap-1.5 pt-0.5">
+                          <Link
+                            href="/trailers/builds"
+                            onClick={() => setActiveMenu(null)}
+                            className="block p-1.5 bg-[#F7F7F5] hover:bg-white border border-[#E8E8E4] hover:border-alkota-orange text-[10px] uppercase font-mono text-[#444] hover:text-alkota-orange no-underline"
+                          >
+                            Real Builds
+                          </Link>
+                          <Link
+                            href="/trailers/payload-calculator"
+                            onClick={() => setActiveMenu(null)}
+                            className="block p-1.5 bg-[#F7F7F5] hover:bg-white border border-[#E8E8E4] hover:border-alkota-orange text-[10px] uppercase font-mono text-[#444] hover:text-alkota-orange no-underline"
+                          >
+                            Payload Tool
+                          </Link>
+                        </div>
                       </div>
 
                       {/* Sub-column 2: Wash Plant Division */}
@@ -825,15 +1007,27 @@ export default function Navigation() {
                       Documentation & Intelligence
                     </span>
                     <Link
-                      href="/support"
+                      href="/parts"
                       onClick={() => setActiveMenu(null)}
                       className="block p-3 bg-[#F7F7F5] hover:bg-white border border-[#E8E8E4] hover:border-alkota-orange transition-all no-underline group"
                     >
                       <h4 className="text-xs uppercase tracking-wider text-alkota-black group-hover:text-alkota-orange font-normal">
-                        Technical Manuals & Parts Lists →
+                        Genuine Parts & Exploded Schematics →
                       </h4>
                       <p className="text-[11px] text-[#777] font-normal mt-0.5">
-                        Schematics, wiring diagrams, and parts breakdowns.
+                        Interactive diagrams, service kits, and serial lookup.
+                      </p>
+                    </Link>
+                    <Link
+                      href="/attachments"
+                      onClick={() => setActiveMenu(null)}
+                      className="block p-3 bg-[#F7F7F5] hover:bg-white border border-[#E8E8E4] hover:border-alkota-orange transition-all no-underline group"
+                    >
+                      <h4 className="text-xs uppercase tracking-wider text-alkota-black group-hover:text-alkota-orange font-normal">
+                        Attachments & Accessories →
+                      </h4>
+                      <p className="text-[11px] text-[#777] font-normal mt-0.5">
+                        Extend machine capability — surface cleaners, foam lances, hose reels, drain jetters.
                       </p>
                     </Link>
                     <Link
@@ -978,6 +1172,19 @@ export default function Navigation() {
                               {cat.name}
                             </Link>
                           ))}
+                        {link.name === 'Service' && (
+                          <>
+                            <Link href="/service" onClick={() => setMobileMenuOpen(false)} className="text-sm text-[#ccc] hover:text-alkota-orange no-underline py-0.5">Service &amp; Support Hub</Link>
+                            <Link href="/service/planned-maintenance" onClick={() => setMobileMenuOpen(false)} className="text-sm text-[#ccc] hover:text-alkota-orange no-underline py-0.5">Planned Maintenance (PPM)</Link>
+                            <Link href="/service/repairs" onClick={() => setMobileMenuOpen(false)} className="text-sm text-[#ccc] hover:text-alkota-orange no-underline py-0.5">Breakdown &amp; Repairs</Link>
+                            <Link href="/service/pump-repair" onClick={() => setMobileMenuOpen(false)} className="text-sm text-[#ccc] hover:text-alkota-orange no-underline py-0.5">Pump Overhaul Workshop</Link>
+                            <Link href="/service/commissioning" onClick={() => setMobileMenuOpen(false)} className="text-sm text-[#ccc] hover:text-alkota-orange no-underline py-0.5">Site Commissioning</Link>
+                            <Link href="/service/machine-registration" onClick={() => setMobileMenuOpen(false)} className="text-sm text-[#ccc] hover:text-alkota-orange no-underline py-0.5">Register Machine</Link>
+                            <Link href="/service/contracts" onClick={() => setMobileMenuOpen(false)} className="text-sm text-[#ccc] hover:text-alkota-orange no-underline py-0.5">Fleet Contracts</Link>
+                            <Link href="/service/my-alkota" onClick={() => setMobileMenuOpen(false)} className="text-sm text-[#ccc] hover:text-alkota-orange no-underline py-0.5">My Alkota Portal</Link>
+                            <Link href="/service/request" onClick={() => setMobileMenuOpen(false)} className="text-sm text-alkota-orange font-bold no-underline py-0.5">Book Service Online →</Link>
+                          </>
+                        )}
                         {link.name === 'Dealers' && (
                           <>
                             <Link href="/dealers" onClick={() => setMobileMenuOpen(false)} className="text-sm text-[#ccc] hover:text-alkota-orange no-underline py-0.5">Find a Dealer</Link>

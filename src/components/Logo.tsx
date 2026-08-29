@@ -14,6 +14,7 @@ export default function Logo({
     <motion.img
       src="/assets/alkota-flame-logo.png"
       alt="Alkota Cleaning Systems Inc."
+      style={{ maxHeight: '40px', width: 'auto' }}
       className={`w-auto object-contain select-none ${className}`}
       initial={isAnimated ? { opacity: 0, scale: 0.95 } : { opacity: 1 }}
       animate={{ opacity: 1, scale: 1 }}

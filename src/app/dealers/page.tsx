@@ -1,320 +1,470 @@
-'use client';
-
-import { useState, useEffect, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import React from 'react';
 import Link from 'next/link';
-import Navigation from '@/components/Navigation';
-import Footer from '@/components/Footer';
-import DealerCard from '@/components/dealers/DealerCard';
-import DealerInteractiveMap from '@/components/dealers/DealerInteractiveMap';
-import { Dealer, getDealers } from '@/lib/dealers';
-import { geocodePostcode, calculateHaversineDistance, extractPostcodeArea } from '@/lib/dealers/geo';
-import { Search, MapPin, Navigation as LocateIcon, ShieldCheck, Wrench, Flame, Droplets, Filter, RotateCcw, ArrowRight, Loader2 } from 'lucide-react';
+import {
+  MapPin,
+  ShieldCheck,
+  Wrench,
+  Flame,
+  Droplets,
+  Truck,
+  ArrowRight,
+  CheckCircle2,
+  Calendar,
+  PhoneCall,
+  Search,
+  Building2,
+  Users,
+  Layers,
+  Sparkles,
+  ExternalLink
+} from 'lucide-react';
+import canonicalDealers from '../../../scripts/data/dealers-canonical-seed.json';
 
-function DealerDirectoryInner() {
-  const searchParams = useSearchParams();
-  const initialPostcode = searchParams.get('postcode') || '';
-  const productContext = searchParams.get('product') || '';
-  const categoryContext = searchParams.get('category') || 'all';
+export const metadata = {
+  title: 'UK Authorised Dealer & Service Network | Alkota UK',
+  description:
+    'Local expertise backed by six decades of industrial pressure washing engineering. Locate your regional Alkota sales, on-site demonstration, service, parts, and chemical specialist.',
+};
 
-  const [dealers, setDealers] = useState<Dealer[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState(initialPostcode);
-  const [selectedService, setSelectedService] = useState('all');
-  const [selectedCategory, setSelectedCategory] = useState(categoryContext);
-  const [selectedDealer, setSelectedDealer] = useState<Dealer | null>(null);
-  const [searchedPostcode, setSearchedPostcode] = useState(initialPostcode);
-
-  // Load initial dealers
-  useEffect(() => {
-    async function load() {
-      setLoading(true);
-      try {
-        const res = await fetch('/api/dealers');
-        if (res.ok) {
-          const data = await res.json();
-          setDealers(data.dealers || []);
-          if (data.dealers?.length > 0) {
-            setSelectedDealer(data.dealers[0]);
-          }
-        }
-      } catch (err) {
-        console.error('Error fetching dealers:', err);
-      } finally {
-        setLoading(false);
-      }
-    }
-    load();
-  }, []);
-
-  // Filter and distance sorting logic
-  const handleSearch = (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
-    setSearchedPostcode(searchQuery);
-
-    const clean = searchQuery.trim().toUpperCase();
-    const coords = geocodePostcode(clean);
-    const prefix = extractPostcodeArea(clean);
-
-    if (coords) {
-      const sorted = [...dealers].map((d) => ({
-        ...d,
-        distance_miles: calculateHaversineDistance(
-          coords.latitude,
-          coords.longitude,
-          d.latitude,
-          d.longitude
-        ),
-      }));
-
-      // Sort: Authoritative territory matches first, then nearest distance
-      sorted.sort((a, b) => {
-        const aTerritory = prefix ? a.territories?.some((t) => t.postcode_prefix === prefix) : false;
-        const bTerritory = prefix ? b.territories?.some((t) => t.postcode_prefix === prefix) : false;
-
-        if (aTerritory && !bTerritory) return -1;
-        if (!aTerritory && bTerritory) return 1;
-
-        return (a.distance_miles || 9999) - (b.distance_miles || 9999);
-      });
-
-      setDealers(sorted);
-      if (sorted.length > 0) {
-        setSelectedDealer(sorted[0]);
-      }
-    }
-  };
-
-  const handleUseLocation = () => {
-    if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          const { latitude, longitude } = pos.coords;
-          const sorted = [...dealers].map((d) => ({
-            ...d,
-            distance_miles: calculateHaversineDistance(
-              latitude,
-              longitude,
-              d.latitude,
-              d.longitude
-            ),
-          }));
-          sorted.sort((a, b) => (a.distance_miles || 9999) - (b.distance_miles || 9999));
-          setDealers(sorted);
-          setSearchQuery('Current Location');
-          setSearchedPostcode('Current Location');
-          if (sorted.length > 0) setSelectedDealer(sorted[0]);
-        },
-        () => {
-          alert('Location permission denied. Please enter your UK postcode manually.');
-        }
-      );
-    }
-  };
-
-  // Filter list by selected service & product category
-  const filteredDealers = dealers.filter((dealer) => {
-    if (selectedService !== 'all') {
-      const hasService = dealer.services?.some((s) => s.service_key === selectedService);
-      if (!hasService) return false;
-    }
-    if (selectedCategory !== 'all') {
-      const hasCategory = dealer.product_categories?.includes(selectedCategory);
-      if (!hasCategory) return false;
-    }
-    return true;
-  });
+export default function DealersLandingPage() {
+  const featuredDealers = canonicalDealers.slice(0, 4);
 
   return (
-    <div className="pt-32 pb-20">
-      {/* Header Banner */}
-      <section className="px-6 sm:px-12 max-w-7xl mx-auto mb-12 border-b border-[#D8D8D6] pb-8">
-        <div className="flex items-center gap-3 mb-4">
-          <span className="h-[2px] w-8 bg-alkota-orange" />
-          <span className="font-ibm-plex-mono text-[10px] font-bold uppercase tracking-[0.35em] text-alkota-orange">
-            AUTHORISED UK DEALER & SERVICE NETWORK
-          </span>
+    <main className="bg-[#FAF9F5] text-alkota-black">
+
+      {/* ── CHAPTER 01: FULL-SCREEN HERO ── */}
+      <section className="relative min-h-[90vh] flex flex-col justify-between bg-[#0A0A0A] text-white px-6 sm:px-12 lg:px-24 pt-32 pb-16 overflow-hidden border-b border-[#222]">
+        {/* Background Radial Glow */}
+        <div
+          className="absolute inset-0 select-none pointer-events-none"
+          style={{
+            backgroundImage: `radial-gradient(ellipse at 80% 25%, rgba(255,105,0,0.08) 0%, transparent 60%),
+                              radial-gradient(ellipse at 20% 75%, rgba(255,255,255,0.03) 0%, transparent 50%)`,
+          }}
+        />
+        <div
+          className="absolute right-0 bottom-0 select-none pointer-events-none font-extralight text-white opacity-[0.02] text-[18vw] leading-none"
+          aria-hidden="true"
+        >
+          NETWORK
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
-          <div className="lg:col-span-8">
-            <h1 className="font-barlow-condensed text-6xl sm:text-8xl font-black uppercase italic tracking-tight text-alkota-black leading-[0.85]">
-              FIND A LOCAL <br />
-              <span className="text-alkota-orange">ALKOTA SPECIALIST.</span>
-            </h1>
-            <p className="mt-4 font-inter text-base sm:text-lg text-[#555] max-w-2xl leading-relaxed">
-              Every Alkota dealer operates mobile service vans, genuine factory spares, and on-site demonstration facilities. Enter your postcode to locate your authorised regional sales and support hub.
+        {/* Hero Top Content */}
+        <div className="relative z-10 max-w-7xl mx-auto w-full">
+          <div className="flex items-center gap-3 mb-6">
+            <span className="w-2.5 h-2.5 bg-alkota-orange rounded-full animate-pulse" />
+            <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.25em] text-[#999]">
+              Alkota UK // Authorised Regional Distribution &amp; Field Engineering
+            </span>
+          </div>
+
+          <h1 className="font-extralight text-4xl sm:text-6xl lg:text-7xl xl:text-8xl tracking-tight text-white leading-[1.05] max-w-5xl mb-8">
+            Local expertise.{' '}
+            <span className="text-alkota-orange font-normal italic">
+              Backed by Alkota.
+            </span>
+          </h1>
+
+          <p className="text-base sm:text-lg lg:text-xl text-[#AAA] font-normal leading-relaxed max-w-3xl mb-12">
+            Every Alkota machine in the United Kingdom is supported by accredited regional partners — factory-trained engineers, dedicated on-site demonstration vans, genuine OEM spares inventory, and verified local chemical supply.
+          </p>
+
+          {/* Primary Action Buttons */}
+          <div className="flex flex-wrap items-center gap-4 mb-16">
+            <Link
+              href="/dealers/find"
+              className="inline-flex items-center gap-3 bg-alkota-orange hover:bg-white hover:text-alkota-black text-white px-8 py-4 font-ibm-plex-mono text-xs uppercase tracking-widest transition-all shadow-lg font-medium"
+            >
+              <Search className="w-4 h-4" />
+              Find Your Alkota Dealer
+            </Link>
+
+            <Link
+              href="/dealers/demo-request"
+              className="inline-flex items-center gap-3 border border-[#444] hover:border-white text-white px-8 py-4 font-ibm-plex-mono text-xs uppercase tracking-widest transition-all bg-[#141414]"
+            >
+              <Calendar className="w-4 h-4 text-alkota-orange" />
+              Book an On-Site Demo
+            </Link>
+
+            <Link
+              href="/dealers/apply"
+              className="inline-flex items-center gap-2 text-[#888] hover:text-white font-ibm-plex-mono text-xs uppercase tracking-widest px-4 py-2 transition-colors"
+            >
+              Become an Approved Dealer →
+            </Link>
+          </div>
+        </div>
+
+        {/* Hero Bottom Metric Strip */}
+        <div className="relative z-10 max-w-7xl mx-auto w-full border-t border-[#222] pt-8 grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div>
+            <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#777] block mb-1">
+              National Reach
+            </span>
+            <span className="text-xl sm:text-2xl font-extralight text-white">
+              Full UK Territory
+            </span>
+          </div>
+
+          <div>
+            <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#777] block mb-1">
+              Mobile Service
+            </span>
+            <span className="text-xl sm:text-2xl font-extralight text-white">
+              18+ Fleet Vans
+            </span>
+          </div>
+
+          <div>
+            <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#777] block mb-1">
+              Live Demonstrations
+            </span>
+            <span className="text-xl sm:text-2xl font-extralight text-white">
+              On-Site or Test Bay
+            </span>
+          </div>
+
+          <div>
+            <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#777] block mb-1">
+              Parts &amp; Chemistry
+            </span>
+            <span className="text-xl sm:text-2xl font-extralight text-white">
+              100% Genuine OEM
+            </span>
+          </div>
+        </div>
+      </section>
+
+
+      {/* ── CHAPTER 02: DEALERS ARE NOT ALL THE SAME (CAPABILITY PHILOSOPHY) ── */}
+      <section className="py-24 px-6 sm:px-12 lg:px-24 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start mb-16">
+          <div className="lg:col-span-5">
+            <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-orange block mb-3">
+              // Beyond Nearest Distance
+            </span>
+            <h2 className="font-extralight text-3xl sm:text-4xl lg:text-5xl text-alkota-black tracking-tight leading-tight">
+              Finding the right expert, not just the nearest pin.
+            </h2>
+          </div>
+
+          <div className="lg:col-span-7">
+            <p className="text-base text-[#555] font-normal leading-relaxed mb-6">
+              When specifying high-pressure cleaning infrastructure, your requirement may demand a mobile hot-water demonstration, a specialist pump rebuild workshop, custom trailer integration, or closed-loop wash bay compliance.
+            </p>
+            <p className="text-sm text-[#777] font-normal leading-relaxed">
+              We structure the Alkota Dealer Network around <strong>verified technical capabilities</strong>. Our routing engine matches your exact application, machinery choice, and postcode to the approved partner with the right tooling and accreditation.
             </p>
           </div>
-
-          <div className="lg:col-span-4 flex flex-col items-start lg:items-end gap-3">
-            <Link
-              href="/dealers/become-a-dealer"
-              className="inline-flex items-center gap-2 border border-alkota-black bg-white text-alkota-black px-6 py-3 font-ibm-plex-mono text-xs font-bold uppercase tracking-widest hover:border-alkota-orange hover:text-alkota-orange transition-colors no-underline"
-            >
-              <span>Apply for Dealership</span>
-              <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
-          </div>
         </div>
 
-        {/* Product Context Banner (if arrived from a specific machine page) */}
-        {productContext && (
-          <div className="mt-8 p-4 bg-[#F8F8F7] border border-alkota-orange flex items-center justify-between gap-4 font-ibm-plex-mono text-xs">
-            <span className="text-[#555]">
-              Searching for authorised support for:{' '}
-              <strong className="text-alkota-black uppercase">{productContext}</strong>
-            </span>
-            <Link
-              href="/dealers"
-              className="text-alkota-orange font-bold hover:underline"
-            >
-              Clear Machine Filter
-            </Link>
-          </div>
-        )}
+        {/* 6 Core Capability Pillars */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-px border border-[#E8E8E4] bg-[#E8E8E4]">
+          {[
+            { key: 'sales', title: 'MACHINE SALES', desc: 'Hot Water, Cold Water & Steam specification' },
+            { key: 'demo', title: 'LIVE DEMOS', desc: 'On-site vehicle wash & factory floor testing' },
+            { key: 'service', title: 'PPM & REPAIRS', desc: 'Mobile service vans & rapid emergency response' },
+            { key: 'pumps', title: 'PUMP OVERHAUL', desc: 'General Pump, CAT & Comet workshop rebuilds' },
+            { key: 'trailers', title: 'TRAILER RIGS', desc: 'Bespoke road-towable mobile wash units' },
+            { key: 'effluent', title: 'WATER TREATMENT', desc: 'Recycling systems & EA effluent compliance' },
+          ].map((item) => (
+            <div key={item.key} className="bg-white p-6 transition-all hover:bg-[#FAF9F5]">
+              <span className="font-ibm-plex-mono text-[9px] text-alkota-orange font-bold block mb-2">
+                // {item.key.toUpperCase()}
+              </span>
+              <h3 className="font-medium text-xs text-alkota-black tracking-tight mb-1.5">
+                {item.title}
+              </h3>
+              <p className="text-[11px] text-[#777] leading-relaxed">
+                {item.desc}
+              </p>
+            </div>
+          ))}
+        </div>
       </section>
 
-      {/* Search & Filter Controls */}
-      <section className="px-6 sm:px-12 max-w-7xl mx-auto mb-10">
-        <div className="bg-white border border-[#D5D5D3] p-6 sm:p-8 shadow-sm">
-          <form onSubmit={handleSearch} className="grid grid-cols-1 md:grid-cols-12 gap-4">
-            {/* Postcode Input */}
-            <div className="md:col-span-6 relative">
-              <label className="block font-ibm-plex-mono text-[9px] font-bold uppercase tracking-wider text-[#777] mb-1.5">
-                ENTER POSTCODE OR TOWN
-              </label>
-              <div className="relative">
+
+      {/* ── CHAPTER 03: FAST DEALER FINDER INTERACTIVE TEASER ── */}
+      <section className="py-20 px-6 sm:px-12 lg:px-24 bg-[#F0EFEB] border-y border-[#E8E8E4]">
+        <div className="max-w-7xl mx-auto">
+          <div className="bg-white border border-[#E8E8E4] p-8 sm:p-12 shadow-sm">
+            <div className="max-w-3xl mb-8">
+              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-orange block mb-2">
+                // Instant Network Lookup
+              </span>
+              <h2 className="font-extralight text-3xl sm:text-4xl text-alkota-black tracking-tight mb-3">
+                Find Your Regional Alkota Specialist
+              </h2>
+              <p className="text-sm text-[#666] leading-relaxed">
+                Enter your postcode or town to locate approved dealers, check mobile service van coverage, and view on-site demonstration facilities.
+              </p>
+            </div>
+
+            <form
+              action="/dealers/find"
+              method="GET"
+              className="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center"
+            >
+              <div className="sm:col-span-6 relative">
                 <input
                   type="text"
-                  placeholder="e.g. S42 5UY, M17 1JT, Leeds, Glasgow..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-[#F8F8F7] border border-[#D5D5D3] px-4 py-3.5 pl-11 font-ibm-plex-mono text-sm text-alkota-black placeholder:text-[#999] focus:border-alkota-orange focus:outline-none"
+                  name="postcode"
+                  placeholder="Enter Postcode (e.g. S42, M17, B1, EH1) or Town..."
+                  className="w-full border border-[#DDD] pl-11 pr-4 py-4 text-sm text-alkota-black focus:border-alkota-orange focus:outline-none uppercase"
                 />
-                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#888]" />
+                <MapPin className="w-5 h-5 text-alkota-orange absolute left-3.5 top-4" />
               </div>
-            </div>
 
-            {/* Service Filter */}
-            <div className="md:col-span-3">
-              <label className="block font-ibm-plex-mono text-[9px] font-bold uppercase tracking-wider text-[#777] mb-1.5">
-                REQUIRED SERVICE
-              </label>
-              <select
-                value={selectedService}
-                onChange={(e) => setSelectedService(e.target.value)}
-                className="w-full bg-[#F8F8F7] border border-[#D5D5D3] px-4 py-3.5 font-ibm-plex-mono text-xs text-alkota-black focus:border-alkota-orange focus:outline-none"
-              >
-                <option value="all">All Services</option>
-                <option value="machine-sales">Machine Sales & Demos</option>
-                <option value="service-maintenance">Service & Maintenance</option>
-                <option value="emergency-breakdown">Emergency Breakdown</option>
-                <option value="parts-accessories">Genuine Parts Stock</option>
-                <option value="trailer-systems">Trailer & Van Packs</option>
-                <option value="water-recovery">Water Recovery & Bay</option>
-              </select>
-            </div>
+              <div className="sm:col-span-3">
+                <select
+                  name="capability"
+                  className="w-full border border-[#DDD] px-4 py-4 text-xs text-alkota-black focus:border-alkota-orange focus:outline-none bg-white"
+                >
+                  <option value="all">All Capabilities</option>
+                  <option value="machine-sales">Machine Sales &amp; Advice</option>
+                  <option value="on-site-demo">On-Site Demonstration</option>
+                  <option value="service-maintenance">Service &amp; Breakdown Repair</option>
+                  <option value="parts-accessories">Genuine Parts Stockist</option>
+                  <option value="chemicals">Hydrus Chemical Supply</option>
+                  <option value="trailer-systems">Bespoke Trailer Systems</option>
+                  <option value="water-recovery">Water Treatment &amp; Recovery</option>
+                </select>
+              </div>
 
-            {/* Search Actions */}
-            <div className="md:col-span-3 flex items-end gap-2">
-              <button
-                type="submit"
-                className="flex-1 bg-alkota-black text-white py-3.5 px-6 font-ibm-plex-mono text-xs font-bold uppercase tracking-widest hover:bg-alkota-orange transition-colors cursor-pointer text-center"
-              >
-                Search
-              </button>
-              <button
-                type="button"
-                onClick={handleUseLocation}
-                className="p-3.5 bg-[#F0F0EE] border border-[#D5D5D3] text-alkota-black hover:border-alkota-orange hover:text-alkota-orange transition-colors cursor-pointer"
-                title="Use my current location"
-                aria-label="Use current location"
-              >
-                <LocateIcon className="h-4 w-4" />
-              </button>
-            </div>
-          </form>
+              <div className="sm:col-span-3">
+                <button
+                  type="submit"
+                  className="w-full inline-flex items-center justify-center gap-2 bg-alkota-orange hover:bg-black text-white px-6 py-4 font-ibm-plex-mono text-xs uppercase tracking-widest transition-colors shadow-sm font-medium"
+                >
+                  <span>Search Network</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </section>
 
-      {/* Main Results Layout: Side-by-Side Map & Result Cards */}
-      <section className="px-6 sm:px-12 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Left Column: Result Cards List */}
-          <div className="lg:col-span-6 space-y-4 max-h-[700px] overflow-y-auto pr-1">
-            <div className="flex items-center justify-between pb-2 border-b border-[#EAEAEA]">
-              <span className="font-ibm-plex-mono text-xs font-bold uppercase text-alkota-black">
-                {filteredDealers.length} AUTHORISED DEALERS FOUND
-              </span>
-              {searchedPostcode && (
-                <span className="font-ibm-plex-mono text-[10px] text-alkota-orange">
-                  Near "{searchedPostcode}"
-                </span>
-              )}
-            </div>
 
-            {loading ? (
-              <div className="p-12 text-center text-[#888] font-ibm-plex-mono text-xs">
-                <Loader2 className="h-6 w-6 animate-spin mx-auto mb-2 text-alkota-orange" />
-                Searching authorised dealer network...
+      {/* ── CHAPTER 04: NETWORK SHOWCASE — FEATURED REGIONAL HUBS ── */}
+      <section className="py-24 px-6 sm:px-12 lg:px-24 max-w-7xl mx-auto">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
+          <div>
+            <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-orange block mb-2">
+              // Accredited Network
+            </span>
+            <h2 className="font-extralight text-3xl sm:text-4xl lg:text-5xl text-alkota-black tracking-tight">
+              Featured Regional Hubs
+            </h2>
+          </div>
+          <Link
+            href="/dealers/find"
+            className="inline-flex items-center gap-2 font-ibm-plex-mono text-xs uppercase tracking-widest text-alkota-orange hover:text-black transition-colors"
+          >
+            View All Regional Centres ({canonicalDealers.length}) →
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+          {featuredDealers.map((dealer) => (
+            <div
+              key={dealer.id}
+              className="bg-white border border-[#E8E8E4] p-8 flex flex-col justify-between hover:border-alkota-orange hover:shadow-sm transition-all"
+            >
+              <div>
+                <div className="flex items-start justify-between gap-4 mb-4">
+                  <div>
+                    <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-alkota-orange bg-orange-50 px-2.5 py-1 border border-orange-200 inline-block mb-2">
+                      {dealer.tier.replace('_', ' ')}
+                    </span>
+                    <h3 className="font-medium text-xl text-alkota-black tracking-tight">
+                      {dealer.name}
+                    </h3>
+                    <p className="text-xs text-[#777] mt-0.5">
+                      {dealer.town}, {dealer.county} ({dealer.postcode})
+                    </p>
+                  </div>
+
+                  <span className="font-ibm-plex-mono text-xs text-emerald-700 bg-emerald-50 px-2.5 py-1 border border-emerald-200 shrink-0">
+                    ★ {dealer.rating}
+                  </span>
+                </div>
+
+                <p className="text-xs text-[#555] leading-relaxed mb-6">
+                  {dealer.short_description}
+                </p>
+
+                {/* Territories covered */}
+                <div className="mb-6">
+                  <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#888] block mb-2">
+                    Primary Territory Outcodes:
+                  </span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {dealer.territories.slice(0, 5).map((t) => (
+                      <span
+                        key={t.postcode_prefix}
+                        className="font-ibm-plex-mono text-[10px] bg-[#FAF9F5] border border-[#DDD] px-2 py-0.5 text-[#555]"
+                      >
+                        {t.postcode_prefix} ({t.county_name?.split('/')[0].trim()})
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Capabilities */}
+                <div className="border-t border-[#F0EFEB] pt-4 mb-6">
+                  <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-alkota-black block mb-2.5">
+                    Approved Capabilities:
+                  </span>
+                  <div className="grid grid-cols-2 gap-2 text-xs text-[#555]">
+                    {dealer.services.slice(0, 4).map((s) => (
+                      <div key={s.service_key} className="flex items-center gap-2">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-alkota-orange shrink-0" />
+                        <span className="truncate">{s.service_name}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
-            ) : filteredDealers.length === 0 ? (
-              <div className="p-12 text-center bg-white border border-[#D5D5D3]">
-                <p className="font-barlow-condensed text-2xl font-bold uppercase text-alkota-black mb-2">
-                  No Specific Dealer in This Filter
-                </p>
-                <p className="font-inter text-xs text-[#666] mb-6">
-                  Our National Engineering Hub covers all UK regions directly.
-                </p>
+
+              <div className="border-t border-[#E8E8E4] pt-4 flex items-center justify-between gap-4">
                 <Link
-                  href="/contact"
-                  className="inline-block bg-alkota-orange text-white px-6 py-3 font-ibm-plex-mono text-xs font-bold uppercase tracking-widest hover:bg-black transition-colors"
+                  href={`/dealers/${dealer.slug}`}
+                  className="font-ibm-plex-mono text-xs uppercase tracking-widest text-alkota-black hover:text-alkota-orange transition-colors font-medium"
                 >
-                  Contact National Support Desk
+                  View Full Hub Profile →
+                </Link>
+
+                <Link
+                  href={`/dealers/demo-request?dealer=${dealer.slug}`}
+                  className="inline-flex items-center gap-1.5 bg-[#FAF9F5] hover:bg-alkota-black hover:text-white text-alkota-black border border-[#DDD] px-4 py-2 font-ibm-plex-mono text-[11px] uppercase tracking-wider transition-all"
+                >
+                  <Calendar className="w-3.5 h-3.5 text-alkota-orange" />
+                  Book Demo
                 </Link>
               </div>
-            ) : (
-              filteredDealers.map((dealer) => (
-                <DealerCard
-                  key={dealer.id}
-                  dealer={dealer}
-                  isSelected={selectedDealer?.id === dealer.id}
-                  onSelect={(d) => setSelectedDealer(d)}
-                />
-              ))
-            )}
-          </div>
+            </div>
+          ))}
+        </div>
+      </section>
 
-          {/* Right Column: Interactive Map View */}
-          <div className="lg:col-span-6 sticky top-32">
-            <DealerInteractiveMap
-              dealers={filteredDealers}
-              selectedDealer={selectedDealer}
-              onSelectDealer={(d) => setSelectedDealer(d)}
-            />
+
+      {/* ── CHAPTER 05: DARK SECTION — MAJOR PROJECT & BESPOKE ROUTING ── */}
+      <section className="bg-[#0A0A0A] text-white py-24 px-6 sm:px-12 lg:px-24 border-y border-[#222]">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mb-16">
+            <div className="lg:col-span-7">
+              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-orange bg-[#1A1A1A] px-3 py-1 border border-[#333] inline-block mb-4">
+                Major Projects &amp; National Fleets
+              </span>
+
+              <h2 className="font-extralight text-3xl sm:text-5xl text-white tracking-tight leading-tight mb-6">
+                Specialist engineering routed with precision.
+              </h2>
+
+              <p className="text-base text-[#AAA] font-normal leading-relaxed mb-6">
+                A £150k custom road-tow trailer system, an automated railway wash plant, or a multi-site contract across 25 logistics depots requires national project engineering — not just local van dispatch.
+              </p>
+              <p className="text-sm text-[#777] font-normal leading-relaxed mb-8">
+                Our dual-tier routing automatically partners your local Alkota dealer with our central UK engineering team to deliver full turnkey design, utilities scoping, commissioning, and SLA management.
+              </p>
+
+              <div className="flex flex-wrap items-center gap-4">
+                <Link
+                  href="/bespoke"
+                  className="inline-flex items-center gap-2 bg-alkota-orange hover:bg-white hover:text-black text-white px-7 py-3.5 font-ibm-plex-mono text-xs uppercase tracking-widest transition-all"
+                >
+                  Explore Bespoke Engineering
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+                <Link
+                  href="/wash-plant"
+                  className="inline-flex items-center gap-2 border border-[#444] hover:border-white text-white px-7 py-3.5 font-ibm-plex-mono text-xs uppercase tracking-widest transition-all"
+                >
+                  Wash Plant Infrastructure
+                </Link>
+              </div>
+            </div>
+
+            <div className="lg:col-span-5 bg-[#141414] border border-[#222] p-8 space-y-4">
+              <h3 className="font-ibm-plex-mono text-xs uppercase tracking-widest text-alkota-orange mb-4">
+                Project Routing Triggers:
+              </h3>
+              {[
+                { title: 'Turnkey Wash Bay Build', desc: 'Civil works, drainage interceptors, and fixed gantries' },
+                { title: 'Custom Trailer Skids', desc: 'Engineered twin-operator hot water mobile rigs' },
+                { title: 'Water Recycling Plant', desc: 'Hydrocarbon separation & closed-loop filtration' },
+                { title: 'Multi-Site National Accounts', desc: 'Consolidated SLA & centralised fleet ledger' },
+              ].map((proj, idx) => (
+                <div key={idx} className="border-b border-[#222] pb-3 last:border-b-0">
+                  <h4 className="text-xs font-medium text-white mb-0.5">{proj.title}</h4>
+                  <p className="text-[11px] text-[#777] leading-relaxed">{proj.desc}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
-    </div>
-  );
-}
 
-export default function FindDealerPage() {
-  return (
-    <main className="min-h-screen bg-[#F8F8F7] text-alkota-black flex flex-col justify-between">
-      <Navigation />
-      <Suspense
-        fallback={
-          <div className="min-h-screen pt-40 text-center font-ibm-plex-mono text-xs text-[#888]">
-            <Loader2 className="h-8 w-8 animate-spin mx-auto text-alkota-orange mb-4" />
-            Loading Alkota Dealer Locator...
+
+      {/* ── CHAPTER 06: BECOME AN ALKOTA DEALER CALLOUT ── */}
+      <section className="py-24 px-6 sm:px-12 lg:px-24 max-w-7xl mx-auto">
+        <div className="bg-white border border-[#E8E8E4] p-8 sm:p-12 shadow-sm">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div className="lg:col-span-7">
+              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-orange block mb-2">
+                // Territory Expansion
+              </span>
+              <h2 className="font-extralight text-3xl sm:text-4xl text-alkota-black tracking-tight leading-tight mb-4">
+                Join the Alkota UK Authorised Network
+              </h2>
+              <p className="text-sm text-[#555] leading-relaxed mb-4">
+                Are you an established industrial cleaning equipment distributor or regional service engineering centre? We are actively expanding accredited territories across England, Scotland, and Wales.
+              </p>
+              <ul className="text-xs text-[#555] space-y-2 mb-6">
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>Exclusive regional territory protection and direct factory leads.</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>Comprehensive technical training, wiring diagrams, and parts discounts.</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>Demonstration machine floorplans and marketing collateral support.</span>
+                </li>
+              </ul>
+
+              <Link
+                href="/dealers/apply"
+                className="inline-flex items-center gap-2 bg-alkota-black hover:bg-alkota-orange text-white px-7 py-3.5 font-ibm-plex-mono text-xs uppercase tracking-widest transition-colors shadow-sm font-medium"
+              >
+                Apply for Dealership Accreditation
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+
+            <div className="lg:col-span-5 bg-[#FAF9F5] border border-[#E8E8E4] p-6 text-center">
+              <Building2 className="w-10 h-10 text-alkota-orange mx-auto mb-3" />
+              <h4 className="font-medium text-sm text-alkota-black mb-1">
+                Existing Dealer Portal Login
+              </h4>
+              <p className="text-xs text-[#666] mb-6">
+                Access your dealer dashboard, pricing sheets, technical bulletins, and assigned customer leads.
+              </p>
+              <Link
+                href="/dealer"
+                className="inline-flex items-center gap-2 border border-[#CCC] hover:border-black text-alkota-black px-6 py-2.5 font-ibm-plex-mono text-xs uppercase tracking-widest transition-colors"
+              >
+                Access Dealer Portal →
+              </Link>
+            </div>
           </div>
-        }
-      >
-        <DealerDirectoryInner />
-      </Suspense>
-      <Footer />
+        </div>
+      </section>
+
     </main>
   );
 }

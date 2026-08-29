@@ -2,6 +2,8 @@ import { MetadataRoute } from 'next';
 import { supabaseAdmin } from '@/lib/supabase/server';
 import { getLobbyArticles } from '@/lib/lobby';
 import { getDealers } from '@/lib/dealers';
+import { REAL_BUILDS } from '@/lib/trailers/real-builds-data';
+import { TRAILER_APPLICATIONS } from '@/lib/trailers/applications-data';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://alkota.co.uk';
@@ -161,6 +163,66 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'weekly',
       priority: 0.9,
     },
+    {
+      url: `${baseUrl}/trailers/open`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/trailers/enclosed`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/trailers/recovery`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/trailers/multi-operator`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/trailers/applications`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/trailers/builds`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/trailers/payload-calculator`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.85,
+    },
+    {
+      url: `${baseUrl}/service/trailers`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.85,
+    },
+    ...TRAILER_APPLICATIONS.map(app => ({
+      url: `${baseUrl}/trailers/applications/${app.slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.85,
+    })),
+    ...REAL_BUILDS.map(build => ({
+      url: `${baseUrl}/trailers/builds/${build.slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.85,
+    })),
     // Wash Plant Flagship Division
     {
       url: `${baseUrl}/wash-plant`,

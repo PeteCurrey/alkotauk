@@ -280,20 +280,22 @@ export default function TrailersPage() {
         </div>
       </section>
 
-      {/* ─── 02. BUILT AROUND THE JOB ───────────────────────────────────────── */}
-      <section className="py-32 px-6 bg-alkota-black border-t border-alkota-iron">
+      {/* ─── 02. BUILT AROUND THE JOB (WARM STONE LIGHT) ────────────────────── */}
+      <section className="py-32 px-6 bg-[#F7F7F5] text-alkota-black border-t border-[#E5E5E0]">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-20 items-start">
             <FadeSection>
-              <ChapterLabel number="02" label="Built Around The Job" />
-              <h2 className="font-barlow-condensed text-5xl md:text-6xl font-black uppercase italic text-white leading-tight tracking-tight mb-8">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="font-ibm-plex-mono text-[10px] font-bold uppercase tracking-[0.35em] text-alkota-orange">02 // Built Around The Job</span>
+              </div>
+              <h2 className="font-barlow-condensed text-5xl md:text-6xl font-black uppercase italic text-alkota-black leading-tight tracking-tight mb-8">
                 THE MACHINE<br />IS ONLY<br />
                 <span className="text-alkota-orange">THE START.</span>
               </h2>
-              <p className="text-alkota-silver text-lg leading-relaxed mb-8">
+              <p className="text-[#555] text-lg leading-relaxed mb-8 font-light">
                 A mobile cleaning operation depends on far more than a pressure washer. The entire system — water supply, fuel, power, operator reach, wastewater management, payload, weather, security — must be engineered together or it will fail in service.
               </p>
-              <p className="text-alkota-silver text-base leading-relaxed">
+              <p className="text-[#666] text-base leading-relaxed font-light">
                 This is why every Alkota trailer is designed around the operation first, then built around the components. We ask what your system needs to <em>do</em> — not which trailer you want.
               </p>
             </FadeSection>
@@ -310,19 +312,19 @@ export default function TrailersPage() {
                   { icon: Shield, label: 'Security', desc: 'Enclosed bodywork, locking vaults, and equipment protection.' },
                   { icon: Settings, label: 'Fabrication', desc: 'Bespoke chassis engineering, livery, and company branding.' },
                 ].map(({ icon: Icon, label, desc }) => (
-                  <div key={label} className="bg-[#0D0D0D] border border-alkota-iron p-5 group hover:border-alkota-orange/40 transition-all duration-300">
+                  <div key={label} className="bg-white border border-[#E0E0DC] p-5 group hover:border-alkota-orange transition-all duration-300 shadow-sm">
                     <Icon className="h-5 w-5 text-alkota-orange mb-3" />
-                    <h4 className="font-barlow-condensed text-sm font-bold uppercase text-white mb-1">{label}</h4>
-                    <p className="text-alkota-grey text-xs leading-relaxed">{desc}</p>
+                    <h4 className="font-barlow-condensed text-base font-bold uppercase text-alkota-black mb-1">{label}</h4>
+                    <p className="text-[#666] text-xs leading-relaxed font-light">{desc}</p>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-8 p-6 border-l-2 border-alkota-orange bg-alkota-orange/5">
-                <p className="font-barlow-condensed text-xl font-bold uppercase italic text-white">
+              <div className="mt-8 p-6 border-l-2 border-alkota-orange bg-white shadow-sm">
+                <p className="font-barlow-condensed text-xl font-bold uppercase italic text-alkota-black">
                   "What does your operation need to do?"
                 </p>
-                <p className="text-alkota-grey text-sm mt-2">
+                <p className="text-[#666] text-sm mt-2 font-light">
                   That is the question behind every Alkota trailer build. Not which trailer — but which system.
                 </p>
               </div>
@@ -331,19 +333,21 @@ export default function TrailersPage() {
         </div>
       </section>
 
-      {/* ─── 03. CHOOSE YOUR FORMAT ─────────────────────────────────────────── */}
-      <section id="section-formats" className="py-32 px-6 bg-alkota-steel border-t border-alkota-iron">
+      {/* ─── 03. CHOOSE YOUR FORMAT (WARM NEUTRAL) ───────────────────────────── */}
+      <section id="section-formats" className="py-32 px-6 bg-[#EFEFEA] text-alkota-black border-t border-[#DDD]">
         <div className="max-w-7xl mx-auto">
           <FadeSection>
-            <ChapterLabel number="03" label="Choose Your Format" />
+            <div className="flex items-center gap-3 mb-4">
+              <span className="font-ibm-plex-mono text-[10px] font-bold uppercase tracking-[0.35em] text-alkota-orange">03 // Choose Your Format</span>
+            </div>
             <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-12">
-              <h2 className="font-barlow-condensed text-5xl md:text-6xl font-black uppercase italic text-white leading-tight tracking-tight">
+              <h2 className="font-barlow-condensed text-5xl md:text-6xl font-black uppercase italic text-alkota-black leading-tight tracking-tight">
                 OPEN DECK<br />OR ENCLOSED<br />
                 <span className="text-alkota-orange">MOBILE PLANT ROOM.</span>
               </h2>
 
               {/* Format toggle */}
-              <div className="flex bg-alkota-black border border-alkota-iron p-1 self-start">
+              <div className="flex bg-white border border-[#D0D0CB] p-1 self-start shadow-sm">
                 {(['open-deck', 'enclosed'] as const).map(fmt => (
                   <button
                     key={fmt}
@@ -351,7 +355,7 @@ export default function TrailersPage() {
                     className={`px-8 py-3 font-ibm-plex-mono text-[10px] font-bold uppercase tracking-[0.25em] transition-all duration-300 ${
                       activeFormat === fmt
                         ? 'bg-alkota-orange text-white'
-                        : 'text-[#666] hover:text-white'
+                        : 'text-[#666] hover:text-alkota-black'
                     }`}
                   >
                     {fmt === 'open-deck' ? 'Open Deck' : 'Enclosed'}
@@ -371,25 +375,24 @@ export default function TrailersPage() {
                 transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                 className="grid lg:grid-cols-2 gap-8"
               >
-                <div className="relative aspect-[4/3] bg-alkota-black border border-alkota-iron overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent to-alkota-black/60 z-10" />
+                <div className="relative aspect-[4/3] bg-[#090909] border border-[#222] overflow-hidden flex items-center justify-center p-6">
                   <img
                     src="/assets/products/trailer-single.png"
                     alt="Alkota Open Deck Trailer"
-                    className="w-full h-full object-cover"
+                    className="max-h-full max-w-full object-contain"
                   />
                   <div className="absolute bottom-6 left-6 z-20">
-                    <span className="font-ibm-plex-mono text-[9px] font-bold uppercase tracking-[0.35em] text-alkota-orange border border-alkota-orange px-3 py-1.5">
+                    <span className="font-ibm-plex-mono text-[9px] font-bold uppercase tracking-[0.35em] text-alkota-orange border border-alkota-orange bg-black/80 px-3 py-1.5">
                       Open Deck System
                     </span>
                   </div>
                 </div>
 
                 <div className="flex flex-col justify-center">
-                  <h3 className="font-barlow-condensed text-3xl font-black uppercase italic text-white mb-6">
+                  <h3 className="font-barlow-condensed text-3xl font-black uppercase italic text-alkota-black mb-6">
                     Maximum Access.<br />Rapid Deployment.
                   </h3>
-                  <p className="text-alkota-silver text-base leading-relaxed mb-8">
+                  <p className="text-[#555] text-base leading-relaxed mb-8 font-light">
                     Open deck systems offer unrestricted access to every component from all sides. Ideal for multi-operator setups, frequently reconfigured equipment, and operations where hose runs, engine access, and visual inspection are important.
                   </p>
 
@@ -404,12 +407,12 @@ export default function TrailersPage() {
                     ].map(point => (
                       <div key={point} className="flex items-start gap-3">
                         <span className="h-1.5 w-1.5 rounded-full bg-alkota-orange mt-2 shrink-0" />
-                        <span className="text-alkota-silver text-sm">{point}</span>
+                        <span className="text-[#555] text-sm font-light">{point}</span>
                       </div>
                     ))}
                   </div>
 
-                  <p className="text-alkota-grey text-xs mb-8">
+                  <p className="text-[#777] text-xs mb-8">
                     Typical applications: Contract cleaning, heavy plant depots, agricultural mobile washdown, civil engineering, hire fleets.
                   </p>
 
@@ -430,22 +433,21 @@ export default function TrailersPage() {
                 transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                 className="grid lg:grid-cols-2 gap-8"
               >
-                <div className="relative aspect-[4/3] bg-alkota-black border border-alkota-iron overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent to-alkota-black/60 z-10" />
+                <div className="relative aspect-[4/3] bg-[#090909] border border-[#222] overflow-hidden flex items-center justify-center p-6">
                   <img
                     src="/assets/products/stationary-gas-fired.png"
                     alt="Alkota Enclosed Mobile Plant Room"
-                    className="w-full h-full object-cover grayscale-[0.2]"
+                    className="max-h-full max-w-full object-contain"
                   />
                   <div className="absolute bottom-6 left-6 z-20">
-                    <span className="font-ibm-plex-mono text-[9px] font-bold uppercase tracking-[0.35em] text-alkota-orange border border-alkota-orange px-3 py-1.5">
+                    <span className="font-ibm-plex-mono text-[9px] font-bold uppercase tracking-[0.35em] text-alkota-orange border border-alkota-orange bg-black/80 px-3 py-1.5">
                       Enclosed Mobile Plant Room
                     </span>
                   </div>
                 </div>
 
                 <div className="flex flex-col justify-center">
-                  <h3 className="font-barlow-condensed text-3xl font-black uppercase italic text-white mb-6">
+                  <h3 className="font-barlow-condensed text-3xl font-black uppercase italic text-alkota-black mb-6">
                     A Mobile Plant Room.<br />On Wheels.
                   </h3>
                   <p className="text-alkota-silver text-base leading-relaxed mb-8">

@@ -15,7 +15,13 @@ import {
   Info,
   Droplets,
   Building2,
-  Gauge
+  Gauge,
+  Truck,
+  Factory,
+  Tractor,
+  Layers,
+  RotateCcw,
+  Zap
 } from 'lucide-react';
 import Link from 'next/link';
 import {
@@ -62,6 +68,12 @@ export default async function ChemicalCategoryHubPage({ params }: CategoryPagePr
 
   const chemicals = getChemicalsByCategory(categorySlug);
 
+  // Category specific narratives
+  const isFleet = categorySlug === 'fleet-vehicle' || categorySlug === 'transportation-fleet';
+  const isDegreaser = categorySlug === 'degreasers' || categorySlug === 'degreaser' || categorySlug === 'heavy-industrial';
+  const isAg = categorySlug === 'industrial' || categorySlug === 'farm-ag' || categorySlug === 'agriculture';
+  const isPartsWasher = categorySlug === 'parts-washers' || categorySlug === 'parts-washer' || categorySlug === 'parts-washer-solution';
+
   return (
     <main className="min-h-screen bg-[#0D0D0D] text-white selection:bg-alkota-orange selection:text-white pt-28 pb-0">
       <Navigation />
@@ -95,7 +107,7 @@ export default async function ChemicalCategoryHubPage({ params }: CategoryPagePr
             <h1 className="text-4xl sm:text-6xl font-extralight tracking-tight uppercase leading-[0.95] text-white mb-6">
               {categoryDef.name.split('&')[0]} <br />
               <span className="text-alkota-orange font-light">
-                {categoryDef.name.includes('&') ? `& ${categoryDef.name.split('&')[1]}` : 'CHEMISTRY.'}
+                {categoryDef.name.includes('&') ? `& ${categoryDef.name.split('&')[1]}` : 'ENGINEERING CHEMISTRY.'}
               </span>
             </h1>
 
@@ -106,9 +118,9 @@ export default async function ChemicalCategoryHubPage({ params }: CategoryPagePr
             <div className="flex flex-wrap gap-4 pt-2">
               <Link
                 href="/chemicals/match"
-                className="inline-flex items-center gap-2 bg-alkota-orange text-white px-6 py-3 text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-colors font-normal"
+                className="inline-flex items-center gap-2 bg-alkota-orange text-white px-6 py-3 text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-colors font-normal shadow-lg shadow-alkota-orange/10"
               >
-                <span>Run Chemical Match For This Category</span>
+                <span>Run Chemical Match Diagnostic</span>
                 <ArrowRight className="h-3.5 w-3.5" />
               </Link>
               <Link
@@ -116,7 +128,7 @@ export default async function ChemicalCategoryHubPage({ params }: CategoryPagePr
                 className="inline-flex items-center gap-2 border border-[#333] bg-[#141414] text-[#CCC] px-5 py-3 text-xs uppercase tracking-widest hover:text-white transition-colors font-normal"
               >
                 <FileText className="h-3.5 w-3.5 text-alkota-orange" />
-                <span>Category SDS Documents</span>
+                <span>Category SDS Technical Library</span>
               </Link>
             </div>
           </div>
@@ -167,12 +179,131 @@ export default async function ChemicalCategoryHubPage({ params }: CategoryPagePr
         </div>
       </section>
 
+      {/* ─── BESPOKE CATEGORY EDITORIAL CHAPTERS ───────────────────────────── */}
+      {isFleet && (
+        <section className="py-16 bg-[#0E0E0E] border-b border-[#222]">
+          <div className="mx-auto max-w-7xl px-6 sm:px-12 space-y-8">
+            <div className="max-w-3xl">
+              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.25em] text-alkota-orange block mb-2">
+                // FLEET ENGINEERING ARCHITECTURE
+              </span>
+              <h2 className="text-2xl sm:text-3xl uppercase tracking-tight text-white font-light mb-4">
+                The Science of Touchless Road-Film Elimination
+              </h2>
+              <p className="text-xs sm:text-sm text-[#AAA] leading-relaxed font-normal">
+                Traffic film is not simple dirt; it is an electrostatically bonded compound of unburnt diesel soot, microscopic tire rubber dust, and oxidised bitumen oils. Alkota Fleet chemistry uses high-performance polar surfactants to neutralize this surface charge, allowing high-pressure hot rinse water to sheet away road grime without abrasive brush swirls.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+              <div className="p-6 bg-[#141414] border border-[#262626] space-y-3">
+                <span className="font-ibm-plex-mono text-[10px] uppercase text-alkota-orange block">
+                  01. Alloy & Clear-Coat Preservation
+                </span>
+                <p className="text-xs text-[#CCC] leading-relaxed font-normal">
+                  High-pH caustics strip clear-coat gloss and permanently pit polished aluminium wheels. Alkota Power Blast TR-407 and Touchless TR-470 are engineered with sacrificial corrosion buffers to protect mirror finishes.
+                </p>
+              </div>
+              <div className="p-6 bg-[#141414] border border-[#262626] space-y-3">
+                <span className="font-ibm-plex-mono text-[10px] uppercase text-alkota-orange block">
+                  02. Interceptor & Wash Bay Compliance
+                </span>
+                <p className="text-xs text-[#CCC] leading-relaxed font-normal">
+                  All Alkota UK fleet formulations feature quick-break emulsion chemistry, allowing oil-water separators and interceptors to efficiently separate fuel and oil droplets before discharging.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {isDegreaser && (
+        <section className="py-16 bg-[#0E0E0E] border-b border-[#222]">
+          <div className="mx-auto max-w-7xl px-6 sm:px-12 space-y-8">
+            <div className="max-w-3xl">
+              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.25em] text-alkota-orange block mb-2">
+                // INDUSTRIAL DEGREASING MECHANISM
+              </span>
+              <h2 className="text-2xl sm:text-3xl uppercase tracking-tight text-white font-light mb-4">
+                Grease is Not One Contaminant
+              </h2>
+              <p className="text-xs sm:text-sm text-[#AAA] leading-relaxed font-normal">
+                Industrial grease ranges from polymerised fifth-wheel lithium grease to high-temperature engine block varnish and bitumen tack. Alkota degreasers pair solvent solvency with thermal liquefaction to chemically penetrate the sludge barrier on contact.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+              <div className="p-6 bg-[#141414] border border-[#262626] space-y-2">
+                <span className="font-ibm-plex-mono text-[10px] uppercase text-alkota-orange block">
+                  Thermal Synergy
+                </span>
+                <p className="text-xs text-[#CCC] font-normal leading-relaxed">
+                  Hot water at 80°C liquefies heavy waxes; alkaline builders then saponify greases into water-soluble soaps.
+                </p>
+              </div>
+              <div className="p-6 bg-[#141414] border border-[#262626] space-y-2">
+                <span className="font-ibm-plex-mono text-[10px] uppercase text-alkota-orange block">
+                  Soil Re-suspension
+                </span>
+                <p className="text-xs text-[#CCC] font-normal leading-relaxed">
+                  Hydrotropic agents form stable micelles, preventing dislodged grease from re-sticking to newly washed metal.
+                </p>
+              </div>
+              <div className="p-6 bg-[#141414] border border-[#262626] space-y-2">
+                <span className="font-ibm-plex-mono text-[10px] uppercase text-alkota-orange block">
+                  Heavy Cast Iron Protection
+                </span>
+                <p className="text-xs text-[#CCC] font-normal leading-relaxed">
+                  Alkaline environments leave clean machine blocks temporarily passivated against immediate atmospheric oxidation.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {isAg && (
+        <section className="py-16 bg-[#0E0E0E] border-b border-[#222]">
+          <div className="mx-auto max-w-7xl px-6 sm:px-12 space-y-8">
+            <div className="max-w-3xl">
+              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.25em] text-alkota-orange block mb-2">
+                // AGRICULTURAL HERO FORMULATION
+              </span>
+              <h2 className="text-2xl sm:text-3xl uppercase tracking-tight text-white font-light mb-4">
+                Farm Soap TR-440: Equipment Restoration Science
+              </h2>
+              <p className="text-xs sm:text-sm text-[#AAA] leading-relaxed font-normal">
+                Agricultural machinery operates in punishing weather, UV sunlight, manure acids, and caked clay. Farm Soap TR-440 is specifically formulated to remove micro-oxidised surface paint layers on weathered tractors and combines, permanently renewing colour depth and leaving a protective rinse barrier.
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {isPartsWasher && (
+        <section className="py-16 bg-[#0E0E0E] border-b border-[#222]">
+          <div className="mx-auto max-w-7xl px-6 sm:px-12 space-y-8">
+            <div className="max-w-3xl">
+              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.25em] text-alkota-orange block mb-2">
+                // CLOSED-LOOP AQUEOUS PROCESS
+              </span>
+              <h2 className="text-2xl sm:text-3xl uppercase tracking-tight text-white font-light mb-4">
+                Non-Foaming Aqueous Degreasing with Flash-Rust Passivation
+              </h2>
+              <p className="text-xs sm:text-sm text-[#AAA] leading-relaxed font-normal">
+                Enclosed automatic rotary parts washers subject detergents to 10+ BAR mechanical impact pressures at 70°C. Standard detergents foam aggressively, cavitating pumps. Alkota APW chemistry uses temperature-activated de-foamers and vapour phase rust inhibitors to passivate bare cast iron for up to 60 days.
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Products Listing Grid */}
       <section className="py-20 bg-[#0D0D0D] border-b border-[#222]">
         <div className="mx-auto max-w-7xl px-6 sm:px-12">
           <div className="flex items-center justify-between mb-10 pb-4 border-b border-[#222]">
             <span className="font-ibm-plex-mono text-xs uppercase tracking-widest text-[#888]">
-              // Verified Products in this Discipline ({chemicals.length})
+              // Verified Formulations in this Family ({chemicals.length})
             </span>
             <span className="text-[10px] font-ibm-plex-mono text-emerald-400 uppercase">
               100% GB CLP Validated

@@ -1,183 +1,337 @@
+import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import Navigation from '@/components/Navigation';
-import Breadcrumbs from '@/components/Breadcrumbs';
-import MachineCard from '@/components/MachineCard';
-import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
-import { getProducts, CANONICAL_CATEGORIES } from '@/lib/products';
 import Footer from '@/components/Footer';
+import { getProducts, CANONICAL_CATEGORIES, Product } from '@/lib/products';
+import { getLobbyArticles } from '@/lib/lobby';
 
-interface MachineCategoryPageProps {
+// Category Hub Components
+import CategoryHero from '@/components/category/CategoryHero';
+import WhyTechnology from '@/components/category/WhyTechnology';
+import ArchitectureNavigator from '@/components/category/ArchitectureNavigator';
+import FeaturedMachines from '@/components/category/FeaturedMachines';
+import FullCatalogueSection from '@/components/category/FullCatalogueSection';
+import CategoryEngineering from '@/components/category/CategoryEngineering';
+import CategoryApplications from '@/components/category/CategoryApplications';
+import CategoryLobbyKnowledge from '@/components/category/CategoryLobbyKnowledge';
+import CategoryDemoCTA from '@/components/category/CategoryDemoCTA';
+
+interface CategoryPageProps {
   params: Promise<{
     category: string;
   }>;
 }
 
-export async function generateMetadata({ params }: MachineCategoryPageProps): Promise<Metadata> {
+// ─────────────────────────────────────────────────────────────────────────────
+// METADATA DEFINITIONS PER CATEGORY
+// ─────────────────────────────────────────────────────────────────────────────
+const CATEGORY_METADATA_CONFIG: Record<string, {
+  title: string;
+  tagline: string;
+  statement: string;
+  heroImage: string;
+  accentColor: string;
+  metrics: Array<{ label: string; value: string; detail: string }>;
+  architectures: Array<{
+    id: string;
+    name: string;
+    tagline: string;
+    description: string;
+    drive: string;
+    powerFuel: string;
+    pressureRange: string;
+    flowRange: string;
+    idealApplication: string;
+    representativeModelSlug?: string;
+    representativeImage: string;
+  }>;
+}> = {
+  'hot-water': {
+    title: 'Hot Water Pressure Washers',
+    tagline: 'High-Temperature Industrial Degreasing & Heavy Washdown',
+    statement: 'Alkota hot water pressure washers combine high-pressure kinetic force with up to 95°C thermal energy to melt bonded grease, engine oils, road bitumen, and biological contamination across the UK’s most demanding industrial sectors.',
+    heroImage: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=2000&q=80',
+    accentColor: '#FF6900',
+    metrics: [
+      { label: 'Thermal Output', value: 'Up to 95°C', detail: 'Sensible heat for petrochemical dissolution' },
+      { label: 'Pressure Range', value: '110 – 350 BAR', detail: 'Hydrostatic blast force' },
+      { label: 'Coil Metallurgy', value: 'Schedule 80', detail: 'ASTM A53 seamless cold-rolled steel' },
+      { label: 'Coil Warranty', value: '7 Years', detail: 'Industry-exclusive protection standard' },
+    ],
+    architectures: [
+      {
+        id: 'belt-drive',
+        name: 'Belt-Driven Electric / Oil-Fired',
+        tagline: 'Continuous-Duty Haulage & Plant Bay Platform',
+        description: 'Low-RPM industrial motor coupled to a triplex ceramic plunger pump via heavy-duty cast iron pulleys and cogged V-belts. Runs cooler, dissipates vibration, and is engineered for continuous multi-shift operation.',
+        drive: 'Cogged V-Belt (1450 RPM Low-Speed)',
+        powerFuel: '230V 1PH / 400V 3PH Electric Motor + Diesel/Kerosene Burner',
+        pressureRange: '138 – 241 BAR (2,000 – 3,500 PSI)',
+        flowRange: '15 – 30 L/MIN (4.0 – 8.0 GPM)',
+        idealApplication: 'Permanent wash pads, commercial fleet haulage depots, and plant hire service bays.',
+        representativeImage: '/assets/products/hot-water-skid.png'
+      },
+      {
+        id: 'diesel-engine',
+        name: 'Diesel & Petrol Engine Skids',
+        tagline: 'Self-Powered Road & Remote Site Rigs',
+        description: 'Independent industrial diesel or petrol engine-driven units with 12V / 230V onboard burner generators. Designed for trailer mounting, service van integration, and remote civil engineering washdown with zero mains power.',
+        drive: 'Belt Drive / Gearbox Reduction',
+        powerFuel: 'Kohler / Vanguard Diesel / Petrol + 12V Burner',
+        pressureRange: '200 – 350 BAR (3,000 – 5,000 PSI)',
+        flowRange: '15 – 38 L/MIN (4.0 – 10.0 GPM)',
+        idealApplication: 'Civil infrastructure, quarry washing, forestry machinery, and mobile contract cleaning rigs.',
+        representativeImage: '/assets/products/ged-12v-skid.png'
+      },
+      {
+        id: 'stationary-gas',
+        name: 'Stationary Gas-Fired Cabinets',
+        tagline: 'Plant Room & Multi-Bay Remote Systems',
+        description: 'Enclosed stationary wash cabinets powered by clean Natural Gas or LPG burners. Installed in dedicated boiler rooms and piped out to multi-bay overhead boom drops with remote operator control stations.',
+        drive: 'Industrial Direct / Belt Drive',
+        powerFuel: 'Electric Motor + Natural Gas / LPG Burner',
+        pressureRange: '110 – 207 BAR (1,600 – 3,000 PSI)',
+        flowRange: '11 – 38 L/MIN (3.0 – 10.0 GPM)',
+        idealApplication: 'Indoor food factories, automotive workshops, and multi-bay commercial wash centers.',
+        representativeImage: '/assets/products/hot-water-skid.png'
+      },
+      {
+        id: 'direct-drive',
+        name: 'Compact Direct-Drive Portables',
+        tagline: 'Manoeuvrable Workshop & Agricultural Washers',
+        description: 'Compact 4-wheel mobile chassis with direct-coupled hollow-shaft triplex pumps. Lightweight and easy to navigate through narrow farm buildings and vehicle service workshops.',
+        drive: 'Direct Drive Flange Mount (2800 RPM)',
+        powerFuel: '230V 1PH / 400V 3PH + Diesel Burner',
+        pressureRange: '110 – 180 BAR (1,600 – 2,600 PSI)',
+        flowRange: '9 – 15 L/MIN (2.4 – 4.0 GPM)',
+        idealApplication: 'Agricultural workshops, car dealerships, and light plant maintenance.',
+        representativeImage: '/assets/products/hot-water-skid.png'
+      }
+    ]
+  },
+  'cold-water': {
+    title: 'Cold Water Pressure Washers',
+    tagline: 'High-Flow Hydraulic Impingement & Continuous Industrial Washdown',
+    statement: 'Engineered for continuous volumetric rinsing, heavy soil displacement, and aggregate decontamination. Alkota cold water machines focus 100% of input horsepower into flow rate and hydrostatic impact with zero burner overheads.',
+    heroImage: 'https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=2000&q=80',
+    accentColor: '#38BDF8',
+    metrics: [
+      { label: 'Flow Capability', value: 'Up to 38 L/MIN', detail: 'High-volume clay & mud displacement' },
+      { label: 'Pressure Range', value: '100 – 350 BAR', detail: 'Deep hydrostatic impingement' },
+      { label: 'Pump Duty Cycle', value: '100% Continuous', detail: 'Oversized crankcase triplex pumps' },
+      { label: 'Chassis Type', value: 'Tubular Steel', detail: 'Heavy-gauge all-welded construction' },
+    ],
+    architectures: [
+      {
+        id: 'electric-stationary',
+        name: 'Electric Stationary Wash Units',
+        tagline: 'Factory Floor & Wash Bay Systems',
+        description: 'Heavy-duty wall-mount or floor-mount electric cold water skids. Piped into low-pressure water mains to deliver dependable, continuous washdown pressure across factory production floors and processing bays.',
+        drive: 'Direct Drive / Low-Speed Belt Drive',
+        powerFuel: '230V 1PH / 400V 3PH Industrial Electric Motor',
+        pressureRange: '100 – 250 BAR (1,500 – 3,600 PSI)',
+        flowRange: '12 – 30 L/MIN (3.2 – 8.0 GPM)',
+        idealApplication: 'Food processing lines, abattoirs, vehicle valet bays, and manufacturing plants.',
+        representativeImage: '/assets/products/ged-12v-skid.png'
+      },
+      {
+        id: 'engine-portable',
+        name: 'Petrol & Diesel Engine Portables',
+        tagline: 'Off-Grid Heavy Plant & Agricultural Washdown',
+        description: 'Roll-cage tubular steel frames equipped with Honda, Vanguard, or Kohler engines. Built to be loaded into pickups or wheeled across muddy farm tracks and construction sites.',
+        drive: 'Belt Drive / Direct Drive Reduction',
+        powerFuel: 'Unleaded Petrol / Commercial Diesel',
+        pressureRange: '180 – 350 BAR (2,600 – 5,000 PSI)',
+        flowRange: '15 – 38 L/MIN (4.0 – 10.0 GPM)',
+        idealApplication: 'Quarries, plant hire yards, agricultural combine washdown, and concrete contractor sites.',
+        representativeImage: '/assets/products/ged-12v-skid.png'
+      },
+      {
+        id: 'electric-mobile',
+        name: 'Mobile Electric Hand-Truck Washers',
+        tagline: 'Agile Workshop & Facility Maintenance',
+        description: 'Compact two-wheel hand-truck format with non-marking tyres and durable powder-coated steel roll frames. Plug-and-play operation for facilities maintenance and machinery rinsing.',
+        drive: 'Direct Drive Flange Mount',
+        powerFuel: '230V 13A/16A Single Phase Electric',
+        pressureRange: '100 – 160 BAR (1,500 – 2,300 PSI)',
+        flowRange: '8 – 14 L/MIN (2.1 – 3.7 GPM)',
+        idealApplication: 'Property maintenance, facility washrooms, vehicle forecourts, and engineering workshops.',
+        representativeImage: '/assets/products/ged-12v-skid.png'
+      }
+    ]
+  },
+  'steam': {
+    title: 'Industrial Steam Cleaners',
+    tagline: '140°C Low-Moisture Vapour Sanitisation & Precision Degreasing',
+    statement: 'Alkota industrial steam cleaners generate 140°C–165°C dry saturated vapour steam with minimal water volume (2–6 L/min). Delivering intense thermal sanitisation that kills bacteria and melts heavy grease without puddles or overspray.',
+    heroImage: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=2000&q=80',
+    accentColor: '#A78BFA',
+    metrics: [
+      { label: 'Vapour Temp', value: '140°C – 165°C', detail: 'Dry saturated thermal sanitisation' },
+      { label: 'Water Delivery', value: '2.0 – 6.0 L/M', detail: 'Ultra-low liquid moisture output' },
+      { label: 'Operating Pressure', value: '10 – 35 BAR', detail: 'Precision low-recoil delivery' },
+      { label: 'Sanitisation', value: 'Chemical Free', detail: 'Kills Listeria & biofilms on contact' },
+    ],
+    architectures: [
+      {
+        id: 'steam-electric-oil',
+        name: 'Electric Driven / Oil-Fired Steam Cleaners',
+        tagline: 'Heavy Industrial Grease & Workshop Platform',
+        description: 'Low-flow positive displacement pump feeding a high-temperature Schedule 80 heating coil. Delivers true dry vapour steam for heavy engine rebuilds, machine tooling degreasing, and hydraulic maintenance.',
+        drive: 'Direct Drive / Low-RPM Belt Drive',
+        powerFuel: '230V 1PH / 400V 3PH + Diesel / Kerosene Burner',
+        pressureRange: '15 – 35 BAR (220 – 500 PSI)',
+        flowRange: '2.5 – 6.0 L/MIN (0.6 – 1.6 GPM)',
+        idealApplication: 'Machine rebuild workshops, engine remanufacturing, aerospace maintenance, and precision tooling.',
+        representativeImage: '/assets/products/hot-water-skid.png'
+      },
+      {
+        id: 'steam-gas-fired',
+        name: 'Stationary Gas-Fired Steam Cleaners',
+        tagline: 'Indoor Food & Pharmaceutical Processing Plant',
+        description: 'Clean-burning Natural Gas or LPG stationary steam generators. Piped into food production lines for conveyor decontamination, microbial biofilm eradication, and CIP sanitisation without chemical residues.',
+        drive: 'Continuous-Duty Electric Pump Unit',
+        powerFuel: 'Electric Motor + Natural Gas / LPG Burner',
+        pressureRange: '10 – 30 BAR (150 – 435 PSI)',
+        flowRange: '2.0 – 5.0 L/MIN (0.5 – 1.3 GPM)',
+        idealApplication: 'Food & beverage packaging lines, dairy processing, commercial bakeries, and cleanroom facilities.',
+        representativeImage: '/assets/products/hot-water-skid.png'
+      }
+    ]
+  }
+};
+
+export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
   const { category } = await params;
   const dbCat = category === 'parts-washers' ? 'parts-washer' : category;
+  const config = CATEGORY_METADATA_CONFIG[category];
   const catInfo = CANONICAL_CATEGORIES[dbCat];
-  const categoryName = catInfo?.name || category.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
   
+  const title = config?.title || catInfo?.name || category.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  const description = config?.statement || catInfo?.description || `Alkota UK industrial ${title.toLowerCase()} systems engineered in South Dakota for continuous-duty performance.`;
+
   return {
-    title: `Alkota ${categoryName} | Industrial Specification | Alkota UK`,
-    description: catInfo?.description || `Browse Alkota's range of premium industrial ${categoryName.toLowerCase()} systems. Engineered in South Dakota, built for the UK market.`,
+    title: `${title} | Industrial Specification | Alkota UK`,
+    description,
     alternates: {
       canonical: `https://alkota.co.uk/machines/${category}`,
+    },
+    openGraph: {
+      title: `${title} | Alkota UK`,
+      description,
+      type: 'website',
+      images: config?.heroImage ? [config.heroImage] : [],
     }
   };
 }
 
-export default async function MachineCategoryPage({ params }: MachineCategoryPageProps) {
+export default async function MachineCategoryPage({ params }: CategoryPageProps) {
   const { category: categorySlug } = await params;
   const dbCategory = categorySlug === 'parts-washers' ? 'parts-washer' : categorySlug;
   
-  const machines = await getProducts({ category: dbCategory });
+  const [allProducts, lobbyArticles] = await Promise.all([
+    getProducts({ category: dbCategory }),
+    getLobbyArticles().catch(() => [])
+  ]);
+
   const catInfo = CANONICAL_CATEGORIES[dbCategory];
-  const categoryName = catInfo?.name || categorySlug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  const config = CATEGORY_METADATA_CONFIG[categorySlug] || {
+    title: catInfo?.name || categorySlug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+    tagline: catInfo?.tagline || 'Industrial Specification Cleaning Systems',
+    statement: catInfo?.description || 'Built for continuous industrial duty, Alkota cleaning systems deliver uncompromising durability and engineering excellence.',
+    heroImage: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=2000&q=80',
+    accentColor: '#FF6900',
+    metrics: [
+      { label: 'Duty Cycle', value: '100% Industrial', detail: 'Continuous multi-shift operations' },
+      { label: 'Build Origin', value: 'South Dakota', detail: '60+ years American engineering' },
+      { label: 'UK Support', value: 'Direct Spares', detail: 'Full technical engineering backup' },
+      { label: 'Warranty', value: 'Full Standard', detail: 'Industrial manufacturer warranty' }
+    ],
+    architectures: [
+      {
+        id: 'industrial-chassis',
+        name: 'Standard Industrial Chassis',
+        tagline: 'Heavy-Duty Continuous Duty Platform',
+        description: 'Engineered for tough industrial applications with heavy-gauge steel frame and premium components.',
+        drive: 'Industrial Pump Assembly',
+        powerFuel: 'Electric / Engine Driven',
+        pressureRange: 'Heavy Duty',
+        flowRange: 'Standard Flow',
+        idealApplication: 'Industrial workshops and manufacturing facilities.',
+        representativeImage: '/assets/products/hot-water-skid.png'
+      }
+    ]
+  };
 
-  // Group machines by series
-  const groupedMachines: Record<string, { name: string; description?: string; machines: typeof machines }> = {};
-  for (const m of machines) {
-    const series = m.series || 'Industrial Series';
-    if (!groupedMachines[series]) {
-      groupedMachines[series] = {
-        name: series,
-        description: m.engineering_story || m.description || '',
-        machines: []
-      };
-    }
-    groupedMachines[series].machines.push(m);
-  }
+  // Filter curated featured products
+  const featuredProducts = allProducts.filter(p => p.featured || p.is_elite_series).slice(0, 3);
+  const displayFeatured = featuredProducts.length > 0 ? featuredProducts : allProducts.slice(0, 3);
 
-  // Wash Bay Cabinet Series Data for Table (UK Specifications)
-  const washBayModels = [
-    { model: '216B', flow: '7.6 L/min (2.0 GPM)', pressure: '110 bar (1,600 PSI)', power: '230V / 1PH / 16A' },
-    { model: '311B', flow: '11.4 L/min (3.0 GPM)', pressure: '76 bar (1,100 PSI)', power: '230V / 1PH / 16A' },
-    { model: '420B', flow: '14.4 L/min (3.8 GPM)', pressure: '138 bar (2,000 PSI)', power: '230V / 1PH / 32A' },
-    { model: '430B', flow: '14.4 L/min (3.8 GPM)', pressure: '207 bar (3,000 PSI)', power: '400V / 3PH / 16A' },
-    { model: '520B', flow: '18.9 L/min (5.0 GPM)', pressure: '138 bar (2,000 PSI)', power: '400V / 3PH / 16A' },
-    { model: '530B', flow: '18.9 L/min (5.0 GPM)', pressure: '207 bar (3,000 PSI)', power: '400V / 3PH / 32A' },
-    { model: '835B', flow: '30.3 L/min (8.0 GPM)', pressure: '241 bar (3,500 PSI)', power: '400V / 3PH / 32A' },
-    { model: '1030B', flow: '37.9 L/min (10.0 GPM)', pressure: '207 bar (3,000 PSI)', power: '400V / 3PH / 32A' },
-  ];
+  // Match relevant Lobby articles
+  const relevantArticles = lobbyArticles.filter(a => {
+    const slugMatch = a.category_slug?.includes(categorySlug) || a.slug?.includes(categorySlug);
+    const tagMatch = a.tags?.some(t => t.toLowerCase().includes(categorySlug.replace('-', ' ')));
+    return slugMatch || tagMatch;
+  });
+  const displayLobbyArticles = relevantArticles.length > 0 ? relevantArticles : lobbyArticles.slice(0, 3);
 
   return (
-    <main className="min-h-screen bg-alkota-bg pt-32 pb-0">
+    <main className="min-h-screen bg-white text-[#1A1A18] font-normal pb-0">
       <Navigation />
-      
-      <div className="relative mx-auto max-w-7xl px-6">
-        {/* Background Watermark */}
-        <div className="absolute top-20 right-0 pointer-events-none select-none opacity-[0.05] z-0">
-          <span className="font-barlow-condensed text-[40vw] font-black uppercase italic leading-none text-alkota-black whitespace-nowrap">
-            {categorySlug.split('-')[0]}
-          </span>
-        </div>
 
-        <div className="relative z-10">
-          <Breadcrumbs items={[
-            { label: 'Machines', href: '/machines' },
-            { label: categoryName }
-          ]} />
-          
-          <header className="mb-24 mt-12 max-w-4xl">
-            <div className="mb-8 flex items-center gap-4">
-              <div className="h-[2px] w-12 bg-alkota-orange" />
-              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-alkota-orange">
-                Industrial Specification
-              </span>
-            </div>
-            <h1 className="font-barlow-condensed mb-10 text-7xl font-black text-alkota-black md:text-9xl uppercase italic leading-[0.8] tracking-tighter">
-              {categoryName.split(' ')[0]} <br />
-              <span className="text-alkota-orange [text-stroke:1px_rgba(0,0,0,0.1)]">
-                {categoryName.split(' ').slice(1).join(' ') || 'SYSTEMS.'}
-              </span>
-            </h1>
-            <p className="font-inter max-w-2xl text-lg text-alkota-silver leading-relaxed uppercase tracking-wider">
-              {catInfo?.description || `Premium ${categoryName} engineered for maximum durability, continuous duty, and superior long-term serviceability.`}
-            </p>
-          </header>
+      {/* ─── 01. FULL-WIDTH CATEGORY HERO ─────────────────────────────────── */}
+      <CategoryHero
+        categorySlug={categorySlug}
+        categoryName={config.title}
+        tagline={config.tagline}
+        statement={config.statement}
+        heroImage={config.heroImage}
+        accentColor={config.accentColor}
+        metrics={config.metrics}
+        totalModels={allProducts.length}
+      />
 
-          <div className="space-y-40 pb-40">
-            {Object.entries(groupedMachines).map(([series, data]) => (
-              <section key={series} id={series.toLowerCase().replace(/\s+/g, '-').split('—')[0].trim()}>
-                <div className="mb-12 max-w-4xl">
-                  <h2 className="font-barlow-condensed text-5xl font-black text-alkota-black uppercase italic tracking-tighter mb-6">
-                    {data.name}
-                  </h2>
-                  <p className="font-inter text-sm text-alkota-silver leading-relaxed uppercase tracking-widest max-w-3xl">
-                    {data.description}
-                  </p>
-                </div>
-                <div className="grid grid-cols-1 gap-px bg-alkota-iron border border-alkota-iron md:grid-cols-2 lg:grid-cols-3">
-                  {data.machines.map((machine, i) => (
-                    <MachineCard key={machine.id || machine.slug} machine={machine} index={i} />
-                  ))}
-                </div>
-              </section>
-            ))}
+      {/* ─── 02. WHY THIS TECHNOLOGY ──────────────────────────────────────── */}
+      <WhyTechnology categorySlug={categorySlug} />
 
-            {/* Special Section: Cold Water Wash Bay B Series Spec Table */}
-            {categorySlug === 'cold-water' && (
-              <section id="wash-bay-series">
-                <div className="mb-12 max-w-4xl">
-                  <h2 className="font-barlow-condensed text-5xl font-black text-alkota-black uppercase italic tracking-tighter mb-6">
-                    Wash Bay Series — Fixed Installation
-                  </h2>
-                  <p className="font-inter text-sm text-alkota-silver leading-relaxed uppercase tracking-widest max-w-4xl">
-                    The Wash Bay Cabinet Series is Alkota&apos;s fixed-installation cold water range — built for permanent wash bay environments. Self-contained enclosed cabinet. Stable welded frame. Belt-driven triplex pump. Manufactured to the same exacting standards as the full Alkota range.
-                    <br /><br />
-                    Sixteen models covering 7.6 to 37.9 L/min (2–10 GPM). Auto start/stop available. The professional&apos;s choice for fleet depots, food processing, and agricultural buildings. UK voltage configurations available.
-                  </p>
-                </div>
-                
-                <div className="overflow-x-auto border border-alkota-iron font-barlow-condensed">
-                  <table className="w-full text-left border-collapse bg-white">
-                    <thead className="bg-alkota-black text-white text-[10px] uppercase tracking-widest font-bold">
-                      <tr>
-                        <th className="p-6 border-r border-white/10">Model</th>
-                        <th className="p-6 border-r border-white/10">Flow Rate</th>
-                        <th className="p-6 border-r border-white/10">Pressure</th>
-                        <th className="p-6">UK Power Spec</th>
-                      </tr>
-                    </thead>
-                    <tbody className="text-xl font-bold text-alkota-black italic">
-                      {washBayModels.map((row, i) => (
-                        <tr key={i} className="border-t border-alkota-iron hover:bg-alkota-bg transition-colors">
-                          <td className="p-6 border-r border-alkota-iron">{row.model}</td>
-                          <td className="p-6 border-r border-alkota-iron">{row.flow}</td>
-                          <td className="p-6 border-r border-alkota-iron">{row.pressure}</td>
-                          <td className="p-6">{row.power}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+      {/* ─── 03. MACHINE ARCHITECTURE NAVIGATOR ───────────────────────────── */}
+      <ArchitectureNavigator
+        categorySlug={categorySlug}
+        architectures={config.architectures}
+        allCategoryProducts={allProducts}
+      />
 
-                <div className="mt-12 flex flex-col md:flex-row items-center justify-between gap-8 bg-alkota-black p-12">
-                   <div>
-                      <h4 className="font-barlow-condensed text-2xl font-black text-white uppercase italic mb-2">Need a bespoke wash bay specification?</h4>
-                      <p className="font-inter text-[10px] text-alkota-smoke uppercase tracking-widest">Additional models, custom plumbing configurations, and remote controls available on request.</p>
-                   </div>
-                   <Link 
-                     href="/contact?enquiry=wash-bay"
-                     className="bg-alkota-orange px-10 py-5 text-[11px] font-black uppercase tracking-[0.3em] text-white hover:bg-white hover:text-alkota-black transition-all flex items-center gap-4"
-                   >
-                      Specify your wash bay requirements <ArrowRight className="h-4 w-4" />
-                   </Link>
-                </div>
-              </section>
-            )}
+      {/* ─── 04. FEATURED CURATED SYSTEMS ─────────────────────────────────── */}
+      <FeaturedMachines
+        categorySlug={categorySlug}
+        featuredProducts={displayFeatured}
+      />
 
-            {machines.length === 0 && (
-              <div className="py-40 text-center border border-alkota-iron bg-white">
-                <p className="font-ibm-plex-mono text-[10px] text-alkota-silver uppercase tracking-[0.2em]">Products coming soon. Contact us for availability.</p>
-                <Link href="/contact" className="mt-8 inline-block text-[11px] font-black uppercase tracking-widest text-alkota-orange hover:text-white transition-colors">Contact us →</Link>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
+      {/* ─── 05. VISUAL ENGINEERING DEEP DIVE ─────────────────────────────── */}
+      <CategoryEngineering categorySlug={categorySlug} />
+
+      {/* ─── 06. FULL FILTERABLE CATALOGUE ────────────────────────────────── */}
+      <FullCatalogueSection
+        categorySlug={categorySlug}
+        categoryName={config.title}
+        allProducts={allProducts}
+      />
+
+      {/* ─── 07. REAL-WORLD SECTOR APPLICATIONS ───────────────────────────── */}
+      <CategoryApplications categorySlug={categorySlug} />
+
+      {/* ─── 08. THE LOBBY TECHNICAL KNOWLEDGE ────────────────────────────── */}
+      <CategoryLobbyKnowledge
+        categorySlug={categorySlug}
+        articles={displayLobbyArticles}
+      />
+
+      {/* ─── 09. ON-SITE DEMONSTRATION & SPECIFICATION CTA ────────────────── */}
+      <CategoryDemoCTA
+        categorySlug={categorySlug}
+        categoryName={config.title}
+      />
+
       <Footer />
     </main>
   );

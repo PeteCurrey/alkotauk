@@ -4,6 +4,7 @@ import ProductUniverse from "@/components/homepage/ProductUniverse";
 import IndustryGrid from "@/components/IndustryGrid";
 import MessQuestFeature from "@/components/homepage/MessQuestFeature";
 import EngineeringHeritage from "@/components/homepage/EngineeringHeritage";
+import SouthDakotaHeritage from "@/components/homepage/SouthDakotaHeritage";
 import BespokeAndLobby from "@/components/homepage/BespokeAndLobby";
 import MachineMatchAndOwnership from "@/components/homepage/MachineMatchAndOwnership";
 import Footer from "@/components/Footer";
@@ -58,13 +59,16 @@ export default function Home() {
       {/* ── 04: MESS QUEST (CINEMATIC DOCUMENTARY CHAPTER) ───────────── */}
       <MessQuestFeature />
 
-      {/* ── 05: ENGINEERING + HERITAGE (UNIFIED FLOWING STORY) ──────── */}
+      {/* ── 05: MECHANICAL ARCHITECTURE (WHY DOES AN ALKOTA LAST?) ─── */}
       <EngineeringHeritage />
 
-      {/* ── 06: BESPOKE + KNOWLEDGE (THE LOBBY EDITORIAL) ───────────── */}
+      {/* ── 06: SIX DECADES OF SOUTH DAKOTA BUILD (FULL-WIDTH SECTION) ─ */}
+      <SouthDakotaHeritage />
+
+      {/* ── 07: BESPOKE + KNOWLEDGE (THE LOBBY EDITORIAL) ───────────── */}
       <BespokeAndLobby />
 
-      {/* ── 07: CONFIGURATOR / SUPPORT / FINAL BRAND SIGNATURE ──────── */}
+      {/* ── 08: CONFIGURATOR / SUPPORT / FINAL BRAND SIGNATURE ──────── */}
       <MachineMatchAndOwnership />
 
       {/* ── GLOBAL CORPORATE FOOTER ─────────────────────────────────── */}

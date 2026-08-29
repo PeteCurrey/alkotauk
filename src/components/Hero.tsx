@@ -25,7 +25,7 @@ export default function Hero() {
   return (
     <section
       ref={containerRef}
-      className="relative h-screen min-h-[720px] w-full flex flex-col justify-center overflow-hidden bg-[#0F0F0D] text-white px-6 sm:px-12 font-normal"
+      className="relative min-h-screen w-full flex flex-col justify-center overflow-hidden bg-[#0F0F0D] text-white px-6 sm:px-12 font-normal"
       aria-label="Alkota UK Industrial Cleaning Equipment"
     >
       {/* Full-bleed authentic photography background */}
@@ -41,12 +41,12 @@ export default function Hero() {
         <div className="absolute inset-0 bg-gradient-to-t from-[#0F0F0D] via-transparent to-black/60" />
       </div>
 
-      {/* Main hero typography & CTAs */}
-      <div className="relative z-10 mx-auto max-w-7xl w-full">
-        <div className="max-w-3xl">
+      {/* Main hero typography & CTAs — Vertically centered */}
+      <div className="relative z-10 mx-auto max-w-7xl w-full my-auto py-20">
+        <div className="max-w-2xl">
           {/* Subtle provenance monoline */}
-          <div className="hero-fade-in mb-6 inline-flex items-center gap-3 font-normal">
-            <span className="h-[1.5px] w-6 bg-alkota-orange" />
+          <div className="hero-fade-in mb-5 inline-flex items-center gap-3 font-normal">
+            <span className="h-[1.5px] w-5 bg-alkota-orange" />
             <span className="text-xs uppercase tracking-[0.25em] text-white/80 font-light">
               Est. 1964 · Alcester, South Dakota · UK Direct
             </span>
@@ -54,32 +54,32 @@ export default function Hero() {
 
           {/* Primary Statement — Extra Light Work Sans */}
           <h1
-            className="hero-fade-in font-extralight uppercase tracking-tight text-white leading-[0.92] mb-8"
-            style={{ fontSize: 'clamp(3.5rem, 8vw, 7.5rem)' }}
+            className="hero-fade-in font-extralight uppercase tracking-tight text-white leading-[0.92] mb-6"
+            style={{ fontSize: 'clamp(3.2rem, 7.5vw, 6.8rem)' }}
           >
             Industrial Power.<br />
             <span className="text-alkota-orange">Built to</span> Outlast.
           </h1>
 
-          {/* Factual supporting paragraph — clean Normal Work Sans */}
-          <p className="hero-fade-in text-[#E0E0DC] text-base sm:text-lg leading-relaxed mb-12 max-w-xl font-normal">
-            Six decades of heavy American industrial engineering. Cold-rolled structural steel, slow-turning ceramic triplex pumps, and continuous-wound Schedule 80 seamless heating coils. Built for continuous duty where equipment failure halts production.
+          {/* Concise supporting paragraph — clean Normal Work Sans */}
+          <p className="hero-fade-in text-[#E0E0DC] text-base sm:text-lg leading-relaxed mb-10 max-w-lg font-normal">
+            Six decades of heavy American industrial engineering. Cold-rolled structural steel, ceramic triplex pumps, and Schedule 80 seamless heating coils built for continuous duty.
           </p>
 
           {/* Dual CTAs — Clean and confident */}
           <div className="hero-fade-in flex flex-col sm:flex-row items-stretch sm:items-center gap-4 font-normal">
             <Link
               href="/machines"
-              className="inline-flex items-center justify-center gap-3 bg-alkota-orange text-white px-9 py-4 text-xs uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all no-underline group shadow-xl font-normal"
+              className="inline-flex items-center justify-center gap-3 bg-alkota-orange text-white px-8 py-3.5 text-xs uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all no-underline group shadow-xl font-normal"
             >
               <span>Explore Fleet</span>
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
             <Link
               href="/dealers/demo-request"
-              className="inline-flex items-center justify-center gap-3 border border-white/40 bg-black/40 backdrop-blur-sm text-white px-8 py-4 text-xs uppercase tracking-[0.2em] hover:border-white hover:bg-white hover:text-black transition-all no-underline font-normal"
+              className="inline-flex items-center justify-center gap-3 border border-white/40 bg-black/40 backdrop-blur-sm text-white px-7 py-3.5 text-xs uppercase tracking-[0.2em] hover:border-white hover:bg-white hover:text-black transition-all no-underline font-normal"
             >
-              <span>Book On-Site Demonstration</span>
+              <span>Book On-Site Demo</span>
             </Link>
           </div>
         </div>

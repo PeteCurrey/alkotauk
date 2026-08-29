@@ -342,7 +342,7 @@ export default function WashPlantPage() {
       <Navigation />
 
       {/* ── CHAPTER 01: CINEMATIC FULL-SCREEN HERO ────────────────────────── */}
-      <section className="relative min-h-[90vh] flex flex-col justify-between bg-[#111] text-white pt-32 pb-16 px-6 sm:px-12 overflow-hidden">
+      <section className="relative min-h-screen flex flex-col justify-between bg-[#111] text-white pt-32 pb-16 px-6 sm:px-12 overflow-hidden">
         {/* Background Image / Texture slot */}
         <div 
           className="absolute inset-0 bg-cover bg-center filter brightness-[0.35] opacity-60 pointer-events-none"

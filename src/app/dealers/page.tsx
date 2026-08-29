@@ -33,7 +33,7 @@ export default function DealersLandingPage() {
     <main className="bg-[#FAF9F5] text-alkota-black">
 
       {/* ── CHAPTER 01: FULL-SCREEN HERO ── */}
-      <section className="relative min-h-[90vh] flex flex-col justify-between bg-[#0A0A0A] text-white px-6 sm:px-12 lg:px-24 pt-32 pb-16 overflow-hidden border-b border-[#222]">
+      <section className="relative min-h-screen flex flex-col justify-between bg-[#0A0A0A] text-white px-6 sm:px-12 lg:px-24 pt-32 pb-16 overflow-hidden border-b border-[#222]">
         {/* Background Radial Glow */}
         <div
           className="absolute inset-0 select-none pointer-events-none"

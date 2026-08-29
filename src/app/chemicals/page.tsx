@@ -134,7 +134,7 @@ export default function ChemicalsMainLandingPage() {
       <Navigation />
 
       {/* ─── 01: FULL-VIEWPORT HERO MASTHEAD (LIGHT-FIRST) ─────────────────── */}
-      <section className="relative min-h-[85vh] flex flex-col justify-between bg-[#0A0A0A] text-white border-b border-[#222] px-6 sm:px-12 pt-28 sm:pt-32 pb-16 overflow-hidden">
+      <section className="relative min-h-screen flex flex-col justify-between bg-[#0A0A0A] text-white border-b border-[#222] px-6 sm:px-12 pt-28 sm:pt-32 pb-16 overflow-hidden">
         {/* Background Image with Controlled Gradient */}
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0A] via-[#0A0A0A]/85 to-transparent z-10" />

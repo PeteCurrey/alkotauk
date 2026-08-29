@@ -16,20 +16,20 @@ export default function AboutPage() {
       <Navigation />
 
       {/* ── HERO ─────────────────────────────────────────────────── */}
-      <section className="relative pt-40 pb-40 px-6 overflow-hidden border-b border-alkota-iron">
+      <section className="relative min-h-screen flex flex-col justify-between pt-36 pb-16 px-6 overflow-hidden border-b border-alkota-iron">
         <div className="absolute top-0 right-0 pointer-events-none select-none opacity-[0.025]">
           <span className="font-barlow-condensed text-[50vw] font-black uppercase italic leading-none text-alkota-black whitespace-nowrap">
             1964
           </span>
         </div>
-        <div className="relative z-10 mx-auto max-w-7xl">
+        <div className="relative z-10 mx-auto max-w-7xl w-full my-auto">
           <div className="mb-8 flex items-center gap-4">
             <div className="h-[2px] w-12 bg-alkota-orange" />
             <span className="font-ibm-plex-mono text-[10px] font-black uppercase tracking-[0.4em] text-alkota-orange">
               // AMERICAN HERITAGE. UK PRESENCE.
             </span>
           </div>
-          <h1 className="font-barlow-condensed text-7xl font-black uppercase italic leading-[0.82] tracking-tighter text-alkota-black md:text-[10rem] mb-12 max-w-5xl">
+          <h1 className="font-barlow-condensed text-7xl font-black uppercase italic leading-[0.82] tracking-tighter text-alkota-black md:text-[8.5rem] mb-12 max-w-5xl">
             GLOBAL INNOVATION.<br />
             <span className="text-alkota-orange">LOCAL EXPERTISE.</span>
           </h1>

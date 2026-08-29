@@ -126,7 +126,7 @@ export default function AskTheLobbyHero() {
   };
 
   return (
-    <section className="relative bg-gradient-to-b from-[#111111] via-[#161616] to-[#FAFAF8] text-white pt-12 sm:pt-16 pb-20 px-6 sm:px-12 border-b border-[#E5E5E0] overflow-hidden">
+    <section className="relative min-h-screen flex flex-col justify-center bg-gradient-to-b from-[#111111] via-[#161616] to-[#FAFAF8] text-white pt-24 sm:pt-28 pb-20 px-6 sm:px-12 border-b border-[#E5E5E0] overflow-hidden">
       {/* Background architectural grid */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#222_1px,transparent_1px),linear-gradient(to_bottom,#222_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_70%_50%_at_50%_30%,#000_70%,transparent_100%)] opacity-25 pointer-events-none" />
 

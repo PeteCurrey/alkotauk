@@ -315,7 +315,7 @@ export default function WaterTreatmentFlagshipPage() {
       <Navigation />
 
       {/* ─── CHAPTER 01: PREMIUM CATEGORY HERO ────────────────────────────────── */}
-      <section className="relative min-h-[92vh] flex flex-col justify-between bg-[#0E1513] text-white border-b border-[#213831] overflow-hidden px-6 sm:px-12 pt-12 pb-16">
+      <section className="relative min-h-screen flex flex-col justify-between bg-[#0E1513] text-white border-b border-[#213831] overflow-hidden px-6 sm:px-12 pt-12 pb-16">
         {/* Subtle Water-Slate Engineering Texture Background */}
         <div 
           className="absolute inset-0 opacity-[0.04] pointer-events-none"

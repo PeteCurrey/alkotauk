@@ -51,7 +51,7 @@ const CATEGORY_METADATA_CONFIG: Record<string, {
     title: 'Hot Water Pressure Washers',
     tagline: 'High-Temperature Industrial Degreasing & Heavy Washdown',
     statement: 'Alkota hot water pressure washers combine high-pressure kinetic force with up to 95°C thermal energy to melt bonded grease, engine oils, road bitumen, and biological contamination across the UK’s most demanding industrial sectors.',
-    heroImage: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=2000&q=80',
+    heroImage: '/assets/hot-water-gauge-hero.jpg',
     accentColor: '#FF6900',
     metrics: [
       { label: 'Thermal Output', value: 'Up to 95°C', detail: 'Sensible heat for petrochemical dissolution' },

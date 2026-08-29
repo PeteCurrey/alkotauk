@@ -3,9 +3,13 @@ import Navigation from '@/components/Navigation';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import MachineCard from '@/components/MachineCard';
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
-
+import { ArrowRight, ArrowDown, Sliders } from 'lucide-react';
 import Footer from '@/components/Footer';
+
+export const metadata = {
+  title: 'Industrial Pressure Washing Fleet & Catalogue | Alkota UK',
+  description: 'Explore the complete 127-machine Alkota fleet. Hot water, cold water, industrial steam, mobile trailers, and bespoke wash systems.',
+};
 
 export default async function MachinesPage() {
   // Fetch all machines from Supabase products table
@@ -17,7 +21,6 @@ export default async function MachinesPage() {
     
   const machines = data || [];
   
-  
   // Unique categories from real data
   const categories = Array.from(new Set((machines || []).map((m: any) => m.category))).map(cat => {
     const slug = cat === 'parts-washer' ? 'parts-washers' : cat as string;
@@ -28,126 +31,119 @@ export default async function MachinesPage() {
   });
 
   return (
-    <main className="min-h-screen bg-alkota-bg pt-32 pb-0">
+    <main className="min-h-screen bg-[#FAF9F5] text-alkota-black font-normal pb-0">
       <Navigation />
-      
-      <div className="relative mx-auto max-w-7xl px-6">
-        {/* Background Watermark */}
-        <div className="absolute top-20 right-0 pointer-events-none select-none opacity-[0.05] z-0">
-          <span className="font-barlow-condensed text-[40vw] font-black uppercase italic leading-none text-alkota-black whitespace-nowrap">
-            FLEET
-          </span>
+
+      {/* ── 01. FULL-SCREEN CINEMATIC HERO ─────────────────────────────────── */}
+      <section className="relative min-h-screen flex flex-col justify-between bg-[#0A0A08] text-white px-6 sm:px-12 pt-32 pb-16 overflow-hidden border-b border-[#222]">
+        {/* Background Image / Ambient Overlay */}
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          <div 
+            className="w-full h-full bg-cover bg-center scale-105"
+            style={{ 
+              backgroundImage: 'url(/assets/hero-home-header.jpg)',
+              filter: 'brightness(0.45) contrast(1.15)'
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-black/30" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A08] via-transparent to-black/60" />
         </div>
 
-        <div className="relative z-10">
-          <Breadcrumbs items={[{ label: 'Fleet' }]} />
-          
-          <header className="mb-24 mt-12 max-w-4xl">
-            <div className="mb-8 flex items-center gap-4">
-              <div className="h-[2px] w-12 bg-alkota-orange" />
-              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-alkota-orange">
-                Industrial Performance Fleet
+        {/* Top Breadcrumbs */}
+        <div className="relative z-10 mx-auto max-w-7xl w-full">
+          <Breadcrumbs items={[{ label: 'Fleet & Catalogue' }]} />
+        </div>
+
+        {/* Hero Centrepiece */}
+        <div className="relative z-10 mx-auto max-w-7xl w-full my-auto py-10">
+          <div className="max-w-4xl">
+            <div className="flex items-center gap-3 mb-6">
+              <span className="h-[2px] w-8 bg-alkota-orange" />
+              <span className="font-mono text-[10px] font-medium uppercase tracking-[0.35em] text-alkota-orange">
+                THE 127-MACHINE INDUSTRIAL FLEET
               </span>
             </div>
-            <h1 className="font-barlow-condensed mb-10 text-7xl font-black text-alkota-black md:text-9xl uppercase italic leading-[0.8] tracking-tighter">
-              INDUSTRIAL <br />
-              <span className="text-alkota-orange [text-stroke:1px_rgba(0,0,0,0.1)]">COMMAND.</span>
+
+            <h1
+              className="font-extralight uppercase tracking-tight text-white leading-[0.92] mb-6"
+              style={{ fontSize: 'clamp(2.5rem, 6.5vw, 5.5rem)' }}
+            >
+              Industrial <br />
+              <span className="text-alkota-orange">Command.</span>
             </h1>
-            <p className="font-inter max-w-2xl text-lg text-alkota-silver leading-relaxed uppercase tracking-wider">
-              The definitive standard in industrial cleaning. From extreme-volume hot water systems to precision-engineered stationary units.
+
+            <p className="text-base sm:text-xl text-[#CCC] leading-relaxed max-w-2xl mb-10 font-light">
+              The definitive standard in industrial cleaning. From continuous-duty hot water skids and high-flow cold water systems to saturated dry steam and turnkey road trailers.
             </p>
-          </header>
 
-          {/* Categories Horizontal Strip */}
-          <section className="mb-40">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-alkota-iron border border-alkota-iron">
-              {categories.slice(0, 3).map((cat, i) => (
-                <Link 
-                  key={cat.slug}
-                  href={`/machines/${cat.slug}`}
-                  className="group relative flex flex-col justify-end bg-white p-10 h-[350px] transition-all duration-500 hover:bg-alkota-bg"
-                >
-                  <div className="relative z-10">
-                    <span className="font-ibm-plex-mono text-[9px] font-black text-alkota-orange uppercase mb-4 block opacity-0 group-hover:opacity-100 transition-opacity">
-                      [ SERIES_0{i+1} ]
-                    </span>
-                    <h3 className="font-barlow-condensed text-4xl font-black text-alkota-black uppercase italic leading-none group-hover:text-alkota-orange transition-colors duration-300">
-                      {cat.name}
-                    </h3>
-                    <div className="mt-8 flex items-center gap-4 text-[10px] font-black text-alkota-black uppercase tracking-[0.3em] opacity-0 group-hover:opacity-100 transition-all transform translate-y-4 group-hover:translate-y-0">
-                      Access Range <ArrowRight className="h-3 w-3" />
-                    </div>
-                  </div>
-                  
-                  {/* Background Watermark */}
-                  <div className="absolute -right-4 -bottom-4 text-alkota-black/[0.03] text-9xl font-black italic uppercase select-none group-hover:text-alkota-orange/5 transition-colors duration-500">
-                    {cat.name.split(' ')[0][0]}
-                  </div>
-
-                  <div className="absolute inset-x-0 bottom-0 h-1 bg-alkota-orange transform scale-x-0 transition-transform duration-500 group-hover:scale-x-100" />
-                </Link>
-              ))}
-
-              {/* Bespoke Trailers Card */}
-              <Link 
-                href="/machines/trailers"
-                className="group relative flex flex-col justify-end bg-white p-10 h-[350px] transition-all duration-500 hover:bg-alkota-bg"
+            <div className="flex flex-wrap items-center gap-4">
+              <a
+                href="#catalogue"
+                className="inline-flex items-center gap-3 bg-alkota-orange hover:bg-white hover:text-black text-white px-8 py-4 text-xs font-medium uppercase tracking-widest transition-all shadow-xl no-underline"
               >
-                <div className="relative z-10">
-                  <span className="font-ibm-plex-mono text-[9px] font-black text-alkota-orange uppercase mb-4 block opacity-0 group-hover:opacity-100 transition-opacity">
-                    [ BESPOKE_RIGS ]
-                  </span>
-                  <h3 className="font-barlow-condensed text-4xl font-black text-alkota-black uppercase italic leading-none group-hover:text-alkota-orange transition-colors duration-300">
-                    Bespoke Trailers
-                  </h3>
-                  <div className="mt-8 flex items-center gap-4 text-[10px] font-black text-alkota-black uppercase tracking-[0.3em] opacity-0 group-hover:opacity-100 transition-all transform translate-y-4 group-hover:translate-y-0">
-                    Access Range <ArrowRight className="h-3 w-3" />
-                  </div>
-                </div>
-                
-                {/* Background Watermark */}
-                <div className="absolute -right-4 -bottom-4 text-alkota-black/[0.03] text-9xl font-black italic uppercase select-none group-hover:text-alkota-orange/5 transition-colors duration-500">
-                  T
-                </div>
+                <span>Browse Full Fleet Below</span>
+                <ArrowDown className="h-4 w-4" />
+              </a>
 
-                <div className="absolute inset-x-0 bottom-0 h-1 bg-alkota-orange transform scale-x-0 transition-transform duration-500 group-hover:scale-x-100" />
+              <Link
+                href="/tools/machine-match"
+                className="inline-flex items-center gap-2 border border-white/25 bg-black/40 text-white px-6 py-4 text-xs font-medium uppercase tracking-widest hover:border-white hover:bg-white hover:text-black transition-all backdrop-blur-sm no-underline"
+              >
+                <Sliders className="h-4 w-4 text-alkota-orange" />
+                <span>Launch Machine Matcher</span>
               </Link>
             </div>
-          </section>
-
-          {/* Full Catalogue Section */}
-          <section className="relative">
-            <div className="space-y-32 mb-40">
-              {Object.entries(
-                (machines || []).reduce((acc: any, m: any) => {
-                  const series = m.series || 'Other';
-                  if (!acc[series]) acc[series] = [];
-                  acc[series].push(m);
-                  return acc;
-                }, {})
-              ).map(([series, items]: [string, any], groupIndex) => (
-                <div key={series}>
-                  <div className="mb-12 flex items-center gap-8">
-                    <h2 className="font-barlow-condensed text-5xl font-black text-alkota-black uppercase italic tracking-tighter md:text-7xl">
-                      {series} <span className="text-alkota-orange">SERIES.</span>
-                    </h2>
-                    <div className="h-px flex-1 bg-alkota-iron hidden md:block" />
-                    <span className="font-ibm-plex-mono text-[10px] text-alkota-silver uppercase tracking-widest">
-                      UNIT_COUNT: {items.length}
-                    </span>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 gap-px bg-alkota-iron border border-alkota-iron md:grid-cols-2 lg:grid-cols-3">
-                    {items.map((machine: any, i: number) => (
-                      <MachineCard key={machine.id} machine={machine} index={i} />
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
+          </div>
         </div>
-      </div>
+
+        {/* Bottom Category Quick-Jump Strip */}
+        <div className="relative z-10 mx-auto max-w-7xl w-full pt-8 border-t border-white/10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs font-mono">
+            <Link href="/machines/hot-water" className="p-4 bg-white/5 hover:bg-alkota-orange/20 border border-white/10 hover:border-alkota-orange transition-all no-underline text-white block">
+              <span className="text-[10px] text-alkota-orange uppercase block mb-1">01 · THERMAL</span>
+              <span className="text-sm uppercase font-light">Hot Water Washers →</span>
+            </Link>
+            <Link href="/machines/cold-water" className="p-4 bg-white/5 hover:bg-alkota-orange/20 border border-white/10 hover:border-alkota-orange transition-all no-underline text-white block">
+              <span className="text-[10px] text-alkota-orange uppercase block mb-1">02 · HIGH-FLOW</span>
+              <span className="text-sm uppercase font-light">Cold Water Washers →</span>
+            </Link>
+            <Link href="/machines/steam" className="p-4 bg-white/5 hover:bg-alkota-orange/20 border border-white/10 hover:border-alkota-orange transition-all no-underline text-white block">
+              <span className="text-[10px] text-alkota-orange uppercase block mb-1">03 · SANITATION</span>
+              <span className="text-sm uppercase font-light">Steam Cleaners →</span>
+            </Link>
+            <Link href="/trailers" className="p-4 bg-white/5 hover:bg-alkota-orange/20 border border-white/10 hover:border-alkota-orange transition-all no-underline text-white block">
+              <span className="text-[10px] text-alkota-orange uppercase block mb-1">04 · MOBILE</span>
+              <span className="text-sm uppercase font-light">Trailer Rigs →</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 02. FULL CATALOGUE GRID ────────────────────────────────────────── */}
+      <section id="catalogue" className="py-24 px-6 sm:px-12">
+        <div className="mx-auto max-w-7xl">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12 pb-6 border-b border-[#E0E0DC]">
+            <div>
+              <span className="font-mono text-xs uppercase tracking-[0.25em] text-alkota-orange block mb-2 font-medium">
+                COMPLETE INVENTORY
+              </span>
+              <h2 className="font-extralight text-3xl sm:text-4xl uppercase tracking-tight text-alkota-black">
+                All Available Models ({machines.length})
+              </h2>
+            </div>
+            <p className="text-xs font-mono text-[#888] uppercase tracking-wider">
+              Engineered in Alcester, SD · Backed Across the UK
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {machines.map((machine: any) => (
+              <MachineCard key={machine.id} machine={machine} />
+            ))}
+          </div>
+        </div>
+      </section>
+
       <Footer />
     </main>
   );

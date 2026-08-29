@@ -55,17 +55,19 @@ export default function CategoryHero({
   };
 
   return (
-    <section className="relative min-h-[82vh] flex flex-col justify-between bg-[#0A0A0A] text-white border-b border-[#222] px-6 sm:px-12 pt-28 sm:pt-32 pb-14 overflow-hidden">
+    <section className="relative min-h-screen flex flex-col justify-between bg-[#0A0A0A] text-white border-b border-[#222] px-6 sm:px-12 pt-28 sm:pt-32 pb-14 overflow-hidden">
       {/* Background Image with Controlled Dark Overlay */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0 overflow-hidden">
         <Image
           src={heroImage}
           alt={categoryName}
           fill
           priority
-          className="object-cover object-center opacity-30"
+          className="object-cover object-center scale-105"
+          style={{ filter: 'brightness(0.52) contrast(1.15)' }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/70 to-[#0A0A0A]/40" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/55 to-black/20" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-transparent to-black/50" />
       </div>
 
       {/* Top Nav Breadcrumbs */}

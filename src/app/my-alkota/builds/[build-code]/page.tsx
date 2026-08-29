@@ -277,7 +277,7 @@ export default function CustomerBuildTrackerPage({
                   <p className="font-bold text-base text-alkota-black">3,500kg Tandem Plant Room</p>
                   <p className="text-[#666]">Insulated GRP Body · 1,000L Baffled Water Tank</p>
                   <p className="font-ibm-plex-mono text-[10px] text-emerald-700 pt-1">
-                    VIN: SIFXX000000987654
+                    VIN: [To be populated from Supabase asset record]
                   </p>
                 </div>
 
@@ -286,7 +286,7 @@ export default function CustomerBuildTrackerPage({
                   <p className="font-bold text-base text-alkota-black">Closed-Loop Recirculation</p>
                   <p className="text-[#666]">5-Stage Hydro-Recycle VFS Treatment Module</p>
                   <p className="font-ibm-plex-mono text-[10px] text-[#777] pt-1">
-                    EA Compliant / Zero Drainage
+                    Multi-stage filtration · Site discharge subject to consent
                   </p>
                 </div>
               </div>

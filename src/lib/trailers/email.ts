@@ -1,3 +1,5 @@
+import { supabaseAdmin } from '@/lib/supabase/server';
+
 export type TrailerEmailEventType =
   | 'BUILD_SAVED'
   | 'ENGINEERING_REVIEW_RECEIVED'
@@ -7,7 +9,7 @@ export type TrailerEmailEventType =
   | 'SERVICE_REQUEST_CONFIRMATION'
   | 'PARTS_ENQUIRY_CONFIRMATION';
 
-export type EmailDeliveryStatus = 'queued' | 'sent' | 'failed' | 'simulated';
+export type EmailDeliveryStatus = 'queued' | 'sending' | 'sent' | 'failed' | 'simulated';
 
 export interface TrailerEmailPayload {
   eventType: TrailerEmailEventType;
@@ -21,23 +23,74 @@ export interface TrailerEmailPayload {
   milestoneMessage?: string;
   serviceType?: string;
   partDescription?: string;
-  idempotencyKey?: string;
+  eventVersion?: number;
+  authorizedBy?: string;
 }
 
 export interface EmailDispatchResult {
   success: boolean;
   status: EmailDeliveryStatus;
+  eventKey: string;
   messageId?: string;
+  duplicated?: boolean;
   error?: string;
+  attemptCount: number;
   dispatchedAt: string;
 }
 
-// In-memory idempotency cache to prevent rapid duplicate dispatches
-const processedIdempotencyKeys = new Set<string>();
+export interface NotificationEventRecord {
+  id: string;
+  event_key: string;
+  event_type: string;
+  entity_type: string;
+  entity_id: string;
+  event_version: number;
+  recipient: string;
+  recipient_name: string | null;
+  subject: string;
+  status: EmailDeliveryStatus;
+  provider: string;
+  provider_message_id: string | null;
+  attempt_count: number;
+  created_at: string;
+  sent_at: string | null;
+  failed_at: string | null;
+  last_error: string | null;
+  metadata: Record<string, any>;
+}
 
-/**
- * Renders high-authority, premium Alkota UK transactional email HTML.
- */
+// ─── DETERMINISTIC EVENT KEY DERIVATION ─────────────────────────────────────
+
+export function deriveEventKey({
+  eventType,
+  entityId,
+  eventVersion = 1,
+  recipientEmail,
+}: {
+  eventType: TrailerEmailEventType;
+  entityId: string;
+  eventVersion?: number;
+  recipientEmail: string;
+}): string {
+  const cleanEmail = recipientEmail.trim().toLowerCase();
+  const cleanEntity = entityId.trim();
+  return `${eventType}:${cleanEntity}:v${eventVersion}:${cleanEmail}`;
+}
+
+// ─── IN-MEMORY FALLBACK STORE (FOR OFFLINE / TEST ISOLATION) ────────────────
+
+const _mockDbStore = new Map<string, NotificationEventRecord>();
+
+export function _clearMockDbStore(): void {
+  _mockDbStore.clear();
+}
+
+export function _getMockDbStore(): Map<string, NotificationEventRecord> {
+  return _mockDbStore;
+}
+
+// ─── EMAIL TEMPLATE GENERATOR ───────────────────────────────────────────────
+
 function renderTrailerEmailHtml(payload: TrailerEmailPayload): { subject: string; html: string } {
   const brandOrange = '#FF6900';
   const brandDark = '#0A0A0A';
@@ -163,42 +216,248 @@ function renderTrailerEmailHtml(payload: TrailerEmailPayload): { subject: string
   return { subject, html };
 }
 
-/**
- * Dispatches a transactional email via Resend with idempotency protection and event independence.
- * Critical: If sending fails, it returns a failed status object without throwing, preserving operational state.
- */
+// ─── DATABASE STATE MANAGEMENT ──────────────────────────────────────────────
+
+async function getEventRecord(eventKey: string): Promise<NotificationEventRecord | null> {
+  try {
+    const { data, error } = await supabaseAdmin
+      .from('transactional_notification_events')
+      .select('*')
+      .eq('event_key', eventKey)
+      .maybeSingle();
+
+    if (!error && data) {
+      return data as NotificationEventRecord;
+    }
+  } catch {
+    // Database connection or table unavailable — fallback to isolated mock store
+  }
+  return _mockDbStore.get(eventKey) || null;
+}
+
+async function claimOrInsertEvent({
+  eventKey,
+  payload,
+  subject,
+}: {
+  eventKey: string;
+  payload: TrailerEmailPayload;
+  subject: string;
+}): Promise<{ record: NotificationEventRecord; isNew: boolean; alreadySent: boolean }> {
+  const entityId = payload.buildReference || payload.buildCode || 'global';
+  const eventVersion = payload.eventVersion || 1;
+  const now = new Date().toISOString();
+
+  // Check mock store atomically first for offline/test environments
+  if (_mockDbStore.has(eventKey)) {
+    const existing = _mockDbStore.get(eventKey)!;
+    if (existing.status === 'sent' || existing.status === 'simulated') {
+      return { record: existing, isNew: false, alreadySent: true };
+    }
+    if (existing.status === 'sending') {
+      return { record: existing, isNew: false, alreadySent: false };
+    }
+    // If failed, retry
+    const updatedRecord: NotificationEventRecord = {
+      ...existing,
+      status: 'sending',
+      attempt_count: existing.attempt_count + 1,
+      last_error: null,
+    };
+    _mockDbStore.set(eventKey, updatedRecord);
+    return { record: updatedRecord, isNew: false, alreadySent: false };
+  }
+
+  // 1. Check existing record in Supabase
+  const existing = await getEventRecord(eventKey);
+  if (existing) {
+    if (existing.status === 'sent' || existing.status === 'simulated') {
+      return { record: existing, isNew: false, alreadySent: true };
+    }
+    if (existing.status === 'sending') {
+      return { record: existing, isNew: false, alreadySent: false };
+    }
+    // If failed, increment attempt count and set to sending
+    const updatedRecord: NotificationEventRecord = {
+      ...existing,
+      status: 'sending',
+      attempt_count: existing.attempt_count + 1,
+      last_error: null,
+    };
+    try {
+      await supabaseAdmin
+        .from('transactional_notification_events')
+        .update({
+          status: 'sending',
+          attempt_count: updatedRecord.attempt_count,
+          last_error: null,
+        })
+        .eq('event_key', eventKey);
+    } catch {
+      _mockDbStore.set(eventKey, updatedRecord);
+    }
+    return { record: updatedRecord, isNew: false, alreadySent: false };
+  }
+
+  // 2. Insert new event record
+  const newRecord: NotificationEventRecord = {
+    id: `ev-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+    event_key: eventKey,
+    event_type: payload.eventType,
+    entity_type: 'trailer_build',
+    entity_id: entityId,
+    event_version: eventVersion,
+    recipient: payload.recipientEmail.trim().toLowerCase(),
+    recipient_name: payload.recipientName || null,
+    subject,
+    status: 'sending',
+    provider: 'resend',
+    provider_message_id: null,
+    attempt_count: 1,
+    created_at: now,
+    sent_at: null,
+    failed_at: null,
+    last_error: null,
+    metadata: {
+      authorized_by: payload.authorizedBy || 'system',
+      build_code: payload.buildCode,
+      build_reference: payload.buildReference,
+    },
+  };
+
+  // Claim in mock store immediately to prevent concurrent races
+  _mockDbStore.set(eventKey, newRecord);
+
+  try {
+    const { data, error } = await supabaseAdmin
+      .from('transactional_notification_events')
+      .insert({
+        event_key: newRecord.event_key,
+        event_type: newRecord.event_type,
+        entity_type: newRecord.entity_type,
+        entity_id: newRecord.entity_id,
+        event_version: newRecord.event_version,
+        recipient: newRecord.recipient,
+        recipient_name: newRecord.recipient_name,
+        subject: newRecord.subject,
+        status: 'sending',
+        provider: 'resend',
+        attempt_count: 1,
+        created_at: now,
+        metadata: newRecord.metadata,
+      })
+      .select()
+      .single();
+
+    if (!error && data) {
+      return { record: data as NotificationEventRecord, isNew: true, alreadySent: false };
+    }
+  } catch {
+    // Fallback store already set
+    return { record: newRecord, isNew: true, alreadySent: false };
+  }
+
+  // If insert collided via unique constraint, re-fetch
+  const winner = await getEventRecord(eventKey);
+  if (winner) {
+    return { record: winner, isNew: false, alreadySent: winner.status === 'sent' || winner.status === 'simulated' };
+  }
+
+  return { record: newRecord, isNew: true, alreadySent: false };
+}
+
+async function finalizeEventStatus({
+  eventKey,
+  status,
+  messageId,
+  error,
+}: {
+  eventKey: string;
+  status: EmailDeliveryStatus;
+  messageId?: string;
+  error?: string;
+}): Promise<void> {
+  const now = new Date().toISOString();
+  try {
+    await supabaseAdmin
+      .from('transactional_notification_events')
+      .update({
+        status,
+        provider_message_id: messageId || null,
+        sent_at: status === 'sent' || status === 'simulated' ? now : null,
+        failed_at: status === 'failed' ? now : null,
+        last_error: error || null,
+      })
+      .eq('event_key', eventKey);
+  } catch {
+    const existing = _mockDbStore.get(eventKey);
+    if (existing) {
+      _mockDbStore.set(eventKey, {
+        ...existing,
+        status,
+        provider_message_id: messageId || null,
+        sent_at: status === 'sent' || status === 'simulated' ? now : null,
+        failed_at: status === 'failed' ? now : null,
+        last_error: error || null,
+      });
+    }
+  }
+}
+
+// ─── DURABLE TRANSACTIONAL DISPATCH ─────────────────────────────────────────
+
 export async function dispatchTrailerTransactionalEmail(
   payload: TrailerEmailPayload
 ): Promise<EmailDispatchResult> {
-  const dispatchedAt = new Date().toISOString();
-
-  // 1. Idempotency Check
-  if (payload.idempotencyKey) {
-    if (processedIdempotencyKeys.has(payload.idempotencyKey)) {
-      return {
-        success: true,
-        status: 'queued',
-        messageId: `idempotent-duplicate-${payload.idempotencyKey}`,
-        dispatchedAt,
-      };
-    }
-    processedIdempotencyKeys.add(payload.idempotencyKey);
-  }
+  const entityId = payload.buildReference || payload.buildCode || 'global';
+  const eventKey = deriveEventKey({
+    eventType: payload.eventType,
+    entityId,
+    eventVersion: payload.eventVersion || 1,
+    recipientEmail: payload.recipientEmail,
+  });
 
   const { subject, html } = renderTrailerEmailHtml(payload);
-  const apiKey = process.env.RESEND_API_KEY;
 
-  // 2. Offline / Development fallback simulation
-  if (!apiKey || apiKey.startsWith('re_dummy') || process.env.NODE_ENV === 'test') {
+  // 1. Claim or check existing event in database
+  const claim = await claimOrInsertEvent({ eventKey, payload, subject });
+
+  // 2. If already sent, suppress duplicate dispatch
+  if (claim.alreadySent) {
     return {
       success: true,
-      status: 'simulated',
-      messageId: `sim-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
-      dispatchedAt,
+      status: claim.record.status,
+      eventKey,
+      messageId: claim.record.provider_message_id || `dedup-${eventKey}`,
+      duplicated: true,
+      attemptCount: claim.record.attempt_count,
+      dispatchedAt: claim.record.sent_at || claim.record.created_at,
     };
   }
 
-  // 3. Live Resend Transport
+  const apiKey = process.env.RESEND_API_KEY;
+
+  // 3. Offline / Test / Development simulation mode
+  if (!apiKey || apiKey.startsWith('re_dummy') || process.env.NODE_ENV === 'test') {
+    const simMessageId = `sim-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
+    await finalizeEventStatus({
+      eventKey,
+      status: 'simulated',
+      messageId: simMessageId,
+    });
+
+    return {
+      success: true,
+      status: 'simulated',
+      eventKey,
+      messageId: simMessageId,
+      duplicated: false,
+      attemptCount: claim.record.attempt_count,
+      dispatchedAt: new Date().toISOString(),
+    };
+  }
+
+  // 4. Live Resend API Transport
   try {
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -217,29 +476,77 @@ export async function dispatchTrailerTransactionalEmail(
 
     if (!res.ok) {
       const errText = await res.text();
-      console.warn(`Transactional email delivery failed [${payload.eventType}]:`, errText);
+      const errorMsg = `Resend error (${res.status}): ${errText.substring(0, 100)}`;
+      await finalizeEventStatus({
+        eventKey,
+        status: 'failed',
+        error: errorMsg,
+      });
+
       return {
         success: false,
         status: 'failed',
-        error: `Resend error: ${res.statusText}`,
-        dispatchedAt,
+        eventKey,
+        error: errorMsg,
+        duplicated: false,
+        attemptCount: claim.record.attempt_count,
+        dispatchedAt: new Date().toISOString(),
       };
     }
 
     const data = await res.json();
+    await finalizeEventStatus({
+      eventKey,
+      status: 'sent',
+      messageId: data.id,
+    });
+
     return {
       success: true,
       status: 'sent',
+      eventKey,
       messageId: data.id,
-      dispatchedAt,
+      duplicated: false,
+      attemptCount: claim.record.attempt_count,
+      dispatchedAt: new Date().toISOString(),
     };
   } catch (err: any) {
-    console.warn(`Transactional email network exception [${payload.eventType}]:`, err.message);
+    const errorMsg = err.message || 'Network exception during Resend dispatch.';
+    await finalizeEventStatus({
+      eventKey,
+      status: 'failed',
+      error: errorMsg,
+    });
+
     return {
       success: false,
       status: 'failed',
-      error: err.message || 'Network error during email dispatch.',
-      dispatchedAt,
+      eventKey,
+      error: errorMsg,
+      duplicated: false,
+      attemptCount: claim.record.attempt_count,
+      dispatchedAt: new Date().toISOString(),
     };
   }
+}
+
+/**
+ * Authorised admin action to explicitly resend a customer lifecycle communication.
+ * Increments the event version (e.g. v1 -> v2) to establish a new auditable delivery attempt.
+ */
+export async function resendTrailerNotification({
+  originalPayload,
+  nextVersion,
+  authorizedAdminUser,
+}: {
+  originalPayload: TrailerEmailPayload;
+  nextVersion: number;
+  authorizedAdminUser: string;
+}): Promise<EmailDispatchResult> {
+  const newPayload: TrailerEmailPayload = {
+    ...originalPayload,
+    eventVersion: nextVersion,
+    authorizedBy: authorizedAdminUser,
+  };
+  return dispatchTrailerTransactionalEmail(newPayload);
 }

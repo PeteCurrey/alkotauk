@@ -13,7 +13,7 @@ export default function MachineMatchAndOwnership() {
     <div className="bg-[#F8F7F4] text-alkota-black font-normal">
       {/* Interactive Machine Match Prompt */}
       <section className="py-24 sm:py-32 px-6 sm:px-12" aria-label="Machine Match Tool">
-        <div className="mx-auto max-w-7xl">
+        <div className="mx-auto max-w-7xl w-full">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-10">
             <div className="max-w-2xl font-normal">
               <span className="text-xs uppercase tracking-[0.25em] text-alkota-orange block mb-3 font-light">

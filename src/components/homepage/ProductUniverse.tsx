@@ -80,8 +80,8 @@ export default function ProductUniverse() {
   const activeFamily = FAMILIES.find((f) => f.id === activeTab) || FAMILIES[0];
 
   return (
-    <section className="bg-[#F8F7F4] text-alkota-black py-28 sm:py-36 overflow-hidden font-normal" aria-label="Alkota Product World">
-      <div className="mx-auto max-w-7xl px-6 sm:px-12">
+    <section className="bg-[#F8F7F4] text-alkota-black py-28 sm:py-36 px-6 sm:px-12 overflow-hidden font-normal" aria-label="Alkota Product World">
+      <div className="mx-auto max-w-7xl w-full">
         {/* Architectural Header */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 pb-12">
           <div>

@@ -85,13 +85,13 @@ export default function Navigation() {
   return (
     <nav 
       ref={navRef}
-      className={`fixed top-0 z-50 w-full transition-all duration-300 font-normal ${
+      className={`fixed top-0 z-50 w-full px-6 sm:px-12 transition-all duration-300 font-normal ${
         isScrolled 
           ? 'bg-white/95 py-3 shadow-md border-b border-[#E0E0DE] backdrop-blur-md text-alkota-black' 
           : 'bg-gradient-to-b from-black/85 via-black/40 to-transparent py-6 text-white'
       }`}
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 sm:px-12">
+      <div className="mx-auto flex max-w-7xl w-full items-center justify-between">
         <Link href="/" className="flex items-center group">
           <Logo className={`${isScrolled ? "h-8 text-alkota-black" : "h-9 text-white"} transition-colors duration-300`} />
         </Link>

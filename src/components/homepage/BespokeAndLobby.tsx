@@ -14,8 +14,8 @@ export default async function BespokeAndLobby() {
   };
 
   return (
-    <section className="bg-white text-alkota-black py-28 sm:py-36 font-normal overflow-hidden" aria-label="Bespoke Engineering and The Lobby">
-      <div className="mx-auto max-w-7xl px-6 sm:px-12">
+    <section className="bg-white text-alkota-black py-28 sm:py-36 px-6 sm:px-12 font-normal overflow-hidden" aria-label="Bespoke Engineering and The Lobby">
+      <div className="mx-auto max-w-7xl w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-20 items-start">
           {/* Left Column: Bespoke Engineering */}
           <div className="lg:col-span-6 flex flex-col justify-between h-full font-normal">

@@ -10,10 +10,10 @@ export default function MessQuestFeature() {
 
   return (
     <section
-      className="relative bg-[#0A0A08] text-white py-24 sm:py-32 overflow-hidden font-normal"
+      className="relative bg-[#0A0A08] text-white py-24 sm:py-32 px-6 sm:px-12 overflow-hidden font-normal"
       aria-label="Mess Quest Documentary Series"
     >
-      <div className="mx-auto max-w-7xl px-6 sm:px-12">
+      <div className="mx-auto max-w-7xl w-full">
         {/* Section Header */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 pb-10">
           <div>

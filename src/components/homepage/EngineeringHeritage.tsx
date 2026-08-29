@@ -3,8 +3,8 @@ import { ArrowRight } from 'lucide-react';
 
 export default function EngineeringHeritage() {
   return (
-    <section className="bg-[#F8F7F4] text-alkota-black py-28 sm:py-36 font-normal overflow-hidden" aria-label="Mechanical Engineering Architecture">
-      <div className="mx-auto max-w-7xl px-6 sm:px-12">
+    <section className="bg-[#F8F7F4] text-alkota-black py-28 sm:py-36 px-6 sm:px-12 font-normal overflow-hidden" aria-label="Mechanical Engineering Architecture">
+      <div className="mx-auto max-w-7xl w-full">
         {/* Editorial Opening */}
         <div className="max-w-3xl mb-20 sm:mb-28">
           <span className="text-xs uppercase tracking-[0.25em] text-alkota-orange block mb-3 font-light">

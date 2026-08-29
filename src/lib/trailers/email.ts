@@ -248,58 +248,7 @@ async function claimOrInsertEvent({
   const eventVersion = payload.eventVersion || 1;
   const now = new Date().toISOString();
 
-  // Check mock store atomically first for offline/test environments
-  if (_mockDbStore.has(eventKey)) {
-    const existing = _mockDbStore.get(eventKey)!;
-    if (existing.status === 'sent' || existing.status === 'simulated') {
-      return { record: existing, isNew: false, alreadySent: true };
-    }
-    if (existing.status === 'sending') {
-      return { record: existing, isNew: false, alreadySent: false };
-    }
-    // If failed, retry
-    const updatedRecord: NotificationEventRecord = {
-      ...existing,
-      status: 'sending',
-      attempt_count: existing.attempt_count + 1,
-      last_error: null,
-    };
-    _mockDbStore.set(eventKey, updatedRecord);
-    return { record: updatedRecord, isNew: false, alreadySent: false };
-  }
-
-  // 1. Check existing record in Supabase
-  const existing = await getEventRecord(eventKey);
-  if (existing) {
-    if (existing.status === 'sent' || existing.status === 'simulated') {
-      return { record: existing, isNew: false, alreadySent: true };
-    }
-    if (existing.status === 'sending') {
-      return { record: existing, isNew: false, alreadySent: false };
-    }
-    // If failed, increment attempt count and set to sending
-    const updatedRecord: NotificationEventRecord = {
-      ...existing,
-      status: 'sending',
-      attempt_count: existing.attempt_count + 1,
-      last_error: null,
-    };
-    try {
-      await supabaseAdmin
-        .from('transactional_notification_events')
-        .update({
-          status: 'sending',
-          attempt_count: updatedRecord.attempt_count,
-          last_error: null,
-        })
-        .eq('event_key', eventKey);
-    } catch {
-      _mockDbStore.set(eventKey, updatedRecord);
-    }
-    return { record: updatedRecord, isNew: false, alreadySent: false };
-  }
-
-  // 2. Insert new event record
+  // Create new record representation
   const newRecord: NotificationEventRecord = {
     id: `ev-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
     event_key: eventKey,
@@ -324,6 +273,59 @@ async function claimOrInsertEvent({
       build_reference: payload.buildReference,
     },
   };
+
+  // Synchronous atomic reservation in memory store
+  if (_mockDbStore.has(eventKey)) {
+    const existing = _mockDbStore.get(eventKey)!;
+    if (existing.status === 'sent' || existing.status === 'simulated') {
+      return { record: existing, isNew: false, alreadySent: true };
+    }
+    if (existing.status === 'sending') {
+      return { record: existing, isNew: false, alreadySent: false };
+    }
+    // If failed, retry
+    const updatedRecord: NotificationEventRecord = {
+      ...existing,
+      status: 'sending',
+      attempt_count: existing.attempt_count + 1,
+      last_error: null,
+    };
+    _mockDbStore.set(eventKey, updatedRecord);
+    return { record: updatedRecord, isNew: false, alreadySent: false };
+  }
+
+  // Atomically claim in store
+  _mockDbStore.set(eventKey, newRecord);
+
+  // 1. Check existing record in Supabase
+  const existing = await getEventRecord(eventKey);
+  if (existing && existing.id !== newRecord.id) {
+    if (existing.status === 'sent' || existing.status === 'simulated') {
+      return { record: existing, isNew: false, alreadySent: true };
+    }
+    if (existing.status === 'sending') {
+      return { record: existing, isNew: false, alreadySent: false };
+    }
+    const updatedRecord: NotificationEventRecord = {
+      ...existing,
+      status: 'sending',
+      attempt_count: existing.attempt_count + 1,
+      last_error: null,
+    };
+    try {
+      await supabaseAdmin
+        .from('transactional_notification_events')
+        .update({
+          status: 'sending',
+          attempt_count: updatedRecord.attempt_count,
+          last_error: null,
+        })
+        .eq('event_key', eventKey);
+    } catch {
+      _mockDbStore.set(eventKey, updatedRecord);
+    }
+    return { record: updatedRecord, isNew: false, alreadySent: false };
+  }
 
   // Claim in mock store immediately to prevent concurrent races
   _mockDbStore.set(eventKey, newRecord);
@@ -422,11 +424,11 @@ export async function dispatchTrailerTransactionalEmail(
   // 1. Claim or check existing event in database
   const claim = await claimOrInsertEvent({ eventKey, payload, subject });
 
-  // 2. If already sent, suppress duplicate dispatch
-  if (claim.alreadySent) {
+  // 2. If already sent or concurrently in transmission by another worker, suppress duplicate dispatch
+  if (claim.alreadySent || !claim.isNew) {
     return {
       success: true,
-      status: claim.record.status,
+      status: claim.record.status === 'sending' ? 'queued' : claim.record.status,
       eventKey,
       messageId: claim.record.provider_message_id || `dedup-${eventKey}`,
       duplicated: true,

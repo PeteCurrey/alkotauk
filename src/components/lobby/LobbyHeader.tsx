@@ -39,27 +39,20 @@ export default function LobbyHeader() {
     >
       <div className="mx-auto flex max-w-7xl w-full items-center justify-between">
 
-        {/* Brand — Alkota flame logo + Lobby label */}
-        <Link href="/lobby" className="flex items-center gap-2.5 group" aria-label="The Lobby by Alkota UK">
+        {/* Brand Flame Logo */}
+        <Link href="/lobby" className="flex items-center group shrink-0" aria-label="The Lobby by Alkota UK">
           <Logo className={`${isScrolled ? 'h-8' : 'h-10'} transition-all duration-300`} />
-          <span className={`hidden lg:block text-[11px] uppercase tracking-[0.2em] font-normal border-l pl-2.5 transition-colors ${
-            isScrolled
-              ? 'text-[#888] border-[#CCC]'
-              : 'text-white/50 border-white/20'
-          }`}>
-            The Lobby
-          </span>
         </Link>
 
         {/* Desktop category nav — matches main nav link style */}
-        <div className="hidden items-center gap-6 xl:gap-7 lg:flex font-normal">
+        <div className="hidden items-center gap-5 xl:gap-7 lg:flex font-normal">
           {CATEGORIES.map(cat => {
             const isActive = pathname.includes(cat.slug);
             return (
               <Link
                 key={cat.slug}
                 href={`/lobby#${cat.slug}`}
-                className={`flex items-center gap-1.5 text-[12px] uppercase tracking-[0.18em] transition-colors no-underline font-normal ${
+                className={`flex items-center gap-1 text-[12px] uppercase tracking-[0.18em] transition-colors no-underline font-normal whitespace-nowrap ${
                   isActive ? 'text-alkota-orange' : textColorClass
                 }`}
               >

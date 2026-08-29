@@ -89,12 +89,11 @@ async function testEmailInfrastructure() {
   assert(dispatch1.status === 'simulated' || dispatch1.status === 'sent', 'Status must be simulated or sent');
   console.log(`✓ PASS: Transactional email dispatched with state: ${dispatch1.status}`);
 
-  // Test 7: Duplicate protection via idempotency key
+  // Test 7: Duplicate protection via durable database-backed idempotency key
   const dispatchDuplicate = await dispatchTrailerTransactionalEmail(testPayload);
   assert(dispatchDuplicate.success === true, 'Duplicate call handled gracefully');
-  assert(dispatchDuplicate.status === 'queued', 'Duplicate event recognized and de-duplicated');
-  assert(dispatchDuplicate.messageId?.startsWith('idempotent-duplicate'), 'Message ID notes idempotency');
-  console.log('✓ PASS: Rapid duplicate email trigger caught by idempotency cache');
+  assert(dispatchDuplicate.duplicated === true, 'Duplicate event recognized and de-duplicated');
+  console.log('✓ PASS: Rapid duplicate email trigger caught by durable idempotency key');
 }
 
 async function runAll() {

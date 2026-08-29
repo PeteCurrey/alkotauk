@@ -3,14 +3,14 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, ArrowLeft, ArrowUpRight, BookOpen, ShieldCheck, Cpu, Flame, BarChart3 } from 'lucide-react';
+import { Menu, X, ArrowLeft, BookOpen } from 'lucide-react';
 import Logo from '@/components/Logo';
 
 const CATEGORIES = [
-  { name: 'Engineering & Metallurgy', slug: 'engineering-design', icon: Cpu },
-  { name: 'Regulatory & Compliance', slug: 'regulatory-compliance', icon: ShieldCheck },
-  { name: 'Application Science', slug: 'application-science', icon: Flame },
-  { name: 'Economics & TCO', slug: 'economics-tco', icon: BarChart3 },
+  { name: 'Engineering', slug: 'engineering-design' },
+  { name: 'Regulatory', slug: 'regulatory-compliance' },
+  { name: 'Application Science', slug: 'application-science' },
+  { name: 'Economics & TCO', slug: 'economics-tco' },
 ];
 
 export default function LobbyHeader() {
@@ -38,28 +38,36 @@ export default function LobbyHeader() {
       aria-label="The Lobby Navigation"
     >
       <div className="mx-auto flex max-w-7xl w-full items-center justify-between">
+        {/* Left: Brand Flame Logo + Desktop Category Nav */}
+        <div className="flex items-center gap-8 xl:gap-10">
+          <Link href="/lobby" className="flex items-center group shrink-0" aria-label="The Lobby by Alkota UK">
+            <Logo className={`${isScrolled ? 'h-8' : 'h-10'} transition-all duration-300`} />
+          </Link>
 
-        {/* Brand Flame Logo */}
-        <Link href="/lobby" className="flex items-center group shrink-0" aria-label="The Lobby by Alkota UK">
-          <Logo className={`${isScrolled ? 'h-8' : 'h-10'} transition-all duration-300`} />
-        </Link>
-
-        {/* Desktop category nav — matches main nav link style */}
-        <div className="hidden items-center gap-5 xl:gap-7 lg:flex font-normal">
-          {CATEGORIES.map(cat => {
-            const isActive = pathname.includes(cat.slug);
-            return (
-              <Link
-                key={cat.slug}
-                href={`/lobby#${cat.slug}`}
-                className={`flex items-center gap-1 text-[12px] uppercase tracking-[0.18em] transition-colors no-underline font-normal whitespace-nowrap ${
-                  isActive ? 'text-alkota-orange' : textColorClass
-                }`}
-              >
-                {cat.name}
-              </Link>
-            );
-          })}
+          {/* Desktop category nav — matches main nav link style */}
+          <div className="hidden items-center gap-6 xl:gap-7 lg:flex font-normal">
+            {CATEGORIES.map(cat => {
+              const isActive = pathname.includes(cat.slug);
+              return (
+                <div key={cat.slug} className="relative py-2">
+                  <Link
+                    href={`/lobby#${cat.slug}`}
+                    className={`flex items-center gap-1 text-[12px] uppercase tracking-[0.18em] transition-colors no-underline font-normal whitespace-nowrap ${
+                      isActive ? 'text-alkota-orange' : textColorClass
+                    }`}
+                  >
+                    {cat.name}
+                  </Link>
+                  {/* Active Orange Underline */}
+                  <span
+                    className={`absolute -bottom-0.5 left-0 h-[2px] bg-alkota-orange transition-all duration-200 ${
+                      isActive ? 'w-full' : 'w-0'
+                    }`}
+                  />
+                </div>
+              );
+            })}
+          </div>
         </div>
 
         {/* Right actions — mirrors main nav CTA block */}
@@ -73,10 +81,10 @@ export default function LobbyHeader() {
             <span>Alkota Main Site</span>
           </Link>
 
-          {/* Machine Matcher — mirrors "Configurator" ghost button */}
+          {/* Machine Matcher — mirrors "Configurator" ghost button, only 2xl+ */}
           <Link
             href="/tools/machine-match"
-            className={`hidden sm:inline-flex px-4 py-2 text-[11px] uppercase tracking-[0.2em] transition-all no-underline font-normal items-center gap-1.5 ${
+            className={`hidden 2xl:inline-flex px-4 py-2 text-[11px] uppercase tracking-[0.2em] transition-all no-underline font-normal items-center gap-1.5 ${
               isScrolled
                 ? 'border border-[#333] text-alkota-black hover:border-alkota-orange hover:text-alkota-orange'
                 : 'border border-white/60 bg-black/40 backdrop-blur-sm text-white hover:border-white hover:bg-white hover:text-black'
@@ -89,7 +97,7 @@ export default function LobbyHeader() {
           {/* Consult an Engineer — orange solid CTA */}
           <Link
             href="/contact"
-            className="hidden sm:inline-flex items-center gap-2 bg-alkota-orange text-white px-4 py-2 text-[11px] uppercase tracking-[0.2em] transition-all hover:bg-white hover:text-black no-underline font-normal"
+            className="hidden sm:inline-flex items-center gap-2 bg-alkota-orange text-white px-4 py-2 text-[11px] uppercase tracking-[0.2em] transition-all hover:bg-white hover:text-black no-underline font-normal shadow-sm"
           >
             <span>Consult an Engineer</span>
           </Link>
@@ -119,22 +127,18 @@ export default function LobbyHeader() {
               <ArrowLeft className="h-3.5 w-3.5" />
               <span>Back to Alkota UK</span>
             </Link>
-            {CATEGORIES.map(cat => {
-              const Icon = cat.icon;
-              return (
-                <Link
-                  key={cat.slug}
-                  href={`/lobby#${cat.slug}`}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 py-2 text-[12px] uppercase tracking-[0.18em] font-normal transition-colors ${
-                    isScrolled ? 'text-alkota-black hover:text-alkota-orange' : 'text-white/80 hover:text-alkota-orange'
-                  }`}
-                >
-                  <Icon className="h-4 w-4 text-alkota-orange" />
-                  <span>{cat.name}</span>
-                </Link>
-              );
-            })}
+            {CATEGORIES.map(cat => (
+              <Link
+                key={cat.slug}
+                href={`/lobby#${cat.slug}`}
+                onClick={() => setMobileMenuOpen(false)}
+                className={`flex items-center py-2 text-[12px] uppercase tracking-[0.18em] font-normal transition-colors ${
+                  isScrolled ? 'text-alkota-black hover:text-alkota-orange' : 'text-white/80 hover:text-alkota-orange'
+                }`}
+              >
+                {cat.name}
+              </Link>
+            ))}
             <div className="mt-3 pt-3 border-t border-[#222] flex flex-col gap-2">
               <Link
                 href="/contact"

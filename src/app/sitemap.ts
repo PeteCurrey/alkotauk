@@ -5,6 +5,7 @@ import { getDealers } from '@/lib/dealers';
 import { REAL_BUILDS } from '@/lib/trailers/real-builds-data';
 import { TRAILER_APPLICATIONS } from '@/lib/trailers/applications-data';
 import { getAllMessQuestEpisodes } from '@/lib/messQuestEpisodes';
+import { getAllCaseStudies } from '@/lib/case-studies/data';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://alkota.co.uk';
@@ -272,6 +273,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: 'monthly' as const,
       priority: 0.85,
+    })),
+    // Editorial Case Studies Platform
+    {
+      url: `${baseUrl}/resources/case-studies`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    ...getAllCaseStudies().map((cs) => ({
+      url: `${baseUrl}/resources/case-studies/${cs.slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: cs.featured ? 0.95 : 0.85,
     })),
     ...baselineWashPlantSlugs,
     ...washPlantProjectUrls,

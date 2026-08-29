@@ -1010,10 +1010,10 @@ export default function TrailersPage() {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
+              { title: 'Bespoke Trailer Engineering — 12-Step Build Story', href: '/resources/case-studies/bespoke-trailer-builds' },
               { title: 'Trailer Payload & Towing — The Engineering Guide', href: '/lobby/engineering-design/trailer-payload-towing' },
               { title: 'Sizing a Mobile Wash System — Pressure vs Flow', href: '/lobby/engineering-design/sizing-mobile-wash-system' },
               { title: 'UK Wash-Water Recovery & Environmental Compliance', href: '/lobby/regulatory-compliance/wash-water-recovery' },
-              { title: 'Hot Water vs Steam for Mobile Applications', href: '/lobby/application-science/hot-water-vs-steam-mobile' },
             ].map(({ title, href }) => (
               <Link
                 key={title}

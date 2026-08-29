@@ -40,7 +40,13 @@ export default function SouthDakotaHeritage() {
           </p>
 
           <p className="text-sm sm:text-base text-[#999] leading-relaxed mb-10 font-normal">
-            In 2013, custom-engineered Alkota hot-water heating systems were selected to power the clean-water drill reaching Subglacial Lake Whillans — 800 metres beneath the Antarctic Ice Sheet. Operating in continuous sub-zero conditions, Alkota delivered uninterrupted thermal performance.
+            In 2013, custom-engineered Alkota hot-water heating systems were selected to power the clean-water drill reaching Subglacial Lake Whillans — 800 metres beneath the Antarctic Ice Sheet. Operating in continuous sub-zero conditions, Alkota delivered uninterrupted thermal performance.{' '}
+            <Link
+              href="/resources/case-studies/antarctica-lake-whillans"
+              className="text-alkota-orange hover:underline font-normal inline-flex items-center gap-1 ml-1"
+            >
+              <span>Read the Antarctica Story →</span>
+            </Link>
           </p>
 
           {/* Proof Metrics */}

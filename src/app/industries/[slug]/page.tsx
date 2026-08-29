@@ -118,6 +118,39 @@ export default async function IndustryDetailPage({ params }: IndustryDetailPageP
       {/* ─── 02B. SEEN IN THE REAL WORLD // MESS QUEST ─────────────────────── */}
       <SeenInRealWorld category={slug} />
 
+      {/* ─── 02C. EDITORIAL CASE STUDY LINK // FIELD PROOF ──────────────────── */}
+      {(() => {
+        const csMap: Record<string, { slug: string; title: string }> = {
+          agriculture: { slug: 'agriculture', title: 'Agriculture: Mud. Oil. Manure.' },
+          'transport-fleet': { slug: 'one-great-northern', title: 'One Great Northern: Heavy Fleet Washdown' },
+          industrial: { slug: 'entirefm-industrial-cleaning', title: 'EntireFM: Industrial Cleaning & Degreasing' },
+          'oil-gas': { slug: 'oilfield', title: 'Oilfield: Extreme Hydrocarbon Cleaning' },
+        };
+        const matchingCs = csMap[slug];
+        if (!matchingCs) return null;
+
+        return (
+          <section className="bg-[#F8F7F4] py-12 px-6 sm:px-12 border-b border-[#E8E8E4]">
+            <div className="mx-auto max-w-7xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#FF6900] block mb-1">
+                  Field Proof // Editorial Case Study
+                </span>
+                <h3 className="font-extralight text-xl sm:text-2xl uppercase tracking-tight text-alkota-black">
+                  {matchingCs.title}
+                </h3>
+              </div>
+              <Link
+                href={`/resources/case-studies/${matchingCs.slug}`}
+                className="inline-flex items-center gap-2 bg-[#121212] text-white px-6 py-3 text-xs uppercase tracking-[0.2em] hover:bg-[#FF6900] transition-colors font-normal no-underline shrink-0"
+              >
+                <span>See It in the Field →</span>
+              </Link>
+            </div>
+          </section>
+        );
+      })()}
+
       {/* ─── 03. ON-SITE TRIAL CTA (DARK) ──────────────────────────────────── */}
       <section className="bg-[#0A0A0A] text-white py-20 px-6 sm:px-12 border-b border-[#222]">
         <div className="mx-auto max-w-7xl flex flex-col md:flex-row md:items-center justify-between gap-8">

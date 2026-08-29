@@ -67,6 +67,7 @@ export default function Footer() {
               // Knowledge Base
             </h4>
             <ul className="space-y-2.5 text-[#999] font-normal">
+              <li><Link href="/resources/case-studies" className="hover:text-white text-white font-medium transition-colors">Case Studies & Field Proof</Link></li>
               <li><Link href="/lobby" className="hover:text-white text-[#FF6900] transition-colors font-normal">The Lobby (Knowledge Hub)</Link></li>
               <li><Link href="/mess-quest" className="hover:text-white transition-colors">Mess Quest Video Series</Link></li>
               <li><Link href="/lobby#engineering-design" className="hover:text-white transition-colors">Schedule 80 Metallurgy</Link></li>

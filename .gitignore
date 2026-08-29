@@ -45,3 +45,6 @@ next-env.d.ts
 
 # python
 /scripts/venv
+
+# scratch & temp assets
+public/assets/wash-plant/scratch/

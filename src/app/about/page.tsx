@@ -187,12 +187,18 @@ export default function AboutPage() {
               </div>
             ))}
           </div>
-          <div className="mt-8">
+          <div className="mt-8 flex flex-wrap items-center gap-6">
             <Link
               href="/technology"
               className="inline-flex items-center gap-3 font-ibm-plex-mono text-[10px] font-black uppercase tracking-widest text-alkota-orange hover:text-alkota-black transition-colors"
             >
               Full Technology Breakdown <ArrowRight className="h-3 w-3" />
+            </Link>
+            <Link
+              href="/resources/case-studies/antarctica-lake-whillans"
+              className="inline-flex items-center gap-3 font-ibm-plex-mono text-[10px] font-black uppercase tracking-widest text-alkota-black hover:text-alkota-orange transition-colors"
+            >
+              Read Antarctica Field Proof →
             </Link>
           </div>
         </div>

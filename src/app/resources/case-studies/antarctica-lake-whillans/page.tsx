@@ -1,0 +1,359 @@
+import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import Link from 'next/link';
+import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
+import CaseStudyHeader from '@/components/case-studies/CaseStudyHeader';
+import CaseStudyDepthIndicator from '@/components/case-studies/CaseStudyDepthIndicator';
+import CaseStudyTelemetryMap from '@/components/case-studies/CaseStudyTelemetryMap';
+import CaseStudySpecifications from '@/components/case-studies/CaseStudySpecifications';
+import CaseStudyRelatedProducts from '@/components/case-studies/CaseStudyRelatedProducts';
+import CaseStudyNextStory from '@/components/case-studies/CaseStudyNextStory';
+import { getCaseStudyBySlug } from '@/lib/case-studies/data';
+import { BookOpen, ExternalLink, ShieldCheck, Compass, Thermometer } from 'lucide-react';
+
+export const metadata: Metadata = {
+  title: 'Alkota in Antarctica | Lake Whillans Hot Water Drill Case Study',
+  description:
+    'Discover how six Alkota pressure-washer systems formed part of the WISSARD hot-water drill that penetrated approximately 800 metres of Antarctic ice to reach Subglacial Lake Whillans.',
+  openGraph: {
+    title: 'Alkota in Antarctica | Lake Whillans Hot Water Drill Case Study',
+    description:
+      'Discover how six Alkota pressure-washer systems formed part of the WISSARD hot-water drill that penetrated approximately 800 metres of Antarctic ice to reach Subglacial Lake Whillans.',
+    url: 'https://alkota.co.uk/resources/case-studies/antarctica-lake-whillans',
+    type: 'article',
+    images: [
+      {
+        url: 'https://images.unsplash.com/photo-1517411032315-54ef2cb783bb?auto=format&fit=crop&w=1200&q=80',
+        width: 1200,
+        height: 630,
+        alt: 'Subglacial Lake Whillans Antarctica Hot Water Drill Case Study',
+      },
+    ],
+  },
+  alternates: {
+    canonical: 'https://alkota.co.uk/resources/case-studies/antarctica-lake-whillans',
+  },
+};
+
+export default function AntarcticaCaseStudyPage() {
+  const caseStudy = getCaseStudyBySlug('antarctica-lake-whillans');
+  if (!caseStudy) notFound();
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Article',
+        '@id': 'https://alkota.co.uk/resources/case-studies/antarctica-lake-whillans#article',
+        headline: caseStudy.title,
+        description: caseStudy.standfirst,
+        image: caseStudy.heroImage,
+        datePublished: '2013-01-28',
+        dateModified: new Date().toISOString(),
+        author: {
+          '@type': 'Organization',
+          name: 'Alkota UK Editorial Intelligence',
+          url: 'https://alkota.co.uk',
+        },
+        publisher: {
+          '@type': 'Organization',
+          name: 'Alkota UK',
+          url: 'https://alkota.co.uk',
+        },
+        mainEntityOfPage: {
+          '@type': 'WebPage',
+          '@id': 'https://alkota.co.uk/resources/case-studies/antarctica-lake-whillans',
+        },
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'Home',
+            item: 'https://alkota.co.uk',
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'Resources',
+            item: 'https://alkota.co.uk/resources',
+          },
+          {
+            '@type': 'ListItem',
+            position: 3,
+            name: 'Case Studies',
+            item: 'https://alkota.co.uk/resources/case-studies',
+          },
+          {
+            '@type': 'ListItem',
+            position: 4,
+            name: 'Antarctica',
+            item: 'https://alkota.co.uk/resources/case-studies/antarctica-lake-whillans',
+          },
+        ],
+      },
+    ],
+  };
+
+  return (
+    <main className="min-h-screen bg-[#F8F7F4] text-alkota-black font-normal overflow-x-hidden">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <Navigation />
+
+      {/* ── 00: EDITORIAL HEADER ───────────────────────────────────── */}
+      <CaseStudyHeader caseStudy={caseStudy} />
+
+      {/* ── LONG-FORM DOCUMENTARY BODY ─────────────────────────────── */}
+      <div className="mx-auto max-w-5xl px-6 sm:px-12 py-20 sm:py-28 font-normal">
+        
+        {/* Chapter 01 */}
+        <section id="chapter-01" className="mb-24">
+          <div className="flex items-center gap-3 mb-3">
+            <span className="font-mono text-xs text-[#FF6900] tracking-widest">CHAPTER 01</span>
+            <span className="h-[1px] w-8 bg-[#FF6900]" />
+            <span className="text-xs uppercase tracking-[0.2em] text-[#777]">Subglacial Lake Whillans</span>
+          </div>
+          <h2 className="font-extralight text-3xl sm:text-5xl uppercase tracking-tight text-alkota-black leading-tight mb-8">
+            The World Beneath the Ice
+          </h2>
+          <div className="space-y-6 text-base sm:text-lg text-[#444] leading-relaxed mb-12">
+            <p>
+              Subglacial Lake Whillans is an active subglacial lake situated beneath the Whillans Ice Stream in West Antarctica. Positioned beneath approximately 800 metres (half a mile) of compressed glacial ice, the lake lies in complete darkness, under immense overburden pressure, isolated from direct contact with Earth’s atmosphere for thousands of years.
+            </p>
+            <p>
+              For polar scientists, reaching this environment was a top scientific priority. However, access had to be clean. Traditional mechanical rock or ice coring techniques risked introducing lubricants, fuel residues, and non-sterile surface microbes into an ancient subglacial ecosystem. Only a sterile, high-output hot-water drilling system could melt an access pathway without chemical contamination.
+            </p>
+          </div>
+
+          {/* Restrained Depth Indicator Component */}
+          <CaseStudyDepthIndicator />
+        </section>
+
+        {/* Chapter 02 */}
+        <section id="chapter-02" className="mb-24 pt-16 border-t border-[#E8E8E4]">
+          <div className="flex items-center gap-3 mb-3">
+            <span className="font-mono text-xs text-[#FF6900] tracking-widest">CHAPTER 02</span>
+            <span className="h-[1px] w-8 bg-[#FF6900]" />
+            <span className="text-xs uppercase tracking-[0.2em] text-[#777]">Thermal Physics & Clean Access</span>
+          </div>
+          <h2 className="font-extralight text-3xl sm:text-5xl uppercase tracking-tight text-alkota-black leading-tight mb-8">
+            The Engineering Problem
+          </h2>
+          <div className="space-y-6 text-base sm:text-lg text-[#444] leading-relaxed mb-12">
+            <p>
+              Melting a 30-centimetre diameter borehole through 800 metres of ice requires monumental continuous thermal energy. Every litre of water pumped down the drill stem loses heat rapidly to the surrounding sub-zero ice walls. If the thermal flow rate drops or the heating core falters, the borehole quickly freezes closed, trapping valuable sensor packages and drill heads.
+            </p>
+            <p>
+              Furthermore, the drilling water itself had to meet strict international clean-access protocols. Sourced from melted Antarctic snow, drill water was routed through multi-stage filtration to 0.2 microns, irradiated with ultraviolet sterilisation systems, and brought to high temperatures before being pumped under pressure to the drill nozzle.
+            </p>
+          </div>
+
+          {/* Large Editorial Numbers as Visual Punctuation */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-px bg-[#E8E8E4] border border-[#E8E8E4] p-px mb-12">
+            <div className="bg-white p-8">
+              <span className="font-extralight text-5xl sm:text-6xl text-[#FF6900] block mb-2">~800m</span>
+              <span className="text-xs uppercase tracking-wider text-[#777] block">Penetration Depth</span>
+            </div>
+            <div className="bg-white p-8">
+              <span className="font-extralight text-5xl sm:text-6xl text-alkota-black block mb-2">90°C</span>
+              <span className="text-xs uppercase tracking-wider text-[#777] block">Operating Water Temp</span>
+            </div>
+            <div className="bg-white p-8">
+              <span className="font-extralight text-5xl sm:text-6xl text-alkota-black block mb-2">0.2μm</span>
+              <span className="text-xs uppercase tracking-wider text-[#777] block">Filtration Standard</span>
+            </div>
+          </div>
+        </section>
+
+        {/* Chapter 03 */}
+        <section id="chapter-03" className="mb-24 pt-16 border-t border-[#E8E8E4]">
+          <div className="flex items-center gap-3 mb-3">
+            <span className="font-mono text-xs text-[#FF6900] tracking-widest">CHAPTER 03</span>
+            <span className="h-[1px] w-8 bg-[#FF6900]" />
+            <span className="text-xs uppercase tracking-[0.2em] text-[#777]">The Thermal Core</span>
+          </div>
+          <h2 className="font-extralight text-3xl sm:text-5xl uppercase tracking-tight text-alkota-black leading-tight mb-8">
+            Six Alkota Machines
+          </h2>
+          <div className="space-y-6 text-base sm:text-lg text-[#444] leading-relaxed mb-12">
+            <p>
+              To generate the immense thermal transfer required for the WISSARD hot-water drill, the University of Nebraska–Lincoln engineering team selected Alkota industrial pressure-washer systems. Specifically, <strong>six Alkota 12257K systems</strong> were integrated into the primary Heater Pump Units (four units in HPU-1 and two units in HPU-2).
+            </p>
+            <p>
+              Published engineering information in the <em>Annals of Glaciology</em> records that each Alkota unit was capable of delivering approximately <strong>45 litres per minute</strong> (around 12 GPM) while increasing water temperature by approximately <strong>52°C</strong>. When all six Alkota units were available for drill-water production, the combined system could theoretically generate up to approximately <strong>270 litres per minute</strong> of clean hot water at approximately <strong>90°C</strong>.
+            </p>
+            <p>
+              In operational field practice, drilling flow was commonly lower because some units were simultaneously tasked with snow melting and reservoir heating. The continuous-wound Schedule 80 coil design and robust slow-turning pump architecture enabled these standard industrial units to operate without failure throughout the campaign.
+            </p>
+          </div>
+
+          {/* Editorial Attribution Box */}
+          <div className="bg-white p-8 sm:p-10 border-l-4 border-[#FF6900] border-y border-r border-[#E8E8E4] mb-12">
+            <div className="text-xs uppercase tracking-wider text-[#FF6900] font-mono mb-2">
+              Engineering Attribution
+            </div>
+            <p className="text-sm sm:text-base text-[#333] leading-relaxed italic mb-4">
+              “The clean hot-water drill system was designed and manufactured by the University of Nebraska–Lincoln Science Management Office and its engineering partners. Alkota supplied the pressure-washer/heating systems incorporated into that larger engineered system.”
+            </p>
+            <span className="text-xs text-[#777] uppercase tracking-wider block">
+              Source: Annals of Glaciology / Cambridge University Press & UNL WISSARD Technical Archive
+            </span>
+          </div>
+        </section>
+
+        {/* Chapter 04 */}
+        <section id="chapter-04" className="mb-24 pt-16 border-t border-[#E8E8E4]">
+          <div className="flex items-center gap-3 mb-3">
+            <span className="font-mono text-xs text-[#FF6900] tracking-widest">CHAPTER 04</span>
+            <span className="h-[1px] w-8 bg-[#FF6900]" />
+            <span className="text-xs uppercase tracking-[0.2em] text-[#777]">Expedition Logistics</span>
+          </div>
+          <h2 className="font-extralight text-3xl sm:text-5xl uppercase tracking-tight text-alkota-black leading-tight mb-8">
+            The Journey Across the Ross Ice Sheet
+          </h2>
+          <div className="space-y-6 text-base sm:text-lg text-[#444] leading-relaxed mb-12">
+            <p>
+              Before a single litre of hot water could be pumped, the entire drill infrastructure had to be transported across the Antarctic wilderness. The WISSARD equipment traverse travelled approximately <strong>625 miles</strong> (1,000 kilometres) from McMurdo Station across the Ross Ice Shelf to the remote drill camp at Lake Whillans.
+            </p>
+            <p>
+              Contemporary University of Nebraska reporting describes <strong>13 Caterpillar tracked tractors</strong> towing <strong>26 ski-mounted modules</strong> carrying more than <strong>500,000 pounds</strong> of specialised drill gear, generators, laboratory containers, fuel bladders, and the Alkota heating skids over crevassed terrain and wind-scoured sastrugi.
+            </p>
+          </div>
+
+          {/* Telemetry Route Map */}
+          <CaseStudyTelemetryMap />
+        </section>
+
+        {/* Chapter 05 */}
+        <section id="chapter-05" className="mb-24 pt-16 border-t border-[#E8E8E4]">
+          <div className="flex items-center gap-3 mb-3">
+            <span className="font-mono text-xs text-[#FF6900] tracking-widest">CHAPTER 05</span>
+            <span className="h-[1px] w-8 bg-[#FF6900]" />
+            <span className="text-xs uppercase tracking-[0.2em] text-[#777]">28 January 2013</span>
+          </div>
+          <h2 className="font-extralight text-3xl sm:text-5xl uppercase tracking-tight text-alkota-black leading-tight mb-8">
+            Breakthrough into the Subglacial Lake
+          </h2>
+          <div className="space-y-6 text-base sm:text-lg text-[#444] leading-relaxed mb-12">
+            <p>
+              On <strong>28 January 2013</strong> local Antarctic operating time (27 January in the United States), after days of continuous thermal melting, the sensor package on the drill stem registered a sudden pressure drop. The hot-water drill nozzle had broken through approximately <strong>800 metres (half a mile)</strong> of West Antarctic ice into Subglacial Lake Whillans.
+            </p>
+            <p>
+              The borehole was approximately <strong>30 centimetres in diameter</strong>. The achievement represented the first successful clean access through the Antarctic ice sheet into a subglacial lake. Scientists subsequently recovered pristine water and sediment samples through the borehole.
+            </p>
+          </div>
+        </section>
+
+        {/* Chapter 06 */}
+        <section id="chapter-06" className="mb-24 pt-16 border-t border-[#E8E8E4]">
+          <div className="flex items-center gap-3 mb-3">
+            <span className="font-mono text-xs text-[#FF6900] tracking-widest">CHAPTER 06</span>
+            <span className="h-[1px] w-8 bg-[#FF6900]" />
+            <span className="text-xs uppercase tracking-[0.2em] text-[#777]">Scientific Discovery</span>
+          </div>
+          <h2 className="font-extralight text-3xl sm:text-5xl uppercase tracking-tight text-alkota-black leading-tight mb-8">
+            What They Found
+          </h2>
+          <div className="space-y-6 text-base sm:text-lg text-[#444] leading-relaxed mb-12">
+            <p>
+              The WISSARD scientific programme used the access provided by the drill to collect samples that subsequently produced important evidence of active microbial ecosystems beneath the Antarctic ice sheet.
+            </p>
+            <p>
+              Subsequent peer-reviewed papers in <em>Nature</em> confirmed that microorganisms thrive in total darkness beneath the ice, deriving metabolic energy from mineral reactions rather than sunlight. While Alkota’s role was strictly the engineering delivery of thermal water, the reliability of that heating core made the clean scientific recovery possible.
+            </p>
+          </div>
+        </section>
+
+        {/* Chapter 07: COMMERCIAL BRIDGE */}
+        <section id="chapter-07" className="mb-24 pt-16 border-t-2 border-[#121212]">
+          <div className="flex items-center gap-3 mb-3">
+            <span className="font-mono text-xs text-[#FF6900] tracking-widest">CHAPTER 07</span>
+            <span className="h-[1px] w-8 bg-[#FF6900]" />
+            <span className="text-xs uppercase tracking-[0.2em] text-[#777]">The Commercial Bridge</span>
+          </div>
+          <h2 className="font-extralight text-3xl sm:text-6xl uppercase tracking-tight text-alkota-black leading-none mb-8">
+            You Don’t Need to Be in Antarctica to Need Reliable Equipment.
+          </h2>
+          <div className="space-y-6 text-base sm:text-lg text-[#444] leading-relaxed mb-12">
+            <p>
+              Most Alkota owners will never ask their machine to help penetrate 800 metres of Antarctic glacial ice. But the engineering principles that mattered there are exactly the things industrial operators care about every day across Britain:
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-8">
+              <div className="p-4 bg-white border border-[#E8E8E4] flex items-center gap-3">
+                <span className="w-2 h-2 rounded-full bg-[#FF6900]" />
+                <span className="text-sm font-normal text-alkota-black">Dependable Continuous Heat Output</span>
+              </div>
+              <div className="p-4 bg-white border border-[#E8E8E4] flex items-center gap-3">
+                <span className="w-2 h-2 rounded-full bg-[#FF6900]" />
+                <span className="text-sm font-normal text-alkota-black">High Flow Hydraulic Volume</span>
+              </div>
+              <div className="p-4 bg-white border border-[#E8E8E4] flex items-center gap-3">
+                <span className="w-2 h-2 rounded-full bg-[#FF6900]" />
+                <span className="text-sm font-normal text-alkota-black">Schedule 80 Steel Pipe Metallurgy</span>
+              </div>
+              <div className="p-4 bg-white border border-[#E8E8E4] flex items-center gap-3">
+                <span className="w-2 h-2 rounded-full bg-[#FF6900]" />
+                <span className="text-sm font-normal text-alkota-black">Low-RPM Ceramic Triplex Plungers</span>
+              </div>
+            </div>
+            <div className="p-8 bg-[#121212] text-white border border-[#222] my-8">
+              <h3 className="font-extralight text-2xl sm:text-3xl uppercase tracking-tight mb-2">
+                Antarctica Wasn’t a Marketing Exercise.<br />
+                <span className="text-[#FF6900]">It Was an Engineering Requirement.</span>
+              </h3>
+              <p className="text-sm text-[#CCC] font-normal">
+                That is precisely where Alkota belongs.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Technical Specifications Table */}
+        <CaseStudySpecifications
+          specifications={caseStudy.specifications || []}
+          title="Antarctic Deployment Technical Parameters"
+          subtitle="Data verified against UNL Science Management Office & Cambridge University Press Annals of Glaciology"
+        />
+
+        {/* Academic Bibliography / Sources of Truth */}
+        <section className="my-16 p-8 bg-white border border-[#E8E8E4]">
+          <div className="flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-[#FF6900] mb-3">
+            <BookOpen className="h-4 w-4" />
+            <span>Academic Sourcing & Sources of Truth</span>
+          </div>
+          <h3 className="font-extralight text-2xl uppercase tracking-tight text-alkota-black mb-6">
+            Verified Historical References
+          </h3>
+          <div className="space-y-4 text-xs text-[#555]">
+            {caseStudy.externalSources?.map((src, idx) => (
+              <div key={idx} className="p-3 bg-[#F8F7F4] border border-[#E8E8E4]">
+                <span className="text-alkota-black font-medium block">{src.title}</span>
+                <span className="text-[#777] block mt-0.5">{src.publisher} ({src.year})</span>
+                {src.note && <span className="text-[#888] italic block mt-1">{src.note}</span>}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Related Canonical Equipment */}
+        <CaseStudyRelatedProducts
+          productSlugs={caseStudy.relatedProductSlugs}
+          fallbackCategory="hot-water"
+          headline="The Schedule 80 Hot-Water Technology"
+        />
+      </div>
+
+      {/* ── NEXT FIELD STORY ───────────────────────────────────────── */}
+      <CaseStudyNextStory nextSlug={caseStudy.nextStorySlug} />
+
+      {/* ── GLOBAL FOOTER ─────────────────────────────────────────── */}
+      <Footer />
+    </main>
+  );
+}

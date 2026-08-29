@@ -60,9 +60,22 @@ export default function MachineMatchAndOwnership() {
         </div>
       </section>
 
-      {/* Final Cinematic Brand Signature */}
-      <section className="relative bg-[#0C0C0A] overflow-hidden py-28 sm:py-36 px-6 sm:px-12 text-white font-normal">
-        <div className="relative z-10 mx-auto max-w-4xl text-center font-normal">
+      {/* Final Cinematic Brand Signature — Engineered for Continuous Duty */}
+      <section className="relative bg-[#0C0C0A] overflow-hidden py-28 sm:py-36 px-6 sm:px-12 text-white font-normal min-h-[640px] flex flex-col justify-center">
+        {/* Full-bleed photography background with slight dark overlay */}
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          <img
+            src="/assets/engineered-continuous-duty.jpg"
+            alt="Alkota High Temperature Pressure Gauge & Engineering Components"
+            className="h-full w-full object-cover object-center scale-105"
+            style={{ filter: 'brightness(0.32) contrast(1.15)' }}
+          />
+          {/* Subtle dark gradient overlays for maximum text clarity */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/55 to-black/85" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0C0C0A] via-transparent to-[#0C0C0A]/80" />
+        </div>
+
+        <div className="relative z-10 mx-auto max-w-4xl text-center font-normal my-auto">
           <span className="text-xs uppercase tracking-[0.25em] text-alkota-orange block mb-6 font-light">
             Est. 1964 · Alcester, South Dakota · UK Direct
           </span>
@@ -73,7 +86,7 @@ export default function MachineMatchAndOwnership() {
             Engineered for Continuous Duty.<br />
             <span className="text-alkota-orange">Backed by 60 Years of Build.</span>
           </h2>
-          <p className="text-[#aaa] leading-relaxed mb-12 font-normal text-base sm:text-lg max-w-xl mx-auto">
+          <p className="text-[#ddd] leading-relaxed mb-12 font-normal text-base sm:text-lg max-w-xl mx-auto">
             Specify your industrial cleaning setup with confidence. Connect directly with Alkota technical specialists for advice, on-site demonstrations, or custom rig design.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 font-normal">
@@ -86,7 +99,7 @@ export default function MachineMatchAndOwnership() {
             </Link>
             <Link
               href="/contact"
-              className="inline-flex items-center gap-3 border border-white/30 bg-black/40 text-white px-8 py-4 text-xs uppercase tracking-[0.2em] hover:border-white hover:bg-white hover:text-black transition-colors no-underline font-normal"
+              className="inline-flex items-center gap-3 border border-white/40 bg-black/40 backdrop-blur-sm text-white px-8 py-4 text-xs uppercase tracking-[0.2em] hover:border-white hover:bg-white hover:text-black transition-colors no-underline font-normal"
             >
               <span>Contact Alkota UK</span>
             </Link>

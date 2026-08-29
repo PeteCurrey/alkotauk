@@ -77,7 +77,7 @@ export default function IndustryGrid() {
   const activeSector = SECTORS.find((s) => s.slug === activeSlug) || SECTORS[0];
 
   return (
-    <section className="relative min-h-[700px] w-full bg-[#0F0F0D] text-white flex flex-col justify-between py-24 sm:py-32 px-6 sm:px-12 font-normal overflow-hidden" aria-label="Real World Applications">
+    <section className="relative min-h-screen w-full bg-[#0F0F0D] text-white flex flex-col justify-center py-24 sm:py-32 px-6 sm:px-12 font-normal overflow-hidden" aria-label="Real World Applications">
       {/* Dynamic Full-Bleed Environment Background */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <AnimatePresence mode="wait">
@@ -101,7 +101,7 @@ export default function IndustryGrid() {
         <div className="absolute inset-0 bg-gradient-to-t from-[#0F0F0D] via-transparent to-[#0F0F0D]/60" />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-7xl w-full">
+      <div className="relative z-10 mx-auto max-w-7xl w-full my-auto">
         {/* Section Header */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-12">
           <div>

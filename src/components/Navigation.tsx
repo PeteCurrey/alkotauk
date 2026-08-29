@@ -93,7 +93,7 @@ export default function Navigation() {
     >
       <div className="mx-auto flex max-w-7xl w-full items-center justify-between">
         <Link href="/" className="flex items-center group">
-          <Logo className={`${isScrolled ? "h-8 text-alkota-black" : "h-9 text-white"} transition-colors duration-300`} />
+          <Logo className={`${isScrolled ? "h-8" : "h-10"} transition-all duration-300`} />
         </Link>
 
         {/* Desktop Nav Links */}

@@ -12,7 +12,7 @@ export default function Footer() {
         <div className="pb-16 mb-16 border-b border-[#1F1F1F] grid grid-cols-1 lg:grid-cols-12 gap-8 items-center font-normal">
           <div className="lg:col-span-8">
             <Link href="/" className="inline-block group mb-4">
-              <Logo className="h-9 text-white" />
+              <Logo className="h-12" />
             </Link>
             <p className="text-sm text-[#888] max-w-2xl leading-relaxed font-normal">
               Alkota UK represents Alkota Cleaning Systems Inc. (Est. 1964, Alcester, South Dakota, USA). Engineered for the UK’s most aggressive industrial, fleet, agricultural, and manufacturing environments.

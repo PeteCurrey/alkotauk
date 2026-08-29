@@ -57,12 +57,12 @@ const MACHINE_CATEGORIES: MachineCategory[] = [
     desc: 'Custom-built highway-certified wash rigs with integrated water tanks, hose reels, and diesel generators.',
   },
   {
-    name: 'Water Recovery Skids',
+    name: 'Water Treatment',
     href: '/water-treatment',
-    subtitle: 'Closed-Loop Compliance',
+    subtitle: 'Recovery, Filtration & Recycling',
     image: '/assets/products/ged-12v-skid.png',
-    spec: 'Environment Agency Compliant',
-    desc: 'Hydrocarbon separation, filtration, and recycling systems for mobile and stationary wash bays.',
+    spec: 'Closed-Loop & EA Compliant',
+    desc: 'Multi-stage vacuum recovery, media sand filtration, closed-loop recycling and wastewater evaporation systems.',
   },
 ];
 
@@ -506,15 +506,15 @@ export default function Navigation() {
                         </p>
                       </Link>
                       <Link
-                        href="/machines/parts-washers"
+                        href="/wash-plant"
                         onClick={() => setActiveMenu(null)}
                         className="block p-3 bg-[#F7F7F5] hover:bg-white border border-[#E8E8E4] hover:border-alkota-orange transition-all no-underline group"
                       >
                         <h4 className="text-xs uppercase tracking-wider text-alkota-black group-hover:text-alkota-orange font-normal">
-                          Aqueous Wash Plants →
+                          Bespoke Wash Plants →
                         </h4>
                         <p className="text-[11px] text-[#777] font-normal mt-0.5">
-                          Automated component degreasing turntables.
+                          Multi-bay fixed installations, automated mat washers & plant hubs.
                         </p>
                       </Link>
                     </div>
@@ -816,6 +816,7 @@ export default function Navigation() {
                           <>
                             <Link href="/machines/trailers" onClick={() => setMobileMenuOpen(false)} className="text-sm text-[#ccc] hover:text-alkota-orange no-underline py-0.5">Bespoke Trailers</Link>
                             <Link href="/bespoke#skid" onClick={() => setMobileMenuOpen(false)} className="text-sm text-[#ccc] hover:text-alkota-orange no-underline py-0.5">Custom Skid Units</Link>
+                            <Link href="/wash-plant" onClick={() => setMobileMenuOpen(false)} className="text-sm text-[#ccc] hover:text-alkota-orange no-underline py-0.5">Bespoke Wash Plants</Link>
                             <Link href="/tools/configurator" onClick={() => setMobileMenuOpen(false)} className="text-sm text-[#ccc] hover:text-alkota-orange no-underline py-0.5">Build Configurator</Link>
                           </>
                         )}

@@ -73,6 +73,17 @@ const FAMILIES: ProductFamily[] = [
     statPrimary: '1,000L On-Board',
     statLabel: 'Highway-Tow Certified',
   },
+  {
+    id: 'water-treatment',
+    slug: 'water-treatment',
+    name: 'Water Treatment',
+    subtitle: 'Closed-Loop & Vacuum Reclaim',
+    tagline: 'Multi-Stage Filtration & Environmental Recovery',
+    description: 'Capture, treat, and recycle wash water. Multi-stage negative-void vacuum filtration, 300 lb media sand beds, and high-volume wastewater evaporation to meet strict UK Environment Agency discharge regulations.',
+    image: '/assets/products/ged-12v-skid.png',
+    statPrimary: '90% Recycled',
+    statLabel: 'BS EN 858 Aligned',
+  },
 ];
 
 export default function ProductUniverse() {
@@ -169,7 +180,7 @@ export default function ProductUniverse() {
 
                 <div className="flex items-center gap-6 font-normal">
                   <Link
-                    href={`/machines/${activeFamily.slug}`}
+                    href={activeFamily.slug === 'water-treatment' ? '/water-treatment' : `/machines/${activeFamily.slug}`}
                     className="inline-flex items-center gap-3 bg-alkota-black text-white px-8 py-4 text-xs uppercase tracking-[0.2em] hover:bg-alkota-orange transition-colors no-underline group shadow-lg font-normal"
                   >
                     <span>Explore {activeFamily.name} Range</span>

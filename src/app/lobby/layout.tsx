@@ -25,7 +25,7 @@ export default function LobbyLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-[#0A0A0A] text-[#E0E0E0] selection:bg-[#FF6900] selection:text-white">
+    <div className="min-h-screen bg-[#FAFAF8] text-[#1A1A18] selection:bg-[#FF6900] selection:text-white font-normal">
       <LobbyHeader />
       <main>{children}</main>
       <LobbyFooter />

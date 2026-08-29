@@ -107,7 +107,7 @@ export default function WaterTreatmentProductPage({ params }: { params: { slug: 
           <Breadcrumbs 
             items={[
               { label: 'Fleet', href: '/machines' }, 
-              { label: 'Water Treatment', href: '/#water-treatment' },
+              { label: 'Water Treatment', href: '/water-treatment' },
               { label: system.name }
             ]} 
           />
@@ -193,7 +193,7 @@ export default function WaterTreatmentProductPage({ params }: { params: { slug: 
                   <ChevronRight className="h-4 w-4" />
                 </Link>
                 <Link
-                  href="/#water-treatment"
+                  href="/water-treatment"
                   className="flex-1 flex items-center justify-center gap-3 bg-white border border-alkota-iron px-8 py-5 text-xs font-black uppercase tracking-[0.2em] text-alkota-black hover:bg-alkota-bg transition-colors"
                 >
                   <ArrowLeft className="h-4 w-4" />

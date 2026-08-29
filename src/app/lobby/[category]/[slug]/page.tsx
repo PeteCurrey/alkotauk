@@ -5,7 +5,6 @@ import { Metadata } from 'next';
 import {
   getLobbyArticleBySlug,
   getLobbyArticles,
-  getLobbyCategoryBySlug,
   LobbyArticle,
 } from '@/lib/lobby';
 import { getProductBySlug } from '@/lib/products';
@@ -14,14 +13,13 @@ import {
   ArrowRight,
   Clock,
   Calendar,
-  Share2,
-  BookOpen,
   ChevronRight,
   ShieldCheck,
   Cpu,
   Flame,
-  ArrowUpRight,
-  CheckCircle2,
+  BarChart3,
+  ExternalLink,
+  BookOpen,
 } from 'lucide-react';
 
 interface Props {
@@ -117,56 +115,56 @@ export default async function LobbyArticlePage({ params }: Props) {
   };
 
   return (
-    <article className="pb-24">
+    <article className="bg-[#FAFAF8] text-[#1A1A18] font-normal pb-24">
       {/* Structured Data */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* ─── BREADCRUMB & HEADER ─────────────────────────────────────────── */}
-      <div className="border-b border-[#1A1A1A] bg-[#0D0D0D] px-6 py-4 sm:px-12">
-        <div className="mx-auto max-w-5xl flex items-center justify-between text-[10px] font-ibm-plex-mono text-[#777]">
+      {/* ─── BREADCRUMB ──────────────────────────────────────────────────── */}
+      <div className="border-b border-[#E5E5E0] bg-white px-6 py-4 sm:px-12">
+        <div className="mx-auto max-w-5xl flex items-center justify-between text-xs font-mono text-[#777]">
           <div className="flex items-center gap-2">
-            <Link href="/lobby" className="hover:text-white transition-colors">
+            <Link href="/lobby" className="hover:text-[#FF6900] transition-colors no-underline text-[#777]">
               The Lobby
             </Link>
-            <ChevronRight className="h-3 w-3 text-[#444]" />
+            <ChevronRight className="h-3 w-3 text-[#ccc]" />
             <Link
-              href={`/lobby#${article.category_slug}`}
-              className="text-[#FF6900] hover:underline"
+              href={'/lobby#' + article.category_slug}
+              className="text-[#FF6900] hover:underline no-underline uppercase"
             >
               {article.category?.name || article.category_slug}
             </Link>
-            <ChevronRight className="h-3 w-3 text-[#444]" />
-            <span className="text-[#aaa] truncate max-w-xs sm:max-w-md">
+            <ChevronRight className="h-3 w-3 text-[#ccc]" />
+            <span className="text-[#333] truncate max-w-xs sm:max-w-md">
               {article.slug}
             </span>
           </div>
           <Link
             href="/lobby"
-            className="hidden sm:inline-flex items-center gap-1 text-[#888] hover:text-white transition-colors"
+            className="hidden sm:inline-flex items-center gap-1.5 text-[#555] hover:text-[#FF6900] transition-colors no-underline"
           >
-            <ArrowLeft className="h-3 w-3" />
-            <span>Archive Index</span>
+            <ArrowLeft className="h-3.5 w-3.5" />
+            <span>All Intelligence</span>
           </Link>
         </div>
       </div>
 
       {/* ─── ARTICLE HEADER ──────────────────────────────────────────────── */}
-      <header className="border-b border-[#1F1F1F] bg-[#0A0A0A] px-6 pt-12 pb-14 sm:px-12 lg:pt-16">
+      <header className="border-b border-[#E5E5E0] bg-white px-6 pt-12 pb-14 sm:px-12 lg:pt-16">
         <div className="mx-auto max-w-4xl">
           {/* Metadata badges */}
           <div className="flex flex-wrap items-center gap-3 mb-6">
-            <span className="inline-block bg-[#FF6900]/10 border border-[#FF6900]/30 px-3 py-1 text-[9px] font-ibm-plex-mono font-bold uppercase tracking-widest text-[#FF6900]">
+            <span className="inline-block bg-[#FF6900]/10 border border-[#FF6900]/30 px-3 py-1 text-[10px] font-mono font-medium uppercase tracking-wider text-[#FF6900]">
               {article.category?.badge_label || 'TECHNICAL WHITE PAPER'}
             </span>
-            <span className="flex items-center gap-1.5 text-[10px] font-ibm-plex-mono text-[#888]">
-              <Clock className="h-3 w-3 text-[#666]" />
+            <span className="flex items-center gap-1.5 text-xs font-mono text-[#777]">
+              <Clock className="h-3.5 w-3.5 text-[#FF6900]" />
               {article.reading_time_mins} Min Read
             </span>
-            <span className="flex items-center gap-1.5 text-[10px] font-ibm-plex-mono text-[#888]">
-              <Calendar className="h-3 w-3 text-[#666]" />
+            <span className="flex items-center gap-1.5 text-xs font-mono text-[#777]">
+              <Calendar className="h-3.5 w-3.5 text-[#777]" />
               {new Date(article.published_at).toLocaleDateString('en-GB', {
                 day: 'numeric',
                 month: 'long',
@@ -175,22 +173,22 @@ export default async function LobbyArticlePage({ params }: Props) {
             </span>
           </div>
 
-          <h1 className="font-barlow-condensed text-4xl sm:text-6xl lg:text-7xl font-black uppercase italic tracking-tight text-white leading-[0.92]">
+          <h1 className="font-extralight text-3xl sm:text-5xl lg:text-6xl uppercase tracking-tight text-[#1A1A18] leading-tight mb-4">
             {article.title}
           </h1>
 
           {article.subtitle && (
-            <p className="mt-4 font-inter text-base sm:text-xl text-[#bbb] leading-relaxed">
+            <p className="font-light text-lg sm:text-xl text-[#555] leading-relaxed mb-8">
               {article.subtitle}
             </p>
           )}
 
           {/* Author Byline */}
           {article.author && (
-            <div className="mt-8 pt-8 border-t border-[#1C1C1C] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="pt-6 border-t border-[#E5E5E0] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="flex items-center gap-4">
                 {article.author.avatar_url && (
-                  <div className="relative h-12 w-12 rounded-full overflow-hidden border border-[#333]">
+                  <div className="relative h-12 w-12 rounded-full overflow-hidden border border-[#E5E5E0]">
                     <Image
                       src={article.author.avatar_url}
                       alt={article.author.name}
@@ -201,16 +199,16 @@ export default async function LobbyArticlePage({ params }: Props) {
                 )}
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="font-barlow-condensed text-lg font-bold text-white">
+                    <span className="font-normal text-base text-[#1A1A18]">
                       {article.author.name}
                     </span>
                     {article.author.credentials && (
-                      <span className="hidden sm:inline text-[10px] font-ibm-plex-mono text-[#FF6900] bg-[#FF6900]/10 px-2 py-0.5 border border-[#FF6900]/20">
+                      <span className="hidden sm:inline text-[10px] font-mono text-[#FF6900] bg-[#FF6900]/10 px-2 py-0.5 border border-[#FF6900]/20">
                         {article.author.credentials}
                       </span>
                     )}
                   </div>
-                  <p className="font-ibm-plex-mono text-[10px] text-[#777]">
+                  <p className="font-mono text-xs text-[#777]">
                     {article.author.role}
                   </p>
                 </div>
@@ -221,7 +219,7 @@ export default async function LobbyArticlePage({ params }: Props) {
                 {article.tags?.map((tag) => (
                   <span
                     key={tag}
-                    className="border border-[#262626] bg-[#111] px-2.5 py-1 text-[9px] font-ibm-plex-mono text-[#888]"
+                    className="border border-[#E5E5E0] bg-[#FAFAF8] px-2.5 py-1 text-[10px] font-mono text-[#666]"
                   >
                     #{tag}
                   </span>
@@ -234,9 +232,9 @@ export default async function LobbyArticlePage({ params }: Props) {
 
       {/* ─── FEATURED IMAGE ──────────────────────────────────────────────── */}
       {article.featured_image_url && (
-        <div className="border-b border-[#1F1F1F] bg-[#050505]">
+        <div className="border-b border-[#E5E5E0] bg-[#FAFAF8]">
           <div className="mx-auto max-w-5xl px-6 sm:px-12 py-8">
-            <div className="relative aspect-[21/9] w-full overflow-hidden border border-[#222] bg-[#111]">
+            <div className="relative aspect-[21/9] w-full overflow-hidden border border-[#E5E5E0] bg-[#EEE] shadow-sm">
               <Image
                 src={article.featured_image_url}
                 alt={article.title}
@@ -253,23 +251,20 @@ export default async function LobbyArticlePage({ params }: Props) {
       <div className="mx-auto max-w-4xl px-6 py-12 sm:px-12">
         <div className="grid grid-cols-1 gap-12">
           {/* Main Article Prose */}
-          <div className="prose prose-invert prose-orange max-w-none font-inter text-[#ccc] leading-relaxed text-sm sm:text-base prose-headings:font-barlow-condensed prose-headings:uppercase prose-headings:italic prose-headings:tracking-tight prose-h1:text-4xl prose-h2:text-3xl prose-h3:text-2xl prose-h2:border-b prose-h2:border-[#222] prose-h2:pb-3 prose-h2:mt-12 prose-strong:text-white prose-table:border-collapse prose-th:border prose-th:border-[#333] prose-th:bg-[#141414] prose-th:p-3 prose-th:font-ibm-plex-mono prose-th:text-xs prose-td:border prose-td:border-[#222] prose-td:p-3 prose-td:text-xs prose-hr:border-[#222]">
-            {/* Render plain text or simple markdown formatting */}
-            <div className="whitespace-pre-line leading-relaxed space-y-4">
-              {article.content_markdown}
-            </div>
+          <div className="text-[#2A2A28] leading-relaxed text-base sm:text-lg space-y-6 font-normal whitespace-pre-line">
+            {article.content_markdown}
           </div>
 
           {/* ─── RELATED HARDWARE / MACHINERY CARDS ─────────────────────── */}
           {relatedMachines.length > 0 && (
-            <div className="mt-12 border-t border-[#222] pt-12">
-              <span className="font-ibm-plex-mono text-[10px] font-bold uppercase tracking-[0.3em] text-[#FF6900]">
-                // ENGINEERED HARDWARE
+            <div className="mt-12 border-t border-[#E5E5E0] pt-12">
+              <span className="font-mono text-[10px] font-medium uppercase tracking-[0.25em] text-[#FF6900]">
+                Engineered Hardware
               </span>
-              <h3 className="mt-2 font-barlow-condensed text-3xl font-black uppercase italic text-white mb-6">
-                APPLICABLE ALKOTA MACHINERY & PLATFORMS
+              <h3 className="mt-2 font-extralight text-2xl sm:text-3xl uppercase tracking-tight text-[#1A1A18] mb-6">
+                Applicable Alkota Machinery & Platforms
               </h3>
-              <p className="font-inter text-xs text-[#888] mb-6">
+              <p className="text-xs sm:text-sm text-[#666] mb-6 font-normal">
                 The technical principles detailed in this paper are built directly into the following Alkota systems:
               </p>
 
@@ -277,24 +272,24 @@ export default async function LobbyArticlePage({ params }: Props) {
                 {relatedMachines.map((machine: any) => (
                   <Link
                     key={machine.id}
-                    href={`/machines/${machine.category}/${machine.slug}`}
-                    className="flex flex-col justify-between border border-[#222] bg-[#0E0E0E] p-5 hover:border-[#FF6900] transition-colors group"
+                    href={'/machines/' + machine.category + '/' + machine.slug}
+                    className="flex flex-col justify-between border border-[#E5E5E0] bg-white p-6 hover:border-[#FF6900] transition-colors group no-underline shadow-xs"
                   >
                     <div>
-                      <span className="text-[8px] font-ibm-plex-mono font-bold uppercase tracking-widest text-[#FF6900]">
+                      <span className="text-[10px] font-mono font-medium uppercase tracking-widest text-[#FF6900]">
                         {machine.series || machine.category}
                       </span>
-                      <h4 className="mt-1 font-barlow-condensed text-2xl font-black uppercase italic text-white group-hover:text-[#FF6900] transition-colors">
+                      <h4 className="mt-1 font-light text-xl text-[#1A1A18] group-hover:text-[#FF6900] transition-colors">
                         {machine.name}
                       </h4>
-                      <p className="mt-2 font-inter text-xs text-[#777] line-clamp-2">
+                      <p className="mt-2 text-xs text-[#666] line-clamp-2 leading-relaxed font-normal">
                         {machine.tagline || machine.description}
                       </p>
                     </div>
 
-                    <div className="mt-4 pt-3 border-t border-[#1A1A1A] flex items-center justify-between font-ibm-plex-mono text-[10px]">
-                      <span className="text-white font-bold">
-                        {machine.pressure_bar ? `${machine.pressure_bar} BAR` : 'Heavy Duty'} • {machine.flow_rate_lpm ? `${machine.flow_rate_lpm} L/MIN` : ''}
+                    <div className="mt-4 pt-3 border-t border-[#F0F0EE] flex items-center justify-between font-mono text-xs">
+                      <span className="text-[#1A1A18]">
+                        {machine.pressure_bar ? machine.pressure_bar + ' BAR' : 'Heavy Duty'} {machine.flow_rate_lpm ? '• ' + machine.flow_rate_lpm + ' L/MIN' : ''}
                       </span>
                       <span className="text-[#FF6900] flex items-center gap-1 group-hover:translate-x-1 transition-transform">
                         Specs <ArrowRight className="h-3 w-3" />
@@ -306,61 +301,23 @@ export default async function LobbyArticlePage({ params }: Props) {
             </div>
           )}
 
-          {/* ─── AUTHOR BIO CARD ───────────────────────────────────────── */}
-          {article.author && (
-            <div className="border border-[#222] bg-[#0D0D0D] p-6 sm:p-8 flex flex-col sm:flex-row items-start gap-6">
-              {article.author.avatar_url && (
-                <div className="relative h-16 w-16 shrink-0 rounded-full overflow-hidden border border-[#333]">
-                  <Image
-                    src={article.author.avatar_url}
-                    alt={article.author.name}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              )}
-              <div className="flex-1">
-                <div className="flex items-center justify-between gap-2 mb-1">
-                  <h4 className="font-barlow-condensed text-2xl font-bold uppercase text-white">
-                    {article.author.name}
-                  </h4>
-                  <span className="font-ibm-plex-mono text-[9px] text-[#FF6900] uppercase">
-                    AUTHOR
-                  </span>
-                </div>
-                <p className="font-ibm-plex-mono text-[10px] text-[#777] mb-3">
-                  {article.author.role} • {article.author.credentials}
-                </p>
-                <p className="font-inter text-xs text-[#999] leading-relaxed">
-                  {article.author.bio}
-                </p>
-              </div>
-            </div>
-          )}
+          {/* Return & Inquiries */}
+          <div className="mt-8 pt-8 border-t border-[#E5E5E0] flex flex-wrap items-center justify-between gap-4">
+            <Link
+              href="/lobby"
+              className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[#1A1A18] hover:text-[#FF6900] no-underline"
+            >
+              <ArrowLeft className="h-3.5 w-3.5" />
+              <span>Return to The Lobby Index</span>
+            </Link>
 
-          {/* ─── CONSULTATION BANNER ───────────────────────────────────── */}
-          <div className="border border-[#FF6900]/40 bg-[#FF6900]/5 p-8 sm:p-10 text-center">
-            <h3 className="font-barlow-condensed text-3xl sm:text-4xl font-black uppercase italic text-white leading-tight">
-              REQUIRE BESPOKE APPLICATION ENGINEERING?
-            </h3>
-            <p className="mt-2 font-inter text-xs sm:text-sm text-[#aaa] max-w-xl mx-auto leading-relaxed">
-              Our UK team provides site assessments, wash bay drainage consultations, and thermodynamic calculations for custom industrial installations.
-            </p>
-            <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link
-                href="/contact"
-                className="inline-flex items-center justify-center gap-2 bg-[#FF6900] px-6 py-3.5 font-ibm-plex-mono text-xs font-bold uppercase tracking-widest text-white hover:bg-white hover:text-black transition-colors w-full sm:w-auto"
-              >
-                <span>Consult an Applications Engineer</span>
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-              <a
-                href="tel:+447912506738"
-                className="inline-flex items-center justify-center gap-2 border border-[#333] bg-[#111] px-6 py-3.5 font-ibm-plex-mono text-xs uppercase tracking-widest text-white hover:border-white transition-colors w-full sm:w-auto"
-              >
-                <span>Call +44 7912 506738</span>
-              </a>
-            </div>
+            <Link
+              href="/contact"
+              className="inline-flex items-center gap-2 bg-[#FF6900] hover:bg-[#1A1A18] text-white px-5 py-2.5 text-xs uppercase tracking-widest transition-colors font-normal no-underline"
+            >
+              <span>Consult an Applications Engineer</span>
+              <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
           </div>
         </div>
       </div>

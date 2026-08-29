@@ -19,8 +19,8 @@ export default function BespokeBuildsPage() {
     {
       title: "BESPOKE WASH PLANTS",
       desc: "Multi-bay plumbing. Hose reel towers. Chemical dosing stations. Water recovery at design stage. For fleet depots, food processing, and agricultural facilities.",
-      cta: "Discuss a Wash Plant →",
-      href: "/contact?enquiry=wash-bay",
+      cta: "Explore Wash Plants →",
+      href: "/wash-plant",
       icon: Factory
     },
     {

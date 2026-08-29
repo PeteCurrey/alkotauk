@@ -37,6 +37,36 @@ const nextConfig: NextConfig = {
         destination: '/tools/machine-match',
         permanent: true,
       },
+      {
+        source: '/wash-plants',
+        destination: '/wash-plant',
+        permanent: true,
+      },
+      {
+        source: '/machines/wash-plants',
+        destination: '/wash-plant',
+        permanent: true,
+      },
+      {
+        source: '/water-recovery-skids',
+        destination: '/water-treatment',
+        permanent: true,
+      },
+      {
+        source: '/machines/water-recovery-skids',
+        destination: '/water-treatment',
+        permanent: true,
+      },
+      {
+        source: '/machines/water-treatment',
+        destination: '/water-treatment',
+        permanent: true,
+      },
+      {
+        source: '/water-recovery',
+        destination: '/water-treatment',
+        permanent: true,
+      },
     ];
   },
   eslint: {

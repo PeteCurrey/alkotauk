@@ -114,7 +114,7 @@ const CATEGORY_METADATA_CONFIG: Record<string, {
     title: 'Cold Water Pressure Washers',
     tagline: 'High-Flow Hydraulic Impingement & Continuous Industrial Washdown',
     statement: 'Engineered for continuous volumetric rinsing, heavy soil displacement, and aggregate decontamination. Alkota cold water machines focus 100% of input horsepower into flow rate and hydrostatic impact with zero burner overheads.',
-    heroImage: 'https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=2000&q=80',
+    heroImage: '/assets/cold-water-control-hero.jpg',
     accentColor: '#38BDF8',
     metrics: [
       { label: 'Flow Capability', value: 'Up to 38 L/MIN', detail: 'High-volume clay & mud displacement' },

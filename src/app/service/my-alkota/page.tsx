@@ -17,8 +17,10 @@ import {
   Gauge,
   Thermometer,
   Droplets,
-  Package
+  Package,
+  Truck
 } from 'lucide-react';
+
 import { SAMPLE_REGISTERED_MACHINE } from '@/lib/service/seed-data';
 
 
@@ -340,6 +342,104 @@ export default function MyAlkotaDashboardPage() {
           </div>
         </div>
       </section>
+
+      {/* ── TRAILER SYSTEMS ── */}
+      <section className="py-12 px-6 sm:px-12 lg:px-24 max-w-7xl mx-auto">
+        <div className="flex items-center gap-3 mb-6">
+          <Truck className="w-5 h-5 text-alkota-orange" />
+          <h3 className="font-medium text-xl text-alkota-black">Bespoke Trailer Systems</h3>
+        </div>
+
+        {/* In-Production Build */}
+        <div className="bg-[#0A0A0A] text-white border border-[#222] p-6 mb-4">
+          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-alkota-orange bg-[#1A1A1A] px-2.5 py-0.5 border border-[#333]">
+                  In Production
+                </span>
+                <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#888] px-2.5 py-0.5 border border-[#333]">
+                  ABP-2509-001
+                </span>
+              </div>
+              <h4 className="font-light text-lg text-white mb-1">
+                Enclosed Dual-Operator Recovery System
+              </h4>
+              <p className="text-xs text-[#888] mb-1">
+                Build Code: <span className="font-ibm-plex-mono text-[#AAA]">AKT-MRPQ47-UK</span>
+              </p>
+              <p className="text-xs text-[#888]">
+                Hargreaves Environmental Services Ltd · Bradford Depot
+              </p>
+            </div>
+            <div className="flex flex-col gap-2 shrink-0">
+              <Link
+                href="/my-alkota/builds/AKT-MRPQ47-UK"
+                className="inline-flex items-center gap-2 bg-alkota-orange hover:bg-white hover:text-black text-white px-4 py-2.5 font-ibm-plex-mono text-[10px] uppercase tracking-widest transition-colors"
+              >
+                Track Your Build
+                <ArrowRight className="w-3 h-3" />
+              </Link>
+            </div>
+          </div>
+
+          {/* Stage progress strip */}
+          <div className="mt-4 pt-4 border-t border-[#222]">
+            <p className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#555] mb-2">Production Progress</p>
+            <div className="flex gap-1">
+              {['complete','complete','complete','complete','complete','in_progress','not_started','not_started','not_started','not_started','not_started','not_started','not_started'].map((status, idx) => (
+                <div
+                  key={idx}
+                  className="h-2 flex-1 rounded-sm"
+                  style={{
+                    background: status === 'complete' ? '#22c55e' : status === 'in_progress' ? '#FF6900' : '#1F1F1F'
+                  }}
+                />
+              ))}
+            </div>
+            <p className="text-[10px] text-[#666] mt-1.5">Water & System Integration — In Progress</p>
+          </div>
+        </div>
+
+        {/* Delivered Asset */}
+        <div className="bg-white border border-[#E8E8E4] p-6">
+          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-emerald-700 bg-emerald-50 px-2.5 py-0.5 border border-emerald-200">
+                  Delivered — In Service
+                </span>
+                <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#888] px-2.5 py-0.5 border border-[#DDD]">
+                  ABP-2508-002
+                </span>
+              </div>
+              <h4 className="font-medium text-base text-alkota-black mb-1">
+                Enclosed Dual-Operator Recovery System
+              </h4>
+              <p className="text-xs text-[#666] mb-1">
+                Build Code: <span className="font-ibm-plex-mono">AKT-KXPR85-UK</span>
+              </p>
+              <p className="text-xs text-[#666]">Delivered 29 Aug 2025 · Warranty active</p>
+            </div>
+            <div className="flex flex-col gap-2 shrink-0">
+              <Link
+                href="/my-alkota/builds/AKT-KXPR85-UK"
+                className="inline-flex items-center gap-2 bg-alkota-black hover:bg-alkota-orange text-white px-4 py-2.5 font-ibm-plex-mono text-[10px] uppercase tracking-widest transition-colors"
+              >
+                View Your System
+                <ArrowRight className="w-3 h-3" />
+              </Link>
+              <Link
+                href="/my-alkota/builds/AKT-KXPR85-UK/service"
+                className="inline-flex items-center gap-2 border border-[#DDD] hover:border-alkota-orange text-[#444] hover:text-alkota-orange px-4 py-2.5 font-ibm-plex-mono text-[10px] uppercase tracking-widest transition-colors"
+              >
+                Request Service
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }
+

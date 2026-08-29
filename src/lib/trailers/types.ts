@@ -270,3 +270,237 @@ export interface EnduranceCalculation {
   continuous_minutes: number;
   typical_trigger_hours: number; // factoring 60% trigger time
 }
+
+// ─── PHASE 06: BUILD LIFECYCLE TYPES ─────────────────────────────────────────
+
+export type BuildStageId =
+  | 'order_confirmed'
+  | 'engineering_release'
+  | 'chassis_received'
+  | 'fabrication'
+  | 'equipment_installation'
+  | 'plumbing_fluid_systems'
+  | 'electrical_power'
+  | 'water_recovery_integration'
+  | 'livery_finish'
+  | 'system_testing'
+  | 'quality_check'
+  | 'ready_for_handover'
+  | 'delivered';
+
+export type BuildStageStatus = 'not_started' | 'in_progress' | 'blocked' | 'complete';
+
+export type BuildProjectStatus =
+  | 'order_confirmed'
+  | 'in_production'
+  | 'blocked'
+  | 'quality_check'
+  | 'ready_for_handover'
+  | 'delivered';
+
+export interface BuildStage {
+  id: BuildStageId;
+  internal_label: string;
+  customer_label: string;
+  status: BuildStageStatus;
+  started_at?: string;
+  completed_at?: string;
+  blocked_reason?: string; // internal only — never expose to customer
+  technician?: string;
+}
+
+export interface BuildUpdate {
+  id: string;
+  date: string;
+  message: string; // customer-visible approved update
+  is_milestone: boolean;
+  stage_id?: BuildStageId;
+  photo_url?: string; // approved photo only
+}
+
+export interface ComponentSerial {
+  id: string;
+  category: 'chassis' | 'machine' | 'engine' | 'pump' | 'burner' | 'generator' | 'recovery' | 'hose_reel' | 'water_treatment' | 'other';
+  description: string;
+  make?: string;
+  model?: string;
+  serial_number?: string;
+  vin?: string; // chassis only
+  notes?: string;
+}
+
+export interface HandoverDocument {
+  id: string;
+  type:
+    | 'final_specification'
+    | 'machine_manual'
+    | 'engine_manual'
+    | 'generator_manual'
+    | 'warranty'
+    | 'trailer_docs'
+    | 'service_info'
+    | 'maintenance_schedule'
+    | 'training_record'
+    | 'certificate'
+    | 'photographs'
+    | 'other';
+  title: string;
+  revision: string;
+  date: string;
+  customer_visible: boolean;
+  url?: string;
+  superseded: boolean;
+  notes?: string;
+}
+
+export interface HandoverChecklistItem {
+  id: string;
+  test_type: string;
+  description: string;
+  // Conditions that must be true for this item to apply. 'always' means unconditional.
+  required_for: Array<'always' | 'enclosed' | 'dual_operator' | 'recovery' | 'generator' | 'closed_loop' | 'vfs_filtration' | 'vacgd'>;
+  result?: 'pass' | 'fail' | 'retest_required' | 'not_applicable';
+  date?: string;
+  technician?: string;
+  notes?: string;
+}
+
+export interface BuildMediaItem {
+  id: string;
+  stage_id?: BuildStageId;
+  filename: string;
+  url: string;
+  alt_text: string;
+  caption?: string;
+  classification: 'internal_only' | 'customer_visible' | 'marketing_approved' | 'hero';
+  uploaded_at: string;
+  uploaded_by: string;
+}
+
+export interface CustomerApproval {
+  id: string;
+  type: 'livery' | 'layout' | 'specification_revision';
+  title: string;
+  version: number;
+  document_url?: string;
+  submitted_at: string;
+  status: 'pending_customer_approval' | 'approved' | 'changes_requested';
+  approved_at?: string;
+  approved_by?: string;
+  customer_notes?: string;
+}
+
+export interface ServiceScheduleItem {
+  id: string;
+  component: string;
+  service_type: string;
+  interval_months?: number;
+  next_due_date?: string;
+  last_completed_date?: string;
+  status: 'current' | 'due_soon' | 'overdue';
+  assigned_provider?: string;
+}
+
+export interface ServiceHistoryEntry {
+  id: string;
+  date: string;
+  service_type: string;
+  engineer: string;
+  work_completed: string;
+  parts_used: string[];
+  recommendations?: string;
+  next_due?: string;
+  customer_visible: boolean;
+  report_url?: string;
+}
+
+export interface WeightRecord {
+  estimated_dry_kg: number;
+  estimated_wet_kg: number;
+  verified_finished_weight_kg?: number;
+  verified_at?: string;
+  verified_by?: string;
+}
+
+export interface AuditLogEntry {
+  id: string;
+  action: string;
+  performed_by: string;
+  performed_at: string;
+  previous_value?: string;
+  new_value?: string;
+  notes?: string;
+}
+
+export interface TrailerBuildProject {
+  id: string; // internal DB ID — never expose publicly
+  build_reference: string; // ABP-YYMM-NNN
+  build_code: string; // AKT-XXXXXX-UK from configurator
+  quote_reference?: string;
+
+  // Accepted from the won opportunity
+  accepted_configuration: TrailerConfiguration;
+  accepted_revision: number;
+
+  // Customer / project identity
+  customer_name: string;
+  customer_company: string;
+  customer_email: string;
+  customer_phone?: string;
+  customer_site?: string;
+
+  // Ownership
+  project_owner?: string;
+  engineering_owner?: string;
+  production_owner?: string;
+  status: BuildProjectStatus;
+
+  // Dates
+  order_confirmed_at: string;
+  target_handover_date?: string; // internal working target
+  confirmed_handover_date?: string; // communicated to customer
+  actual_handover_date?: string;
+  target_customer_visible: boolean; // admin controls visibility
+
+  // Production
+  stages: BuildStage[];
+  updates: BuildUpdate[];
+  component_serials: ComponentSerial[];
+  media: BuildMediaItem[];
+  customer_approvals: CustomerApproval[];
+
+  // Specification
+  weights: WeightRecord;
+  final_engineering_notes?: string;
+
+  // Handover
+  handover_checklist: HandoverChecklistItem[];
+  handover_documents: HandoverDocument[];
+  handover_completed: boolean;
+  handover_customer_representative?: string;
+  handover_date?: string;
+  training_completed: boolean;
+  training_notes?: string;
+
+  // Asset
+  asset_created: boolean;
+  qr_token?: string; // random safe token, never the DB id
+  warranty_start?: string;
+  warranty_end?: string;
+  warranty_covered_equipment?: string[];
+  service_schedule?: ServiceScheduleItem[];
+  service_history?: ServiceHistoryEntry[];
+  service_contract_type?: string;
+  service_contract_start?: string;
+  service_contract_end?: string;
+
+  // Commercial intelligence
+  case_study_candidate: boolean;
+  marketing_permission: boolean;
+
+  // Audit
+  audit_log: AuditLogEntry[];
+
+  created_at: string;
+  updated_at: string;
+}

@@ -13,8 +13,8 @@ export default function SouthDakotaHeritage() {
         <img
           src="/assets/south-dakota-craft-hero.jpg"
           alt="Alkota Handcrafted Manufacturing & Coil Winding in Alcester, South Dakota"
-          className="h-full w-full object-cover object-center scale-105"
-          style={{ filter: 'brightness(0.62) contrast(1.1)' }}
+          className="h-full w-full object-cover object-center"
+          style={{ filter: 'brightness(0.62) contrast(1.1)', transform: 'scaleX(-1) scale(1.05)' }}
         />
         {/* Directional gradient: darker behind text on the left, revealing the craftsman and coils on the right */}
         <div className="absolute inset-0 bg-gradient-to-r from-black/92 via-black/60 to-black/25" />

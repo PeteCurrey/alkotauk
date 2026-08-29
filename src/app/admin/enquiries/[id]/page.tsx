@@ -146,6 +146,79 @@ export default function EnquiryDetailPage({ params }: { params: Promise<{ id: st
             )}
           </div>
 
+          {/* Trailer Rig Build Metadata */}
+          {enquiry.metadata?.build_code && (
+            <div className="border border-[#FF6900]/40 bg-[#0D0D0D] p-6">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <span className="font-ibm-plex-mono text-[10px] bg-[#FF6900] text-white px-2 py-0.5 uppercase font-bold">
+                    {enquiry.metadata.build_code}
+                  </span>
+                  <p className="font-ibm-plex-mono text-[10px] font-black uppercase tracking-widest text-[#FF6900]">
+                    Configured Trailer Specification
+                  </p>
+                </div>
+                <Link
+                  href={`/trailers/build/${enquiry.metadata.build_code}`}
+                  target="_blank"
+                  className="font-ibm-plex-mono text-[9px] text-[#FF6900] hover:underline uppercase tracking-widest"
+                >
+                  View Public Build Sheet →
+                </Link>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 mb-4 text-xs font-mono">
+                <div className="bg-[#111] p-3 border border-[#222]">
+                  <span className="text-[#666] text-[9px] uppercase block">Format</span>
+                  <span className="text-white uppercase font-bold">{enquiry.metadata.format}</span>
+                </div>
+                <div className="bg-[#111] p-3 border border-[#222]">
+                  <span className="text-[#666] text-[9px] uppercase block">Chassis</span>
+                  <span className="text-white">{enquiry.metadata.chassis_id}</span>
+                </div>
+                <div className="bg-[#111] p-3 border border-[#222]">
+                  <span className="text-[#666] text-[9px] uppercase block">Machine</span>
+                  <span className="text-[#FF6900]">{enquiry.metadata.machine_id}</span>
+                </div>
+                <div className="bg-[#111] p-3 border border-[#222]">
+                  <span className="text-[#666] text-[9px] uppercase block">Water Storage</span>
+                  <span className="text-white">{enquiry.metadata.water_storage_id}</span>
+                </div>
+                <div className="bg-[#111] p-3 border border-[#222]">
+                  <span className="text-[#666] text-[9px] uppercase block">Recovery System</span>
+                  <span className="text-white">{enquiry.metadata.recovery_option_id}</span>
+                </div>
+                <div className="bg-[#111] p-3 border border-[#222]">
+                  <span className="text-[#666] text-[9px] uppercase block">Operators</span>
+                  <span className="text-white">{enquiry.metadata.operator_count} Operator(s)</span>
+                </div>
+              </div>
+
+              {enquiry.metadata.weights && (
+                <div className="border-t border-[#222] pt-3 grid grid-cols-4 gap-2 text-center text-xs font-mono">
+                  <div className="bg-[#080808] p-2">
+                    <span className="text-[8px] text-[#555] block uppercase">Est. Dry</span>
+                    <span className="text-white font-bold">{enquiry.metadata.weights.estimated_dry_weight_kg}kg</span>
+                  </div>
+                  <div className="bg-[#080808] p-2">
+                    <span className="text-[8px] text-[#555] block uppercase">Est. Wet</span>
+                    <span className="text-[#FF6900] font-bold">{enquiry.metadata.weights.estimated_wet_weight_kg}kg</span>
+                  </div>
+                  <div className="bg-[#080808] p-2">
+                    <span className="text-[8px] text-[#555] block uppercase">MAM Limit</span>
+                    <span className="text-white font-bold">{enquiry.metadata.weights.chassis_mam_kg}kg</span>
+                  </div>
+                  <div className="bg-[#080808] p-2">
+                    <span className="text-[8px] text-[#555] block uppercase">Margin</span>
+                    <span className={enquiry.metadata.weights.is_overweight ? 'text-red-400 font-bold' : 'text-green-400 font-bold'}>
+                      {enquiry.metadata.weights.payload_margin_kg}kg
+                    </span>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Source Tracking */}
           {(enquiry.source_page || enquiry.utm_source) && (
             <div className="border border-[#222] bg-[#0D0D0D] p-6">

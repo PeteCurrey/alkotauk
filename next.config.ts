@@ -67,6 +67,26 @@ const nextConfig: NextConfig = {
         destination: '/water-treatment',
         permanent: true,
       },
+      {
+        source: '/machines/trailers',
+        destination: '/trailers',
+        permanent: true,
+      },
+      {
+        source: '/machines/trailers/configure',
+        destination: '/trailers/configure',
+        permanent: true,
+      },
+      {
+        source: '/bespoke-trailers',
+        destination: '/trailers',
+        permanent: true,
+      },
+      {
+        source: '/pressure-washer-trailers',
+        destination: '/trailers',
+        permanent: true,
+      },
     ];
   },
   eslint: {

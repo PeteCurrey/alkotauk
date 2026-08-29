@@ -36,6 +36,7 @@ const NAV = [
     section: 'COMMERCIAL',
     items: [
       { icon: Inbox, label: 'Enquiries & Leads', href: '/admin/leads', badge: true },
+      { icon: Truck, label: 'Trailer Builds Pipeline', href: '/admin/trailer-builds' },
       { icon: Building2, label: 'Dealer Network', href: '/admin/dealers' },
       { icon: Globe, label: 'Industry Pages', href: '/admin/industries' },
     ],

@@ -49,12 +49,12 @@ const MACHINE_CATEGORIES: MachineCategory[] = [
     desc: 'Closed-loop aqueous component degreasing with heated spray manifolds for engineering workshops.',
   },
   {
-    name: 'Bespoke Mobile Trailers',
-    href: '/machines/trailers',
-    subtitle: 'Highway-Certified Mobile Rigs',
+    name: 'Alkota Trailers',
+    href: '/trailers',
+    subtitle: 'Bespoke Mobile Cleaning Systems',
     image: '/assets/products/trailer-single.png',
-    spec: 'Single / Tandem Axle · Turnkey Plant',
-    desc: 'Custom-built highway-certified wash rigs with integrated water tanks, hose reels, and diesel generators.',
+    spec: 'Open & Enclosed · Turnkey Road Rigs',
+    desc: 'Bespoke mobile industrial cleaning systems engineered in the UK with water storage, power, recovery, and dual-operator capability.',
   },
   {
     name: 'Water Treatment',
@@ -482,15 +482,27 @@ export default function Navigation() {
                     </h3>
                     <div className="space-y-2">
                       <Link
-                        href="/machines/trailers"
+                        href="/trailers"
                         onClick={() => setActiveMenu(null)}
                         className="block p-3 bg-[#F7F7F5] hover:bg-white border border-[#E8E8E4] hover:border-alkota-orange transition-all no-underline group"
                       >
                         <h4 className="text-xs uppercase tracking-wider text-alkota-black group-hover:text-alkota-orange font-normal">
-                          Bespoke Mobile Trailers →
+                          Alkota Trailers & Mobile Systems →
                         </h4>
                         <p className="text-[11px] text-[#777] font-normal mt-0.5">
-                          Single and tandem axle turnkey rigs with integrated tanks.
+                          Open deck & enclosed mobile plant rooms with live rig configurator.
+                        </p>
+                      </Link>
+                      <Link
+                        href="/trailers/configure"
+                        onClick={() => setActiveMenu(null)}
+                        className="block p-3 bg-alkota-orange/5 hover:bg-alkota-orange/10 border border-alkota-orange/30 hover:border-alkota-orange transition-all no-underline group"
+                      >
+                        <h4 className="text-xs uppercase tracking-wider text-alkota-orange font-bold">
+                          Launch Rig Configurator →
+                        </h4>
+                        <p className="text-[11px] text-[#777] font-normal mt-0.5">
+                          Interactive 13-step mobile cleaning system builder.
                         </p>
                       </Link>
                       <Link
@@ -814,7 +826,8 @@ export default function Navigation() {
                         )}
                         {link.name === 'Bespoke' && (
                           <>
-                            <Link href="/machines/trailers" onClick={() => setMobileMenuOpen(false)} className="text-sm text-[#ccc] hover:text-alkota-orange no-underline py-0.5">Bespoke Trailers</Link>
+                            <Link href="/trailers" onClick={() => setMobileMenuOpen(false)} className="text-sm text-[#ccc] hover:text-alkota-orange no-underline py-0.5">Alkota Trailers & Mobile Systems</Link>
+                            <Link href="/trailers/configure" onClick={() => setMobileMenuOpen(false)} className="text-sm text-alkota-orange font-bold no-underline py-0.5">Trailer Rig Configurator</Link>
                             <Link href="/bespoke#skid" onClick={() => setMobileMenuOpen(false)} className="text-sm text-[#ccc] hover:text-alkota-orange no-underline py-0.5">Custom Skid Units</Link>
                             <Link href="/wash-plant" onClick={() => setMobileMenuOpen(false)} className="text-sm text-[#ccc] hover:text-alkota-orange no-underline py-0.5">Bespoke Wash Plants</Link>
                             <Link href="/tools/configurator" onClick={() => setMobileMenuOpen(false)} className="text-sm text-[#ccc] hover:text-alkota-orange no-underline py-0.5">Build Configurator</Link>

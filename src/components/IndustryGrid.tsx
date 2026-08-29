@@ -77,8 +77,8 @@ export default function IndustryGrid() {
   const activeSector = SECTORS.find((s) => s.slug === activeSlug) || SECTORS[0];
 
   return (
-    <section className="relative min-h-screen w-full bg-[#0F0F0D] text-white flex flex-col justify-center py-24 sm:py-32 px-6 sm:px-12 font-normal overflow-hidden" aria-label="Real World Applications">
-      {/* Dynamic Full-Bleed Environment Background */}
+    <section className="relative min-h-screen w-full bg-[#0F0F0D] text-white flex flex-col justify-start pt-28 sm:pt-36 pb-20 px-6 sm:px-12 font-normal overflow-hidden" aria-label="Real World Applications">
+      {/* Dynamic Full-Bleed Environment Background — Lightened for photographic richness */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <AnimatePresence mode="wait">
           <motion.div
@@ -93,17 +93,18 @@ export default function IndustryGrid() {
               src={activeSector.image}
               alt={activeSector.name}
               className="w-full h-full object-cover object-center"
-              style={{ filter: 'brightness(0.38) contrast(1.15)' }}
+              style={{ filter: 'brightness(0.68) contrast(1.08)' }}
             />
           </motion.div>
         </AnimatePresence>
-        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/55 to-black/35" />
+        {/* Directional gradient: darker behind left-aligned text, lighter toward right visual */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/45 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0F0F0D] via-transparent to-[#0F0F0D]/60" />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-7xl w-full my-auto">
-        {/* Section Header */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-12">
+      <div className="relative z-10 mx-auto max-w-7xl w-full">
+        {/* Section Header — Top/Upper-Third Origin */}
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-10 sm:pb-14">
           <div>
             <span className="text-xs uppercase tracking-[0.25em] text-alkota-orange block mb-3 font-light">
               Real-World Applications

@@ -68,21 +68,18 @@ export default function MachineMatchAndOwnership() {
             src="/assets/engineered-continuous-duty.jpg"
             alt="Alkota High Temperature Pressure Gauge & Engineering Components"
             className="h-full w-full object-cover object-center scale-105"
-            style={{ filter: 'brightness(0.32) contrast(1.15)' }}
+            style={{ filter: 'brightness(0.60) contrast(1.08)' }}
           />
           {/* Subtle dark gradient overlays for maximum text clarity */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/55 to-black/85" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0C0C0A] via-transparent to-[#0C0C0A]/80" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/45 to-black/80" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0C0C0A] via-transparent to-[#0C0C0A]/60" />
         </div>
 
         <div className="relative z-10 mx-auto max-w-4xl text-center font-normal my-auto">
-          <span className="text-xs uppercase tracking-[0.25em] text-alkota-orange block mb-6 font-light">
+          <span className="text-xs uppercase tracking-[0.25em] text-alkota-orange block mb-4 font-light">
             Est. 1964 · Alcester, South Dakota · UK Direct
           </span>
-          <h2
-            className="font-extralight uppercase tracking-tight text-white leading-none mb-8"
-            style={{ fontSize: 'clamp(2.5rem, 6vw, 5rem)' }}
-          >
+          <h2 className="font-extralight text-4xl sm:text-5xl lg:text-6xl uppercase tracking-tight text-white leading-none mb-8">
             Engineered for Continuous Duty.<br />
             <span className="text-alkota-orange">Backed by 60 Years of Build.</span>
           </h2>

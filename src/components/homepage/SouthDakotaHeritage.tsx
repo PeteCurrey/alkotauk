@@ -8,29 +8,26 @@ export default function SouthDakotaHeritage() {
       className="relative min-h-[640px] w-full bg-[#0D0D0B] text-white flex flex-col justify-center py-28 sm:py-36 px-6 sm:px-12 font-normal overflow-hidden"
       aria-label="Six Decades of South Dakota Build"
     >
-      {/* Full-width background image of welding and manufacturing */}
+      {/* Full-width background image of welding and manufacturing — Lightened to reveal authentic shop environment */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <img
           src="/assets/industries/manufacturing.png"
           alt="Alkota Manufacturing & Welding in Alcester South Dakota"
           className="h-full w-full object-cover object-center scale-105"
-          style={{ filter: 'brightness(0.42) contrast(1.15)' }}
+          style={{ filter: 'brightness(0.65) contrast(1.08)' }}
         />
-        {/* Soft atmospheric gradient overlays */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-black/35" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0D0D0B] via-transparent to-[#0D0D0B]/70" />
+        {/* Directional gradient: darker behind text, lighter toward right factory visual */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/45 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0D0D0B] via-transparent to-[#0D0D0B]/60" />
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl w-full my-auto">
         <div className="max-w-3xl">
-          <span className="text-xs uppercase tracking-[0.25em] text-alkota-orange block mb-4 font-light">
+          <span className="text-xs uppercase tracking-[0.25em] text-alkota-orange block mb-3 font-light">
             Manufacturing Heritage · Est. 1964
           </span>
 
-          <h2
-            className="font-extralight uppercase tracking-tight text-white leading-none mb-6"
-            style={{ fontSize: 'clamp(2.8rem, 6.5vw, 5.5rem)' }}
-          >
+          <h2 className="font-extralight text-4xl sm:text-5xl lg:text-6xl uppercase tracking-tight text-white leading-none mb-6">
             Six Decades of<br />
             <span className="text-alkota-orange">South Dakota Build.</span>
           </h2>

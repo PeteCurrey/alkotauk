@@ -5,27 +5,30 @@ export default function SouthDakotaHeritage() {
   return (
     <section
       id="heritage"
-      className="relative min-h-[640px] w-full bg-[#0D0D0B] text-white flex flex-col justify-center py-28 sm:py-36 px-6 sm:px-12 font-normal overflow-hidden"
+      className="relative min-h-[720px] lg:min-h-[800px] w-full bg-[#0D0D0B] text-white flex flex-col justify-center py-28 sm:py-36 px-6 sm:px-12 font-normal overflow-hidden"
       aria-label="Six Decades of South Dakota Build"
     >
-      {/* Full-width background image of welding and manufacturing — Lightened to reveal authentic shop environment */}
+      {/* Full-width authentic factory background of Alkota coil winder in Alcester, SD */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <img
-          src="/assets/industries/manufacturing.png"
-          alt="Alkota Manufacturing & Welding in Alcester South Dakota"
+          src="/assets/south-dakota-craft-hero.jpg"
+          alt="Alkota Handcrafted Manufacturing & Coil Winding in Alcester, South Dakota"
           className="h-full w-full object-cover object-center scale-105"
-          style={{ filter: 'brightness(0.65) contrast(1.08)' }}
+          style={{ filter: 'brightness(0.62) contrast(1.1)' }}
         />
-        {/* Directional gradient: darker behind text, lighter toward right factory visual */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/45 to-transparent" />
+        {/* Directional gradient: darker behind text on the left, revealing the craftsman and coils on the right */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/92 via-black/60 to-black/25" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0D0D0B] via-transparent to-[#0D0D0B]/60" />
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl w-full my-auto">
-        <div className="max-w-3xl">
-          <span className="text-xs uppercase tracking-[0.25em] text-alkota-orange block mb-3 font-light">
-            Manufacturing Heritage · Est. 1964
-          </span>
+        <div className="max-w-2xl">
+          <div className="flex items-center gap-3 mb-4">
+            <span className="h-[1.5px] w-6 bg-alkota-orange" />
+            <span className="text-xs uppercase tracking-[0.25em] text-alkota-orange font-mono">
+              Manufacturing Heritage · Est. 1964
+            </span>
+          </div>
 
           <h2 className="font-extralight text-4xl sm:text-5xl lg:text-6xl uppercase tracking-tight text-white leading-none mb-6">
             Six Decades of<br />

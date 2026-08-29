@@ -9,7 +9,7 @@ import {
   Building2, Globe, Settings, ExternalLink, LogOut,
   ChevronRight, Flame, Waves, Wind, Truck, Factory,
   Droplets, Zap, BarChart3, PenSquare, BookOpen, Film,
-  Bell,
+  Bell, Package,
 } from 'lucide-react';
 
 const NAV = [
@@ -44,8 +44,15 @@ const NAV = [
     items: [
       { icon: Inbox, label: 'Enquiries & Leads', href: '/admin/leads', badge: true },
       { icon: Truck, label: 'Trailer Builds Pipeline', href: '/admin/trailer-builds' },
+      { icon: Package, label: 'Active Build Projects', href: '/admin/trailer-builds/bp-001' },
       { icon: Building2, label: 'Dealer Network', href: '/admin/dealers' },
       { icon: Globe, label: 'Industry Pages', href: '/admin/industries' },
+    ],
+  },
+  {
+    section: 'SERVICE & ASSETS',
+    items: [
+      { icon: Zap, label: 'Trailer Asset Register', href: '/admin/assets' },
     ],
   },
   {

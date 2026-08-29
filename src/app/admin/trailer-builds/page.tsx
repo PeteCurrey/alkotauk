@@ -1,6 +1,6 @@
 import { supabaseAdmin } from '@/lib/supabase/server';
 import Link from 'next/link';
-import { Truck, Inbox, Droplets, Flame, ArrowRight, ShieldCheck, Clock, CheckCircle2, AlertTriangle, Eye, Sparkles, Plus, Scale } from 'lucide-react';
+import { Truck, Inbox, Droplets, Flame, ArrowRight, ShieldCheck, Clock, CheckCircle2, AlertTriangle, Eye, Sparkles, Plus, Scale, Package } from 'lucide-react';
 import {
   UK_CHASSIS_OPTIONS,
   TRAILER_MACHINE_OPTIONS,
@@ -8,6 +8,7 @@ import {
   calculateOpportunityScore,
   calculateCommercialValue,
 } from '@/lib/trailers/configurator-data';
+import { SAMPLE_BUILD_PROJECT } from '@/lib/trailers/build-project-data';
 
 export const dynamic = 'force-dynamic';
 
@@ -100,6 +101,108 @@ export default async function AdminTrailerBuildsPage() {
             {builds.filter((b) => b.metadata?.recovery_option_id && b.metadata.recovery_option_id !== 'recovery-none').length}
           </h3>
           <p className="text-[10px] font-ibm-plex-mono text-[#666] mt-0.5">VFS / Closed-Loop</p>
+        </div>
+      </div>
+
+      {/* Active Phase 06 Build Projects */}
+      <div className="mb-8 bg-[#111] border border-[#222] p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#222] pb-4 mb-4">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#FF6900] bg-[#1A1A1A] px-2 py-0.5 border border-[#333]">
+                Phase 06 · Active Production
+              </span>
+              <h2 className="font-barlow-condensed text-2xl font-bold uppercase text-white">
+                Live Alkota Build Projects
+              </h2>
+            </div>
+            <p className="font-ibm-plex-mono text-[10px] text-[#777] uppercase tracking-widest mt-1">
+              // Won quotes transitioning into workshop fabrication, component registration &amp; customer handover
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/admin/assets"
+              className="inline-flex items-center gap-2 border border-[#333] hover:border-[#FF6900] px-4 py-2 font-ibm-plex-mono text-[10px] uppercase text-[#AAA] hover:text-white transition-colors"
+            >
+              <Zap className="h-3.5 w-3.5" /> View Asset Register
+            </Link>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* In Production Card */}
+          <div className="bg-[#161616] p-4 border border-[#262626] flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="font-ibm-plex-mono text-xs font-bold text-[#FF6900]">
+                  {SAMPLE_BUILD_PROJECT.build_reference}
+                </span>
+                <span className="px-2 py-0.5 bg-amber-950 text-[#FF6900] border border-amber-800 font-ibm-plex-mono text-[9px] uppercase font-bold">
+                  In Production
+                </span>
+              </div>
+              <h4 className="font-medium text-white text-sm mb-1">{SAMPLE_BUILD_PROJECT.customer_company}</h4>
+              <p className="text-xs text-[#888]">
+                Enclosed Dual-Operator DED-4000 · Config: <span className="font-ibm-plex-mono text-[#AAA]">{SAMPLE_BUILD_PROJECT.build_code}</span>
+              </p>
+              <div className="mt-3">
+                <div className="flex justify-between text-[9px] font-ibm-plex-mono text-[#777] mb-1">
+                  <span>Plumbing &amp; Fluid Systems (Stage 6/13)</span>
+                  <span>Target: Oct 2025</span>
+                </div>
+                <div className="flex gap-1">
+                  {SAMPLE_BUILD_PROJECT.stages.map((s, idx) => (
+                    <div
+                      key={idx}
+                      className={`h-1.5 flex-1 rounded-sm ${
+                        s.status === 'complete' ? 'bg-emerald-500' : s.status === 'in_progress' ? 'bg-[#FF6900]' : 'bg-[#262626]'
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="mt-4 pt-3 border-t border-[#222] flex items-center justify-between">
+              <span className="text-[10px] text-[#666] font-ibm-plex-mono">Owner: {SAMPLE_BUILD_PROJECT.project_owner}</span>
+              <Link
+                href="/admin/trailer-builds/bp-001"
+                className="inline-flex items-center gap-1 bg-[#FF6900] hover:bg-[#e55f00] text-white px-3 py-1.5 font-ibm-plex-mono text-[10px] uppercase font-bold tracking-wider transition-colors"
+              >
+                Open Build Control →
+              </Link>
+            </div>
+          </div>
+
+          {/* Delivered Asset Card */}
+          <div className="bg-[#161616] p-4 border border-[#262626] flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="font-ibm-plex-mono text-xs font-bold text-emerald-400">
+                  {SAMPLE_DELIVERED_ASSET.build_reference}
+                </span>
+                <span className="px-2 py-0.5 bg-emerald-950 text-emerald-400 border border-emerald-800 font-ibm-plex-mono text-[9px] uppercase font-bold">
+                  Delivered — In Service
+                </span>
+              </div>
+              <h4 className="font-medium text-white text-sm mb-1">{SAMPLE_DELIVERED_ASSET.customer_company}</h4>
+              <p className="text-xs text-[#888]">
+                Enclosed Rig · Handed over 29 Aug 2025 · Verified Weight: <span className="font-ibm-plex-mono text-emerald-400 font-bold">2,508 kg</span>
+              </p>
+              <div className="mt-3 text-xs bg-[#111] p-2 border border-[#222] font-ibm-plex-mono text-[10px] text-[#AAA]">
+                <span>PPM Status: 1 Service Due Soon (Brake &amp; Hitch Inspection)</span>
+              </div>
+            </div>
+            <div className="mt-4 pt-3 border-t border-[#222] flex items-center justify-between">
+              <span className="text-[10px] text-[#666] font-ibm-plex-mono">QR: {SAMPLE_DELIVERED_ASSET.qr_token}</span>
+              <Link
+                href="/admin/trailer-builds/bp-002"
+                className="inline-flex items-center gap-1 border border-[#444] hover:border-white text-[#CCC] hover:text-white px-3 py-1.5 font-ibm-plex-mono text-[10px] uppercase font-bold tracking-wider transition-colors"
+              >
+                View Asset Record →
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
 

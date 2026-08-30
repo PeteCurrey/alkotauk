@@ -1,11 +1,13 @@
 import React from 'react';
 import Link from 'next/link';
-import { ArrowRight, Search, Sparkles } from 'lucide-react';
-import { supabaseAdmin } from '@/lib/supabase/server';
-import ProductCard from '@/components/parts/ProductCard';
-import { MASTER_TAXONOMY } from '@/lib/parts/taxonomy';
-
 import { Metadata } from 'next';
+import { ArrowRight, Search, Sparkles, ShieldCheck, Wrench, Award, ChevronRight } from 'lucide-react';
+import { supabaseAdmin } from '@/lib/supabase/server';
+import { MASTER_TAXONOMY } from '@/lib/parts/taxonomy';
+import ShowroomHero from '@/components/parts/ShowroomHero';
+import ShowroomCategoryModules from '@/components/parts/ShowroomCategoryModules';
+import FeaturedToolingShowcase from '@/components/parts/FeaturedToolingShowcase';
+import EngineeringIntegritySection from '@/components/parts/EngineeringIntegritySection';
 
 export const dynamic = 'force-dynamic';
 
@@ -19,21 +21,12 @@ export const metadata: Metadata = {
   },
 };
 
-const FEATURED_CATEGORY_SLUGS = [
-  'pumps',
-  'hoses',
-  'trigger-guns',
-  'lances-nozzles',
-  'surface-cleaners',
-  'burners',
-];
-
 const EDITORIAL_APPLICATIONS = [
-  { label: 'Fleet & Vehicle Cleaning', href: '/parts-attachments/applications' },
-  { label: 'Industrial Washdown', href: '/parts-attachments/applications' },
-  { label: 'Hard Surface Cleaning', href: '/parts-attachments/applications' },
-  { label: 'Drain & Pipe Jetting', href: '/parts-attachments/applications' },
-  { label: 'Agricultural & Outdoor', href: '/parts-attachments/applications' },
+  { label: 'Commercial Fleet & Haulage Washdown', desc: 'Heavy vehicle washdown lances, non-marking hoses, and foam injectors.', href: '/parts-attachments/applications' },
+  { label: 'Hard Surface & Flat Ground Restoration', desc: 'Mosmatic dual-arm rotary surface cleaners and undercarriage wash bars.', href: '/parts-attachments/applications' },
+  { label: 'Agricultural & Farm Mud Clearance', desc: 'High-volume clay displacement nozzles, ceramic turbo tips, and live swivels.', href: '/parts-attachments/applications' },
+  { label: 'Workshop Degreasing & Engine Overhaul', desc: 'Low-foaming chemical injectors, steam dump guns, and 150°C hoses.', href: '/parts-attachments/applications' },
+  { label: 'Drain, Tube & Industrial Jetting', desc: 'Forward-firing retro jetting nozzles and flexible thermo-plastic lines.', href: '/parts-attachments/applications' },
 ];
 
 export default async function PartsHomePage() {
@@ -65,90 +58,13 @@ export default async function PartsHomePage() {
   const brands = dbBrands || [];
   const featuredBrand = brands[0] || null;
 
-  const featuredCats = FEATURED_CATEGORY_SLUGS
-    .map(slug => MASTER_TAXONOMY.find(c => c.slug === slug))
-    .filter((c): c is NonNullable<typeof c> => Boolean(c));
-
   return (
-    <main className="min-h-screen bg-[#FAF9F5] text-alkota-black">
+    <main className="min-h-screen bg-[#FAF9F5] text-alkota-black font-sans selection:bg-alkota-orange selection:text-white">
 
-      {/* ── 01: HERO ── */}
-      <section
-        className="relative min-h-screen w-full flex flex-col justify-center overflow-hidden bg-[#0F0F0D] text-white px-6 sm:px-12 font-normal"
-        aria-label="Alkota UK Parts & Attachments"
-      >
-        <div className="absolute inset-0 z-0 overflow-hidden">
-          <img
-            src="/assets/parts/parts-hero-workshop.jpg"
-            alt="Alkota engineering workshop"
-            className="h-full w-full object-cover object-center scale-105"
-            style={{ filter: 'brightness(0.65) contrast(1.12)' }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/45 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0F0F0D] via-transparent to-black/60" />
-        </div>
+      {/* ── 01: CINEMATIC SHOWROOM HERO ── */}
+      <ShowroomHero />
 
-        <div className="relative z-10 mx-auto max-w-7xl w-full my-auto py-20">
-          <div className="max-w-2xl">
-            <div className="mb-5 inline-flex items-center gap-3 font-normal">
-              <span className="h-[1.5px] w-5 bg-alkota-orange shrink-0" />
-              <span className="text-xs uppercase tracking-[0.25em] text-white/80 font-light">
-                Alkota UK · Parts, Spares & Tooling
-              </span>
-            </div>
-
-            <h1
-              className="font-extralight uppercase tracking-tight text-white leading-[0.92] mb-6"
-              style={{ fontSize: 'clamp(3.2rem, 7.5vw, 6.8rem)' }}
-            >
-              Parts that keep<br />
-              <span className="text-alkota-orange">the pressure on.</span>
-            </h1>
-
-            <p className="text-[#E0E0DC] text-base sm:text-lg leading-relaxed mb-8 max-w-lg font-normal">
-              Genuine Alkota components, Swiss-precision Mosmatic tooling, and professional-grade attachments from the world's leading pressure-washing manufacturers.
-            </p>
-
-            <div className="max-w-lg bg-white/95 backdrop-blur-sm p-1.5 mb-8 shadow-xl">
-              <form action="/parts-attachments/search" method="GET" className="flex items-center gap-2">
-                <Search className="h-4 w-4 text-[#888] ml-2.5 shrink-0" />
-                <input
-                  type="text"
-                  name="q"
-                  placeholder="Search by part number, brand, or machine model"
-                  className="w-full bg-transparent text-alkota-black text-xs sm:text-sm px-2 py-2 focus:outline-none font-normal"
-                />
-                <button
-                  type="submit"
-                  className="bg-alkota-orange hover:bg-black text-white px-5 py-2 font-ibm-plex-mono text-[11px] uppercase tracking-widest transition-colors shrink-0 cursor-pointer"
-                >
-                  Search
-                </button>
-              </form>
-            </div>
-
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 font-normal">
-              <Link
-                href="/parts-attachments/categories"
-                className="inline-flex items-center justify-center gap-3 bg-alkota-orange text-white px-8 py-3.5 text-xs uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all group shadow-xl font-normal"
-              >
-                <span>Explore Parts</span>
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Link>
-              <Link
-                href="/parts-attachments/finder"
-                className="inline-flex items-center justify-center gap-3 border border-white/40 bg-black/40 backdrop-blur-sm text-white px-7 py-3.5 text-xs uppercase tracking-[0.2em] hover:border-white hover:bg-white hover:text-black transition-all font-normal"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-alkota-orange" />
-                <span>Find My Part</span>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-
-      {/* ── 02: THREE WAYS IN ── */}
+      {/* ── 02: 3 CORE PATHWAYS (EDITORIAL SPLIT) ── */}
       <section className="bg-white border-b border-[#E0DEDC]">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[#E0DEDC]">
@@ -158,16 +74,16 @@ export default async function PartsHomePage() {
               className="group flex flex-col justify-between px-10 py-14 hover:bg-[#FAF9F5] transition-colors"
             >
               <div>
-                <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.2em] text-[#AAA] block mb-5">01 / Browse</span>
+                <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.2em] text-[#AAA] block mb-5">01 / Category Range</span>
                 <h2 className="font-extralight text-[#0A0A0A] leading-tight mb-4" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.4rem)' }}>
-                  Shop the Range
+                  Shop by Component
                 </h2>
                 <p className="text-sm font-normal text-[#666] leading-relaxed max-w-xs">
-                  Pumps, hoses, nozzles, guns, surface cleaners, and everything in between.
+                  Pumps, hoses, nozzles, guns, surface cleaners, burner heads, and everything in between.
                 </p>
               </div>
               <div className="mt-8 flex items-center gap-2 font-ibm-plex-mono text-[11px] uppercase tracking-widest text-alkota-orange">
-                <span>Explore every component</span>
+                <span>Explore all 16 categories</span>
                 <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
               </div>
             </Link>
@@ -177,12 +93,12 @@ export default async function PartsHomePage() {
               className="group flex flex-col justify-between px-10 py-14 hover:bg-[#FAF9F5] transition-colors"
             >
               <div>
-                <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.2em] text-[#AAA] block mb-5">02 / Compatibility</span>
+                <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.2em] text-[#AAA] block mb-5">02 / Verified Fitment</span>
                 <h2 className="font-extralight text-[#0A0A0A] leading-tight mb-4" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.4rem)' }}>
-                  Find by Machine
+                  Find by Machine Model
                 </h2>
                 <p className="text-sm font-normal text-[#666] leading-relaxed max-w-xs">
-                  Tell us what you're running and we'll show you guaranteed-compatible parts.
+                  Select your Alkota series or model code for guaranteed-compatible replacement parts and kits.
                 </p>
               </div>
               <div className="mt-8 flex items-center gap-2 font-ibm-plex-mono text-[11px] uppercase tracking-widest text-alkota-orange">
@@ -196,18 +112,18 @@ export default async function PartsHomePage() {
               className="group flex flex-col justify-between px-10 py-14 hover:bg-[#FAF9F5] transition-colors"
             >
               <div>
-                <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.2em] text-[#AAA] block mb-5">03 / Manufacturer</span>
+                <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.2em] text-[#AAA] block mb-5">03 / Manufacturing Partners</span>
                 <h2 className="font-extralight text-[#0A0A0A] leading-tight mb-4" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.4rem)' }}>
-                  Shop by Brand
+                  Authorised Brands
                 </h2>
                 <p className="text-sm font-normal text-[#666] leading-relaxed max-w-xs">
                   {brands.length > 0
-                    ? brands.slice(0, 4).map(b => b.name).join('. ') + '. And more.'
-                    : 'Giant. Interpump. Mosmatic. CoxREELS. And more.'}
+                    ? brands.slice(0, 4).map(b => b.name).join(' · ') + ' & more.'
+                    : 'General Pump · Mosmatic · CoxREELS · Steel Eagle · Dual Pumps.'}
                 </p>
               </div>
               <div className="mt-8 flex items-center gap-2 font-ibm-plex-mono text-[11px] uppercase tracking-widest text-alkota-orange">
-                <span>Browse all brands</span>
+                <span>Browse brand catalogue</span>
                 <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
               </div>
             </Link>
@@ -216,154 +132,25 @@ export default async function PartsHomePage() {
         </div>
       </section>
 
+      {/* ── 03: "ENGINEERED FOR MORE" — FEATURED SPOTLIGHT SHOWROOM ── */}
+      <FeaturedToolingShowcase featuredParts={featuredParts} />
 
-      {/* ── 03: SHOP THE RANGE — Editorial category rows ── */}
-      <section className="py-20 px-6 sm:px-12 lg:px-24 bg-[#FAF9F5] border-b border-[#E0DEDC]">
-        <div className="max-w-7xl mx-auto">
+      {/* ── 04: CATEGORY SHOWROOM MODULES ── */}
+      <ShowroomCategoryModules categories={MASTER_TAXONOMY} />
 
-          <div className="flex items-end justify-between mb-12">
-            <div>
-              <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.2em] text-alkota-orange block mb-3">
-                // The Range
-              </span>
-              <h2 className="font-extralight text-alkota-black tracking-tight" style={{ fontSize: 'clamp(2rem, 4vw, 3.2rem)' }}>
-                Every component.<br />
-                <span className="text-[#999]">Organised with precision.</span>
-              </h2>
-            </div>
-            <Link
-              href="/parts-attachments/categories"
-              className="hidden md:flex items-center gap-2 font-ibm-plex-mono text-[11px] uppercase tracking-widest text-[#888] hover:text-alkota-orange transition-colors"
-            >
-              <span>All Categories</span>
-              <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
-          </div>
+      {/* ── 05: MECHANICAL INTEGRITY & METALLURGY STANDARD ── */}
+      <EngineeringIntegritySection />
 
-          <div className="divide-y divide-[#E0DEDC]">
-            {featuredCats.map((cat, idx) => (
-              <div key={cat.slug} className="group py-8 flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-12">
-                <div className="flex items-baseline gap-5 lg:w-1/3 min-w-0">
-                  <span className="font-ibm-plex-mono text-[9px] text-[#C0BDB8] shrink-0">
-                    {String(idx + 1).padStart(2, '0')}
-                  </span>
-                  <Link href={`/parts-attachments/${cat.slug}`}>
-                    <h3 className="text-xl sm:text-2xl font-light text-alkota-black group-hover:text-alkota-orange transition-colors">
-                      {cat.name}
-                    </h3>
-                  </Link>
-                </div>
-
-                <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 flex-1 min-w-0">
-                  {cat.subcategories.slice(0, 6).map((sub, si) => (
-                    <React.Fragment key={sub.slug}>
-                      <Link
-                        href={`/parts-attachments/${cat.slug}?sub=${sub.slug}`}
-                        className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-[#999] hover:text-alkota-orange transition-colors whitespace-nowrap"
-                      >
-                        {sub.name}
-                      </Link>
-                      {si < Math.min(5, cat.subcategories.length - 1) && (
-                        <span className="text-[#D8D5D0] text-[10px]" aria-hidden="true">·</span>
-                      )}
-                    </React.Fragment>
-                  ))}
-                  {cat.subcategories.length > 6 && (
-                    <Link
-                      href={`/parts-attachments/${cat.slug}`}
-                      className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-orange"
-                    >
-                      +{cat.subcategories.length - 6} more
-                    </Link>
-                  )}
-                </div>
-
-                <Link
-                  href={`/parts-attachments/${cat.slug}`}
-                  className="text-alkota-orange group-hover:translate-x-1 transition-transform shrink-0 text-lg"
-                  aria-label={`Browse ${cat.name}`}
-                >
-                  →
-                </Link>
-              </div>
-            ))}
-          </div>
-
-          <div className="pt-8 flex md:hidden">
-            <Link
-              href="/parts-attachments/categories"
-              className="flex items-center gap-2 font-ibm-plex-mono text-[11px] uppercase tracking-widest text-[#888] hover:text-alkota-orange transition-colors"
-            >
-              <span>View All Categories</span>
-              <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
-          </div>
-
-        </div>
-      </section>
-
-
-      {/* ── 04: FEATURED PRODUCTS — DB-driven only ── */}
-      <section className="py-20 px-6 sm:px-12 lg:px-24 bg-white border-b border-[#E0DEDC]">
-        <div className="max-w-7xl mx-auto">
-
-          <div className="flex items-end justify-between mb-12">
-            <div>
-              <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.2em] text-alkota-orange block mb-3">
-                // In the Catalogue
-              </span>
-              <h2 className="font-extralight text-alkota-black tracking-tight" style={{ fontSize: 'clamp(2rem, 4vw, 3.2rem)' }}>
-                Featured Components.
-              </h2>
-            </div>
-            <Link
-              href="/parts-attachments/categories"
-              className="hidden md:flex items-center gap-2 font-ibm-plex-mono text-[11px] uppercase tracking-widest text-[#888] hover:text-alkota-orange transition-colors"
-            >
-              <span>Full Catalogue</span>
-              <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
-          </div>
-
-          {featuredParts && featuredParts.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-px bg-[#E8E6E2]">
-              {featuredParts.slice(0, 6).map((part) => (
-                <div key={part.id} className="bg-white">
-                  <ProductCard part={part} />
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="py-20 border border-dashed border-[#D0CEC9] flex flex-col items-center gap-5 text-center">
-              <p className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-[#BBB]">
-                // Catalogue being assembled
-              </p>
-              <p className="text-[#777] text-sm font-light max-w-sm">
-                Parts are being catalogued and will appear here as they are verified and listed.
-              </p>
-              <Link
-                href="/parts-attachments/enquiry"
-                className="inline-flex items-center gap-2 font-ibm-plex-mono text-[11px] uppercase tracking-widest text-alkota-orange hover:text-alkota-black transition-colors"
-              >
-                Submit a parts enquiry <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
-            </div>
-          )}
-
-        </div>
-      </section>
-
-
-      {/* ── 05: EDITORIAL BRAND FEATURE ── */}
-      <section className={`py-24 px-6 sm:px-12 lg:px-24 border-b ${featuredBrand ? 'bg-[#0A0A0A] text-white border-[#1A1A1A]' : 'bg-[#0A0A0A] text-white border-[#1A1A1A]'}`}>
+      {/* ── 06: AUTHORISED BRAND PARTNER SHOWCASE ── */}
+      <section className="py-24 px-6 sm:px-12 lg:px-24 bg-[#0A0A0A] text-white border-b border-[#1A1A1A]">
         <div className="max-w-7xl mx-auto">
           {featuredBrand ? (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
               <div className="lg:col-span-6 space-y-7">
                 <div className="flex items-center gap-3">
                   <span className="h-[1px] w-6 bg-alkota-orange" />
-                  <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.22em] text-[#555]">
-                    {featuredBrand.country_of_origin || 'International'} · Featured Partner
+                  <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.22em] text-[#777]">
+                    {featuredBrand.country_of_origin || 'International'} · Authorised Partner
                   </span>
                 </div>
                 <h2 className="font-extralight text-white leading-tight" style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)' }}>
@@ -379,23 +166,23 @@ export default async function PartsHomePage() {
                 )}
                 <Link
                   href={`/parts-attachments/brands/${featuredBrand.slug}`}
-                  className="inline-flex items-center gap-3 border border-white/20 hover:border-alkota-orange text-white hover:text-alkota-orange px-7 py-3 font-ibm-plex-mono text-[11px] uppercase tracking-widest transition-all group"
+                  className="inline-flex items-center gap-3 border border-white/20 hover:border-alkota-orange text-white hover:text-alkota-orange px-7 py-3.5 font-ibm-plex-mono text-[11px] uppercase tracking-widest transition-all group font-medium"
                 >
-                  <span>View {featuredBrand.name} Range</span>
+                  <span>View {featuredBrand.name} Catalogue</span>
                   <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </div>
 
               <div className="lg:col-span-6">
-                <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.2em] text-[#3A3A3A] block mb-5">
-                  // All Brand Partners
+                <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.2em] text-[#555] block mb-5">
+                  // All Authorised Manufacturing Partners
                 </span>
                 <div className="divide-y divide-[#1C1C1C]">
                   {brands.slice(0, 8).map((brand) => (
                     <Link
                       key={brand.slug}
                       href={`/parts-attachments/brands/${brand.slug}`}
-                      className="flex items-center justify-between py-3.5 group"
+                      className="flex items-center justify-between py-4 group hover:pl-2 transition-all"
                     >
                       <div>
                         <span className="text-sm font-light text-[#CCC] group-hover:text-white transition-colors">
@@ -417,7 +204,7 @@ export default async function PartsHomePage() {
                       href="/parts-attachments/brands"
                       className="flex items-center gap-2 pt-4 font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-orange"
                     >
-                      All {brands.length} Brand Partners <ArrowRight className="h-3 w-3" />
+                      View All {brands.length} Brand Partners <ArrowRight className="h-3 w-3" />
                     </Link>
                   )}
                 </div>
@@ -429,7 +216,7 @@ export default async function PartsHomePage() {
                 // Brand Partners
               </span>
               <p className="font-extralight text-white text-3xl">
-                Authorised stockists for the world's best.
+                Authorised stockists for the world's best engineering.
               </p>
               <Link
                 href="/parts-attachments/brands"
@@ -442,25 +229,24 @@ export default async function PartsHomePage() {
         </div>
       </section>
 
-
-      {/* ── 06: BY APPLICATION — Editorial discovery strip ── */}
+      {/* ── 07: APPLICATION DISCOVERY ── */}
       <section className="py-20 px-6 sm:px-12 lg:px-24 bg-[#FAF9F5] border-b border-[#E0DEDC]">
-        <div className="max-w-7xl mx-auto">
-
-          <div className="flex items-end justify-between mb-12">
+        <div className="max-w-7xl mx-auto space-y-12">
+          
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#E0DEDC] pb-6">
             <div>
-              <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.2em] text-alkota-orange block mb-3">
-                // By Application
+              <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.2em] text-alkota-orange block mb-2 font-medium">
+                // Operational Sectors
               </span>
-              <h2 className="font-extralight text-alkota-black" style={{ fontSize: 'clamp(2rem, 4vw, 3.2rem)' }}>
-                Designed for the job.
+              <h2 className="font-extralight text-alkota-black text-3xl sm:text-4xl uppercase tracking-tight">
+                Tooling By Application.
               </h2>
             </div>
             <Link
               href="/parts-attachments/applications"
-              className="hidden md:flex items-center gap-2 font-ibm-plex-mono text-[11px] uppercase tracking-widest text-[#888] hover:text-alkota-orange transition-colors"
+              className="font-ibm-plex-mono text-[11px] uppercase tracking-widest text-[#666] hover:text-alkota-orange transition-colors inline-flex items-center gap-1 font-medium"
             >
-              <span>All Applications</span>
+              <span>Explore All Applications</span>
               <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </div>
@@ -468,19 +254,22 @@ export default async function PartsHomePage() {
           <div className="divide-y divide-[#E0DEDC]">
             {EDITORIAL_APPLICATIONS.map((app, idx) => (
               <Link
-                key={app.href + idx}
+                key={app.label + idx}
                 href={app.href}
-                className="group flex items-center justify-between py-6 hover:pl-2 transition-all"
+                className="group flex flex-col md:flex-row md:items-center justify-between py-6 hover:pl-3 transition-all gap-2 md:gap-8"
               >
-                <div className="flex items-baseline gap-6">
-                  <span className="font-ibm-plex-mono text-[9px] text-[#C0BDB8]">
-                    {String(idx + 1).padStart(2, '0')}
+                <div className="flex items-baseline gap-6 min-w-0">
+                  <span className="font-ibm-plex-mono text-[10px] text-[#BBB] shrink-0 font-medium">
+                    0{idx + 1}
                   </span>
-                  <span className="text-xl sm:text-2xl font-light text-alkota-black group-hover:text-alkota-orange transition-colors">
-                    {app.label}
-                  </span>
+                  <div>
+                    <h3 className="text-xl sm:text-2xl font-light text-alkota-black group-hover:text-alkota-orange transition-colors">
+                      {app.label}
+                    </h3>
+                    <p className="text-xs text-[#777] font-normal mt-0.5">{app.desc}</p>
+                  </div>
                 </div>
-                <span className="text-alkota-orange group-hover:translate-x-1 transition-transform text-lg shrink-0 ml-4">
+                <span className="text-alkota-orange group-hover:translate-x-1 transition-transform text-lg shrink-0">
                   →
                 </span>
               </Link>
@@ -490,33 +279,32 @@ export default async function PartsHomePage() {
         </div>
       </section>
 
-
-      {/* ── 07: ENQUIRY CTA ── */}
+      {/* ── 08: PARTS DESK & ENQUIRY CTA ── */}
       <section className="py-20 px-6 sm:px-12 lg:px-24 bg-alkota-orange text-white">
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-start lg:items-center justify-between gap-10">
           <div className="max-w-2xl">
-            <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.2em] text-white/60 block mb-4">
-              // Parts Desk
+            <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.2em] text-white/70 block mb-3 font-medium">
+              // Technical Parts Helpdesk
             </span>
-            <h2 className="font-extralight text-white leading-tight mb-4" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)' }}>
-              Can't find the exact part?
+            <h2 className="font-extralight text-white leading-tight mb-4" style={{ fontSize: 'clamp(2rem, 3.8vw, 3rem)' }}>
+              Can't locate the exact part number?
             </h2>
-            <p className="text-white/85 text-sm leading-relaxed font-normal max-w-xl">
-              Our engineering parts desk can trace components for any Alkota, General Pump, CAT Pump, or legacy cleaning system. Tell us your machine model or share a photo of the data plate.
+            <p className="text-white/90 text-sm leading-relaxed font-normal max-w-xl">
+              Our UK engineering parts desk traces components for any Alkota, General Pump, CAT Pump, or legacy industrial system. Share your machine model or data plate photo for a guaranteed quote in 24 hours.
             </p>
           </div>
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 shrink-0">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 shrink-0 font-normal">
             <Link
               href="/parts-attachments/enquiry"
-              className="text-center bg-white text-alkota-black hover:bg-black hover:text-white px-10 py-4 font-ibm-plex-mono text-[11px] uppercase tracking-widest transition-colors shadow-lg"
+              className="text-center bg-white text-alkota-black hover:bg-black hover:text-white px-10 py-4 font-ibm-plex-mono text-[11px] uppercase tracking-widest transition-colors shadow-lg font-medium"
             >
               Submit Parts Enquiry
             </Link>
             <Link
               href="/parts-attachments/finder"
-              className="text-center border border-white/50 text-white hover:bg-white hover:text-alkota-orange px-10 py-4 font-ibm-plex-mono text-[11px] uppercase tracking-widest transition-colors"
+              className="text-center border border-white/50 text-white hover:bg-white hover:text-alkota-orange px-10 py-4 font-ibm-plex-mono text-[11px] uppercase tracking-widest transition-colors font-medium"
             >
-              Use Parts Finder
+              Use Interactive Finder
             </Link>
           </div>
         </div>

@@ -60,28 +60,32 @@ export default function MachineMatchAndOwnership() {
         </div>
       </section>
 
-      {/* Final Cinematic Brand Signature — Engineered for Continuous Duty */}
+      {/* Final Cinematic Brand Signature — Handcrafted to Perform. Engineered To Last */}
       <section className="relative bg-[#0C0C0A] overflow-hidden py-28 sm:py-36 px-6 sm:px-12 text-white font-normal min-h-[680px] flex flex-col justify-center">
-        {/* Full-bleed photography background with slight dark overlay */}
+        {/* Full-bleed heritage photography — positioned to keep the 60th Anniversary badge visible */}
         <div className="absolute inset-0 z-0 overflow-hidden">
           <img
-            src="/assets/alkota-60-years-vintage.jpg"
+            src="/assets/alkota-60-heritage-vintage.jpg"
             alt="Alkota 60th Anniversary Heritage - Alcester South Dakota Industrial Cleaning Equipment"
-            className="h-full w-full object-cover object-center scale-105"
-            style={{ filter: 'brightness(0.52) contrast(1.12)' }}
+            className="h-full w-full object-cover"
+            style={{
+              objectPosition: '30% 40%',
+              filter: 'brightness(0.42) contrast(1.08) sepia(0.08)'
+            }}
           />
-          {/* Subtle dark gradient overlays for maximum text clarity */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/55 to-black/85" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0C0C0A] via-transparent to-[#0C0C0A]/70" />
+          {/* Gentle dark overlay — preserves photographic texture while ensuring readability */}
+          <div className="absolute inset-0 bg-black/35" />
+          {/* Directional gradient — darker in centre for text legibility, lighter to edges */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0C0C0A]/80 via-transparent to-[#0C0C0A]/60" />
         </div>
 
         <div className="relative z-10 mx-auto max-w-5xl text-center font-normal my-auto">
           <span className="text-xs uppercase tracking-[0.25em] text-alkota-orange block mb-4 font-light">
             Est. 1964 · Alcester, South Dakota · UK Direct
           </span>
-          <h2 className="font-extralight text-3xl sm:text-5xl lg:text-6xl uppercase tracking-tight text-white leading-[1.1] mb-8">
-            <span className="block">Engineered for Continuous Duty.</span>
-            <span className="block text-alkota-orange">Backed by 60 Years of Build.</span>
+          <h2 className="font-extralight text-3xl sm:text-5xl lg:text-6xl uppercase tracking-tight text-white leading-[1.1] mb-8 whitespace-nowrap">
+            <span className="block">Handcrafted to Perform.</span>
+            <span className="block text-alkota-orange">Engineered To Last.</span>
           </h2>
           <p className="text-[#ddd] leading-relaxed mb-12 font-normal text-base sm:text-lg max-w-xl mx-auto">
             Specify your industrial cleaning setup with confidence. Connect directly with Alkota technical specialists for advice, on-site demonstrations, or custom rig design.

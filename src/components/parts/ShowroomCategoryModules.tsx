@@ -18,7 +18,7 @@ export default function ShowroomCategoryModules({ categories = MASTER_TAXONOMY }
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-[#E8E8E4] pb-10">
           <div>
             <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.25em] text-alkota-orange block mb-2 font-medium">
-              // Equipment Directory
+              Equipment Directory
             </span>
             <h2 
               className="font-extralight text-[#0A0A0A] tracking-tight uppercase leading-[0.95]"

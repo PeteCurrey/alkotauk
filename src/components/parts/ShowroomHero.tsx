@@ -35,7 +35,7 @@ export default function ShowroomHero() {
           <div className="inline-flex items-center gap-3">
             <span className="h-2 w-2 rounded-full bg-alkota-orange" />
             <span className="font-ibm-plex-mono text-xs uppercase tracking-[0.25em] text-[#777] font-medium">
-              Parts &amp; Attachments
+              Parts &amp; Tooling Showroom
             </span>
           </div>
 

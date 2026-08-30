@@ -203,32 +203,32 @@ export default async function CategoryBrowsePage({ params, searchParams }: PageP
       {/* ── 02: REFINED HORIZONTAL FILTER BAR ── */}
       <section className="bg-white border-b border-[#E8E8E4] px-6 sm:px-12 lg:px-24 py-4 sticky top-[68px] z-30 shadow-sm">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
-          <div className="flex flex-wrap items-center gap-2.5">
-            <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.2em] text-[#888] mr-1">
+          <div className="flex flex-wrap items-center gap-6">
+            <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.2em] text-[#999] mr-2">
               Filter:
             </span>
 
             {/* In Stock */}
             <Link
               href={buildUrl({ available: isAvailableOnly ? undefined : 'yes' })}
-              className={`font-ibm-plex-mono text-[10px] uppercase tracking-widest px-3 py-1.5 border transition-colors ${
+              className={`font-ibm-plex-mono text-[11px] uppercase tracking-wider transition-colors pb-0.5 ${
                 isAvailableOnly
-                  ? 'bg-alkota-black border-black text-white font-medium'
-                  : 'border-[#DCDAD4] text-[#666] hover:border-black hover:text-black bg-[#FAF9F5]'
+                  ? 'text-alkota-black font-semibold border-b-2 border-black'
+                  : 'text-[#777] hover:text-black'
               }`}
             >
               In Stock Only
             </Link>
 
-            {/* Brand Filter Pills */}
+            {/* Brand Filter */}
             {(brands || []).slice(0, 6).map((b) => (
               <Link
                 key={b.slug}
                 href={buildUrl({ brand: selectedBrand === b.slug ? undefined : b.slug })}
-                className={`font-ibm-plex-mono text-[10px] uppercase tracking-widest px-3 py-1.5 border transition-colors ${
+                className={`font-ibm-plex-mono text-[11px] uppercase tracking-wider transition-colors pb-0.5 ${
                   selectedBrand === b.slug
-                    ? 'bg-alkota-black border-black text-white font-medium'
-                    : 'border-[#DCDAD4] text-[#666] hover:border-black hover:text-black bg-[#FAF9F5]'
+                    ? 'text-alkota-black font-semibold border-b-2 border-black'
+                    : 'text-[#777] hover:text-black'
                 }`}
               >
                 {b.name}
@@ -239,9 +239,9 @@ export default async function CategoryBrowsePage({ params, searchParams }: PageP
             {hasActiveFilters && (
               <Link
                 href={`/parts-attachments/${categorySlug}`}
-                className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-[#888] hover:text-alkota-orange px-2 py-1.5 underline"
+                className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-orange hover:text-black"
               >
-                Reset All
+                Reset (×)
               </Link>
             )}
           </div>

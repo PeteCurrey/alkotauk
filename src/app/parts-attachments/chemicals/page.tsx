@@ -217,7 +217,7 @@ export default async function ChemicalsStorefrontPage({ searchParams }: Chemical
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-[#E8E8E4] pb-10">
             <div>
               <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.25em] text-alkota-orange block mb-2 font-medium">
-                // The Core Four
+                Core Formulations
               </span>
               <h2 
                 className="font-extralight text-[#0A0A0A] tracking-tight uppercase leading-[0.95]"
@@ -302,7 +302,7 @@ export default async function ChemicalsStorefrontPage({ searchParams }: Chemical
           
           <div className="border-b border-[#E8E8E4] pb-8">
             <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.25em] text-alkota-orange block mb-2 font-medium">
-              // Sequential Process Flow
+              Sequential Process Flow
             </span>
             <h2 
               className="font-extralight text-[#0A0A0A] tracking-tight uppercase leading-[0.95]"
@@ -377,7 +377,7 @@ export default async function ChemicalsStorefrontPage({ searchParams }: Chemical
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#E8E8E4] pb-8">
             <div>
               <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.25em] text-alkota-orange block mb-2 font-medium">
-                // Complete Range
+                Complete Catalogue
               </span>
               <h2 className="text-3xl sm:text-4xl font-extralight text-[#0A0A0A] tracking-tight uppercase">
                 All Formulations.

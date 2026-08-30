@@ -68,13 +68,6 @@ export default function ProductCard({ part }: ProductCardProps) {
             </span>
           </div>
         )}
-
-        {/* OEM Genuine subtle marker */}
-        {part.oem_genuine && (
-          <span className="absolute top-3 left-3 bg-[#0A0A0A] text-white px-2 py-0.5 font-ibm-plex-mono text-[8px] uppercase tracking-widest">
-            OEM Genuine
-          </span>
-        )}
       </Link>
 
       {/* ── CARD BODY ── */}

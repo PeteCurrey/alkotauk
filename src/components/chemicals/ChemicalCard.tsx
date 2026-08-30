@@ -63,18 +63,6 @@ export default function ChemicalCard({ product }: ChemicalCardProps) {
             </span>
           </div>
         )}
-
-        {/* Master Code Subtle Tag */}
-        <span className="absolute top-3 left-3 bg-[#0A0A0A] text-white px-2 py-0.5 font-ibm-plex-mono text-[8px] uppercase tracking-widest">
-          {product.originating_master_code}
-        </span>
-
-        {/* UK CLP Verified Pill */}
-        {product.compliance_status === 'VERIFIED_UK_CLP' && (
-          <span className="absolute top-3 right-3 bg-emerald-700/90 text-white px-1.5 py-0.5 font-ibm-plex-mono text-[8px] uppercase tracking-widest">
-            UK CLP
-          </span>
-        )}
       </Link>
 
       {/* ── CARD BODY ── */}

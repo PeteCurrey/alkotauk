@@ -59,7 +59,7 @@ export default function FeaturedToolingShowcase({ featuredParts = [] }: Featured
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-[#E8E8E4] pb-10">
           <div className="space-y-2">
             <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.25em] text-alkota-orange block font-medium">
-              // Featured Equipment
+              Featured Equipment
             </span>
             <h2 
               className="font-extralight text-[#0A0A0A] tracking-tight uppercase leading-[0.95]"

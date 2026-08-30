@@ -40,28 +40,34 @@ export default function CaseStudyHubHero() {
       {/* Main Editorial Hero Typography */}
       <div className="relative z-10 mx-auto max-w-7xl w-full my-auto py-10 lg:py-16">
         <div className="max-w-4xl">
-          <div className="flex items-center gap-3 mb-6">
-            <span className="h-[1.5px] w-8 bg-[#FF6900]" />
-            <span className="text-[11px] uppercase tracking-[0.3em] text-[#FF6900] font-mono">
+          {/* Subtle provenance monoline matching homepage */}
+          <div className="mb-5 inline-flex items-center gap-3 font-normal">
+            <span className="h-[1.5px] w-5 bg-[#FF6900]" />
+            <span className="text-xs uppercase tracking-[0.25em] text-white/80 font-light">
               Alkota UK // Field Proof & Engineering Journal
             </span>
           </div>
 
-          <h1 className="font-extralight text-4xl sm:text-6xl lg:text-7xl xl:text-8xl uppercase tracking-tight text-white leading-[0.95] mb-8">
+          {/* Primary Statement — Extra Light matching homepage clamp & leading */}
+          <h1
+            className="font-extralight uppercase tracking-tight text-white leading-[0.92] mb-6"
+            style={{ fontSize: 'clamp(3.2rem, 7.5vw, 6.8rem)' }}
+          >
             Built for the Job.<br />
             <span className="text-[#FF6900]">Proven in the Field.</span>
           </h1>
 
-          <p className="text-lg sm:text-xl lg:text-2xl text-[#CCC] max-w-3xl leading-relaxed font-normal mb-8">
+          {/* Concise supporting paragraph — clean Normal Work Sans matching homepage */}
+          <p className="text-[#E0E0DC] text-base sm:text-lg leading-relaxed mb-10 max-w-2xl font-normal">
             From a research station beneath the Antarctic ice to working cranes, industrial facilities, farms, vessels and bespoke mobile systems — these stories show what happens when pressure-washing equipment has to do more than look good in a catalogue.
           </p>
 
           {/* Editorial Introduction Callout */}
-          <div className="p-6 bg-black/60 border border-white/15 backdrop-blur-sm max-w-3xl mb-10">
-            <div className="text-xs font-mono uppercase tracking-wider text-[#FF6900] mb-1.5">
+          <div className="p-6 bg-black/60 border border-white/15 backdrop-blur-sm max-w-2xl mb-10">
+            <div className="text-xs font-mono uppercase tracking-[0.2em] text-[#FF6900] mb-1.5 font-light">
               The Engineering Reality
             </div>
-            <p className="text-sm text-[#BBB] leading-relaxed">
+            <p className="text-sm text-[#E0E0DC] leading-relaxed font-normal">
               A pressure washer is easy to specify. The hard part is specifying the <span className="text-white font-medium">right one</span>. Every operation has different contamination, surfaces, water availability, power, duty cycle, mobility, environmental requirements and operator workflow. These field stories explore those exact engineering problems.
             </p>
           </div>

@@ -210,31 +210,31 @@ export default function WashPlantServicePage() {
         </header>
 
         {/* ── THREE SERVICE PILLARS ─────────────────────────────────────────── */}
-        <section className="mb-24 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white border border-alkota-iron p-8 shadow-sm">
-            <Activity className="h-8 w-8 text-alkota-orange mb-4" />
-            <h3 className="font-extralight text-2xl uppercase tracking-tight text-alkota-black mb-2">
+        <section className="mb-28 grid grid-cols-1 md:grid-cols-3 gap-0 divide-y md:divide-y-0 md:divide-x divide-alkota-iron/40 border-y border-alkota-iron/40 py-12">
+          <div className="md:pr-10 pb-8 md:pb-0">
+            <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.3em] text-alkota-orange block mb-4">01 // CONTINUITY</span>
+            <h3 className="font-extralight text-3xl uppercase tracking-tight text-alkota-black mb-3">
               Operational Availability
             </h3>
-            <p className="text-xs text-alkota-silver leading-relaxed">
+            <p className="text-sm text-alkota-silver leading-relaxed">
               Unplanned downtime halts vehicle flow, disrupts dispatch schedules, and accumulates fleet contamination. Scheduled PPM identifies wear before it causes catastrophic failure.
             </p>
           </div>
-          <div className="bg-white border border-alkota-iron p-8 shadow-sm">
-            <ShieldCheck className="h-8 w-8 text-alkota-orange mb-4" />
-            <h3 className="font-extralight text-2xl uppercase tracking-tight text-alkota-black mb-2">
+          <div className="md:px-10 py-8 md:py-0">
+            <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.3em] text-alkota-orange block mb-4">02 // MASTERY</span>
+            <h3 className="font-extralight text-3xl uppercase tracking-tight text-alkota-black mb-3">
               Technical Competence
             </h3>
-            <p className="text-xs text-alkota-silver leading-relaxed">
+            <p className="text-sm text-alkota-silver leading-relaxed">
               Factory-trained engineers carry specialised diagnostic instrumentation, calibrated combustion testers, genuine OEM pump spares, and pressure measurement equipment on every visit.
             </p>
           </div>
-          <div className="bg-white border border-alkota-iron p-8 shadow-sm">
-            <Wrench className="h-8 w-8 text-alkota-orange mb-4" />
-            <h3 className="font-extralight text-2xl uppercase tracking-tight text-alkota-black mb-2">
+          <div className="md:pl-10 pt-8 md:pt-0">
+            <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.3em] text-alkota-orange block mb-4">03 // AGNOSTIC</span>
+            <h3 className="font-extralight text-3xl uppercase tracking-tight text-alkota-black mb-3">
               Multi-Brand Capability
             </h3>
-            <p className="text-xs text-alkota-silver leading-relaxed">
+            <p className="text-sm text-alkota-silver leading-relaxed">
               We do not need to have built your wash plant. Our engineering team routinely takes over maintenance and overhauls on third-party and legacy industrial wash installations of any origin.
             </p>
           </div>
@@ -251,15 +251,15 @@ export default function WashPlantServicePage() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-0 divide-y divide-alkota-iron/30">
             {SERVICE_CAPABILITIES.map((cap, idx) => (
-              <div key={idx} className="bg-white border border-alkota-iron p-6 hover:border-alkota-orange transition-colors">
-                <div className="flex items-start gap-3">
-                  <CheckCircle2 className="h-4 w-4 text-alkota-orange shrink-0 mt-0.5" />
-                  <div>
-                    <h4 className="text-sm uppercase tracking-tight text-alkota-black font-normal mb-1">{cap.title}</h4>
-                    <p className="text-xs text-alkota-silver leading-relaxed">{cap.desc}</p>
-                  </div>
+              <div key={idx} className="py-6 flex items-start gap-5">
+                <span className="font-extralight text-2xl text-alkota-orange leading-none tabular-nums shrink-0 mt-0.5">
+                  {String(idx + 1).padStart(2, '0')}
+                </span>
+                <div>
+                  <h4 className="text-sm uppercase tracking-tight text-alkota-black font-medium mb-1.5">{cap.title}</h4>
+                  <p className="text-sm text-alkota-silver leading-relaxed">{cap.desc}</p>
                 </div>
               </div>
             ))}
@@ -280,30 +280,33 @@ export default function WashPlantServicePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-0 divide-y md:divide-y-0 md:divide-x divide-white/10 border-t border-b border-white/10 py-10">
             {CONTRACT_TIERS.map((tier, idx) => (
-              <div key={idx} className="bg-[#141414] border border-[#2A2A2A] p-8 flex flex-col justify-between hover:border-alkota-orange transition-colors">
+              <div key={idx} className="p-6 md:p-8 flex flex-col justify-between">
                 <div>
-                  <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#222]">
-                    <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-alkota-orange">
-                      {tier.tier} // {tier.focus}
+                  <div className="mb-6">
+                    <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-alkota-orange block mb-1">
+                      {tier.tier}
+                    </span>
+                    <span className="font-ibm-plex-mono text-[10px] uppercase text-[#777] block">
+                      {tier.focus}
                     </span>
                   </div>
-                  <h3 className="font-extralight text-2xl uppercase tracking-tight text-white mb-3">
+                  <h3 className="font-extralight text-2xl uppercase tracking-tight text-white mb-4 leading-tight">
                     {tier.name}
                   </h3>
                   <p className="text-xs text-[#999] leading-relaxed mb-6">{tier.description}</p>
-                  <div className="space-y-2">
+                  <div className="space-y-2.5">
                     {tier.features.map((feat, fIdx) => (
-                      <div key={fIdx} className="flex items-center gap-2 text-xs text-[#ccc]">
-                        <CheckCircle2 className="h-3.5 w-3.5 text-alkota-orange shrink-0" />
+                      <div key={fIdx} className="flex items-start gap-2.5 text-xs text-[#ccc]">
+                        <span className="text-alkota-orange shrink-0">—</span>
                         <span>{feat}</span>
                       </div>
                     ))}
                   </div>
                 </div>
-                <div className="mt-6 pt-4 border-t border-[#222] text-[10px] font-ibm-plex-mono text-[#666] uppercase">
-                  Scope configured per site survey and duty assessment
+                <div className="mt-8 pt-4 border-t border-white/10 text-[9px] font-ibm-plex-mono text-[#666] uppercase">
+                  Engineered to site duty
                 </div>
               </div>
             ))}

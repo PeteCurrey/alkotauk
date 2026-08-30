@@ -160,16 +160,16 @@ export default function WashPlantRefurbishmentPage() {
         </header>
 
         {/* ── BROWNFIELD PHILOSOPHY ────────────────────────────────────────── */}
-        <section className="mb-24 bg-white border border-alkota-iron p-8 sm:p-14 shadow-sm">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-            <div className="lg:col-span-5 space-y-4">
+        <section className="mb-28 border-y border-alkota-iron/40 py-16">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+            <div className="lg:col-span-5 space-y-6">
               <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.35em] text-alkota-orange block">
                 // LIVE SITE EXECUTION
               </span>
-              <h2 className="font-extralight text-3xl sm:text-4xl uppercase tracking-tight text-alkota-black leading-tight">
+              <h2 className="font-extralight text-4xl sm:text-5xl uppercase tracking-tight text-alkota-black leading-none">
                 Phased delivery on live operational sites.
               </h2>
-              <p className="text-xs sm:text-sm text-alkota-silver leading-relaxed">
+              <p className="text-sm text-alkota-silver leading-relaxed">
                 Halting a fleet depot or mining wash bay for weeks is commercially impossible. We engineer upgrade packages with off-site pre-fabrication, factory testing, and planned shift cutovers to protect operational continuity.
               </p>
               <div className="pt-2">
@@ -177,23 +177,21 @@ export default function WashPlantRefurbishmentPage() {
               </div>
             </div>
 
-            <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4 font-ibm-plex-mono text-xs">
-              <div className="p-5 bg-alkota-bg border border-alkota-iron space-y-2">
-                <span className="text-alkota-orange block uppercase font-bold">01. OFF-SITE SKID FABRICATION</span>
-                <p className="text-alkota-silver leading-relaxed">Pumps, thermal coils, and control cabinets are fully wired and hydrostatic pressure-tested at our facility before site arrival.</p>
-              </div>
-              <div className="p-5 bg-alkota-bg border border-alkota-iron space-y-2">
-                <span className="text-alkota-orange block uppercase font-bold">02. PLANNED CUTOVER WINDOWS</span>
-                <p className="text-alkota-silver leading-relaxed">Mechanical and electrical tie-ins are scheduled during weekend or overnight operational downtime windows.</p>
-              </div>
-              <div className="p-5 bg-alkota-bg border border-alkota-iron space-y-2">
-                <span className="text-alkota-orange block uppercase font-bold">03. RETAIN SOUND CIVILS</span>
-                <p className="text-alkota-silver leading-relaxed">We reuse existing concrete wash pads, sumps, and structural buildings while replacing only the worn mechanical plant.</p>
-              </div>
-              <div className="p-5 bg-alkota-bg border border-alkota-iron space-y-2">
-                <span className="text-alkota-orange block uppercase font-bold">04. 60–75% CAPEX SAVINGS</span>
-                <p className="text-alkota-silver leading-relaxed">Targeted subsystem modernization delivers modern performance at a fraction of complete demolition and rebuild costs.</p>
-              </div>
+            <div className="lg:col-span-7 space-y-0 divide-y divide-alkota-iron/30">
+              {[
+                { n: '01', title: 'Off-Site Skid Fabrication', body: 'Pumps, thermal coils, and control cabinets are fully wired and hydrostatic pressure-tested at our facility before site arrival.' },
+                { n: '02', title: 'Planned Cutover Windows', body: 'Mechanical and electrical tie-ins are scheduled during weekend or overnight operational downtime windows.' },
+                { n: '03', title: 'Retain Sound Civils', body: 'We reuse existing concrete wash pads, sumps, and structural buildings while replacing only the worn mechanical plant.' },
+                { n: '04', title: '60–75% CAPEX Savings', body: 'Targeted subsystem modernization delivers modern performance at a fraction of complete demolition and rebuild costs.' }
+              ].map((item) => (
+                <div key={item.n} className="py-6 flex items-start gap-6">
+                  <span className="font-extralight text-3xl text-alkota-orange leading-none tabular-nums shrink-0 mt-0.5">{item.n}</span>
+                  <div>
+                    <h4 className="text-sm uppercase tracking-tight text-alkota-black font-medium mb-1.5">{item.title}</h4>
+                    <p className="text-sm text-alkota-silver leading-relaxed">{item.body}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </section>
@@ -209,17 +207,15 @@ export default function WashPlantRefurbishmentPage() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-0 divide-y divide-alkota-iron/30 border-y border-alkota-iron/30">
             {UPGRADE_CAPABILITIES.map((cap, idx) => (
-              <div key={idx} className="bg-white border border-alkota-iron p-6 hover:border-alkota-orange transition-colors flex flex-col justify-between">
+              <div key={idx} className="py-6 flex items-start gap-5">
+                <span className="font-extralight text-2xl text-alkota-orange leading-none tabular-nums shrink-0 mt-0.5">
+                  {String(idx + 1).padStart(2, '0')}
+                </span>
                 <div>
-                  <div className="flex items-center gap-2 mb-3">
-                    <CheckCircle2 className="h-4 w-4 text-alkota-orange shrink-0" />
-                    <h4 className="text-xs uppercase tracking-tight text-alkota-black font-normal">{cap.title}</h4>
-                  </div>
-                  <p className="text-xs text-alkota-silver leading-relaxed">
-                    {cap.desc}
-                  </p>
+                  <h4 className="text-sm uppercase tracking-tight text-alkota-black font-medium mb-1.5">{cap.title}</h4>
+                  <p className="text-sm text-alkota-silver leading-relaxed">{cap.desc}</p>
                 </div>
               </div>
             ))}
@@ -240,11 +236,11 @@ export default function WashPlantRefurbishmentPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-12 border-t border-white/10 pt-12">
             {UPGRADE_SEQUENCE.map((seq) => (
-              <div key={seq.step} className="bg-[#141414] border border-[#222] p-6 hover:border-alkota-orange transition-colors">
-                <span className="font-extralight text-3xl text-alkota-orange block mb-2">{seq.step}</span>
-                <h4 className="font-light text-sm uppercase tracking-tight text-white mb-2">{seq.title}</h4>
+              <div key={seq.step}>
+                <span className="font-extralight text-4xl text-alkota-orange block mb-3">{seq.step}</span>
+                <h4 className="font-light text-base uppercase tracking-tight text-white mb-2">{seq.title}</h4>
                 <p className="text-xs text-[#999] leading-relaxed">{seq.desc}</p>
               </div>
             ))}
@@ -252,44 +248,44 @@ export default function WashPlantRefurbishmentPage() {
         </section>
 
         {/* ── DUAL LIFECYCLE FLOWS ─────────────────────────────────────────── */}
-        <section className="mb-24 bg-white border border-alkota-iron p-10 sm:p-14">
-          <div className="mb-10">
+        <section className="mb-28 border-t border-alkota-iron/40 pt-16">
+          <div className="mb-12 max-w-3xl">
             <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.35em] text-alkota-orange block mb-2">
               // TOTAL LIFECYCLE GOVERNANCE
             </span>
-            <h2 className="font-extralight text-4xl sm:text-5xl uppercase tracking-tight text-alkota-black">
+            <h2 className="font-extralight text-4xl sm:text-5xl uppercase tracking-tight text-alkota-black leading-tight">
               Service to CAPEX. And CAPEX to Service.
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 font-ibm-plex-mono text-xs">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
             {/* Flow 1: Service -> Refurbishment */}
-            <div className="p-8 bg-alkota-bg border border-alkota-iron space-y-4">
-              <span className="text-alkota-orange font-bold block text-[10px] uppercase">
-                PATHWAY A // THIRD-PARTY & LEGACY PLANT LIFE EXTENSION
+            <div className="space-y-6">
+              <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.3em] text-alkota-orange block">
+                Pathway A // Third-Party & Legacy Life Extension
               </span>
-              <div className="space-y-2 text-[#555]">
-                <p>1. Existing wash plant suffers recurring faults or high running costs</p>
-                <p>2. Alkota executes comprehensive Site Condition Survey</p>
-                <p>3. Engineer identifies specific obsolete or failing subsystems</p>
-                <p>4. Targeted Refurbishment / Upgrade proposal issued with ROI model</p>
-                <p>5. Phased site installation and commissioning</p>
-                <p>6. Plant re-baselined with new digital asset register & PPM contract</p>
+              <div className="space-y-3 divide-y divide-alkota-iron/20 font-ibm-plex-mono text-xs text-alkota-silver">
+                <p className="pt-2">01. Existing wash plant suffers recurring faults or high running costs</p>
+                <p className="pt-3">02. Alkota executes comprehensive Site Condition Survey</p>
+                <p className="pt-3">03. Engineer identifies specific obsolete or failing subsystems</p>
+                <p className="pt-3">04. Targeted Refurbishment / Upgrade proposal issued with ROI model</p>
+                <p className="pt-3">05. Phased site installation and commissioning</p>
+                <p className="pt-3">06. Plant re-baselined with new digital asset register & PPM contract</p>
               </div>
             </div>
 
             {/* Flow 2: CAPEX -> Asset Management */}
-            <div className="p-8 bg-alkota-bg border border-alkota-iron space-y-4">
-              <span className="text-alkota-orange font-bold block text-[10px] uppercase">
-                PATHWAY B // NEW ALKOTA CAPITAL INFRASTRUCTURE
+            <div className="space-y-6">
+              <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.3em] text-alkota-orange block">
+                Pathway B // New Alkota Capital Infrastructure
               </span>
-              <div className="space-y-2 text-[#555]">
-                <p>1. Turnkey design and engineering of new wash plant (£100k–£1m+)</p>
-                <p>2. Site commissioning and formal Site Acceptance Testing (SAT)</p>
-                <p>3. One-click conversion into Managed Asset in Alkota CRM</p>
-                <p>4. Scheduled PPM programme and critical spares consignment</p>
-                <p>5. Multi-year condition monitoring and obsolescence tracking</p>
-                <p>6. Scheduled life-extension upgrades at year 7–10</p>
+              <div className="space-y-3 divide-y divide-alkota-iron/20 font-ibm-plex-mono text-xs text-alkota-silver">
+                <p className="pt-2">01. Turnkey design and engineering of new wash plant (£100k–£1m+)</p>
+                <p className="pt-3">02. Site commissioning and formal Site Acceptance Testing (SAT)</p>
+                <p className="pt-3">03. One-click conversion into Managed Asset in Alkota CRM</p>
+                <p className="pt-3">04. Scheduled PPM programme and critical spares consignment</p>
+                <p className="pt-3">05. Multi-year condition monitoring and obsolescence tracking</p>
+                <p className="pt-3">06. Scheduled life-extension upgrades at year 7–10</p>
               </div>
             </div>
           </div>

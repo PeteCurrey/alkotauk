@@ -188,25 +188,25 @@ export default function WashPlantAssetManagementPage() {
             </p>
           </div>
 
-          <div className="bg-white border border-alkota-iron overflow-hidden">
-            <div className="grid grid-cols-4 bg-alkota-black text-white text-[10px] font-ibm-plex-mono uppercase tracking-widest p-4">
-              <span>Component</span>
-              <span>Failure Consequence</span>
-              <span>Typical Lead Time</span>
-              <span>Holding Model</span>
-            </div>
-            {SPARES_CATEGORIES.map((spare, idx) => (
-              <div key={idx} className={`grid grid-cols-4 gap-4 p-4 text-xs border-t border-alkota-iron items-center ${idx % 2 === 0 ? 'bg-white' : 'bg-alkota-bg'}`}>
-                <span className="text-alkota-black font-normal">{spare.component}</span>
-                <span className={`font-ibm-plex-mono text-[10px] uppercase tracking-wider ${
-                  spare.consequence === 'Production Halt' ? 'text-red-600' : 'text-amber-600'
-                }`}>
-                  {spare.consequence}
-                </span>
-                <span className="text-alkota-silver">{spare.leadTime}</span>
-                <span className="text-alkota-black">{spare.holding}</span>
+          <div className="overflow-x-auto">
+            <div className="min-w-[600px] divide-y divide-alkota-iron/30 border-y border-alkota-iron/30">
+              <div className="grid grid-cols-12 text-[9px] font-ibm-plex-mono uppercase tracking-[0.25em] text-alkota-orange py-4">
+                <span className="col-span-4">Component</span>
+                <span className="col-span-3">Failure Consequence</span>
+                <span className="col-span-3">Typical Lead Time</span>
+                <span className="col-span-2 text-right">Holding Model</span>
               </div>
-            ))}
+              {SPARES_CATEGORIES.map((spare, idx) => (
+                <div key={idx} className="grid grid-cols-12 gap-4 py-4 text-xs items-center">
+                  <span className="col-span-4 text-alkota-black font-medium">{spare.component}</span>
+                  <span className={`col-span-3 font-ibm-plex-mono text-[11px] ${
+                    spare.consequence === 'Production Halt' ? 'text-red-600' : 'text-alkota-orange'
+                  }`}>{spare.consequence}</span>
+                  <span className="col-span-3 text-alkota-silver">{spare.leadTime}</span>
+                  <span className="col-span-2 text-right text-alkota-black font-ibm-plex-mono text-[10px] uppercase">{spare.holding}</span>
+                </div>
+              ))}
+            </div>
           </div>
 
           <div className="mt-4 p-4 bg-alkota-bg border border-alkota-iron text-[10px] font-ibm-plex-mono text-alkota-silver">
@@ -215,8 +215,8 @@ export default function WashPlantAssetManagementPage() {
         </section>
 
         {/* ── DATA-READY APPROACH ──────────────────────────────────────────── */}
-        <section className="mb-24 bg-white border border-alkota-iron p-10 sm:p-12">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+        <section className="mb-24 py-12 border-t border-alkota-iron/40">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             <div className="lg:col-span-6 space-y-4">
               <div className="flex items-center gap-2 mb-2">
                 <WashPlantCapabilityBadge label="DATA-READY" />

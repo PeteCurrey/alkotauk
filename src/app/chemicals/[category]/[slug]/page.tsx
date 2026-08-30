@@ -26,7 +26,8 @@ import {
   XCircle,
   MessageSquare,
   HelpCircle,
-  Calculator
+  Calculator,
+  Award
 } from 'lucide-react';
 import { generateSeo } from '@/lib/seo';
 import { getChemicalBySlug, VERIFIED_CHEMICAL_PRODUCTS, CHEMICAL_CATEGORIES } from '@/lib/chemicals/seed-data';
@@ -99,12 +100,28 @@ export default async function ChemicalDetailPage({ params }: ChemicalDetailPageP
   ];
 
   return (
-    <main className="min-h-screen bg-[#0D0D0D] text-white selection:bg-alkota-orange selection:text-white pt-28 pb-0 overflow-x-hidden">
+    <main className="min-h-screen bg-[#0D0D0D] text-white selection:bg-alkota-orange selection:text-white pb-0 overflow-x-hidden">
       <Navigation />
 
-      {/* Breadcrumb Header */}
-      <div className="border-b border-[#222] bg-[#0A0A0A]">
-        <div className="mx-auto max-w-7xl px-6 sm:px-12 py-8">
+      {/* ── 01: FULL SCREEN HERO SECTION WITH BACKGROUND IMAGE ── */}
+      <section 
+        className="relative min-h-screen w-full flex flex-col justify-between bg-[#0A0A0A] text-white pt-32 pb-16 px-6 sm:px-12 lg:px-24 border-b border-[#222] overflow-hidden"
+        aria-label={`${chemical.name} - Technical Specification`}
+      >
+        {/* Full Hero Background Image */}
+        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+          <img
+            src="/assets/cold-water-control-hero.jpg"
+            alt={`${chemical.name} industrial chemical formulation`}
+            className="h-full w-full object-cover object-center scale-105"
+            style={{ filter: 'brightness(0.38) contrast(1.2)' }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/80 to-black/50" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0D0D0D] via-transparent to-black/70" />
+        </div>
+
+        {/* Top Breadcrumb & Metadata Navigation */}
+        <div className="relative z-10 max-w-7xl mx-auto w-full border-b border-white/10 pb-6">
           <Breadcrumbs
             items={[
               { label: 'Chemicals', href: '/chemicals' },
@@ -113,54 +130,107 @@ export default async function ChemicalDetailPage({ params }: ChemicalDetailPageP
             ]}
           />
         </div>
-      </div>
 
-      {/* Main Technical Specification Section */}
-      <section className="py-12 bg-[#0D0D0D]">
+        {/* Hero Content Stage */}
+        <div className="relative z-10 max-w-7xl mx-auto w-full my-auto py-12">
+          <div className="max-w-3xl space-y-6">
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="font-ibm-plex-mono text-xs uppercase tracking-widest text-alkota-orange bg-alkota-orange/10 px-3 py-1 border border-alkota-orange/30 font-medium">
+                {chemical.code || 'HYDRUS-UK'}
+              </span>
+              <span className="font-ibm-plex-mono text-xs text-[#AAA] uppercase">
+                {chemical.manufacturer || 'Alkota USA / UK Formulation'}
+              </span>
+              <span className="text-[#555]">•</span>
+              <span className="text-emerald-400 font-ibm-plex-mono text-xs font-medium">
+                UK Approved // GB CLP Validated
+              </span>
+            </div>
+
+            <h1 
+              className="text-4xl sm:text-6xl lg:text-7xl font-extralight uppercase tracking-tight text-white leading-[0.94]"
+            >
+              {chemical.name}
+            </h1>
+
+            <p className="text-base sm:text-xl text-[#DDD] font-light leading-relaxed max-w-2xl">
+              {chemical.tagline || chemical.description}
+            </p>
+
+            {/* Dense Physical Metric Pillars */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-px bg-white/10 border border-white/10 text-xs font-ibm-plex-mono pt-2 max-w-2xl backdrop-blur-md">
+              <div className="bg-black/60 p-3">
+                <span className="block text-[8px] text-[#888] uppercase">pH Classification</span>
+                <span className="text-white text-sm font-medium">{chemical.ph_level || '11.5 – 12.0'}</span>
+              </div>
+              <div className="bg-black/60 p-3">
+                <span className="block text-[8px] text-[#888] uppercase">Specific Gravity</span>
+                <span className="text-white text-sm font-medium">{chemical.specific_gravity || '1.08 @ 20°C'}</span>
+              </div>
+              <div className="bg-black/60 p-3">
+                <span className="block text-[8px] text-[#888] uppercase">Hot Dilution Rate</span>
+                <span className="text-alkota-orange text-sm font-medium">{chemical.dilution_hot || '1:60 to 1:120'}</span>
+              </div>
+              <div className="bg-black/60 p-3">
+                <span className="block text-[8px] text-[#888] uppercase">Cold Dilution Rate</span>
+                <span className="text-white text-sm font-medium">{chemical.dilution_cold || '1:30 to 1:80'}</span>
+              </div>
+              <div className="bg-black/60 p-3">
+                <span className="block text-[8px] text-[#888] uppercase">Biodegradability</span>
+                <span className="text-emerald-400 text-sm font-medium">
+                  {chemical.biodegradable ? 'OECD 301B' : 'Industrial Standard'}
+                </span>
+              </div>
+              <div className="bg-black/60 p-3">
+                <span className="block text-[8px] text-[#888] uppercase">Packaging</span>
+                <span className="text-cyan-400 text-sm font-medium">5L / 20L / 200L / IBC</span>
+              </div>
+            </div>
+
+            {/* Direct Order Actions */}
+            <div className="flex flex-col sm:flex-row gap-3 pt-4 max-w-xl">
+              <Link
+                href={`/contact?subject=Price%20Request%20for%20${encodeURIComponent(chemical.name)}`}
+                className="flex-1 flex items-center justify-center gap-2 bg-alkota-orange hover:bg-white hover:text-black text-white py-4 px-8 text-xs uppercase tracking-widest font-mono transition-all shadow-lg"
+              >
+                <span>Request Pricing &amp; Bulk Order</span>
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                href="/parts-attachments/chemicals"
+                className="flex items-center justify-center gap-2 border border-white/30 hover:border-white bg-white/5 backdrop-blur-sm text-white py-4 px-6 text-xs uppercase tracking-widest font-mono transition-colors"
+              >
+                <span>Shop Retail Store</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Telemetry Strip */}
+        <div className="relative z-10 max-w-7xl mx-auto w-full pt-6 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs font-ibm-plex-mono text-[#AAA]">
+          <div className="flex items-center gap-2">
+            <Award className="h-4 w-4 text-alkota-orange" />
+            <span>Master Formula {chemical.code || 'HYDRUS-UK'} · Genuine Alkota Formulation</span>
+          </div>
+          <span>Next-Day UK Mainland Delivery on All Standard Drums</span>
+        </div>
+      </section>
+
+      {/* ── 02: TECHNICAL PROFILE & FORMULATION SPECIFICATION ── */}
+      <section className="py-16 bg-[#0D0D0D]">
         <div className="mx-auto max-w-7xl px-6 sm:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             
-            {/* ─── LEFT COLUMN: PRODUCT VISUAL & IDENTITY (7 cols) ───────── */}
+            {/* ─── LEFT COLUMN: PRODUCT TECHNICAL PROFILE (7 cols) ───────── */}
             <div className="lg:col-span-7 space-y-10">
-              {/* Product Visual Container with Neutral Placeholder Design */}
-              <div className="relative aspect-[16/10] bg-[#141414] border border-[#262626] p-8 flex items-center justify-center overflow-hidden group">
-                {chemical.primary_image_url || chemical.image_url ? (
-                  <img
-                    src={chemical.primary_image_url || chemical.image_url || ''}
-                    alt={chemical.name}
-                    className="max-h-full max-w-full object-contain filter drop-shadow-2xl transition-transform duration-500 group-hover:scale-105"
-                  />
-                ) : (
-                  <div className="text-center space-y-3 p-6">
-                    <Beaker className="h-16 w-16 text-alkota-orange mx-auto opacity-40" />
-                    <span className="font-ibm-plex-mono text-xs uppercase tracking-widest text-[#666] block">
-                      Alkota Hydrus Chemical Formulation
-                    </span>
-                    <span className="text-sm uppercase tracking-tight text-[#AAA] font-light">
-                      {chemical.name} · {chemical.code}
-                    </span>
-                  </div>
-                )}
-
-                <div className="absolute top-4 left-4 bg-black/80 px-3 py-1 border border-[#333] flex items-center gap-2">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                  <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#CCC]">
-                    UK Approved // GB CLP Validated
-                  </span>
-                </div>
-
-                <div className="absolute bottom-4 right-4 font-ibm-plex-mono text-[9px] text-[#666] uppercase">
-                  {chemical.form || 'Concentrated Liquid'}
-                </div>
-              </div>
-
+              
               {/* Formulation Overview & Engineering Story */}
               <div className="space-y-4">
                 <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.25em] text-alkota-orange block">
-                  // TECHNICAL PROFILE & FORMULATION SCIENCE
+                  // TECHNICAL PROFILE &amp; FORMULATION SCIENCE
                 </span>
                 <h2 className="text-2xl sm:text-3xl font-extralight uppercase tracking-tight text-white">
-                  Chemical Purpose & Action
+                  Chemical Purpose &amp; Action
                 </h2>
                 <p className="text-sm text-[#CCC] leading-relaxed font-normal">
                   {chemical.description}
@@ -189,7 +259,7 @@ export default async function ChemicalDetailPage({ params }: ChemicalDetailPageP
                   <div className="flex items-center gap-2 text-red-400">
                     <AlertTriangle className="h-4 w-4" />
                     <span className="font-ibm-plex-mono text-xs uppercase tracking-wider font-bold">
-                      Important Surface Restrictions & Metallurgy Cautions
+                      Important Surface Restrictions &amp; Metallurgy Cautions
                     </span>
                   </div>
                   <p className="text-xs text-[#DDD] leading-relaxed font-normal">
@@ -261,7 +331,7 @@ export default async function ChemicalDetailPage({ params }: ChemicalDetailPageP
                 <div className="flex items-center gap-2">
                   <Calculator className="h-4 w-4 text-alkota-orange" />
                   <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.25em] text-alkota-orange">
-                    // DOSING & DILUTION CALCULATOR
+                    // DOSING &amp; DILUTION CALCULATOR
                   </span>
                 </div>
                 <ProductDilutionWidget
@@ -301,99 +371,14 @@ export default async function ChemicalDetailPage({ params }: ChemicalDetailPageP
               </div>
             </div>
 
-            {/* ─── RIGHT COLUMN: DENSE SPECIFICATION & ORDERING (5 cols) ─── */}
+            {/* ─── RIGHT COLUMN: DENSE SPECIFICATION & SAFETY (5 cols) ─── */}
             <div className="lg:col-span-5 space-y-6 lg:sticky lg:top-32">
-              {/* Product Masthead */}
-              <div className="bg-[#141414] border border-[#262626] p-6 space-y-4">
-                <div className="flex items-center justify-between pb-3 border-b border-[#222]">
-                  <span className="font-ibm-plex-mono text-[10px] uppercase text-alkota-orange bg-alkota-orange/10 px-2.5 py-0.5 border border-alkota-orange/30">
-                    {chemical.code || 'HYDRUS-UK'}
-                  </span>
-                  <span className="font-ibm-plex-mono text-xs text-[#888] uppercase">
-                    {chemical.manufacturer}
-                  </span>
-                </div>
-
-                <h1 className="text-3xl sm:text-4xl font-extralight uppercase tracking-tight text-white leading-tight">
-                  {chemical.name}
-                </h1>
-
-                <p className="text-xs text-[#AAA] leading-relaxed font-normal">
-                  {chemical.tagline}
-                </p>
-
-                {/* Dense Physical Metric Pillars */}
-                <div className="grid grid-cols-2 gap-px bg-[#262626] border border-[#262626] text-xs font-ibm-plex-mono pt-2">
-                  <div className="bg-[#181818] p-3">
-                    <span className="block text-[8px] text-[#666] uppercase">pH Classification</span>
-                    <span className="text-white text-sm">{chemical.ph_level || '11.5 – 12.0'}</span>
-                  </div>
-                  <div className="bg-[#181818] p-3">
-                    <span className="block text-[8px] text-[#666] uppercase">Specific Gravity</span>
-                    <span className="text-white text-sm">{chemical.specific_gravity || '1.08 @ 20°C'}</span>
-                  </div>
-                  <div className="bg-[#181818] p-3">
-                    <span className="block text-[8px] text-[#666] uppercase">Hot Dilution Rate</span>
-                    <span className="text-alkota-orange text-sm">{chemical.dilution_hot || '1:60 to 1:120'}</span>
-                  </div>
-                  <div className="bg-[#181818] p-3">
-                    <span className="block text-[8px] text-[#666] uppercase">Cold Dilution Rate</span>
-                    <span className="text-white text-sm">{chemical.dilution_cold || '1:30 to 1:80'}</span>
-                  </div>
-                  <div className="bg-[#181818] p-3">
-                    <span className="block text-[8px] text-[#666] uppercase">Biodegradability</span>
-                    <span className="text-emerald-400 text-sm">
-                      {chemical.biodegradable ? 'OECD 301B' : 'Non-Bio'}
-                    </span>
-                  </div>
-                  <div className="bg-[#181818] p-3">
-                    <span className="block text-[8px] text-[#666] uppercase">Water Recycling</span>
-                    <span className="text-cyan-400 text-sm">
-                      {chemical.water_recovery_compatible ? 'Compatible' : 'Dedicated'}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Available Packaging Options */}
-                {chemical.available_sizes && (
-                  <div className="pt-2">
-                    <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#777] block mb-2">
-                      Available Packaging Formats:
-                    </span>
-                    <div className="flex flex-wrap gap-1.5">
-                      {chemical.available_sizes.map((sz, i) => (
-                        <span key={i} className="px-2.5 py-1 bg-black/60 border border-[#333] text-[10px] font-ibm-plex-mono text-[#DDD]">
-                          {sz}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Order / Pricing Action Buttons */}
-                <div className="pt-4 border-t border-[#222] space-y-2.5">
-                  <Link
-                    href={`/contact?subject=Price%20Request%20for%20${encodeURIComponent(chemical.name)}`}
-                    className="w-full flex items-center justify-center gap-2 bg-alkota-orange text-white py-3.5 text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-all font-normal shadow-lg shadow-alkota-orange/20"
-                  >
-                    <span>Request Pricing & Order</span>
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
-                  <Link
-                    href="/dealers"
-                    className="w-full flex items-center justify-center gap-2 border border-[#333] bg-[#1C1C1C] text-[#CCC] hover:text-white py-2.5 text-xs uppercase tracking-widest transition-colors font-normal"
-                  >
-                    <span>Find Local Stocking Dealer</span>
-                  </Link>
-                </div>
-              </div>
-
               {/* Safety & GB CLP / COSHH Documentation Box */}
               <div className="bg-[#141412] border border-[#262626] p-6 space-y-4">
                 <div className="flex items-center justify-between pb-3 border-b border-[#222]">
                   <span className="font-ibm-plex-mono text-[10px] uppercase text-alkota-orange font-bold flex items-center gap-1.5">
                     <ShieldCheck className="h-3.5 w-3.5" />
-                    <span>GB CLP & Safety Data</span>
+                    <span>GB CLP &amp; Safety Data</span>
                   </span>
                   {chemical.signal_word === 'DANGER' ? (
                     <span className="text-red-400 bg-red-950/40 px-2 py-0.5 border border-red-800 text-[10px] font-ibm-plex-mono">
@@ -445,6 +430,25 @@ export default async function ChemicalDetailPage({ params }: ChemicalDetailPageP
                 <span className="block text-[9px] font-ibm-plex-mono text-[#555] text-center">
                   Document Revision: {chemical.sds_revision_date || 'Current Active'}
                 </span>
+              </div>
+
+              {/* Available Formats & Quick Quote */}
+              <div className="bg-[#141414] border border-[#262626] p-6 space-y-4">
+                <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-[#777] block font-medium">
+                  Direct Dispatch Formats
+                </span>
+                <p className="text-xs text-[#AAA] leading-relaxed">
+                  Available in 5L polycans, 20L drums, 200L barrels, and 1000L palletised IBC containers with next-day UK dispatch.
+                </p>
+                <div className="pt-2">
+                  <Link
+                    href={`/contact?subject=Price%20Request%20for%20${encodeURIComponent(chemical.name)}`}
+                    className="w-full flex items-center justify-center gap-2 bg-alkota-orange hover:bg-white hover:text-black text-white py-3 font-mono text-xs uppercase tracking-widest transition-colors"
+                  >
+                    <span>Request Quotation</span>
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
+                </div>
               </div>
             </div>
 

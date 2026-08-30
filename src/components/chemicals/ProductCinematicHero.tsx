@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, ShoppingBag, Plus, Minus, CheckCircle2, ShieldCheck } from 'lucide-react';
+import { ShoppingBag, Plus, Minus, Check } from 'lucide-react';
 import { ChemicalRetailProduct, ChemicalSKU } from '@/lib/types/chemical-commerce';
 import { usePartsRequest } from '@/components/parts/PartsRequestListContext';
 
@@ -93,43 +93,40 @@ export default function ProductCinematicHero({ product }: Props) {
   return (
     <section 
       id="overview" 
-      className="relative min-h-[90vh] w-full flex flex-col justify-between bg-[#FAF9F5] text-alkota-black pt-32 pb-16 px-6 sm:px-12 lg:px-24 border-b border-[#E8E8E4] overflow-hidden"
+      className="relative min-h-[92vh] w-full flex flex-col justify-between bg-[#FAF9F5] text-alkota-black pt-36 pb-16 px-6 sm:px-12 lg:px-24 border-b border-[#E8E8E4] overflow-hidden"
+      aria-label={`${product.retail_name} - Chemical Product Showcase`}
     >
       
-      {/* ── TOP BREADCRUMB & METRIC INDICATORS ── */}
-      <div className="relative z-10 max-w-7xl w-full mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E8E8E4] pb-6">
+      {/* Top Breadcrumb */}
+      <div className="relative z-10 max-w-7xl w-full mx-auto flex items-center justify-between gap-4 border-b border-[#E8E8E4] pb-6">
         <nav className="flex items-center gap-2 font-ibm-plex-mono text-[10px] uppercase tracking-widest text-[#777]">
-          <Link href="/chemicals" className="hover:text-alkota-orange transition-colors">
+          <Link href="/parts-attachments/chemicals" className="hover:text-alkota-orange transition-colors">
             Chemicals
-          </Link>
-          <span>/</span>
-          <Link href={`/chemicals?family=${encodeURIComponent(product.retail_family)}`} className="hover:text-alkota-orange transition-colors">
-            {product.retail_family}
           </Link>
           <span>/</span>
           <span className="text-alkota-black font-semibold">{product.retail_name}</span>
         </nav>
 
-        <div className="flex items-center gap-4 text-xs font-ibm-plex-mono text-[#777]">
-          <span>Master Formula: <strong className="text-alkota-black font-semibold">{product.originating_master_code}</strong></span>
+        <div className="flex items-center gap-3 text-xs font-ibm-plex-mono text-[#777]">
+          <span>Formula {product.originating_master_code}</span>
           <span className="text-[#DDD]">•</span>
-          <span className="text-emerald-700 font-medium">100% GB-CLP Compliant</span>
+          <span className="text-emerald-800 font-medium">GB-CLP Verified</span>
         </div>
       </div>
 
-      {/* ── MAIN SHOWROOM STAGE (APPLE-STYLE PRODUCT HERO) ── */}
+      {/* Main Showroom Composition (Apple-Style Desire Stage) */}
       <div className="relative z-10 max-w-7xl w-full mx-auto my-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center py-10">
         
-        {/* Left Column: Product Selection & Direct Purchase (6 Cols) */}
-        <div className="lg:col-span-6 space-y-8">
+        {/* Left Column: Product Selection & Direct Purchase (5 Cols) */}
+        <div className="lg:col-span-5 space-y-8">
           
           <div className="space-y-3">
-            <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-orange block font-medium">
-              // {product.descriptor || 'Commercial Formulation'}
+            <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.25em] text-alkota-orange block font-medium">
+              {product.descriptor || 'Commercial Formulation'}
             </span>
 
             <h1 
-              className="font-extralight text-[#0A0A0A] tracking-tight uppercase leading-[0.94]"
+              className="font-extralight text-[#0A0A0A] tracking-tight uppercase leading-[0.92]"
               style={{ fontSize: 'clamp(2.6rem, 5vw, 4.2rem)' }}
             >
               {product.retail_name}
@@ -144,7 +141,7 @@ export default function ProductCinematicHero({ product }: Props) {
           <div className="space-y-3 pt-2">
             <div className="flex items-center justify-between">
               <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-[#777]">
-                Select Pack Size:
+                Select Container Format:
               </span>
               <span className="font-ibm-plex-mono text-xs text-[#888]">
                 SKU: {selectedSku.sku_code}
@@ -162,7 +159,7 @@ export default function ProductCinematicHero({ product }: Props) {
                     className={`p-3 text-left border transition-all cursor-pointer ${
                       isSelected
                         ? 'border-black bg-white shadow-sm ring-1 ring-black'
-                        : 'border-[#E0DED8] bg-[#F5F4EF] hover:border-[#BBB]'
+                        : 'border-[#DCDAD4] bg-[#F2F0E8] hover:border-[#BBB]'
                     }`}
                   >
                     <span className="font-ibm-plex-mono text-xs text-alkota-black block font-medium">
@@ -182,9 +179,9 @@ export default function ProductCinematicHero({ product }: Props) {
             
             <div className="flex items-baseline justify-between">
               <div>
-                <span className="font-ibm-plex-mono text-[9px] text-[#888] uppercase tracking-widest block">Direct Trade Price</span>
+                <span className="font-ibm-plex-mono text-[9px] text-[#888] uppercase tracking-widest block">Trade Price</span>
                 <div className="flex items-baseline gap-2">
-                  <span className="font-ibm-plex-mono text-3xl text-alkota-black font-light">
+                  <span className="font-ibm-plex-mono text-3xl sm:text-4xl text-alkota-black font-light">
                     £{priceExVat.toFixed(2)}
                   </span>
                   <span className="font-ibm-plex-mono text-[10px] text-[#777] uppercase">ex VAT</span>
@@ -227,10 +224,10 @@ export default function ProductCinematicHero({ product }: Props) {
               </button>
 
               <a
-                href="#story"
+                href="#technical"
                 className="px-6 py-4 border border-[#DCDAD4] hover:border-black text-alkota-black text-center font-ibm-plex-mono text-xs uppercase tracking-widest transition-colors font-medium"
               >
-                Learn More
+                Specifications
               </a>
             </div>
 
@@ -238,13 +235,11 @@ export default function ProductCinematicHero({ product }: Props) {
 
         </div>
 
-        {/* Right Column: Massive Chemical Canister Presentation (6 Cols) */}
-        <div className="lg:col-span-6 relative flex items-center justify-center min-h-[420px]">
+        {/* Right Column: Giant Chemical Bottle Presentation (7 Cols) */}
+        <div className="lg:col-span-7 relative flex items-center justify-center min-h-[460px] sm:min-h-[540px]">
           
-          <div className="relative w-full max-w-lg aspect-square flex items-center justify-center p-8 bg-white border border-[#E8E8E4] shadow-sm">
-            
-            {/* Soft Ambient Ground Shadow */}
-            <div className="absolute inset-x-12 bottom-6 h-10 bg-black/8 blur-xl rounded-full pointer-events-none" />
+          <div className="relative w-full max-w-xl aspect-square flex items-center justify-center p-8 bg-white border border-[#E8E8E4] shadow-sm">
+            <div className="absolute inset-x-12 bottom-6 h-12 bg-black/10 blur-xl rounded-full pointer-events-none" />
 
             <img
               src={product.hero_image || '/assets/industries/fleet.png'}
@@ -254,38 +249,16 @@ export default function ProductCinematicHero({ product }: Props) {
                 (e.target as HTMLElement).setAttribute('src', '/assets/industries/fleet.png');
               }}
             />
-
-            {/* Subtle Origin Badge */}
-            <div className="absolute top-4 right-4 bg-[#FAF9F5] border border-[#E0DED8] px-3 py-1 font-ibm-plex-mono text-[9px] text-[#777] uppercase tracking-wider">
-              {product.originating_master_code} · {product.originating_master_name}
-            </div>
-
           </div>
 
         </div>
 
       </div>
 
-      {/* ── PROGRESSIVE DISCLOSURE JUMP NAV ── */}
-      <div className="relative z-10 max-w-7xl mx-auto w-full pt-8 border-t border-[#E8E8E4] flex flex-wrap items-center justify-between gap-4 text-xs font-ibm-plex-mono text-[#777]">
-        <div className="flex flex-wrap items-center gap-6">
-          <a href="#story" className="hover:text-black transition-colors uppercase tracking-wider">
-            01 / How It Works
-          </a>
-          <a href="#problem" className="hover:text-black transition-colors uppercase tracking-wider">
-            02 / Target Soil
-          </a>
-          <a href="#usage" className="hover:text-black transition-colors uppercase tracking-wider">
-            03 / Dilution &amp; Use
-          </a>
-          <a href="#technical" className="hover:text-black transition-colors uppercase tracking-wider">
-            04 / Safety &amp; Specs
-          </a>
-        </div>
-
-        <span className="text-[10px] uppercase tracking-widest text-[#888]">
-          Despatched Next-Day Across UK Mainland
-        </span>
+      {/* Discreet Bottom Despatch Line */}
+      <div className="relative z-10 max-w-7xl mx-auto w-full pt-8 flex items-center justify-between text-xs font-ibm-plex-mono text-[#777]">
+        <span>Sourced &amp; Stocked in UK</span>
+        <span>Next-Day Courier / Pallet Despatch Across UK Mainland</span>
       </div>
 
     </section>

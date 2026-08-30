@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface ProductFamily {
@@ -88,41 +88,80 @@ const FAMILIES: ProductFamily[] = [
 
 export default function ProductUniverse() {
   const [activeTab, setActiveTab] = useState<string>(FAMILIES[0].id);
+  const scrollRef = useRef<HTMLDivElement>(null);
   const activeFamily = FAMILIES.find((f) => f.id === activeTab) || FAMILIES[0];
+
+  const handleScroll = (direction: 'left' | 'right') => {
+    if (scrollRef.current) {
+      const scrollAmount = 240;
+      scrollRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth',
+      });
+    }
+  };
 
   return (
     <section className="bg-[#F8F7F4] text-alkota-black py-28 sm:py-36 px-6 sm:px-12 overflow-hidden font-normal" aria-label="Alkota Product World">
       <div className="mx-auto max-w-7xl w-full">
-        {/* Architectural Header */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 pb-12">
-          <div>
-            <span className="text-xs uppercase tracking-[0.25em] text-alkota-orange block mb-3 font-light">
-              The Product World
-            </span>
-            <h2 className="font-extralight text-4xl sm:text-5xl lg:text-6xl uppercase tracking-tight text-alkota-black leading-none">
-              Engineered by Category.
-            </h2>
-          </div>
+        {/* Top Line: Eyebrow + Interactive Scrollable Category Tabs */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-4">
+          <span className="text-xs uppercase tracking-[0.25em] text-alkota-orange block font-light shrink-0">
+            The Product World
+          </span>
 
-          {/* Clean family tabs — No boxes, subtle text switcher */}
-          <div className="flex items-center gap-6 sm:gap-8 overflow-x-auto pb-2 scrollbar-none font-normal">
-            {FAMILIES.map((family) => {
-              const isActive = family.id === activeTab;
-              return (
-                <button
-                  key={family.id}
-                  onClick={() => setActiveTab(family.id)}
-                  className={`whitespace-nowrap pb-1.5 text-xs uppercase tracking-[0.18em] transition-all cursor-pointer border-b-2 font-normal ${
-                    isActive
-                      ? 'border-alkota-orange text-alkota-black'
-                      : 'border-transparent text-[#999] hover:text-alkota-black'
-                  }`}
-                >
-                  {family.name}
-                </button>
-              );
-            })}
+          {/* Understated Category Selector with Scroll Arrows */}
+          <div className="flex items-center gap-1.5 min-w-0 max-w-full lg:max-w-[70%]">
+            {/* Scroll Left Button */}
+            <button
+              type="button"
+              onClick={() => handleScroll('left')}
+              className="p-1 text-black/40 hover:text-black hover:bg-black/5 transition-colors cursor-pointer bg-transparent border-none shrink-0 flex items-center justify-center rounded-sm"
+              aria-label="Scroll categories left"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+
+            {/* Scrollable Container */}
+            <div
+              ref={scrollRef}
+              className="flex items-center gap-6 sm:gap-8 overflow-x-auto pb-1 scrollbar-none font-normal scroll-smooth"
+            >
+              {FAMILIES.map((family) => {
+                const isActive = family.id === activeTab;
+                return (
+                  <button
+                    key={family.id}
+                    onClick={() => setActiveTab(family.id)}
+                    className={`whitespace-nowrap pb-1 text-xs uppercase tracking-[0.18em] transition-all cursor-pointer border-b-2 font-normal shrink-0 ${
+                      isActive
+                        ? 'border-alkota-orange text-alkota-black'
+                        : 'border-transparent text-[#999] hover:text-alkota-black'
+                    }`}
+                  >
+                    {family.name}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Scroll Right Button */}
+            <button
+              type="button"
+              onClick={() => handleScroll('right')}
+              className="p-1 text-black/40 hover:text-black hover:bg-black/5 transition-colors cursor-pointer bg-transparent border-none shrink-0 flex items-center justify-center rounded-sm"
+              aria-label="Scroll categories right"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
           </div>
+        </div>
+
+        {/* Section Headline */}
+        <div className="pb-8 sm:pb-12">
+          <h2 className="font-extralight text-4xl sm:text-5xl lg:text-6xl uppercase tracking-tight text-alkota-black leading-none">
+            Engineered by Category.
+          </h2>
         </div>
 
         {/* Gallery Product Showcase Canvas */}

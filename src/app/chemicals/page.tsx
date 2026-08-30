@@ -37,7 +37,7 @@ export default async function ProfessionalChemicalsHubPage() {
 
       {/* ── 01: HERO (Professional / B2B Technical Hub) ────────────────────────── */}
       <section
-        className="relative min-h-[85vh] w-full flex flex-col justify-center overflow-hidden bg-[#0F0F0D] text-white px-6 sm:px-12 font-normal"
+        className="relative min-h-screen w-full flex flex-col justify-center overflow-hidden bg-[#0F0F0D] text-white px-6 sm:px-12 font-normal"
         aria-label="Alkota UK Professional Chemistry Hub"
       >
         <div className="absolute inset-0 z-0 overflow-hidden">
@@ -64,14 +64,14 @@ export default async function ProfessionalChemicalsHubPage() {
             {/* Headline */}
             <h1
               className="font-extralight uppercase tracking-tight text-white leading-[0.92] mb-6"
-              style={{ fontSize: 'clamp(3rem, 7vw, 6.2rem)' }}
+              style={{ fontSize: 'clamp(3.2rem, 7.5vw, 6.8rem)' }}
             >
               Professional Chemistry.<br />
               <span className="text-alkota-orange">Engineered to clean.</span>
             </h1>
 
             {/* Supporting technical copy */}
-            <p className="text-[#E0E0DC] text-base sm:text-lg leading-relaxed mb-8 max-w-lg font-normal">
+            <p className="text-[#E0E0DC] text-base sm:text-lg leading-relaxed mb-10 max-w-lg font-normal">
               Six decades of American industrial formulation heritage. High-potency traffic film removers, aluminium acid brighteners, agricultural degreasers, and Schedule 80 coil protection chemistry.
             </p>
 

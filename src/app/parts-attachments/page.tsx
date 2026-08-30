@@ -62,7 +62,7 @@ export default async function PartsHomePage() {
 
       {/* ── 01: HERO ── */}
       <section
-        className="relative min-h-screen w-full flex flex-col justify-center overflow-hidden bg-[#0F0F0D] text-white"
+        className="relative min-h-screen w-full flex flex-col justify-center overflow-hidden bg-[#0F0F0D] text-white px-6 sm:px-12 font-normal"
         aria-label="Alkota UK Parts & Attachments"
       >
         <div className="absolute inset-0 z-0 overflow-hidden">
@@ -70,62 +70,62 @@ export default async function PartsHomePage() {
             src="/assets/parts/parts-hero-workshop.jpg"
             alt="Alkota engineering workshop"
             className="h-full w-full object-cover object-center scale-105"
-            style={{ filter: 'brightness(0.68) contrast(1.08)' }}
+            style={{ filter: 'brightness(0.65) contrast(1.12)' }}
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/88 via-black/40 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0F0F0D] via-transparent to-black/50" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/45 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0F0F0D] via-transparent to-black/60" />
         </div>
 
-        <div className="relative z-10 mx-auto max-w-7xl w-full px-6 sm:px-12 my-auto py-24 sm:py-32">
+        <div className="relative z-10 mx-auto max-w-7xl w-full my-auto py-20">
           <div className="max-w-2xl">
-            <div className="mb-6 inline-flex items-center gap-3">
+            <div className="mb-5 inline-flex items-center gap-3 font-normal">
               <span className="h-[1.5px] w-5 bg-alkota-orange shrink-0" />
-              <span className="text-[11px] uppercase tracking-[0.25em] text-white/75 font-normal">
+              <span className="text-xs uppercase tracking-[0.25em] text-white/80 font-light">
                 Alkota UK · Parts, Spares & Tooling
               </span>
             </div>
 
             <h1
-              className="font-extralight uppercase tracking-tight text-white leading-[0.93] mb-7"
+              className="font-extralight uppercase tracking-tight text-white leading-[0.92] mb-6"
               style={{ fontSize: 'clamp(3.2rem, 7.5vw, 6.8rem)' }}
             >
               Parts that keep<br />
               <span className="text-alkota-orange">the pressure on.</span>
             </h1>
 
-            <p className="text-[#DDDBD6] text-base sm:text-lg leading-relaxed mb-9 max-w-lg font-normal">
+            <p className="text-[#E0E0DC] text-base sm:text-lg leading-relaxed mb-8 max-w-lg font-normal">
               Genuine Alkota components, Swiss-precision Mosmatic tooling, and professional-grade attachments from the world's leading pressure-washing manufacturers.
             </p>
 
-            <div className="max-w-xl bg-white/95 backdrop-blur-sm p-1.5 mb-9 shadow-2xl">
+            <div className="max-w-lg bg-white/95 backdrop-blur-sm p-1.5 mb-8 shadow-xl">
               <form action="/parts-attachments/search" method="GET" className="flex items-center gap-2">
                 <Search className="h-4 w-4 text-[#888] ml-2.5 shrink-0" />
                 <input
                   type="text"
                   name="q"
                   placeholder="Search by part number, brand, or machine model"
-                  className="w-full bg-transparent text-alkota-black text-sm px-2 py-2.5 focus:outline-none font-normal"
+                  className="w-full bg-transparent text-alkota-black text-xs sm:text-sm px-2 py-2 focus:outline-none font-normal"
                 />
                 <button
                   type="submit"
-                  className="bg-alkota-orange hover:bg-black text-white px-5 py-2.5 font-ibm-plex-mono text-[11px] uppercase tracking-widest transition-colors shrink-0 cursor-pointer"
+                  className="bg-alkota-orange hover:bg-black text-white px-5 py-2 font-ibm-plex-mono text-[11px] uppercase tracking-widest transition-colors shrink-0 cursor-pointer"
                 >
                   Search
                 </button>
               </form>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 font-normal">
               <Link
                 href="/parts-attachments/categories"
-                className="inline-flex items-center justify-center gap-3 bg-alkota-orange text-white px-8 py-3.5 text-xs uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all group"
+                className="inline-flex items-center justify-center gap-3 bg-alkota-orange text-white px-8 py-3.5 text-xs uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all group shadow-xl font-normal"
               >
                 <span>Explore Parts</span>
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
               <Link
                 href="/parts-attachments/finder"
-                className="inline-flex items-center justify-center gap-3 border border-white/35 bg-black/35 backdrop-blur-sm text-white px-7 py-3.5 text-xs uppercase tracking-[0.2em] hover:border-white hover:bg-white hover:text-black transition-all"
+                className="inline-flex items-center justify-center gap-3 border border-white/40 bg-black/40 backdrop-blur-sm text-white px-7 py-3.5 text-xs uppercase tracking-[0.2em] hover:border-white hover:bg-white hover:text-black transition-all font-normal"
               >
                 <Sparkles className="w-3.5 h-3.5 text-alkota-orange" />
                 <span>Find My Part</span>

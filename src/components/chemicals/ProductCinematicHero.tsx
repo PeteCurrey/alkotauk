@@ -236,20 +236,18 @@ export default function ProductCinematicHero({ product }: Props) {
         </div>
 
         {/* Right Column: Giant Chemical Bottle Presentation (7 Cols) */}
-        <div className="lg:col-span-7 relative flex items-center justify-center min-h-[460px] sm:min-h-[540px]">
+        <div className="lg:col-span-7 relative flex items-center justify-center min-h-[480px] sm:min-h-[560px]">
           
-          <div className="relative w-full max-w-xl aspect-square flex items-center justify-center p-8 bg-white border border-[#E8E8E4] shadow-sm">
-            <div className="absolute inset-x-12 bottom-6 h-12 bg-black/10 blur-xl rounded-full pointer-events-none" />
+          <div className="absolute inset-x-12 bottom-6 h-16 bg-black/10 blur-2xl rounded-full pointer-events-none" />
 
-            <img
-              src={product.hero_image || '/assets/industries/fleet.png'}
-              alt={product.retail_name}
-              className="relative z-10 max-h-[85%] max-w-[85%] object-contain filter drop-shadow-md hover:scale-105 transition-transform duration-500 select-none"
-              onError={(e) => {
-                (e.target as HTMLElement).setAttribute('src', '/assets/industries/fleet.png');
-              }}
-            />
-          </div>
+          <img
+            src={product.hero_image || '/assets/industries/fleet.png'}
+            alt={product.retail_name}
+            className="relative z-10 w-full h-auto max-w-[540px] object-contain filter drop-shadow-[0_32px_52px_rgba(0,0,0,0.14)] hover:scale-[1.03] transition-transform duration-500 select-none"
+            onError={(e) => {
+              (e.target as HTMLElement).setAttribute('src', '/assets/industries/fleet.png');
+            }}
+          />
 
         </div>
 

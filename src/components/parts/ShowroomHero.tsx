@@ -60,53 +60,22 @@ export default function ShowroomHero() {
 
         </div>
 
-        {/* Right Column: Giant Product Cutout (7 Cols, Dominating the Screen) */}
-        <div className="lg:col-span-7 relative flex items-center justify-center min-h-[460px] sm:min-h-[560px]">
+        {/* Right Column: Product Fills Column — No Labels, No Boxes */}
+        <div className="lg:col-span-7 relative flex items-center justify-center min-h-[480px] sm:min-h-[600px]">
           
-          {/* Natural Ambient Ground Shadow */}
-          <div className="absolute inset-x-8 bottom-4 h-16 bg-black/10 blur-3xl rounded-full pointer-events-none" />
+          <div className="absolute inset-x-8 bottom-4 h-20 bg-black/10 blur-3xl rounded-full pointer-events-none" />
 
-          {/* Monumental Product Image Cutout */}
           <img
             src="/assets/products/whirl-away-surface-cleaner.png"
             alt="Mosmatic Stainless Steel Flat Surface Cleaner"
-            className="relative z-10 max-h-[540px] w-auto object-contain filter drop-shadow-[0_28px_48px_rgba(0,0,0,0.15)] hover:scale-105 transition-transform duration-700 select-none"
+            className="relative z-10 w-full h-auto max-w-[680px] object-contain filter drop-shadow-[0_32px_56px_rgba(0,0,0,0.16)] hover:scale-[1.03] transition-transform duration-700 select-none"
             onError={(e) => {
               (e.target as HTMLElement).setAttribute('src', '/assets/products/industrial-pump.png');
             }}
           />
 
-          {/* Discreet Floating Product Caption */}
-          <div className="absolute bottom-2 right-2 bg-white/90 backdrop-blur-md border border-[#E0DED8] px-4 py-2.5 shadow-sm hidden sm:block">
-            <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-alkota-orange block font-semibold">
-              Mosmatic DL-UHD
-            </span>
-            <span className="text-xs font-light text-alkota-black">
-              18" Rotary Surface Cleaner · 275 Bar
-            </span>
-          </div>
-
         </div>
 
-      </div>
-
-      {/* Discreet Bottom Bar */}
-      <div className="relative z-10 max-w-7xl mx-auto w-full pt-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs font-ibm-plex-mono text-[#777]">
-        <div className="flex flex-wrap items-center gap-6">
-          <span>OEM Genuine Parts</span>
-          <span className="text-[#DDD]">•</span>
-          <span>Mosmatic · Cox Reels · General Pump</span>
-          <span className="text-[#DDD]">•</span>
-          <span>Despatched UK Mainland</span>
-        </div>
-
-        <Link
-          href="/parts-attachments/categories"
-          className="text-alkota-black hover:text-alkota-orange uppercase tracking-wider transition-colors inline-flex items-center gap-1 font-medium"
-        >
-          <span>All 16 Categories</span>
-          <ArrowRight className="w-3 h-3 text-alkota-orange" />
-        </Link>
       </div>
 
     </section>

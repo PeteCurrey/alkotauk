@@ -1,12 +1,10 @@
 import React from 'react';
 import Link from 'next/link';
 import { Metadata } from 'next';
-import { ArrowRight, ChevronRight, Droplets, Sparkles, Check } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 import ChemicalCard from '@/components/chemicals/ChemicalCard';
 import { 
   getRetailProducts, 
-  getChemicalApplications,
-  getMasterFormulations 
 } from '@/lib/chemicals/service';
 
 export const dynamic = 'force-dynamic';
@@ -32,7 +30,6 @@ export default async function ChemicalsStorefrontPage({ searchParams }: Chemical
     family: family,
   });
 
-  // Filter by search query if present
   let filteredProducts = allProducts;
   if (q && q.trim()) {
     const term = q.trim().toLowerCase();
@@ -45,320 +42,291 @@ export default async function ChemicalsStorefrontPage({ searchParams }: Chemical
     );
   }
 
-  // The 4 Core Powerhouses
-  const flagshipProducts = [
-    {
-      slug: 'roadforce-fleet-heavy-tfr',
-      masterCode: 'TR-407',
-      name: 'RoadForce Fleet Heavy TFR',
-      task: 'Touchless Traffic Film Remover',
-      headline: 'Cuts through road film and diesel grime.',
-      desc: 'The standard for commercial fleet washdowns. Removes static road film, soot, and winter salt in one touchless pass without etching vehicle livery or polished aluminium.',
-      packSizes: ['5 L', '20 L', '200 L', '1000 L'],
-      fromPrice: '£38.50',
-      image: '/assets/industries/fleet.png',
-      transformation: {
-        from: 'Static Road Film & Diesel Soot',
-        to: 'Clean Paintwork & Clear Sheeting'
-      }
-    },
-    {
-      slug: 'greasecut-workshop-degreaser',
-      masterCode: 'DE-703',
-      name: 'GreaseCut Workshop Degreaser',
-      task: 'High-Alkaline Plant Degreaser',
-      headline: 'Dissolves baked oil and chassis grease on contact.',
-      desc: 'Accelerates under 50°C–90°C hot water washing to saponify heavy petroleum oils and hydraulic grease into clean rinse water.',
-      packSizes: ['5 L', '20 L', '200 L', '1000 L'],
-      fromPrice: '£42.00',
-      image: '/assets/parts/parts-hero-workshop.jpg',
-      transformation: {
-        from: 'Baked Hydraulic Oil & Grease',
-        to: 'Bare Metal Soluble Rinse'
-      }
-    },
-    {
-      slug: 'alumarestore-aluminium-acid-brightener',
-      masterCode: 'TS-602',
-      name: 'AlumaRestore Acid Brightener',
-      task: 'Aluminium Cleaner & Deoxidiser',
-      headline: 'Restores weathered aluminium to satin brilliance.',
-      desc: 'Phosphoric and organic acid deoxidiser that strips grey chalking and heavy oxidation from fuel tanks, wheels, and tipper bodies in under two minutes.',
-      packSizes: ['5 L', '20 L', '200 L', '1000 L'],
-      fromPrice: '£46.00',
-      image: '/assets/hot-water-gauge-hero.jpg',
-      transformation: {
-        from: 'Oxidised Chalky Aluminium',
-        to: 'Restored Satin Finish'
-      }
-    },
-    {
-      slug: 'scaleguard-coil-protector',
-      masterCode: 'SD-927',
-      name: 'ScaleGuard Coil Protector',
-      task: 'Heating Coil Scale Inhibitor',
-      headline: 'Binds hard water minerals before they block your coil.',
-      desc: 'Essential preventative treatment for hot water pressure washers. Prevents scale choke points and preserves your 7-year boiler warranty.',
-      packSizes: ['5 L', '20 L', '200 L'],
-      fromPrice: '£34.00',
-      image: '/assets/engineered-continuous-duty.jpg',
-      transformation: {
-        from: 'Hard Calcium Precipitation',
-        to: 'Continuous Free Water Flow'
-      }
-    }
-  ];
-
   return (
     <main className="min-h-screen bg-[#FAF9F5] text-alkota-black font-sans selection:bg-alkota-orange selection:text-white">
 
-      {/* ── 01: CAMPAIGN HERO — DRAMATIC CHEMICAL STAGING ── */}
+      {/* 01: HERO — FULL-BLEED CAMPAIGN */}
       <section 
-        className="relative min-h-[90vh] w-full flex flex-col justify-between bg-[#FAF9F5] text-alkota-black pt-36 pb-16 px-6 sm:px-12 lg:px-24 overflow-hidden"
+        className="relative w-full min-h-[92vh] flex flex-col justify-end overflow-hidden"
         aria-label="Alkota UK Professional Cleaning Chemistry"
       >
-        <div className="max-w-7xl mx-auto w-full my-auto space-y-12">
-          
-          <div className="max-w-3xl space-y-6">
-            <span className="font-ibm-plex-mono text-xs uppercase tracking-[0.25em] text-[#777] font-medium block">
+        <div className="absolute inset-0">
+          <img
+            src="/assets/industries/fleet.png"
+            alt=""
+            aria-hidden="true"
+            className="w-full h-full object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/60 to-[#0A0A0A]/20" />
+        </div>
+
+        <div className="relative z-10 max-w-7xl mx-auto w-full px-6 sm:px-12 lg:px-24 pb-20 pt-40">
+          <div className="max-w-2xl space-y-8">
+            <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.3em] text-white/50 font-medium block">
               Professional Cleaning Chemistry
             </span>
-
             <h1 
-              className="font-extralight text-[#0A0A0A] tracking-tight uppercase leading-[0.9] select-none"
-              style={{ fontSize: 'clamp(3.2rem, 7vw, 6.2rem)' }}
+              className="font-extralight text-white tracking-tight uppercase leading-[0.88] select-none"
+              style={{ fontSize: 'clamp(3.5rem, 8vw, 7rem)' }}
             >
-              Cleaning <br />
-              <span className="text-[#666] font-light">chemistry.</span>
+              Made for<br />
+              serious<br />
+              <span className="text-white/50 font-light">cleaning.</span>
             </h1>
-
-            <p className="text-lg sm:text-xl text-[#555] font-normal leading-relaxed max-w-lg">
-              Made for serious cleaning. Formulated to work faster with hot water pressure washing.
+            <p className="text-base sm:text-lg text-white/70 font-normal leading-relaxed max-w-sm">
+              Formulated to work faster with hot water pressure washing. Not domestic. Not diluted. Not generic.
             </p>
-
-            <div className="pt-2 flex flex-wrap items-center gap-6">
+            <div className="flex flex-col sm:flex-row items-start gap-5">
               <a
-                href="#flagships"
-                className="inline-flex items-center gap-3 bg-alkota-black hover:bg-alkota-orange text-white px-8 py-4 font-ibm-plex-mono text-xs uppercase tracking-widest transition-colors font-medium shadow-sm"
+                href="#roadforce"
+                className="inline-flex items-center gap-3 bg-white hover:bg-alkota-orange text-alkota-black hover:text-white px-8 py-4 font-ibm-plex-mono text-xs uppercase tracking-widest transition-colors font-medium"
               >
-                <span>Explore Formulations</span>
+                <span>See the Chemistry</span>
                 <ArrowRight className="w-4 h-4" />
               </a>
-
               <Link
                 href="/chemicals/finder"
-                className="inline-flex items-center gap-2 text-[#666] hover:text-black font-ibm-plex-mono text-xs uppercase tracking-wider transition-colors py-4 px-2"
+                className="inline-flex items-center gap-2 text-white/60 hover:text-white font-ibm-plex-mono text-xs uppercase tracking-wider transition-colors py-4"
               >
                 <Sparkles className="w-3.5 h-3.5 text-alkota-orange" />
-                <span>Chemical Match Tool</span>
+                <span>Match Tool</span>
               </Link>
             </div>
           </div>
-
         </div>
 
-        {/* Bottom Ambient Line */}
-        <div className="max-w-7xl mx-auto w-full pt-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs font-ibm-plex-mono text-[#777]">
-          <div className="flex flex-wrap items-center gap-6">
-            <span>50+ Years USA Craft</span>
-            <span className="text-[#DDD]">•</span>
-            <span>Accelerates at 50°C–90°C</span>
-            <span className="text-[#DDD]">•</span>
-            <span>100% GB-CLP Compliant</span>
-          </div>
-
-          <a href="#catalogue" className="text-alkota-black hover:text-alkota-orange uppercase tracking-wider transition-colors">
-            All Products ({allProducts.length}) ↓
+        <div className="relative z-10 border-t border-white/10 px-6 sm:px-12 lg:px-24 py-4 flex flex-wrap items-center gap-6 text-[10px] font-ibm-plex-mono text-white/40 uppercase tracking-wider">
+          <span>GB-CLP Compliant</span>
+          <span className="text-white/20">·</span>
+          <span>Works at 50°C–90°C</span>
+          <span className="text-white/20">·</span>
+          <span>{allProducts.length} Formulations In Stock</span>
+          <a href="#catalogue" className="text-white/40 hover:text-white transition-colors ml-auto">
+            Full Catalogue ↓
           </a>
         </div>
       </section>
 
-      {/* ── 02: VISUAL STORYTELLING — BEFORE / AFTER TRANSFORMATION ── */}
-      <section className="py-32 px-6 sm:px-12 lg:px-24 bg-white text-alkota-black border-y border-[#E8E8E4]">
-        <div className="max-w-7xl mx-auto space-y-20">
-          
-          <div className="max-w-xl space-y-3">
-            <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.25em] text-alkota-orange block font-medium">
-              Surface Transformation
+      {/* 02: ROADFORCE — FULL-WIDTH SPLIT, IMAGE LEFT */}
+      <section id="roadforce" className="w-full grid grid-cols-1 lg:grid-cols-2 min-h-[80vh]">
+        <div className="relative min-h-[50vh] lg:min-h-0 overflow-hidden order-2 lg:order-1">
+          <img
+            src="/assets/industries/fleet.png"
+            alt="Commercial fleet vehicle being washed"
+            className="w-full h-full object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-black/10" />
+          <span className="absolute bottom-4 left-4 font-ibm-plex-mono text-[9px] uppercase tracking-widest text-white/40">TR-407</span>
+        </div>
+        <div className="flex flex-col justify-center px-10 sm:px-16 lg:px-20 py-20 bg-[#F5F4EF] space-y-8 order-1 lg:order-2">
+          <div className="space-y-3">
+            <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.3em] text-[#888] font-medium block">
+              Traffic Film Remover
             </span>
             <h2 
-              className="font-extralight text-[#0A0A0A] tracking-tight uppercase leading-[0.95]"
-              style={{ fontSize: 'clamp(2.4rem, 4.5vw, 4rem)' }}
+              className="font-extralight text-[#0A0A0A] tracking-tight uppercase leading-[0.92]"
+              style={{ fontSize: 'clamp(2.4rem, 4vw, 3.8rem)' }}
             >
-              The result on the surface.
+              RoadForce<br /><span className="text-[#666] font-light">Fleet TFR</span>
             </h2>
-            <p className="text-sm sm:text-base text-[#666] font-normal leading-relaxed">
-              Standard detergents only lift loose dust. Alkota chemistry breaks the static bond holding road grime, grease, and oxidation to metal.
-            </p>
           </div>
+          <p className="text-base text-[#1A1A1A] font-light leading-snug max-w-sm">
+            Cuts through road film and diesel grime. One touchless pass — no etching on livery or polished aluminium.
+          </p>
+          <p className="text-sm text-[#666] font-normal leading-relaxed max-w-sm">
+            Static road film, winter salt, and diesel soot release on contact. Works cold; accelerates at temperature. The standard for commercial fleet washdowns.
+          </p>
+          <div className="space-y-1">
+            <span className="font-ibm-plex-mono text-[9px] uppercase text-[#999] tracking-widest block">Available in</span>
+            <div className="flex flex-wrap gap-2">
+              {['5 L', '20 L', '200 L', '1000 L'].map(s => (
+                <span key={s} className="font-ibm-plex-mono text-[10px] text-[#444] px-2.5 py-1 border border-[#DCDAD4]">{s}</span>
+              ))}
+            </div>
+          </div>
+          <div className="flex items-center justify-between pt-4 border-t border-[#E0DED8]">
+            <div>
+              <span className="font-ibm-plex-mono text-[9px] uppercase text-[#999] block">From</span>
+              <span className="font-ibm-plex-mono text-3xl text-alkota-black font-light">£38.50 <span className="text-[10px] text-[#777]">ex VAT</span></span>
+            </div>
+            <Link
+              href="/chemicals/product/roadforce-fleet-heavy-tfr"
+              className="inline-flex items-center gap-2 bg-alkota-black hover:bg-alkota-orange text-white px-8 py-4 font-ibm-plex-mono text-xs uppercase tracking-widest transition-colors font-medium"
+            >
+              <span>View Product</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        </div>
+      </section>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {flagshipProducts.map((p) => (
-              <div key={p.slug} className="space-y-6">
-                <div className="space-y-2">
-                  <span className="font-ibm-plex-mono text-xs text-[#888] font-light">
-                    {p.masterCode}
-                  </span>
-                  <h3 className="text-xl font-light text-[#0A0A0A] tracking-tight uppercase">
-                    {p.name.split(' ')[0]}
-                  </h3>
-                </div>
+      {/* 03: GREASECUT — DARK CANVAS LEFT, PHOTOGRAPH RIGHT */}
+      <section className="w-full flex flex-col lg:flex-row min-h-[70vh] overflow-hidden">
+        <div className="flex flex-col justify-center px-10 sm:px-16 lg:px-20 py-24 bg-[#111110] text-white lg:w-1/2 space-y-8">
+          <div className="space-y-3">
+            <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.3em] text-white/40 font-medium block">
+              Plant Degreaser · DE-703
+            </span>
+            <h2 
+              className="font-extralight text-white tracking-tight uppercase leading-[0.92]"
+              style={{ fontSize: 'clamp(2.4rem, 4vw, 3.8rem)' }}
+            >
+              GreaseCut<br /><span className="text-white/40 font-light">Workshop</span>
+            </h2>
+          </div>
+          <p className="text-base text-white/80 font-light leading-snug max-w-sm">
+            Dissolves baked oil and chassis grease on contact.
+          </p>
+          <p className="text-sm text-white/50 font-normal leading-relaxed max-w-sm">
+            Accelerates under 50°C–90°C hot water washing to saponify heavy petroleum oils and hydraulic grease into clean rinse water.
+          </p>
+          <div className="flex items-center justify-between pt-6 border-t border-white/10">
+            <span className="font-ibm-plex-mono text-2xl text-white font-light">
+              From £42.00 <span className="text-[10px] text-white/40">ex VAT</span>
+            </span>
+            <Link
+              href="/chemicals/product/greasecut-workshop-degreaser"
+              className="inline-flex items-center gap-2 bg-white hover:bg-alkota-orange text-alkota-black hover:text-white px-8 py-4 font-ibm-plex-mono text-xs uppercase tracking-widest transition-colors font-medium"
+            >
+              <span>View Product</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        </div>
+        <div className="relative lg:w-1/2 min-h-[50vh] lg:min-h-0 overflow-hidden">
+          <img
+            src="/assets/parts/parts-hero-workshop.jpg"
+            alt="Workshop degreasing heavy plant machinery"
+            className="w-full h-full object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-black/20" />
+        </div>
+      </section>
 
-                {/* Transformation Visual Strip */}
-                <div className="p-6 bg-[#FAF9F5] border border-[#E8E8E4] space-y-4">
-                  <div>
-                    <span className="font-ibm-plex-mono text-[9px] uppercase tracking-wider text-[#999] block mb-1">
-                      Before Application
-                    </span>
-                    <p className="text-xs font-normal text-[#444]">
-                      {p.transformation.from}
-                    </p>
-                  </div>
-
-                  <div className="h-px bg-[#E8E8E4] flex items-center justify-center">
-                    <span className="bg-[#FAF9F5] px-2 text-[10px] text-alkota-orange font-mono">↓</span>
-                  </div>
-
-                  <div>
-                    <span className="font-ibm-plex-mono text-[9px] uppercase tracking-wider text-emerald-800 font-semibold block mb-1">
-                      After Hot Water Rinse
-                    </span>
-                    <p className="text-xs font-medium text-alkota-black">
-                      {p.transformation.to}
-                    </p>
-                  </div>
-                </div>
-
-                <Link
-                  href={`/chemicals/product/${p.slug}`}
-                  className="font-ibm-plex-mono text-xs text-alkota-black hover:text-alkota-orange uppercase tracking-wider transition-colors inline-flex items-center gap-1 font-medium"
+      {/* 04: ALUMARESTORE — OFF-WHITE, EDITORIAL LAYOUT WITH INLINE IMAGE */}
+      <section className="w-full py-28 px-6 sm:px-12 lg:px-24 bg-white border-y border-[#E8E8E4]">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+            <div className="lg:col-span-1 hidden lg:block">
+              <span 
+                className="font-ibm-plex-mono font-light text-[#EBEBEB] select-none leading-none"
+                style={{ fontSize: 'clamp(5rem, 8vw, 8rem)' }}
+              >03</span>
+            </div>
+            <div className="lg:col-span-7 space-y-6">
+              <div className="space-y-2">
+                <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.3em] text-[#888] font-medium block">
+                  Aluminium Brightener · TS-602
+                </span>
+                <h2 
+                  className="font-extralight text-[#0A0A0A] tracking-tight uppercase leading-[0.92]"
+                  style={{ fontSize: 'clamp(2.4rem, 4vw, 3.8rem)' }}
                 >
-                  <span>View Formulation</span>
+                  AlumaRestore<br /><span className="text-[#999] font-light">Acid Brightener</span>
+                </h2>
+              </div>
+              <p className="text-base text-[#1A1A1A] font-light leading-snug max-w-lg">
+                Restores weathered aluminium to satin brilliance.
+              </p>
+              <p className="text-sm text-[#666] leading-relaxed max-w-lg">
+                Phosphoric and organic acid deoxidiser that strips grey chalking and heavy oxidation from fuel tanks, wheels, and tipper bodies in under two minutes. Safe on painted surfaces. Rinses clean.
+              </p>
+              <div className="flex flex-wrap gap-2 pt-2">
+                {['5 L', '20 L', '200 L', '1000 L'].map(s => (
+                  <span key={s} className="font-ibm-plex-mono text-[10px] text-[#444] px-2.5 py-1 border border-[#DCDAD4]">{s}</span>
+                ))}
+              </div>
+            </div>
+            <div className="lg:col-span-4 space-y-6">
+              <div className="aspect-[4/3] overflow-hidden">
+                <img
+                  src="/assets/hot-water-gauge-hero.jpg"
+                  alt="Hot water pressure washer gauge detail"
+                  className="w-full h-full object-cover object-center"
+                />
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="font-ibm-plex-mono text-2xl text-alkota-black font-light">
+                  From £46.00 <span className="text-[10px] text-[#777]">ex VAT</span>
+                </span>
+                <Link
+                  href="/chemicals/product/alumarestore-aluminium-acid-brightener"
+                  className="inline-flex items-center gap-1.5 font-ibm-plex-mono text-xs uppercase tracking-wider text-alkota-black hover:text-alkota-orange transition-colors font-medium"
+                >
+                  <span>View</span>
                   <ArrowRight className="w-3.5 h-3.5 text-alkota-orange" />
                 </Link>
               </div>
-            ))}
+            </div>
           </div>
-
         </div>
       </section>
 
-      {/* ── 03: THE 4 POWERHOUSES (INDIVIDUAL PHYSICAL PRODUCT MOMENTS) ── */}
-      <section id="flagships" className="py-32 px-6 sm:px-12 lg:px-24 bg-[#FAF9F5] border-b border-[#E8E8E4]">
-        <div className="max-w-7xl mx-auto space-y-24">
-          
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-[#E8E8E4] pb-10">
-            <div>
-              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.25em] text-alkota-orange block mb-2 font-medium">
-                Core Formulations
+      {/* 05: SCALEGUARD — WARM STONE */}
+      <section className="w-full py-28 px-6 sm:px-12 lg:px-24 bg-[#F2F0E8]">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div className="space-y-6">
+              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.3em] text-[#888] font-medium block">
+                Coil Protector · SD-927
               </span>
               <h2 
-                className="font-extralight text-[#0A0A0A] tracking-tight uppercase leading-[0.95]"
-                style={{ fontSize: 'clamp(2.4rem, 4.5vw, 4rem)' }}
+                className="font-extralight text-[#0A0A0A] tracking-tight uppercase leading-[0.92]"
+                style={{ fontSize: 'clamp(2.4rem, 4vw, 3.8rem)' }}
               >
-                The 4 Powerhouses.
+                ScaleGuard<br /><span className="text-[#999] font-light">Coil Protector</span>
               </h2>
-            </div>
-            <p className="max-w-md text-sm text-[#666] font-normal leading-relaxed">
-              Targeted chemistry for commercial haulage, agricultural machinery, workshop wash bays, and boiler protection.
-            </p>
-          </div>
-
-          <div className="space-y-20">
-            {flagshipProducts.map((p, idx) => (
-              <div 
-                key={p.slug}
-                className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center border-b border-[#E8E8E4] pb-20 last:border-b-0 last:pb-0"
-              >
-                {/* 6 Cols Narrative */}
-                <div className={`lg:col-span-6 space-y-6 ${idx % 2 === 1 ? 'lg:order-2' : ''}`}>
-                  <div className="space-y-2">
-                    <span className="font-ibm-plex-mono text-xs text-alkota-orange uppercase tracking-wider font-semibold">
-                      {p.masterCode} · {p.task}
-                    </span>
-                    <h3 
-                      className="font-extralight text-[#0A0A0A] tracking-tight uppercase leading-[0.95]"
-                      style={{ fontSize: 'clamp(2rem, 3.5vw, 3rem)' }}
-                    >
-                      {p.name}
-                    </h3>
-                  </div>
-
-                  <p className="text-base sm:text-lg text-[#1A1A1A] font-light leading-snug">
-                    "{p.headline}"
-                  </p>
-
-                  <p className="text-sm text-[#555] font-normal leading-relaxed">
-                    {p.desc}
-                  </p>
-
-                  <div className="flex flex-wrap items-center gap-2 pt-2">
-                    <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#888] mr-2">
-                      Pack Formats:
-                    </span>
-                    {p.packSizes.map((size) => (
-                      <span key={size} className="font-ibm-plex-mono text-[10px] text-[#444] bg-white border border-[#E0DED8] px-2.5 py-1">
-                        {size}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="pt-6 border-t border-[#E8E8E4] flex items-center justify-between">
-                    <div>
-                      <span className="font-ibm-plex-mono text-[9px] uppercase text-[#888] block">Trade Price</span>
-                      <span className="font-ibm-plex-mono text-2xl text-alkota-black font-light">From {p.fromPrice} <span className="text-[10px] text-[#777]">ex VAT</span></span>
-                    </div>
-                    <Link
-                      href={`/chemicals/product/${p.slug}`}
-                      className="inline-flex items-center gap-2 bg-alkota-black hover:bg-alkota-orange text-white px-8 py-4 font-ibm-plex-mono text-xs uppercase tracking-widest transition-colors font-medium shadow-sm"
-                    >
-                      <span>View Product</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </Link>
-                  </div>
-                </div>
-
-                {/* 6 Cols Visual Staging */}
-                <div className={`lg:col-span-6 relative flex items-center justify-center min-h-[360px] sm:min-h-[440px] bg-white border border-[#E8E8E4] p-8 ${idx % 2 === 1 ? 'lg:order-1' : ''}`}>
-                  <div className="absolute inset-x-12 bottom-6 h-12 bg-black/10 blur-xl rounded-full pointer-events-none" />
-                  
-                  <img
-                    src={p.image}
-                    alt={p.name}
-                    className="relative z-10 max-h-[340px] w-auto object-contain filter drop-shadow-md hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
+              <p className="text-base text-[#1A1A1A] font-light leading-snug max-w-sm">
+                Binds hard water minerals before they block your coil.
+              </p>
+              <p className="text-sm text-[#666] leading-relaxed max-w-sm">
+                Essential preventative for hot water pressure washers. Prevents scale choke points and keeps your 7-year boiler warranty intact. Available in 5L through to 200L drum.
+              </p>
+              <div className="flex items-center justify-between pt-6 border-t border-[#DCDAD4]">
+                <span className="font-ibm-plex-mono text-2xl text-alkota-black font-light">
+                  From £34.00 <span className="text-[10px] text-[#777]">ex VAT</span>
+                </span>
+                <Link
+                  href="/chemicals/product/scaleguard-coil-protector"
+                  className="inline-flex items-center gap-2 bg-alkota-black hover:bg-alkota-orange text-white px-8 py-4 font-ibm-plex-mono text-xs uppercase tracking-widest transition-colors font-medium"
+                >
+                  <span>View Product</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
               </div>
-            ))}
+            </div>
+            <div className="aspect-[4/3] overflow-hidden">
+              <img
+                src="/assets/engineered-continuous-duty.jpg"
+                alt="Alkota pressure washer heating coil"
+                className="w-full h-full object-cover object-center hover:scale-[1.02] transition-transform duration-700"
+              />
+            </div>
           </div>
-
         </div>
       </section>
 
-      {/* ── 04: COMPLETE PRODUCT DIRECTORY (CLEAN UNBOXED GRID) ── */}
-      <section id="catalogue" className="py-32 px-6 sm:px-12 lg:px-24 bg-white border-b border-[#E8E8E4]">
-        <div className="max-w-7xl mx-auto space-y-16">
-          
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#E8E8E4] pb-8">
-            <div>
-              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.25em] text-alkota-orange block mb-2 font-medium">
+      {/* 06: COMPLETE PRODUCT DIRECTORY */}
+      <section id="catalogue" className="py-24 px-6 sm:px-12 lg:px-24 bg-white border-t border-[#E8E8E4]">
+        <div className="max-w-7xl mx-auto space-y-12">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-[#E8E8E4]">
+            <div className="space-y-1">
+              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.25em] text-[#888] font-medium block">
                 Complete Range
               </span>
               <h2 className="text-3xl sm:text-4xl font-extralight text-[#0A0A0A] tracking-tight uppercase">
                 All Formulations.
               </h2>
             </div>
-            <div className="text-xs font-ibm-plex-mono text-[#777]">
-              {filteredProducts.length} verified commercial chemical formulations
-            </div>
+            <span className="text-xs font-ibm-plex-mono text-[#999]">
+              {filteredProducts.length} commercial chemical formulations
+            </span>
           </div>
-
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
             {filteredProducts.map((prod) => (
               <ChemicalCard key={prod.id} product={prod} />
             ))}
           </div>
-
         </div>
       </section>
 

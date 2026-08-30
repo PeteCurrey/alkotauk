@@ -55,7 +55,7 @@ export default function FeaturedToolingShowcase({ featuredParts = [] }: Featured
     <div className="w-full">
       
       {/* ── 01: MAJOR EDITORIAL TRANSITION / TYPOGRAPHIC STATEMENT ── */}
-      <section className="py-32 px-6 sm:px-12 lg:px-24 bg-[#F2F0E8] text-alkota-black border-b border-[#E5E3DC]">
+      <section className="py-32 px-6 sm:px-12 lg:px-24 bg-[#F2F0E8] text-alkota-black">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
           <div className="lg:col-span-7">
@@ -99,7 +99,7 @@ export default function FeaturedToolingShowcase({ featuredParts = [] }: Featured
       </section>
 
       {/* ── 02: EDITORIAL FEATURE — MOSMATIC SURFACE CLEANER (PURE WHITE, 70% PRODUCT) ── */}
-      <section id="surface-cleaners" className="py-32 px-6 sm:px-12 lg:px-24 bg-white text-alkota-black border-b border-[#E8E8E4] overflow-hidden">
+      <section id="surface-cleaners" className="py-32 px-6 sm:px-12 lg:px-24 bg-white text-alkota-black overflow-hidden">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
           
           {/* Left 7 Cols: Massive Product Cutout Floating Openly */}
@@ -187,97 +187,85 @@ export default function FeaturedToolingShowcase({ featuredParts = [] }: Featured
         </div>
       </section>
 
-      {/* ── 03: DRAMATIC CONTRAST MOMENT — COX REELS (DEEP GRAPHITE CANVAS) ── */}
-      <section className="py-32 px-6 sm:px-12 lg:px-24 bg-[#111110] text-white border-b border-[#222] overflow-hidden">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-          
-          {/* Left 5 Cols: Narrative */}
-          <div className="lg:col-span-5 space-y-8 order-2 lg:order-1">
-            <div className="space-y-3">
-              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.25em] text-alkota-orange block font-medium">
-                Cox Reels USA · Industrial Hose Management
-              </span>
-              <h3 
-                className="font-extralight text-white tracking-tight uppercase leading-[0.95]"
-                style={{ fontSize: 'clamp(2.2rem, 4vw, 3.4rem)' }}
+      {/* ── 03: DRAMATIC CONTRAST MOMENT — COX REELS (FULL-BLEED DARK SPLIT) ── */}
+      <section className="w-full flex flex-col lg:flex-row min-h-[85vh] overflow-hidden">
+        
+        {/* Left: dark text column — full height, generous padding */}
+        <div className="flex flex-col justify-center px-10 sm:px-16 lg:px-20 xl:px-24 py-24 bg-[#111110] text-white lg:w-5/12 space-y-8">
+          <div className="space-y-3">
+            <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.25em] text-alkota-orange block font-medium">
+              Cox Reels USA · Industrial Hose Management
+            </span>
+            <h3 
+              className="font-extralight text-white tracking-tight uppercase leading-[0.95]"
+              style={{ fontSize: 'clamp(2.4rem, 4vw, 3.6rem)' }}
+            >
+              All-steel hose<br />
+              <span className="text-white/40 font-light">management.</span>
+            </h3>
+            <p className="text-sm sm:text-base text-[#AAA] font-normal leading-relaxed max-w-sm pt-2">
+              Keep 30 metres of high-pressure hose tidy, safe, and ready to deploy. Heavy-gauge welded steel frame with CPC brass live swivel and adjustable drag brake.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-3 gap-4 pt-4 border-t border-[#262626] font-ibm-plex-mono text-xs text-[#AAA]">
+            <div>
+              <span className="text-[#666] block text-[9px] uppercase tracking-wider">Capacity</span>
+              <span className="text-white font-medium">30m (3/8")</span>
+            </div>
+            <div>
+              <span className="text-[#666] block text-[9px] uppercase tracking-wider">Rating</span>
+              <span className="text-white font-medium">300 Bar</span>
+            </div>
+            <div>
+              <span className="text-[#666] block text-[9px] uppercase tracking-wider">Mount</span>
+              <span className="text-white font-medium">Floor / Wall</span>
+            </div>
+          </div>
+
+          <div className="pt-6 border-t border-[#262626] space-y-4">
+            <div className="flex items-baseline gap-3">
+              <span className="font-ibm-plex-mono text-[9px] text-[#777] uppercase tracking-widest">Trade Price</span>
+              <span className="font-ibm-plex-mono text-3xl text-white font-light">£285.00</span>
+              <span className="font-ibm-plex-mono text-[10px] text-[#777] uppercase">ex VAT</span>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-3 pt-2">
+              <button
+                type="button"
+                onClick={handleAddReel}
+                className="flex-1 bg-white hover:bg-alkota-orange text-black hover:text-white py-4 px-6 font-ibm-plex-mono text-xs uppercase tracking-widest transition-colors font-medium flex items-center justify-center gap-2 cursor-pointer"
               >
-                All-steel hose management.
-              </h3>
-              <p className="text-sm sm:text-base text-[#AAA] font-normal leading-relaxed pt-2">
-                Keep 30 metres of high-pressure hose tidy, safe, and ready to deploy. Heavy-gauge welded steel frame with CPC brass live swivel and adjustable drag brake.
-              </p>
+                <span>Add to Order</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+              <Link
+                href="/parts-attachments/product/cox-reels-1125-3-100"
+                className="px-6 py-4 border border-[#333] hover:border-white text-white text-center font-ibm-plex-mono text-xs uppercase tracking-widest transition-colors font-medium"
+              >
+                View Details
+              </Link>
             </div>
-
-            {/* Spec Highlights */}
-            <div className="grid grid-cols-3 gap-4 pt-4 border-t border-[#262626] font-ibm-plex-mono text-xs text-[#AAA]">
-              <div>
-                <span className="text-[#666] block text-[9px] uppercase tracking-wider">Capacity</span>
-                <span className="text-white font-medium">30m (3/8")</span>
-              </div>
-              <div>
-                <span className="text-[#666] block text-[9px] uppercase tracking-wider">Rating</span>
-                <span className="text-white font-medium">300 Bar</span>
-              </div>
-              <div>
-                <span className="text-[#666] block text-[9px] uppercase tracking-wider">Mount</span>
-                <span className="text-white font-medium">Floor / Wall</span>
-              </div>
-            </div>
-
-            {/* Price & Action */}
-            <div className="pt-6 border-t border-[#262626] space-y-4">
-              <div className="flex items-baseline justify-between">
-                <div>
-                  <span className="font-ibm-plex-mono text-[9px] text-[#777] uppercase tracking-widest block">Trade Price</span>
-                  <div className="flex items-baseline gap-2">
-                    <span className="font-ibm-plex-mono text-3xl text-white font-light">£285.00</span>
-                    <span className="font-ibm-plex-mono text-[10px] text-[#777] uppercase">ex VAT</span>
-                  </div>
-                </div>
-                <span className="font-ibm-plex-mono text-[10px] text-emerald-400 bg-emerald-950/60 px-2.5 py-1 font-medium border border-emerald-800">
-                  In Stock · UK Warehouse
-                </span>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-3 pt-2">
-                <button
-                  type="button"
-                  onClick={handleAddReel}
-                  className="flex-1 bg-white hover:bg-alkota-orange text-black hover:text-white py-4 px-6 font-ibm-plex-mono text-xs uppercase tracking-widest transition-colors font-medium flex items-center justify-center gap-2 cursor-pointer shadow-sm"
-                >
-                  <span>Add to Order</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
-                <Link
-                  href="/parts-attachments/product/cox-reels-1125-3-100"
-                  className="px-6 py-4 border border-[#333] hover:border-white text-white text-center font-ibm-plex-mono text-xs uppercase tracking-widest transition-colors font-medium"
-                >
-                  View Details
-                </Link>
-              </div>
-            </div>
-
           </div>
-
-          {/* Right 7 Cols: Dramatic Product Image */}
-          <div className="lg:col-span-7 relative flex items-center justify-center min-h-[420px] sm:min-h-[520px] order-1 lg:order-2">
-            <div className="absolute inset-x-12 bottom-6 h-14 bg-black/50 blur-3xl rounded-full pointer-events-none" />
-
-            <img
-              src="/assets/products/high-pressure-hose.png"
-              alt="Cox Reels Heavy Duty Hose Reel"
-              className="relative z-10 max-h-[460px] w-auto object-contain filter drop-shadow-[0_28px_48px_rgba(0,0,0,0.5)] hover:scale-105 transition-transform duration-700 select-none"
-              onError={(e) => {
-                (e.target as HTMLElement).setAttribute('src', '/assets/products/216x4.png');
-              }}
-            />
-          </div>
-
         </div>
+
+        {/* Right: product floats on a dark field — full height */}
+        <div className="relative lg:w-7/12 min-h-[50vh] lg:min-h-0 flex items-center justify-center bg-[#0D0D0C] overflow-hidden">
+          <div className="absolute inset-x-24 bottom-8 h-20 bg-black/60 blur-3xl rounded-full pointer-events-none" />
+          <img
+            src="/assets/products/high-pressure-hose.png"
+            alt="Cox Reels Heavy Duty Hose Reel"
+            className="relative z-10 w-full h-auto max-w-[520px] object-contain filter drop-shadow-[0_32px_56px_rgba(0,0,0,0.7)] hover:scale-[1.03] transition-transform duration-700 select-none px-8 lg:px-0"
+            onError={(e) => {
+              (e.target as HTMLElement).setAttribute('src', '/assets/products/216x4.png');
+            }}
+          />
+        </div>
+
       </section>
 
       {/* ── 04: SCULPTURAL PUMP FEATURE — GENERAL PUMP TS2021 (WARM STONE CANVAS) ── */}
-      <section className="py-32 px-6 sm:px-12 lg:px-24 bg-[#FAF9F5] text-alkota-black border-b border-[#E8E8E4] overflow-hidden">
+      <section className="py-32 px-6 sm:px-12 lg:px-24 bg-[#FAF9F5] text-alkota-black overflow-hidden">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
           
           {/* Left 7 Cols: Massive Pump Cutout */}

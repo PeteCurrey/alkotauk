@@ -43,14 +43,14 @@ export default function AdminLoginPage() {
 
   return (
     <div className="min-h-screen bg-[#EBECEF] flex items-center justify-center p-6">
-      <div className="w-full max-w-md bg-white rounded-[32px] border border-[#E2E4E8] p-8 sm:p-10 shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
+      <div className="w-full max-w-md bg-white rounded-2xl border border-[#E2E4E8] p-8 sm:p-10 shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
         {/* Emblem & Branding */}
         <div className="flex flex-col items-center text-center mb-8">
           <div className="h-12 w-12 rounded-2xl bg-[#FF6900] text-white flex items-center justify-center font-black text-xl shadow-md mb-4">
             A
           </div>
           <h1 className="text-2xl font-extrabold text-[#0F172A] tracking-tight">
-            Alkota Studio
+            Alkota Portal
           </h1>
           <p className="text-xs text-[#64748B] font-medium mt-1">
             Commercial equipment control and store management suite
@@ -109,7 +109,7 @@ export default function AdminLoginPage() {
             {loading ? (
               <span className="animate-pulse">Authorizing Session...</span>
             ) : (
-              <>Sign In to Studio →</>
+              <>Sign In to Portal →</>
             )}
           </button>
         </form>

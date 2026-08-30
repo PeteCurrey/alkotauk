@@ -97,7 +97,7 @@ export default function QuoteDetailClient({ initialQuote }: { initialQuote: any 
         {/* Left Column: Details (7 cols) */}
         <div className="lg:col-span-7 space-y-6">
           {/* Customer Card */}
-          <div className="bg-white rounded-[24px] border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)] space-y-4">
+          <div className="bg-white rounded-2xl border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)] space-y-4">
             <h3 className="text-xs font-bold uppercase tracking-wider text-[#FF6900]">Customer Telemetry</h3>
             <div>
               <h2 className="text-xl font-bold text-[#0F172A]">{quote.name}</h2>
@@ -125,7 +125,7 @@ export default function QuoteDetailClient({ initialQuote }: { initialQuote: any 
           </div>
 
           {/* Requested Equipment Card */}
-          <div className="bg-white rounded-[24px] border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)] space-y-4">
+          <div className="bg-white rounded-2xl border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)] space-y-4">
             <h3 className="text-xs font-bold uppercase tracking-wider text-[#FF6900]">Requested Machinery</h3>
             
             <div className="flex items-start justify-between gap-4 p-4 rounded-2xl bg-[#F6F7F9] border border-[#E6E8EC]">
@@ -157,7 +157,7 @@ export default function QuoteDetailClient({ initialQuote }: { initialQuote: any 
         {/* Right Column: Processing & Notes (5 cols) */}
         <div className="lg:col-span-5 space-y-6">
           {/* Status & Pipeline Card */}
-          <div className="bg-white rounded-[24px] border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)] space-y-4">
+          <div className="bg-white rounded-2xl border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)] space-y-4">
             <h3 className="text-xs font-bold uppercase tracking-wider text-[#FF6900]">Quotation Pipeline</h3>
 
             <div>
@@ -199,7 +199,7 @@ export default function QuoteDetailClient({ initialQuote }: { initialQuote: any 
           </div>
 
           {/* Quick Actions Card */}
-          <div className="bg-white rounded-[24px] border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)] space-y-3">
+          <div className="bg-white rounded-2xl border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)] space-y-3">
             <h3 className="text-xs font-bold uppercase tracking-wider text-[#FF6900]">Quick Communication</h3>
             <a
               href={`mailto:${quote.email}?subject=Alkota UK Commercial Quote — ${encodeURIComponent(productName)}&body=Dear ${encodeURIComponent(quote.name || '')},%0D%0A%0D%0AThank you for your pricing inquiry regarding the Alkota ${encodeURIComponent(productName)}.%0D%0A%0D%0A`}

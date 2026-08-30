@@ -53,22 +53,22 @@ export default function QuotesClient({ initialQuotes }: { initialQuotes: any[] }
 
       {/* KPI Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-4 gap-5">
-        <div className="bg-white rounded-[24px] border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
+        <div className="bg-white rounded-2xl border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
           <p className="text-xs font-bold uppercase tracking-wider text-[#64748B]">Total Inquiries</p>
           <p className="text-3xl font-extrabold text-[#0F172A] mt-2">{quotes.length}</p>
           <p className="text-[11px] text-[#94A3B8] font-medium mt-1">All time portal submissions</p>
         </div>
-        <div className="bg-white rounded-[24px] border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
+        <div className="bg-white rounded-2xl border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
           <p className="text-xs font-bold uppercase tracking-wider text-[#FF6900]">New / Unprocessed</p>
           <p className="text-3xl font-extrabold text-[#FF6900] mt-2">{countNew}</p>
           <p className="text-[11px] text-[#94A3B8] font-medium mt-1">Awaiting sales team response</p>
         </div>
-        <div className="bg-white rounded-[24px] border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
+        <div className="bg-white rounded-2xl border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
           <p className="text-xs font-bold uppercase tracking-wider text-blue-600">Active Discussions</p>
           <p className="text-3xl font-extrabold text-blue-600 mt-2">{countQuoted}</p>
           <p className="text-[11px] text-[#94A3B8] font-medium mt-1">Quoted or spec in review</p>
         </div>
-        <div className="bg-white rounded-[24px] border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
+        <div className="bg-white rounded-2xl border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
           <p className="text-xs font-bold uppercase tracking-wider text-emerald-600">Won / Converted</p>
           <p className="text-3xl font-extrabold text-emerald-600 mt-2">{countWon}</p>
           <p className="text-[11px] text-[#94A3B8] font-medium mt-1">Completed machinery orders</p>
@@ -76,7 +76,7 @@ export default function QuotesClient({ initialQuotes }: { initialQuotes: any[] }
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="bg-white rounded-[20px] border border-[#E6E8EC] p-3.5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
+      <div className="bg-white rounded-2xl border border-[#E6E8EC] p-3.5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
         <div className="flex flex-wrap gap-1.5">
           {['all', 'new', 'quoted', 'in-progress', 'won', 'closed'].map(st => {
             const count = st === 'all' ? quotes.length : quotes.filter(q => q.status === st).length;
@@ -116,7 +116,7 @@ export default function QuotesClient({ initialQuotes }: { initialQuotes: any[] }
 
       {/* Quotes Cards List */}
       {filtered.length === 0 ? (
-        <div className="bg-white rounded-[24px] border border-[#E6E8EC] p-16 text-center shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
+        <div className="bg-white rounded-2xl border border-[#E6E8EC] p-16 text-center shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
           <FileText className="h-10 w-10 text-[#CBD5E1] mx-auto mb-3" />
           <h3 className="text-lg font-bold text-[#0F172A] mb-1">No Quote Requests Found</h3>
           <p className="text-xs text-[#64748B] max-w-md mx-auto">
@@ -133,7 +133,7 @@ export default function QuotesClient({ initialQuotes }: { initialQuotes: any[] }
             return (
               <div 
                 key={q.id} 
-                className="bg-white rounded-[24px] border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)] hover:border-[#CBD5E1] transition-all"
+                className="bg-white rounded-2xl border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)] hover:border-[#CBD5E1] transition-all"
               >
                 <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
                   <div className="flex-1">

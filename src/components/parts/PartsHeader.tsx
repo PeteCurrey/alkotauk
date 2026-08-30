@@ -11,65 +11,58 @@ import {
   ArrowLeft, 
   ArrowRight,
   ShieldCheck,
-  ChevronRight
+  ChevronDown,
+  Layers,
+  Wrench,
+  Gauge,
+  Activity,
+  Flame,
+  Target,
+  RotateCcw,
+  Link2,
+  Sparkles,
+  Truck,
+  Cpu,
+  Package
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Logo from '@/components/Logo';
+import { useCart } from '@/context/CartContext';
 import { usePartsRequest } from './PartsRequestListContext';
-import { PartCategoryAdmin } from '@/lib/types/parts';
+import { MASTER_TAXONOMY } from '@/lib/parts/taxonomy';
 
-const FALLBACK_CATEGORIES: { slug: string; name: string }[] = [
-  { slug: 'all', name: 'All Parts' },
-  { slug: 'pumps', name: 'Pumps & Components' },
-  { slug: 'burners', name: 'Burners & Ignition' },
-  { slug: 'coils', name: 'Heating Coils' },
-  { slug: 'hoses', name: 'Hoses & Reels' },
-  { slug: 'trigger-guns', name: 'Trigger Guns' },
-  { slug: 'lances-nozzles', name: 'Lances & Nozzles' },
-  { slug: 'surface-cleaners', name: 'Surface Cleaners' },
-  { slug: 'valves-unloaders', name: 'Valves & Unloaders' },
-  { slug: 'filters', name: 'Filters & Strainers' },
-  { slug: 'electrical-switches', name: 'Electrical & Controls' },
-  { slug: 'seals-o-rings', name: 'Seals & O-Rings' },
-  { slug: 'service-kits', name: 'Service Kits' },
-  { slug: 'attachments', name: 'Attachments' },
+const FEATURED_BRANDS = [
+  { slug: 'alkota', name: 'Alkota OEM' },
+  { slug: 'giant-pumps', name: 'Giant Pumps' },
+  { slug: 'interpump', name: 'Interpump' },
+  { slug: 'general-pump', name: 'General Pump' },
+  { slug: 'cat-pumps', name: 'CAT Pumps' },
+  { slug: 'pa', name: 'PA SpA' },
+  { slug: 'mosmatic', name: 'Mosmatic' },
+  { slug: 'suttner', name: 'Suttner' },
+  { slug: 'cox-reels', name: 'CoxREELS' },
+  { slug: 'steel-eagle', name: 'Steel Eagle' },
+  { slug: 'dual-pumps', name: 'Dual Pumps' },
 ];
 
 export default function PartsHeader() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { itemCount } = useCart();
   const { totalItemsCount, setIsDrawerOpen } = usePartsRequest();
 
-  const [categories, setCategories] = useState<Array<{ slug: string; name: string }>>(FALLBACK_CATEGORIES);
   const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [productsMegaOpen, setProductsMegaOpen] = useState(false);
+  const [brandsMegaOpen, setBrandsMegaOpen] = useState(false);
+  const [machinesMegaOpen, setMachinesMegaOpen] = useState(false);
+  const [appsMegaOpen, setAppsMegaOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-
-  const currentCat = pathname.startsWith('/parts-attachments/') && !pathname.startsWith('/parts-attachments/product') && !pathname.startsWith('/parts-attachments/brands') && !pathname.startsWith('/parts-attachments/enquiry')
-    ? pathname.split('/')[2]
-    : searchParams.get('cat') || 'all';
-
-  useEffect(() => {
-    async function loadCategories() {
-      try {
-        const res = await fetch('/api/admin/parts/categories');
-        if (res.ok) {
-          const data: PartCategoryAdmin[] = await res.json();
-          if (Array.isArray(data) && data.length > 0) {
-            setCategories([{ slug: 'all', name: 'All Parts' }, ...data.map(c => ({ slug: c.slug, name: c.name }))]);
-          }
-        }
-      } catch (err) {
-        console.error('Failed to load categories in PartsHeader', err);
-      }
-    }
-    loadCategories();
-  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > 15);
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
@@ -78,272 +71,367 @@ export default function PartsHeader() {
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      router.push(`/parts-attachments/all?q=${encodeURIComponent(searchQuery.trim())}`);
-    } else {
-      router.push('/parts-attachments/all');
+      router.push(`/parts-attachments/search?q=${encodeURIComponent(searchQuery.trim())}`);
     }
   };
 
+  const closeAllMenus = () => {
+    setProductsMegaOpen(false);
+    setBrandsMegaOpen(false);
+    setMachinesMegaOpen(false);
+    setAppsMegaOpen(false);
+  };
+
   return (
-    <header className="sticky top-0 z-40 w-full bg-[#0A0A0A] border-b border-[#222222] text-white shadow-xl">
-      {/* Top Meta Strip */}
-      <div className="hidden md:flex items-center justify-between px-6 sm:px-12 py-1.5 bg-[#050505] border-b border-[#1A1A1A] font-ibm-plex-mono text-[9px] uppercase tracking-[0.2em] text-[#777]">
+    <header className="sticky top-0 z-50 w-full font-sans bg-[#0A0A0A] border-b border-[#222] text-white select-none">
+      {/* ── TOP UTILITY STRIP ── */}
+      <div className="bg-[#050505] border-b border-[#1A1A1A] px-4 sm:px-8 py-1.5 text-[11px] font-ibm-plex-mono text-[#777] flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <span className="flex items-center gap-1.5 text-alkota-orange">
-            <span className="h-1.5 w-1.5 rounded-full bg-alkota-orange animate-pulse" />
-            OEM PARTS & ATTACHMENTS DEPARTMENT
-          </span>
-          <span className="text-[#333]">|</span>
-          <span>Next-Day UK Despatch on Stocked Lines</span>
-        </div>
-        <div className="flex items-center gap-4">
-          <Link 
-            href="/" 
-            className="flex items-center gap-1 text-[#888] hover:text-white transition-colors"
+          <Link
+            href="/"
+            className="flex items-center gap-1 text-[#666] hover:text-[#CCC] transition-colors uppercase tracking-widest"
           >
-            <ArrowLeft className="h-2.5 w-2.5" />
-            <span>Back to Alkota.co.uk Main Site</span>
+            <ArrowLeft className="w-3 h-3 text-alkota-orange" />
+            <span>alkota.co.uk</span>
           </Link>
-          <span className="text-[#333]">|</span>
-          <Link href="/service" className="text-[#888] hover:text-white transition-colors">
-            Service & Support Hub
+          <span className="hidden md:inline text-[#333]">|</span>
+          <span className="hidden md:inline text-[#888]">
+            OEM Spares · Specialist Attachments · Next-Day UK Despatch
+          </span>
+        </div>
+        <div className="flex items-center gap-6">
+          <Link href="/parts-attachments/finder" className="text-alkota-orange hover:underline uppercase tracking-wider flex items-center gap-1">
+            <Sparkles className="w-3 h-3" />
+            Parts Finder
           </Link>
-          <span className="text-[#333]">|</span>
-          <a href="tel:+441234567890" className="text-[#888] hover:text-alkota-orange transition-colors">
-            Parts Helpline: 01234 567 890
+          <a href="tel:01234567890" className="hover:text-white transition-colors">
+            Parts Desk: 01234 567 890
           </a>
         </div>
       </div>
 
-      {/* Main Header Bar */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 py-3.5 flex items-center justify-between gap-4">
-        {/* Brand Logo & Section Title */}
-        <div className="flex items-center gap-4 sm:gap-6 shrink-0">
-          <Link href="/parts-attachments" className="flex items-center group">
-            <Logo className="h-7 sm:h-8" />
-          </Link>
-          <div className="hidden sm:block h-6 w-px bg-[#262626]" />
-          <Link 
-            href="/parts-attachments" 
-            className="hidden sm:flex flex-col no-underline group"
-          >
-            <span className="font-barlow-condensed uppercase tracking-wider text-sm font-normal text-white group-hover:text-alkota-orange transition-colors">
-              Parts & Attachments
-            </span>
-            <span className="font-ibm-plex-mono text-[8px] uppercase tracking-widest text-[#666]">
-              Catalogue & Spares
-            </span>
-          </Link>
-        </div>
+      {/* ── MAIN NAVIGATION BAR ── */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16 sm:h-20 gap-4 lg:gap-8">
+          {/* Logo */}
+          <div className="flex items-center gap-4 shrink-0">
+            <Link href="/parts-attachments" className="flex items-center gap-2 group" onClick={closeAllMenus}>
+              <Logo />
+              <div className="flex flex-col border-l border-[#333] pl-2.5 ml-1">
+                <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-alkota-orange leading-tight">
+                  Parts & Spares
+                </span>
+                <span className="text-[10px] text-[#888] tracking-wider leading-tight">
+                  Commerce Hub
+                </span>
+              </div>
+            </Link>
+          </div>
 
-        {/* Global Search Bar */}
-        <form 
-          onSubmit={handleSearchSubmit} 
-          className="flex-1 max-w-xl relative hidden md:block mx-2"
-        >
-          <div className="relative flex items-center">
-            <Search className="absolute left-3.5 h-4 w-4 text-[#666] pointer-events-none" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search 500+ parts, part numbers (e.g. 20-001), Mosmatic, Cox Reels..."
-              className="w-full bg-[#141414] border border-[#2A2A2A] focus:border-alkota-orange text-white text-xs pl-10 pr-24 py-2.5 rounded-none font-inter transition-all placeholder:text-[#555] focus:outline-none"
-            />
-            <button
-              type="submit"
-              className="absolute right-1 px-3 py-1.5 bg-[#222] hover:bg-alkota-orange text-white font-ibm-plex-mono text-[9px] uppercase tracking-widest transition-colors cursor-pointer"
+          {/* Desktop Discovery Routes (5 First-Class Entries) */}
+          <nav className="hidden lg:flex items-center gap-1 text-xs uppercase tracking-widest font-ibm-plex-mono">
+            {/* 1. Shop Products */}
+            <div 
+              className="relative"
+              onMouseEnter={() => { closeAllMenus(); setProductsMegaOpen(true); }}
+              onMouseLeave={() => setProductsMegaOpen(false)}
             >
-              Search
+              <button 
+                className={`px-3 py-2 flex items-center gap-1 transition-colors ${
+                  productsMegaOpen ? 'text-alkota-orange' : 'text-[#BBB] hover:text-white'
+                }`}
+              >
+                Products
+                <ChevronDown className="w-3 h-3" />
+              </button>
+
+              {/* Products Mega Menu Dropdown */}
+              <AnimatePresence>
+                {productsMegaOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 8 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute top-full left-0 w-[640px] bg-[#121212] border border-[#282828] shadow-2xl p-6 grid grid-cols-2 gap-4 z-50"
+                  >
+                    <div className="col-span-2 flex items-center justify-between pb-3 border-b border-[#222]">
+                      <span className="text-[10px] font-ibm-plex-mono text-alkota-orange tracking-widest">
+                        // MASTER PRODUCT TAXONOMY
+                      </span>
+                      <Link 
+                        href="/parts-attachments/categories" 
+                        onClick={closeAllMenus}
+                        className="text-[10px] text-[#888] hover:text-white flex items-center gap-1 tracking-widest"
+                      >
+                        All Categories <ArrowRight className="w-3 h-3 text-alkota-orange" />
+                      </Link>
+                    </div>
+                    {MASTER_TAXONOMY.slice(0, 10).map((cat) => (
+                      <Link
+                        key={cat.slug}
+                        href={`/parts-attachments/${cat.slug}`}
+                        onClick={closeAllMenus}
+                        className="group flex flex-col p-2.5 rounded hover:bg-[#1A1A1A] transition-colors"
+                      >
+                        <span className="text-xs font-normal text-white group-hover:text-alkota-orange transition-colors">
+                          {cat.name}
+                        </span>
+                        <span className="text-[10px] text-[#666] line-clamp-1 mt-0.5 normal-case font-sans">
+                          {cat.shortDesc}
+                        </span>
+                      </Link>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {/* 2. Shop by Brand */}
+            <div 
+              className="relative"
+              onMouseEnter={() => { closeAllMenus(); setBrandsMegaOpen(true); }}
+              onMouseLeave={() => setBrandsMegaOpen(false)}
+            >
+              <button 
+                className={`px-3 py-2 flex items-center gap-1 transition-colors ${
+                  brandsMegaOpen ? 'text-alkota-orange' : 'text-[#BBB] hover:text-white'
+                }`}
+              >
+                Brands
+                <ChevronDown className="w-3 h-3" />
+              </button>
+
+              <AnimatePresence>
+                {brandsMegaOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 8 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute top-full left-0 w-[480px] bg-[#121212] border border-[#282828] shadow-2xl p-6 z-50"
+                  >
+                    <div className="flex items-center justify-between pb-3 border-b border-[#222] mb-3">
+                      <span className="text-[10px] font-ibm-plex-mono text-alkota-orange tracking-widest">
+                        // LEADING MANUFACTURER PARTNERS
+                      </span>
+                      <Link 
+                        href="/parts-attachments/brands" 
+                        onClick={closeAllMenus}
+                        className="text-[10px] text-[#888] hover:text-white flex items-center gap-1 tracking-widest"
+                      >
+                        View All 25+ <ArrowRight className="w-3 h-3 text-alkota-orange" />
+                      </Link>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      {FEATURED_BRANDS.map((b) => (
+                        <Link
+                          key={b.slug}
+                          href={`/parts-attachments/brands/${b.slug}`}
+                          onClick={closeAllMenus}
+                          className="px-3 py-2 text-xs font-normal text-[#CCC] hover:text-white hover:bg-[#1A1A1A] transition-colors rounded flex items-center justify-between"
+                        >
+                          <span>{b.name}</span>
+                          <span className="text-[9px] text-[#555]">→</span>
+                        </Link>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {/* 3. Shop by Machine */}
+            <Link
+              href="/parts-attachments/machines"
+              className="px-3 py-2 text-[#BBB] hover:text-white transition-colors"
+            >
+              Machines
+            </Link>
+
+            {/* 4. Shop by Application */}
+            <Link
+              href="/parts-attachments/applications"
+              className="px-3 py-2 text-[#BBB] hover:text-white transition-colors"
+            >
+              Applications
+            </Link>
+
+            {/* 5. Parts Finder */}
+            <Link
+              href="/parts-attachments/finder"
+              className="px-3 py-2 text-alkota-orange hover:text-white transition-colors flex items-center gap-1.5"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              Finder
+            </Link>
+          </nav>
+
+          {/* Search Form */}
+          <form onSubmit={handleSearchSubmit} className="flex-1 max-w-xs sm:max-w-md relative">
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search part number, brand, model..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-[#161616] border border-[#333] hover:border-[#444] focus:border-alkota-orange rounded-none text-xs text-white placeholder-[#777] pl-9 pr-8 py-2.5 focus:outline-none transition-all"
+              />
+              <Search className="w-3.5 h-3.5 text-[#777] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#666] hover:text-white"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+          </form>
+
+          {/* Right Action Icons: Cart & Enquiry */}
+          <div className="flex items-center gap-3 shrink-0">
+            {/* Ecommerce Cart Trigger */}
+            <Link
+              href="/cart"
+              className="relative p-2.5 text-[#AAA] hover:text-white hover:bg-[#1A1A1A] transition-colors border border-transparent hover:border-[#333]"
+              title="View Ecommerce Shopping Basket"
+            >
+              <ShoppingBag className="w-4 h-4" />
+              {itemCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-alkota-orange text-white text-[9px] font-bold h-4.5 min-w-4.5 px-1 flex items-center justify-center rounded-full">
+                  {itemCount}
+                </span>
+              )}
+            </Link>
+
+            {/* Direct Technical Quote Desk Button */}
+            <Link
+              href="/parts-attachments/enquiry"
+              className="hidden sm:inline-flex items-center gap-2 bg-alkota-orange hover:bg-white hover:text-alkota-black text-white px-4 py-2.5 text-[10px] font-ibm-plex-mono uppercase tracking-widest transition-all"
+            >
+              <span>Quote Desk</span>
+              <ArrowRight className="w-3 h-3" />
+            </Link>
+
+            {/* Mobile Hamburger Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="lg:hidden p-2 text-[#AAA] hover:text-white"
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
-        </form>
-
-        {/* Action Controls (Basket, Enquiry, Mobile Toggle) */}
-        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-          {/* Back to main on mobile */}
-          <Link 
-            href="/" 
-            className="md:hidden flex items-center justify-center p-2 text-[#888] hover:text-white transition-colors"
-            title="Back to Alkota Home"
-          >
-            <ArrowLeft className="h-4 w-4" />
-          </Link>
-
-          {/* Parts Request Drawer Trigger (Cart) */}
-          <button
-            type="button"
-            onClick={() => setIsDrawerOpen(true)}
-            className="relative flex items-center gap-2 bg-[#141414] border border-[#2A2A2A] hover:border-alkota-orange px-3.5 py-2 transition-colors group cursor-pointer"
-            aria-label="View Parts Enquiry Basket"
-          >
-            <ShoppingBag className="h-4 w-4 text-alkota-orange group-hover:scale-105 transition-transform" />
-            <span className="hidden sm:inline font-ibm-plex-mono text-[10px] uppercase tracking-wider text-[#CCC]">
-              Enquiry Basket
-            </span>
-            {totalItemsCount > 0 && (
-              <span className="h-4 min-w-4 px-1 rounded-full bg-alkota-orange text-white font-ibm-plex-mono text-[9px] flex items-center justify-center">
-                {totalItemsCount}
-              </span>
-            )}
-          </button>
-
-          {/* Fast Quote / Enquiry Direct Link */}
-          <Link
-            href="/parts-attachments/enquiry"
-            className="hidden lg:inline-flex items-center gap-2 bg-alkota-orange hover:bg-white hover:text-alkota-black text-white px-4 py-2 font-ibm-plex-mono text-[10px] uppercase tracking-widest transition-all shadow-sm"
-          >
-            <span>Quote Enquiry</span>
-            <ArrowRight className="h-3 w-3" />
-          </Link>
-
-          {/* Mobile Navigation Trigger */}
-          <button
-            type="button"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 text-white bg-[#141414] border border-[#2A2A2A] cursor-pointer"
-            aria-label="Toggle Category Menu"
-          >
-            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
         </div>
       </div>
 
-      {/* Category Horizontal Pill Navigation Bar (Desktop) */}
-      <nav 
-        className="hidden md:block border-t border-[#1C1C1C] bg-[#0E0E0E] overflow-x-auto no-scrollbar"
-        aria-label="Parts Categories"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-8 flex items-center gap-1 py-1.5 whitespace-nowrap">
-          {categories.map((cat) => {
-            const isActive = currentCat === cat.slug;
-            return (
-              <Link
-                key={cat.slug}
-                href={cat.slug === 'all' ? '/parts-attachments/all' : `/parts-attachments/${cat.slug}`}
-                className={`px-3 py-1.5 text-[11px] uppercase tracking-[0.14em] font-normal transition-all no-underline shrink-0 relative ${
-                  isActive
-                    ? 'text-white bg-[#1C1C1C] border-b-2 border-alkota-orange'
-                    : 'text-[#888] hover:text-white hover:bg-[#141414]'
-                }`}
-              >
-                {cat.name}
-              </Link>
-            );
-          })}
-          <div className="h-4 w-px bg-[#262626] mx-2 shrink-0" />
+      {/* ── SECONDARY HORIZONTAL CATEGORY BAR ── */}
+      <div className="bg-[#111] border-t border-[#1F1F1F] px-4 sm:px-6 lg:px-8 overflow-x-auto scrollbar-none">
+        <div className="max-w-7xl mx-auto flex items-center gap-2 py-2 min-w-max text-[11px] font-ibm-plex-mono uppercase tracking-wider text-[#888]">
           <Link
-            href="/parts-attachments/brands/mosmatic"
-            className="px-3 py-1.5 text-[11px] uppercase tracking-[0.14em] text-alkota-orange/90 hover:text-white hover:bg-[#141414] transition-all no-underline shrink-0"
+            href="/parts-attachments"
+            className={`px-3 py-1 rounded transition-colors ${
+              pathname === '/parts-attachments' ? 'bg-[#222] text-white font-medium' : 'hover:text-white hover:bg-[#181818]'
+            }`}
           >
-            Mosmatic
+            Overview
           </Link>
           <Link
-            href="/parts-attachments/brands/cox-reels"
-            className="px-3 py-1.5 text-[11px] uppercase tracking-[0.14em] text-alkota-orange/90 hover:text-white hover:bg-[#141414] transition-all no-underline shrink-0"
+            href="/parts-attachments/categories"
+            className="px-3 py-1 hover:text-white hover:bg-[#181818] transition-colors"
           >
-            Cox Reels
+            All Categories
           </Link>
+          {MASTER_TAXONOMY.slice(0, 8).map((cat) => (
+            <Link
+              key={cat.slug}
+              href={`/parts-attachments/${cat.slug}`}
+              className={`px-3 py-1 rounded transition-colors ${
+                pathname === `/parts-attachments/${cat.slug}` ? 'bg-alkota-orange text-white' : 'hover:text-white hover:bg-[#181818]'
+              }`}
+            >
+              {cat.name}
+            </Link>
+          ))}
           <Link
-            href="/parts-attachments/brands/steel-eagle"
-            className="px-3 py-1.5 text-[11px] uppercase tracking-[0.14em] text-alkota-orange/90 hover:text-white hover:bg-[#141414] transition-all no-underline shrink-0"
+            href="/parts-attachments/brands"
+            className="px-3 py-1 text-alkota-orange hover:underline transition-colors"
           >
-            Steel Eagle
-          </Link>
-          <Link
-            href="/parts-attachments/brands/dual-pumps"
-            className="px-3 py-1.5 text-[11px] uppercase tracking-[0.14em] text-alkota-orange/90 hover:text-white hover:bg-[#141414] transition-all no-underline shrink-0"
-          >
-            Dual Pumps
+            Brands →
           </Link>
         </div>
-      </nav>
+      </div>
 
-      {/* Mobile Slide-Down Menu */}
+      {/* ── MOBILE MENU PANEL ── */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.2 }}
-            className="md:hidden border-t border-[#222] bg-[#0E0E0E] px-4 py-6 space-y-6"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="lg:hidden bg-[#0F0F0F] border-b border-[#222] px-6 py-6 space-y-6 overflow-hidden"
           >
-            {/* Mobile Search */}
-            <form onSubmit={handleSearchSubmit} className="relative">
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search parts, part numbers..."
-                className="w-full bg-[#161616] border border-[#333] text-white text-xs pl-9 pr-4 py-2.5 focus:outline-none focus:border-alkota-orange"
-              />
-              <Search className="absolute left-3 top-3 h-4 w-4 text-[#777]" />
-            </form>
-
-            {/* Mobile Categories */}
-            <div>
-              <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#666] block mb-3">
-                // Browse Categories
-              </span>
-              <div className="grid grid-cols-1 gap-1 divide-y divide-[#1A1A1A] border-y border-[#1A1A1A]">
-                {categories.map((cat) => (
-                  <Link
-                    key={cat.slug}
-                    href={cat.slug === 'all' ? '/parts-attachments/all' : `/parts-attachments/${cat.slug}`}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center justify-between py-2.5 text-xs uppercase tracking-wider text-[#CCC] hover:text-alkota-orange no-underline"
-                  >
-                    <span>{cat.name}</span>
-                    <ChevronRight className="h-3 w-3 text-[#555]" />
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            {/* Mobile Brands */}
-            <div>
-              <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-alkota-orange block mb-3">
-                // Partner Brands
+            <div className="space-y-2">
+              <span className="text-[10px] font-ibm-plex-mono text-alkota-orange uppercase tracking-widest block">
+                // Discovery Routes
               </span>
               <div className="grid grid-cols-2 gap-2">
-                {[
-                  { slug: 'alkota', name: 'Alkota Genuine' },
-                  { slug: 'mosmatic', name: 'Mosmatic Swiss' },
-                  { slug: 'cox-reels', name: 'Cox Reels USA' },
-                  { slug: 'steel-eagle', name: 'Steel Eagle' },
-                  { slug: 'dual-pumps', name: 'Dual Pumps' },
-                ].map((b) => (
+                <Link
+                  href="/parts-attachments/categories"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-3 bg-[#181818] text-xs font-light text-white rounded"
+                >
+                  Browse Categories
+                </Link>
+                <Link
+                  href="/parts-attachments/brands"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-3 bg-[#181818] text-xs font-light text-white rounded"
+                >
+                  Shop by Brand
+                </Link>
+                <Link
+                  href="/parts-attachments/machines"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-3 bg-[#181818] text-xs font-light text-white rounded"
+                >
+                  Shop by Machine
+                </Link>
+                <Link
+                  href="/parts-attachments/applications"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-3 bg-[#181818] text-xs font-light text-white rounded"
+                >
+                  Shop by Application
+                </Link>
+              </div>
+              <Link
+                href="/parts-attachments/finder"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block p-3 bg-alkota-orange text-white text-center text-xs font-ibm-plex-mono uppercase tracking-widest font-medium mt-2"
+              >
+                Open Parts Finder Wizard →
+              </Link>
+            </div>
+
+            <div className="space-y-2 pt-4 border-t border-[#222]">
+              <span className="text-[10px] font-ibm-plex-mono text-[#777] uppercase tracking-widest block">
+                Top Categories
+              </span>
+              <div className="grid grid-cols-1 gap-1">
+                {MASTER_TAXONOMY.map((cat) => (
                   <Link
-                    key={b.slug}
-                    href={`/parts-attachments/brands/${b.slug}`}
+                    key={cat.slug}
+                    href={`/parts-attachments/${cat.slug}`}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="p-3 bg-[#141414] border border-[#222] text-xs text-white hover:border-alkota-orange transition-colors no-underline block"
+                    className="py-2 text-sm text-[#CCC] hover:text-white border-b border-[#1A1A1A] flex items-center justify-between"
                   >
-                    {b.name}
+                    <span>{cat.name}</span>
+                    <span className="text-[#555] text-xs">→</span>
                   </Link>
                 ))}
               </div>
-            </div>
-
-            {/* Mobile Actions */}
-            <div className="pt-2 border-t border-[#222] space-y-2">
-              <Link
-                href="/parts-attachments/enquiry"
-                onClick={() => setMobileMenuOpen(false)}
-                className="w-full flex items-center justify-center gap-2 bg-alkota-orange text-white py-3 font-ibm-plex-mono text-xs uppercase tracking-widest no-underline"
-              >
-                <span>Submit Parts Enquiry</span>
-                <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
-              <Link
-                href="/"
-                onClick={() => setMobileMenuOpen(false)}
-                className="w-full flex items-center justify-center gap-2 bg-[#181818] text-[#999] hover:text-white py-2.5 font-ibm-plex-mono text-[10px] uppercase tracking-widest no-underline"
-              >
-                <ArrowLeft className="h-3 w-3" />
-                <span>Return to Alkota.co.uk</span>
-              </Link>
             </div>
           </motion.div>
         )}

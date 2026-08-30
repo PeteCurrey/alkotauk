@@ -83,7 +83,7 @@ function SpecRow({ rows, onChange }: { rows: { label: string; value: string }[];
 
 function SectionCard({ title, badge, children }: { title: string; badge?: string; children: React.ReactNode }) {
   return (
-    <div className="bg-white rounded-[24px] border border-[#E6E8EC] p-8 shadow-[0_2px_12px_rgba(0,0,0,0.02)] space-y-6">
+    <div className="bg-white rounded-2xl border border-[#E6E8EC] p-8 shadow-[0_2px_12px_rgba(0,0,0,0.02)] space-y-6">
       <div className="border-b border-[#F0F2F5] pb-4 flex items-center justify-between">
         <h3 className="text-sm font-extrabold uppercase tracking-wider text-[#FF6900]">{title}</h3>
         {badge && <span className="px-2.5 py-1 rounded-full bg-[#F1F3F7] text-[10px] font-bold text-[#64748B] uppercase">{badge}</span>}
@@ -262,7 +262,7 @@ export default function ProductForm({ initial, id }: { initial?: Partial<Product
       {/* Delete Confirmation Modal */}
       {showDeleteModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-[24px] border border-[#E6E8EC] p-8 max-w-md w-full shadow-2xl">
+          <div className="bg-white rounded-2xl border border-[#E6E8EC] p-8 max-w-md w-full shadow-2xl">
             <h3 className="text-xl font-bold text-[#0F172A] mb-2">Delete Machine Record</h3>
             <p className="text-xs text-[#64748B] leading-relaxed mb-6 font-medium">
               Are you sure you want to permanently delete this product from the database and public catalogue?
@@ -522,11 +522,11 @@ export default function ProductForm({ initial, id }: { initial?: Partial<Product
           {/* Section 3: Visual & Document Assets */}
           <SectionCard title="Product Photography & Documentation" badge="Asset Pipeline">
             <FileUploadField
-              label="Primary Studio Cutout / Photo URL *"
+              label="Primary Product Cutout / Image URL *"
               value={form.primary_image_url || ''}
               onChange={url => set('primary_image_url', url)}
               accept="image/*"
-              placeholder="https://..."
+              placeholder="https://.../machine-photo.png"
               helper="Primary high-resolution machine photography used on storefront and card grids."
             />
 
@@ -774,7 +774,7 @@ export default function ProductForm({ initial, id }: { initial?: Partial<Product
 
           {/* Delete Danger Zone */}
           {id && (
-            <div className="bg-red-50/70 rounded-[24px] border border-red-200/70 p-6 space-y-3">
+            <div className="bg-red-50/70 rounded-2xl border border-red-200/70 p-6 space-y-3">
               <p className="text-xs font-bold text-red-900 uppercase tracking-wider">Danger Zone</p>
               <p className="text-xs text-red-700 font-medium">
                 Permanently delete this product from the database and all store catalogues.

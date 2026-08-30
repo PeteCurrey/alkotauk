@@ -6,7 +6,7 @@ export default function AdminSettingsPage() {
     <div className="space-y-8 max-w-5xl mx-auto">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-extrabold text-[#0F172A] tracking-tight">Studio & System Settings</h1>
+        <h1 className="text-3xl font-extrabold text-[#0F172A] tracking-tight">System & Store Configuration</h1>
         <p className="text-sm font-medium text-[#64748B] mt-1">
           Configure storefront metadata, commercial protocols, and database utilities
         </p>
@@ -47,9 +47,9 @@ export default function AdminSettingsPage() {
           <Link
             key={href}
             href={href}
-            className="flex items-start gap-4 p-6 rounded-[28px] bg-white border border-[#E2E4E8] hover:border-[#CBD5E1] shadow-[0_2px_12px_rgba(0,0,0,0.02)] transition-all group"
+            className="flex items-start gap-4 p-6 rounded-2xl bg-white border border-[#E2E4E8] hover:border-[#CBD5E1] shadow-[0_2px_12px_rgba(0,0,0,0.02)] transition-all group"
           >
-            <div className="h-12 w-12 rounded-2xl bg-[#F6F7F9] border border-[#E2E4E8] flex items-center justify-center shrink-0 group-hover:bg-[#FF6900]/10 transition-colors">
+            <div className="h-12 w-12 rounded-xl bg-[#F6F7F9] border border-[#E2E4E8] flex items-center justify-center shrink-0 group-hover:bg-[#FF6900]/10 transition-colors">
               <Icon className="h-6 w-6 text-[#64748B] group-hover:text-[#FF6900] transition-colors" />
             </div>
             <div className="flex-1 min-w-0">
@@ -66,7 +66,7 @@ export default function AdminSettingsPage() {
       </div>
 
       {/* System Status Pill Card */}
-      <div className="bg-white rounded-[28px] border border-[#E2E4E8] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
+      <div className="bg-white rounded-2xl border border-[#E2E4E8] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
         <h3 className="text-xs font-bold uppercase tracking-wider text-[#FF6900] mb-4">Core Infrastructure</h3>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs font-medium">
           <div className="p-4 rounded-2xl bg-[#F6F7F9] border border-[#E2E4E8] flex items-center gap-3">

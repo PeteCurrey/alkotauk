@@ -70,22 +70,22 @@ export default async function AdminLeadsPage() {
 
       {/* Metrics Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-4 gap-5">
-        <div className="bg-white rounded-[24px] border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
+        <div className="bg-white rounded-2xl border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
           <p className="text-xs font-bold uppercase tracking-wider text-[#64748B]">Total Pipeline Leads</p>
           <p className="text-3xl font-extrabold text-[#0F172A] mt-2">{combinedLeads.length}</p>
           <p className="text-[11px] text-[#94A3B8] font-medium mt-1">Direct inquiries & routed forms</p>
         </div>
-        <div className="bg-white rounded-[24px] border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
+        <div className="bg-white rounded-2xl border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
           <p className="text-xs font-bold uppercase tracking-wider text-[#FF6900]">Live Demonstrations</p>
           <p className="text-3xl font-extrabold text-[#FF6900] mt-2">{demoCount}</p>
           <p className="text-[11px] text-[#94A3B8] font-medium mt-1">On-site plant trial bookings</p>
         </div>
-        <div className="bg-white rounded-[24px] border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
+        <div className="bg-white rounded-2xl border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
           <p className="text-xs font-bold uppercase tracking-wider text-blue-600">General Inquiries</p>
           <p className="text-3xl font-extrabold text-blue-600 mt-2">{contactCount}</p>
           <p className="text-[11px] text-[#94A3B8] font-medium mt-1">Contact form submissions</p>
         </div>
-        <div className="bg-white rounded-[24px] border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
+        <div className="bg-white rounded-2xl border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
           <p className="text-xs font-bold uppercase tracking-wider text-emerald-600">Technical & Service</p>
           <p className="text-3xl font-extrabold text-emerald-600 mt-2">{technicalCount}</p>
           <p className="text-[11px] text-[#94A3B8] font-medium mt-1">Service & maintenance support</p>
@@ -93,7 +93,7 @@ export default async function AdminLeadsPage() {
       </div>
 
       {combinedLeads.length === 0 ? (
-        <div className="bg-white rounded-[24px] border border-[#E6E8EC] p-16 text-center shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
+        <div className="bg-white rounded-2xl border border-[#E6E8EC] p-16 text-center shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
           <Inbox className="h-10 w-10 text-[#CBD5E1] mx-auto mb-3" />
           <h3 className="text-lg font-bold text-[#0F172A] mb-1">
             No Website Leads Recorded Yet
@@ -107,7 +107,7 @@ export default async function AdminLeadsPage() {
           {combinedLeads.map((lead) => (
             <div 
               key={lead.id} 
-              className="bg-white rounded-[24px] border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)] hover:border-[#CBD5E1] transition-all"
+              className="bg-white rounded-2xl border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)] hover:border-[#CBD5E1] transition-all"
             >
               <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 mb-4">
                 <div className="flex-1">

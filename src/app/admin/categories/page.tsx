@@ -70,17 +70,17 @@ export default async function AdminCategoriesPage() {
 
       {/* Top Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-        <div className="bg-white rounded-[24px] border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
+        <div className="bg-white rounded-2xl border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
           <p className="text-xs font-bold uppercase tracking-wider text-[#64748B]">Active Categories</p>
           <p className="text-4xl font-extrabold text-[#0F172A] mt-2">{categories.length}</p>
           <p className="text-xs text-[#94A3B8] mt-1 font-medium">Mapped to public store taxonomy</p>
         </div>
-        <div className="bg-white rounded-[24px] border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
+        <div className="bg-white rounded-2xl border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
           <p className="text-xs font-bold uppercase tracking-wider text-[#FF6900]">Total Machines</p>
           <p className="text-4xl font-extrabold text-[#0F172A] mt-2">{allProducts.length}</p>
           <p className="text-xs text-[#94A3B8] mt-1 font-medium">{allProducts.filter((p: any) => p.active).length} live across categories</p>
         </div>
-        <div className="bg-white rounded-[24px] border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
+        <div className="bg-white rounded-2xl border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
           <p className="text-xs font-bold uppercase tracking-wider text-emerald-600">Pricing Protocol</p>
           <p className="text-3xl font-extrabold text-emerald-600 mt-2">Request Pricing</p>
           <p className="text-xs text-[#94A3B8] mt-1 font-medium">Configured for bespoke commercial quotes</p>
@@ -97,7 +97,7 @@ export default async function AdminCategoriesPage() {
           return (
             <div
               key={cat.slug}
-              className="bg-white rounded-[24px] border border-[#E6E8EC] p-7 shadow-[0_2px_12px_rgba(0,0,0,0.02)] hover:border-[#CBD5E1] transition-all flex flex-col justify-between group"
+              className="bg-white rounded-2xl border border-[#E6E8EC] p-7 shadow-[0_2px_12px_rgba(0,0,0,0.02)] hover:border-[#CBD5E1] transition-all flex flex-col justify-between group"
             >
               <div>
                 <div className="flex items-center justify-between mb-5">

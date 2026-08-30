@@ -68,10 +68,10 @@ export default function ProductListClient({ initialProducts }: { initialProducts
       {/* Delete Confirmation Modal */}
       {confirmDeleteId && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-[24px] border border-[#E6E8EC] p-8 max-w-md w-full shadow-2xl">
-            <h3 className="text-xl font-bold text-[#0F172A] mb-2">Delete Machine Record</h3>
+          <div className="bg-white rounded-2xl border border-[#E6E8EC] p-8 max-w-md w-full shadow-2xl">
+            <h3 className="text-xl font-bold text-[#0F172A] mb-2">Delete Product</h3>
             <p className="text-xs text-[#64748B] leading-relaxed mb-6 font-medium">
-              Are you sure you want to delete this product? It will be removed from all public store catalogues and specification sheets.
+              Are you sure you want to permanently delete this product? It will be immediately removed from the live catalogue and database.
             </p>
             <div className="flex justify-end gap-2.5">
               <button
@@ -120,7 +120,7 @@ export default function ProductListClient({ initialProducts }: { initialProducts
 
       {/* Attention banner if items missing assets */}
       {missingCount > 0 && (
-        <div className="bg-amber-50/90 border border-amber-200/90 rounded-[20px] p-5 flex items-center justify-between gap-4 shadow-sm">
+        <div className="bg-amber-50/90 border border-amber-200/90 rounded-2xl p-5 flex items-center justify-between gap-4 shadow-sm">
           <div className="flex items-center gap-3.5">
             <div className="h-9 w-9 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center shrink-0">
               <AlertTriangle className="h-4 w-4" />
@@ -176,24 +176,29 @@ export default function ProductListClient({ initialProducts }: { initialProducts
       </div>
 
       {/* Filter and Search Bar Card */}
-      <div className="bg-white rounded-[20px] border border-[#E6E8EC] p-3.5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
+      <div className="bg-white rounded-2xl border border-[#E6E8EC] p-3.5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
         <div className="flex items-center gap-1.5">
-          {(['all', 'live', 'draft'] as const).map(st => (
+          {[
+            { label: 'All Products', value: 'all' },
+            { label: 'Live on Store', value: 'live' },
+            { label: 'Hidden / Draft', value: 'draft' },
+          ].map(f => (
             <button
-              key={st}
-              onClick={() => setStatusFilter(st)}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-colors ${
-                statusFilter === st 
-                  ? 'bg-[#F1F3F7] text-[#0F172A] font-bold' 
+              key={f.value}
+              onClick={() => setStatusFilter(f.value as any)}
+              className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-colors ${
+                statusFilter === f.value
+                  ? 'bg-[#F1F3F7] text-[#0F172A] font-bold'
                   : 'text-[#64748B] hover:text-[#0F172A]'
               }`}
             >
-              {st === 'all' ? 'All Models' : st === 'live' ? 'Live on Store' : 'Drafts / Hidden'}
+              {f.label}
             </button>
           ))}
         </div>
 
-        <div className="relative flex-1 max-w-md">
+        {/* Search */}
+        <div className="relative w-full sm:w-80">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#94A3B8]" />
           <input
             type="text"
@@ -206,7 +211,7 @@ export default function ProductListClient({ initialProducts }: { initialProducts
       </div>
 
       {/* Products Table Card */}
-      <div className="bg-white rounded-[24px] border border-[#E6E8EC] shadow-[0_2px_12px_rgba(0,0,0,0.02)] overflow-hidden">
+      <div className="bg-white rounded-2xl border border-[#E6E8EC] shadow-[0_2px_12px_rgba(0,0,0,0.02)] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left min-w-[950px]">
             <thead>

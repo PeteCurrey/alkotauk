@@ -1,64 +1,47 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { RefreshCw, Sparkles } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { RefreshCw, CheckCircle2, AlertCircle } from 'lucide-react';
 
 export default function SeedCatalogueButton() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [statusMessage, setStatusMessage] = useState<string | null>(null);
-  const [isError, setIsError] = useState(false);
+  const [result, setResult] = useState('');
 
-  const handleSeed = async () => {
-    if (!confirm('This will upsert and sync the complete Parts & Attachments catalogue (Alkota OEM + Mosmatic + Cox Reels + Steel Eagle + Dual Pumps) into Supabase. Continue?')) {
+  async function seed() {
+    if (!confirm('This will seed/sync all 13 Master Categories, Subcategories, 25+ Brands, 10 Applications, Machine Models, Suppliers, and 120+ Products into Supabase. Continue?')) {
       return;
     }
-
     setLoading(true);
-    setStatusMessage('Seeding catalogue items into database...');
-    setIsError(false);
-
+    setResult('');
     try {
-      const res = await fetch('/api/admin/parts/seed-v2', {
-        method: 'POST',
-      });
+      const res = await fetch('/api/admin/parts/seed-commerce', { method: 'POST' });
       const data = await res.json();
-
       if (res.ok) {
-        setStatusMessage(`Successfully seeded ${data.seeded || 0} components.`);
-        setIsError(false);
+        setResult(`✓ Synced: ${data.summary?.parts || 0} Parts, ${data.summary?.masterCategories || 0} Categories, ${data.summary?.brands || 0} Brands`);
         router.refresh();
       } else {
-        setIsError(true);
-        setStatusMessage(data.error || 'Seeding failed.');
+        setResult(`Error: ${data.error}`);
       }
     } catch (err: any) {
-      setIsError(true);
-      setStatusMessage('Network error during seeding.');
+      setResult(`Error: ${err.message}`);
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   return (
     <div className="flex items-center gap-3">
-      {statusMessage && (
-        <span className={`font-ibm-plex-mono text-[10px] flex items-center gap-1 ${isError ? 'text-red-400' : 'text-green-400'}`}>
-          {isError ? <AlertCircle className="h-3 w-3" /> : <CheckCircle2 className="h-3 w-3" />}
-          {statusMessage}
-        </span>
-      )}
-
+      {result && <span className="font-mono text-[10px] text-green-700 font-semibold">{result}</span>}
       <button
         type="button"
-        onClick={handleSeed}
+        onClick={seed}
         disabled={loading}
-        className="flex items-center gap-2 px-4 py-3 bg-[#1A1A1A] border border-[#333] text-[#CCC] hover:text-white font-ibm-plex-mono text-[10px] uppercase tracking-widest hover:border-alkota-orange transition-colors disabled:opacity-50 cursor-pointer"
-        title="Sync full partner & OEM catalogue"
+        className="flex items-center gap-2 px-4 py-2.5 bg-black hover:bg-[#222] text-white rounded-lg text-xs font-bold transition-all disabled:opacity-50"
       >
-        <RefreshCw className={`h-3 w-3 text-alkota-orange ${loading ? 'animate-spin' : ''}`} />
-        <span>{loading ? 'Seeding...' : 'Seed Catalogue'}</span>
+        <Sparkles className={`h-3.5 w-3.5 text-[#FF6900] ${loading ? 'animate-spin' : ''}`} />
+        <span>{loading ? 'Seeding Platform...' : 'Seed Commerce Platform'}</span>
       </button>
     </div>
   );

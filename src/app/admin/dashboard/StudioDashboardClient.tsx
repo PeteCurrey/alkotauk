@@ -55,13 +55,13 @@ export default function StudioDashboardClient({ initialProducts, recentEnquiries
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {/* ── TOP 3-PANEL COMMAND DECK ───────────────────────────────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* ── LEFT PANEL: Machine Telemetry & Specs (3 cols) ── */}
-        <div className="lg:col-span-3 bg-white rounded-[32px] p-6 border border-[#E2E4E8] shadow-[0_4px_24px_rgba(0,0,0,0.03)] flex flex-col justify-between space-y-6">
+        <div className="lg:col-span-3 bg-white rounded-2xl p-5 border border-[#E2E4E8] shadow-[0_4px_20px_rgba(0,0,0,0.02)] flex flex-col justify-between space-y-5">
           <div>
-            <div className="flex items-center justify-between text-[#64748B] mb-3">
+            <div className="flex items-center justify-between text-[#64748B] mb-2.5">
               <span className="text-[11px] font-bold uppercase tracking-wider">Machine Details</span>
               <Link href={`/admin/products/${currentProduct.id}`} className="hover:text-[#0F172A] transition-colors">
                 <Settings className="h-4 w-4 text-[#94A3B8]" />
@@ -69,7 +69,7 @@ export default function StudioDashboardClient({ initialProducts, recentEnquiries
             </div>
 
             <p className="text-[11px] text-[#94A3B8] font-medium">Model ID</p>
-            <h2 className="text-2xl font-black text-[#0F172A] tracking-tight truncate">
+            <h2 className="text-xl font-black text-[#0F172A] tracking-tight truncate">
               {currentProduct.name}
             </h2>
             <p className="text-xs text-[#FF6900] font-bold uppercase tracking-wide mt-0.5">
@@ -77,7 +77,7 @@ export default function StudioDashboardClient({ initialProducts, recentEnquiries
             </p>
 
             {/* Spec breakdown */}
-            <div className="grid grid-cols-2 gap-4 mt-6 pt-5 border-t border-[#F0F2F5] text-xs">
+            <div className="grid grid-cols-2 gap-3.5 mt-5 pt-4 border-t border-[#F0F2F5] text-xs">
               <div>
                 <p className="text-[#94A3B8] text-[10px] uppercase font-bold">Operating Pressure</p>
                 <p className="font-extrabold text-[#0F172A] mt-0.5">
@@ -107,9 +107,9 @@ export default function StudioDashboardClient({ initialProducts, recentEnquiries
             </div>
           </div>
 
-          {/* Performance Radar Simulation / Coordinate Visualizer */}
-          <div className="pt-5 border-t border-[#F0F2F5]">
-            <div className="flex items-center justify-between text-[11px] font-bold text-[#475569] mb-3">
+          {/* Performance Radar Simulation */}
+          <div className="pt-4 border-t border-[#F0F2F5]">
+            <div className="flex items-center justify-between text-[11px] font-bold text-[#475569] mb-2.5">
               <span>Performance Radar</span>
               <span className="text-[10px] font-mono text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full font-bold">
                 • 100% Stable Output
@@ -117,24 +117,23 @@ export default function StudioDashboardClient({ initialProducts, recentEnquiries
             </div>
 
             {/* Radar Grid Canvas */}
-            <div className="relative h-28 w-full bg-[#F6F7F9] rounded-2xl border border-[#E2E4E8] flex items-center justify-center overflow-hidden">
+            <div className="relative h-24 w-full bg-[#F6F7F9] rounded-xl border border-[#E2E4E8] flex items-center justify-center overflow-hidden">
               <div className="absolute inset-0 grid grid-cols-4 grid-rows-3 divide-x divide-y divide-[#E2E4E8]/60 opacity-70" />
-              {/* Radar area polygon */}
-              <div className="absolute h-16 w-16 bg-[#FF6900]/15 border border-[#FF6900] rounded-full animate-pulse" />
+              <div className="absolute h-14 w-14 bg-[#FF6900]/15 border border-[#FF6900] rounded-full animate-pulse" />
               <div className="absolute h-2 w-2 rounded-full bg-[#FF6900] shadow-[0_0_8px_#FF6900]" />
-              <span className="absolute bottom-2 left-2 text-[9px] font-mono text-[#94A3B8]">Pressure</span>
-              <span className="absolute top-2 right-2 text-[9px] font-mono text-[#94A3B8]">Thermal BTU</span>
+              <span className="absolute bottom-1.5 left-2 text-[9px] font-mono text-[#94A3B8]">Pressure</span>
+              <span className="absolute top-1.5 right-2 text-[9px] font-mono text-[#94A3B8]">Thermal BTU</span>
             </div>
           </div>
         </div>
 
         {/* ── CENTER PANEL: Interactive Visual Stage (6 cols) ── */}
-        <div className="lg:col-span-6 bg-white rounded-[32px] p-6 border border-[#E2E4E8] shadow-[0_4px_24px_rgba(0,0,0,0.03)] flex flex-col justify-between relative min-h-[460px]">
+        <div className="lg:col-span-6 bg-white rounded-2xl p-5 border border-[#E2E4E8] shadow-[0_4px_20px_rgba(0,0,0,0.02)] flex flex-col justify-between relative min-h-[440px]">
           {/* Top Stage Bar */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-xs font-bold text-[#0F172A]">Live Studio Stage</span>
+              <span className="text-xs font-bold text-[#0F172A]">Equipment Visualizer</span>
               <span className="px-2.5 py-0.5 rounded-full bg-[#F6F7F9] text-[10px] font-mono text-[#64748B]">
                 {selectedIndex + 1} of {products.length} models
               </span>
@@ -148,33 +147,32 @@ export default function StudioDashboardClient({ initialProducts, recentEnquiries
           </div>
 
           {/* Machine Showcase Stage */}
-          <div className="relative flex-1 flex items-center justify-center p-8 my-4 overflow-hidden">
-            {/* Stage Backdrop Plate */}
-            <div className="absolute w-4/5 h-16 bg-[#F1F3F7] rounded-full blur-xl opacity-80 -bottom-2" />
+          <div className="relative flex-1 flex items-center justify-center p-6 my-2 overflow-hidden">
+            <div className="absolute w-4/5 h-12 bg-[#F1F3F7] rounded-full blur-xl opacity-80 -bottom-2" />
 
             {/* Left Nav Button */}
             <button
               type="button"
               onClick={prevMachine}
-              className="absolute left-2 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-white/90 backdrop-blur-sm border border-[#E2E4E8] flex items-center justify-center text-[#0F172A] hover:bg-[#111] hover:text-white shadow-md transition-all z-10"
+              className="absolute left-2 top-1/2 -translate-y-1/2 h-9 w-9 rounded-full bg-white/90 backdrop-blur-sm border border-[#E2E4E8] flex items-center justify-center text-[#0F172A] hover:bg-[#111] hover:text-white shadow-md transition-all z-10"
             >
-              <ChevronLeft className="h-5 w-5" />
+              <ChevronLeft className="h-4 w-4" />
             </button>
 
             {/* Machine Cutout Render */}
             <div 
-              className="relative max-h-72 w-full flex items-center justify-center transition-transform duration-300"
+              className="relative max-h-64 w-full flex items-center justify-center transition-transform duration-300"
               style={{ transform: `scale(${zoomLevel})` }}
             >
               {currentProduct.primary_image_url ? (
                 <img
                   src={currentProduct.primary_image_url}
                   alt={currentProduct.name}
-                  className="max-h-64 max-w-full object-contain drop-shadow-[0_12px_24px_rgba(0,0,0,0.12)]"
+                  className="max-h-60 max-w-full object-contain drop-shadow-[0_12px_24px_rgba(0,0,0,0.12)]"
                 />
               ) : (
-                <div className="h-48 w-48 rounded-3xl bg-[#F6F7F9] border border-[#E2E4E8] flex items-center justify-center text-[#94A3B8]">
-                  <Package className="h-16 w-16" />
+                <div className="h-40 w-40 rounded-2xl bg-[#F6F7F9] border border-[#E2E4E8] flex items-center justify-center text-[#94A3B8]">
+                  <Package className="h-14 w-14" />
                 </div>
               )}
             </div>
@@ -183,16 +181,16 @@ export default function StudioDashboardClient({ initialProducts, recentEnquiries
             <button
               type="button"
               onClick={nextMachine}
-              className="absolute right-2 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-white/90 backdrop-blur-sm border border-[#E2E4E8] flex items-center justify-center text-[#0F172A] hover:bg-[#111] hover:text-white shadow-md transition-all z-10"
+              className="absolute right-2 top-1/2 -translate-y-1/2 h-9 w-9 rounded-full bg-white/90 backdrop-blur-sm border border-[#E2E4E8] flex items-center justify-center text-[#0F172A] hover:bg-[#111] hover:text-white shadow-md transition-all z-10"
             >
-              <ChevronRight className="h-5 w-5" />
+              <ChevronRight className="h-4 w-4" />
             </button>
           </div>
 
-          {/* Bottom Stage Controls Island */}
-          <div className="flex items-center justify-between pt-4 border-t border-[#F0F2F5]">
+          {/* Bottom Stage Controls */}
+          <div className="flex items-center justify-between pt-3.5 border-t border-[#F0F2F5]">
             {/* Zoom Slider Pill */}
-            <div className="flex items-center gap-2 bg-[#F6F7F9] px-3.5 py-1.5 rounded-full border border-[#E2E4E8]">
+            <div className="flex items-center gap-2 bg-[#F6F7F9] px-3 py-1.5 rounded-full border border-[#E2E4E8]">
               <button 
                 type="button" 
                 onClick={() => setZoomLevel(Math.max(0.8, zoomLevel - 0.1))} 
@@ -200,8 +198,8 @@ export default function StudioDashboardClient({ initialProducts, recentEnquiries
               >
                 –
               </button>
-              <div className="h-1.5 w-12 bg-[#CBD5E1] rounded-full relative">
-                <div className="absolute top-1/2 -translate-y-1/2 h-3 w-3 bg-[#FF6900] rounded-full left-1/2 -translate-x-1/2 shadow-sm" />
+              <div className="h-1.5 w-10 bg-[#CBD5E1] rounded-full relative">
+                <div className="absolute top-1/2 -translate-y-1/2 h-2.5 w-2.5 bg-[#FF6900] rounded-full left-1/2 -translate-x-1/2 shadow-sm" />
               </div>
               <button 
                 type="button" 
@@ -217,14 +215,14 @@ export default function StudioDashboardClient({ initialProducts, recentEnquiries
               <Link
                 href={`/machines/${currentProduct.category || 'hot-water'}/${currentProduct.slug}`}
                 target="_blank"
-                className="px-4 py-2 rounded-full bg-[#F6F7F9] hover:bg-[#EBECEF] text-xs font-bold text-[#334155] transition-colors flex items-center gap-1.5 border border-[#E2E4E8]"
+                className="px-3.5 py-1.5 rounded-full bg-[#F6F7F9] hover:bg-[#EBECEF] text-xs font-bold text-[#334155] transition-colors flex items-center gap-1.5 border border-[#E2E4E8]"
               >
                 <Eye className="h-3.5 w-3.5 text-[#FF6900]" />
                 <span>Storefront View</span>
               </Link>
               <Link
                 href={`/admin/products/${currentProduct.id}`}
-                className="px-5 py-2 rounded-full bg-[#111111] text-white text-xs font-bold hover:bg-[#333] transition-colors shadow-sm flex items-center gap-1.5"
+                className="px-4 py-1.5 rounded-full bg-[#111111] text-white text-xs font-bold hover:bg-[#333] transition-colors shadow-sm flex items-center gap-1.5"
               >
                 <Settings className="h-3.5 w-3.5" />
                 <span>Edit Specs</span>
@@ -234,9 +232,9 @@ export default function StudioDashboardClient({ initialProducts, recentEnquiries
         </div>
 
         {/* ── RIGHT PANEL: Commercial Fleet & Live Quote Stream (3 cols) ── */}
-        <div className="lg:col-span-3 bg-white rounded-[32px] p-6 border border-[#E2E4E8] shadow-[0_4px_24px_rgba(0,0,0,0.03)] flex flex-col justify-between space-y-6">
+        <div className="lg:col-span-3 bg-white rounded-2xl p-5 border border-[#E2E4E8] shadow-[0_4px_20px_rgba(0,0,0,0.02)] flex flex-col justify-between space-y-5">
           <div>
-            <div className="flex items-center justify-between text-[#64748B] mb-3">
+            <div className="flex items-center justify-between text-[#64748B] mb-2.5">
               <span className="text-[11px] font-bold uppercase tracking-wider">Quote Stream</span>
               <Link href="/admin/quotes" className="text-xs font-bold text-[#FF6900] hover:underline">
                 View All ({stats.totalQuotes})
@@ -244,22 +242,22 @@ export default function StudioDashboardClient({ initialProducts, recentEnquiries
             </div>
 
             {/* Quick Metrics */}
-            <div className="grid grid-cols-2 gap-3 mb-4">
-              <div className="p-3.5 rounded-2xl bg-[#F6F7F9] border border-[#E2E4E8]">
+            <div className="grid grid-cols-2 gap-2.5 mb-3.5">
+              <div className="p-3 rounded-xl bg-[#F6F7F9] border border-[#E2E4E8]">
                 <p className="text-[10px] font-bold uppercase text-[#94A3B8]">Pending Quotes</p>
-                <p className="text-2xl font-black text-[#FF6900] mt-0.5">{stats.newQuotes}</p>
+                <p className="text-xl font-black text-[#FF6900] mt-0.5">{stats.newQuotes}</p>
               </div>
-              <div className="p-3.5 rounded-2xl bg-[#F6F7F9] border border-[#E2E4E8]">
+              <div className="p-3 rounded-xl bg-[#F6F7F9] border border-[#E2E4E8]">
                 <p className="text-[10px] font-bold uppercase text-[#94A3B8]">Live Catalogue</p>
-                <p className="text-2xl font-black text-[#0F172A] mt-0.5">{stats.activeProducts}</p>
+                <p className="text-xl font-black text-[#0F172A] mt-0.5">{stats.activeProducts}</p>
               </div>
             </div>
 
             {/* Live inquiries stream */}
-            <div className="space-y-2.5">
+            <div className="space-y-2">
               {recentEnquiries.slice(0, 3).map((item) => (
-                <div key={item.id} className="p-3 rounded-2xl bg-[#F8F9FB] border border-[#F0F2F5] hover:border-[#E2E4E8] transition-colors">
-                  <div className="flex items-center justify-between gap-2 mb-1">
+                <div key={item.id} className="p-2.5 rounded-xl bg-[#F8F9FB] border border-[#F0F2F5] hover:border-[#E2E4E8] transition-colors">
+                  <div className="flex items-center justify-between gap-2 mb-0.5">
                     <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-extrabold bg-[#FF6900]/10 text-[#FF6900]">
                       • {item.status?.toUpperCase() || 'NEW'}
                     </span>
@@ -279,16 +277,16 @@ export default function StudioDashboardClient({ initialProducts, recentEnquiries
           </div>
 
           {/* Fast Departure Route Capsule Tags */}
-          <div className="pt-4 border-t border-[#F0F2F5] space-y-2">
+          <div className="pt-3.5 border-t border-[#F0F2F5] space-y-1.5">
             <span className="text-[10px] font-bold uppercase text-[#94A3B8] block">Commercial Dispatch Channels</span>
             <div className="flex flex-wrap gap-1.5">
-              <span className="px-3 py-1 rounded-full bg-[#F6F7F9] border border-[#E2E4E8] text-[11px] font-bold text-[#475569] flex items-center gap-1.5">
+              <span className="px-2.5 py-1 rounded-full bg-[#F6F7F9] border border-[#E2E4E8] text-[11px] font-bold text-[#475569] flex items-center gap-1.5">
                 <span className="h-1.5 w-1.5 rounded-full bg-[#FF6900]" /> UK South Hub
               </span>
-              <span className="px-3 py-1 rounded-full bg-[#F6F7F9] border border-[#E2E4E8] text-[11px] font-bold text-[#475569] flex items-center gap-1.5">
+              <span className="px-2.5 py-1 rounded-full bg-[#F6F7F9] border border-[#E2E4E8] text-[11px] font-bold text-[#475569] flex items-center gap-1.5">
                 <span className="h-1.5 w-1.5 rounded-full bg-blue-500" /> Northern Depot
               </span>
-              <span className="px-3 py-1 rounded-full bg-[#F6F7F9] border border-[#E2E4E8] text-[11px] font-bold text-[#475569] flex items-center gap-1.5">
+              <span className="px-2.5 py-1 rounded-full bg-[#F6F7F9] border border-[#E2E4E8] text-[11px] font-bold text-[#475569] flex items-center gap-1.5">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> Scotland Direct
               </span>
             </div>
@@ -297,7 +295,7 @@ export default function StudioDashboardClient({ initialProducts, recentEnquiries
       </div>
 
       {/* ── BOTTOM HORIZONTAL CAROUSEL TRAY ───────────────────────────────── */}
-      <div className="w-full bg-white rounded-[32px] p-6 border border-[#E2E4E8] shadow-[0_4px_24px_rgba(0,0,0,0.03)] space-y-4">
+      <div className="w-full bg-white rounded-2xl p-5 border border-[#E2E4E8] shadow-[0_4px_20px_rgba(0,0,0,0.02)] space-y-3.5">
         {/* Tray Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -312,7 +310,7 @@ export default function StudioDashboardClient({ initialProducts, recentEnquiries
           <div className="flex items-center gap-2">
             <Link
               href="/admin/products"
-              className="px-4 py-1.5 rounded-full bg-[#F6F7F9] hover:bg-[#EBECEF] text-xs font-bold text-[#334155] transition-colors border border-[#E2E4E8]"
+              className="px-3.5 py-1 rounded-full bg-[#F6F7F9] hover:bg-[#EBECEF] text-xs font-bold text-[#334155] transition-colors border border-[#E2E4E8]"
             >
               Manage Full Catalogue →
             </Link>
@@ -320,7 +318,7 @@ export default function StudioDashboardClient({ initialProducts, recentEnquiries
         </div>
 
         {/* Horizontal Scrolling Card Reel */}
-        <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-thin">
+        <div className="flex gap-3.5 overflow-x-auto pb-2 scrollbar-thin">
           {products.map((p, idx) => {
             const isSelected = selectedIndex === idx;
             return (
@@ -328,13 +326,13 @@ export default function StudioDashboardClient({ initialProducts, recentEnquiries
                 key={p.id}
                 type="button"
                 onClick={() => setSelectedIndex(idx)}
-                className={`flex-shrink-0 w-52 p-4 rounded-2xl border text-left transition-all duration-200 cursor-pointer ${
+                className={`flex-shrink-0 w-48 p-3.5 rounded-xl border text-left transition-all duration-150 cursor-pointer ${
                   isSelected
-                    ? 'bg-[#111111] text-white border-[#111111] shadow-lg shadow-black/10'
+                    ? 'bg-[#111111] text-white border-[#111111] shadow-md shadow-black/10'
                     : 'bg-[#F6F7F9] text-[#0F172A] border-[#E2E4E8] hover:border-[#CBD5E1] hover:bg-white'
                 }`}
               >
-                <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center justify-between mb-1.5">
                   <span className={`text-[10px] font-mono font-bold uppercase ${
                     isSelected ? 'text-[#FF6900]' : 'text-[#64748B]'
                   }`}>
@@ -348,18 +346,18 @@ export default function StudioDashboardClient({ initialProducts, recentEnquiries
                 </div>
 
                 {/* Thumbnail Stage */}
-                <div className={`h-24 w-full rounded-xl flex items-center justify-center p-2 mb-3 ${
+                <div className={`h-20 w-full rounded-lg flex items-center justify-center p-2 mb-2.5 ${
                   isSelected ? 'bg-white/10' : 'bg-white border border-[#E2E4E8]'
                 }`}>
                   {p.primary_image_url ? (
                     <img src={p.primary_image_url} alt={p.name} className="h-full w-full object-contain" />
                   ) : (
-                    <Package className={`h-8 w-8 ${isSelected ? 'text-white/40' : 'text-[#CBD5E1]'}`} />
+                    <Package className={`h-7 w-7 ${isSelected ? 'text-white/40' : 'text-[#CBD5E1]'}`} />
                   )}
                 </div>
 
                 <p className="font-extrabold text-xs truncate leading-tight">{p.name}</p>
-                <p className={`text-[11px] truncate mt-0.5 ${
+                <p className={`text-[10px] truncate mt-0.5 ${
                   isSelected ? 'text-white/70' : 'text-[#64748B]'
                 }`}>
                   {p.pressure_bar ? `${p.pressure_bar} BAR` : '207 BAR'} · {p.flow_rate_lpm ? `${p.flow_rate_lpm} LPM` : '15 LPM'}

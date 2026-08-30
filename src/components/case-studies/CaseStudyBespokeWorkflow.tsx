@@ -4,14 +4,23 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { ArrowRight, ArrowUpRight, Wrench, Shield, CheckCircle2, ChevronRight } from 'lucide-react';
 import { CaseStudyWorkflowStep } from '@/lib/case-studies/types';
+import { getCaseStudyBySlug } from '@/lib/case-studies/data';
 
 interface Props {
-  steps: CaseStudyWorkflowStep[];
+  steps?: CaseStudyWorkflowStep[];
 }
 
-export default function CaseStudyBespokeWorkflow({ steps }: Props) {
+export default function CaseStudyBespokeWorkflow({ steps: initialSteps }: Props) {
+  const fallbackSteps = getCaseStudyBySlug('bespoke-trailer-builds')?.workflowSteps || [];
+  const steps = initialSteps && initialSteps.length > 0 ? initialSteps : fallbackSteps;
   const [activeStepIdx, setActiveStepIdx] = useState<number>(0);
-  const activeStep = steps[activeStepIdx] || steps[0];
+  const activeStep = steps[activeStepIdx] || steps[0] || {
+    step: '01',
+    title: 'Requirement & Operational Audit',
+    subtitle: 'Defining the operational envelope',
+    description: 'We evaluate your daily target surfaces, contract commitments, and towing capacities.',
+    engineeringFocus: 'Payload limits and daily square-metre targets.',
+  };
 
   return (
     <section className="my-20 bg-[#0D0D0B] text-white p-8 sm:p-14 border border-[#222] font-normal">

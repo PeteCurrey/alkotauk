@@ -1,6 +1,6 @@
 import { supabaseAdmin } from '@/lib/supabase/server';
 import Link from 'next/link';
-import { Truck, Inbox, Droplets, Flame, ArrowRight, ShieldCheck, Clock, CheckCircle2, AlertTriangle, Eye, Sparkles, Plus, Scale, Package } from 'lucide-react';
+import { Truck, Inbox, Droplets, Flame, ArrowRight, ShieldCheck, Clock, CheckCircle2, AlertTriangle, Eye, Sparkles, Plus, Scale, Package, Zap } from 'lucide-react';
 import {
   UK_CHASSIS_OPTIONS,
   TRAILER_MACHINE_OPTIONS,
@@ -8,7 +8,7 @@ import {
   calculateOpportunityScore,
   calculateCommercialValue,
 } from '@/lib/trailers/configurator-data';
-import { SAMPLE_BUILD_PROJECT } from '@/lib/trailers/build-project-data';
+import { SAMPLE_BUILD_PROJECT, SAMPLE_DELIVERED_ASSET } from '@/lib/trailers/build-project-data';
 
 export const dynamic = 'force-dynamic';
 

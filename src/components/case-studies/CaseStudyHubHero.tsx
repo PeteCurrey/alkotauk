@@ -71,7 +71,7 @@ export default function CaseStudyHubHero() {
             </div>
             <div className="flex items-center gap-2">
               <ShieldCheck className="h-4 w-4 text-[#FF6900] shrink-0" />
-              <span className="uppercase tracking-wider">Verified Projects</span>
+              <span className="uppercase tracking-wider">Documented Field Proof</span>
             </div>
           </div>
         </div>

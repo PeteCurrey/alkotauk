@@ -108,8 +108,8 @@ export default async function IndustryDetailPage({ params }: IndustryDetailPageP
           </div>
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {machines?.map((machine: any) => (
-              <MachineCard key={machine._id} machine={machine} />
+            {machines?.map((machine: any, idx: number) => (
+              <MachineCard key={machine._id} machine={machine} index={idx} />
             ))}
           </div>
         </div>

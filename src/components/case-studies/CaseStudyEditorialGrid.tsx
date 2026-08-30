@@ -81,8 +81,8 @@ export default function CaseStudyEditorialGrid({ caseStudies }: Props) {
                   <span className="text-xs uppercase tracking-[0.2em] text-[#FF6900] font-normal">
                     01 // Crane Hire & Heavy Plant
                   </span>
-                  <span className="text-[10px] uppercase px-2.5 py-0.5 bg-[#EAEAEA] text-[#666] border border-[#DDD]">
-                    Named Customer
+                  <span className="text-[10px] uppercase px-2.5 py-0.5 bg-[#EAEAEA] text-[#555] border border-[#DDD] font-normal">
+                    Named Customer / Field Application
                   </span>
                 </div>
                 <h3 className="font-extralight text-3xl sm:text-4xl lg:text-5xl uppercase tracking-tight text-alkota-black leading-tight mb-4">
@@ -150,8 +150,13 @@ export default function CaseStudyEditorialGrid({ caseStudies }: Props) {
                 </div>
                 <div className="lg:col-span-5 flex flex-col justify-between bg-white p-8 sm:p-12 border border-[#E8E8E4]">
                   <div>
-                    <div className="text-[11px] uppercase tracking-[0.2em] text-[#888] mb-3">
-                      02 // Industrial Cleaning
+                    <div className="flex items-center gap-3 mb-3">
+                      <span className="text-xs uppercase tracking-[0.2em] text-[#FF6900] font-normal">
+                        02 // Industrial Cleaning
+                      </span>
+                      <span className="text-[10px] uppercase px-2.5 py-0.5 bg-[#EAEAEA] text-[#555] border border-[#DDD] font-normal">
+                        Named Customer / Field Application
+                      </span>
                     </div>
                     <h3 className="font-extralight text-2xl sm:text-3xl lg:text-4xl uppercase tracking-tight text-alkota-black leading-tight mb-4">
                       When Cleaning Becomes an Engineering Job.

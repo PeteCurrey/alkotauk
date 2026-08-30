@@ -75,10 +75,21 @@ export default function CaseStudyHeader({ caseStudy }: Props) {
             <span className="text-white font-normal">{caseStudy.date}</span>
           </div>
           <div>
-            <span className="text-[#888] block uppercase text-[10px] tracking-wider mb-1">Status</span>
-            <span className="text-[#FF6900] font-normal">Verified Field Case</span>
+            <span className="text-[#888] block uppercase text-[10px] tracking-wider mb-1">Classification</span>
+            <span className="text-[#FF6900] font-normal">{caseStudy.sourceType}</span>
           </div>
         </div>
+
+        {caseStudy.heroCaption && (
+          <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-[11px] text-[#888]">
+            <span>{caseStudy.heroCaption}</span>
+            {caseStudy.heroCredit && (
+              <span className="text-[#666] uppercase tracking-wider text-[10px]">
+                {caseStudy.heroCredit}
+              </span>
+            )}
+          </div>
+        )}
       </div>
     </header>
   );

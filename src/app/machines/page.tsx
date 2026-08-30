@@ -137,8 +137,8 @@ export default async function MachinesPage() {
           </div>
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {machines.map((machine: any) => (
-              <MachineCard key={machine.id} machine={machine} />
+            {machines.map((machine: any, idx: number) => (
+              <MachineCard key={machine.id} machine={machine} index={idx} />
             ))}
           </div>
         </div>

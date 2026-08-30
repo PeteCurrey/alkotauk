@@ -82,10 +82,10 @@ export default function CaseStudyFlagshipCard({ caseStudy }: Props) {
                 </div>
                 <div>
                   <span className="font-extralight text-3xl sm:text-4xl text-white block mb-1">
-                    270 L/m
+                    ~270 L/min
                   </span>
                   <span className="text-[11px] uppercase tracking-wider text-[#888] font-normal">
-                    Theoretical Max Thermal Output
+                    Theoretical Max Thermal Array
                   </span>
                 </div>
               </div>

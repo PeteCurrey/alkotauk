@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
+import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { getProducts, CANONICAL_CATEGORIES, Product } from '@/lib/products';
@@ -329,6 +330,31 @@ export default async function MachineCategoryPage({ params }: CategoryPageProps)
         categorySlug={categorySlug}
         articles={displayLobbyArticles}
       />
+
+      {/* ─── 08B. EDITORIAL FIELD CASE LINK ─────────────────────────────────── */}
+      {categorySlug === 'hot-water' && (
+        <section className="bg-[#121212] text-white py-12 px-6 sm:px-12 border-t border-b border-[#222]">
+          <div className="mx-auto max-w-7xl flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+            <div>
+              <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#FF6900] block mb-1">
+                Field Case // Mobile Crane & Fleet Maintenance
+              </span>
+              <h3 className="font-extralight text-2xl sm:text-3xl uppercase tracking-tight text-white">
+                One Great Northern: Keeping Heavy Equipment Ready for the Next Lift
+              </h3>
+              <p className="text-xs text-[#AAA] max-w-2xl mt-1 font-normal">
+                How Chesterfield crane hire specialist One Great Northern deploys Alkota hot-water cleaning to maintain multi-axle chassis and outriggers.
+              </p>
+            </div>
+            <Link
+              href="/resources/case-studies/one-great-northern"
+              className="inline-flex items-center gap-2 bg-[#FF6900] hover:bg-[#E05800] text-white px-7 py-3.5 text-xs uppercase tracking-[0.2em] font-normal transition-colors no-underline shrink-0"
+            >
+              <span>Read Field Feature →</span>
+            </Link>
+          </div>
+        </section>
+      )}
 
       {/* ─── 09. ON-SITE DEMONSTRATION & SPECIFICATION CTA ────────────────── */}
       <CategoryDemoCTA

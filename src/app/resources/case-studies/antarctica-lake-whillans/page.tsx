@@ -8,9 +8,10 @@ import CaseStudyDepthIndicator from '@/components/case-studies/CaseStudyDepthInd
 import CaseStudyTelemetryMap from '@/components/case-studies/CaseStudyTelemetryMap';
 import CaseStudySpecifications from '@/components/case-studies/CaseStudySpecifications';
 import CaseStudyRelatedProducts from '@/components/case-studies/CaseStudyRelatedProducts';
+import CaseStudyConsultationCTA from '@/components/case-studies/CaseStudyConsultationCTA';
 import CaseStudyNextStory from '@/components/case-studies/CaseStudyNextStory';
 import { getCaseStudyBySlug } from '@/lib/case-studies/data';
-import { BookOpen, ExternalLink, ShieldCheck, Compass, Thermometer } from 'lucide-react';
+import { BookOpen, ExternalLink, ShieldCheck, Compass, Thermometer, Calendar, Clock } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Alkota in Antarctica | Lake Whillans Hot Water Drill Case Study',
@@ -49,7 +50,7 @@ export default function AntarcticaCaseStudyPage() {
         headline: caseStudy.title,
         description: caseStudy.standfirst,
         image: caseStudy.heroImage,
-        datePublished: '2013-01-28',
+        datePublished: '2024-01-15T00:00:00Z',
         dateModified: new Date().toISOString(),
         author: {
           '@type': 'Organization',
@@ -193,6 +194,45 @@ export default function AntarcticaCaseStudyPage() {
             </p>
           </div>
 
+          {/* Technical Fact Panel: Equipment Capability vs Whole-System Operation */}
+          <div className="bg-[#121212] text-white p-8 sm:p-12 border border-[#222] mb-12">
+            <div className="flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-[#FF6900] mb-4 font-mono">
+              <Thermometer className="h-4 w-4" />
+              <span>THE HEATING CORE // TECHNICAL SPECIFICATION</span>
+            </div>
+            
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 pt-4 border-t border-white/15 mb-8">
+              <div>
+                <span className="font-extralight text-3xl sm:text-4xl text-white block mb-1">6</span>
+                <span className="text-[11px] uppercase tracking-wider text-[#AAA]">Alkota 12257K Units</span>
+              </div>
+              <div>
+                <span className="font-extralight text-3xl sm:text-4xl text-[#FF6900] block mb-1">≈45 L/min</span>
+                <span className="text-[11px] uppercase tracking-wider text-[#AAA]">Flow per Unit</span>
+              </div>
+              <div>
+                <span className="font-extralight text-3xl sm:text-4xl text-[#FF6900] block mb-1">≈52°C</span>
+                <span className="text-[11px] uppercase tracking-wider text-[#AAA]">Temp Rise per Unit (ΔT)</span>
+              </div>
+              <div>
+                <span className="font-extralight text-3xl sm:text-4xl text-white block mb-1">≈270 L/min</span>
+                <span className="text-[11px] uppercase tracking-wider text-[#AAA]">Theoretical Combined Array</span>
+              </div>
+              <div>
+                <span className="font-extralight text-3xl sm:text-4xl text-white block mb-1">≈90°C</span>
+                <span className="text-[11px] uppercase tracking-wider text-[#AAA]">System Water Target</span>
+              </div>
+              <div>
+                <span className="font-extralight text-3xl sm:text-4xl text-white block mb-1">≈800 m</span>
+                <span className="text-[11px] uppercase tracking-wider text-[#AAA]">Ice Penetration Depth</span>
+              </div>
+            </div>
+
+            <p className="text-xs text-[#AAA] leading-relaxed border-t border-white/10 pt-4 italic">
+              Published system figures describe the Alkota heater units as components within the larger University of Nebraska–Lincoln WISSARD Clean Hot Water Drill System. Operational flow varied according to drilling, snow melting and water-production requirements.
+            </p>
+          </div>
+
           {/* Editorial Attribution Box */}
           <div className="bg-white p-8 sm:p-10 border-l-4 border-[#FF6900] border-y border-r border-[#E8E8E4] mb-12">
             <div className="text-xs uppercase tracking-wider text-[#FF6900] font-mono mb-2">
@@ -215,11 +255,11 @@ export default function AntarcticaCaseStudyPage() {
             <span className="text-xs uppercase tracking-[0.2em] text-[#777]">Expedition Logistics</span>
           </div>
           <h2 className="font-extralight text-3xl sm:text-5xl uppercase tracking-tight text-alkota-black leading-tight mb-8">
-            The Journey Across the Ross Ice Sheet
+            The Traverse Across the Ross Ice Sheet
           </h2>
           <div className="space-y-6 text-base sm:text-lg text-[#444] leading-relaxed mb-12">
             <p>
-              Before a single litre of hot water could be pumped, the entire drill infrastructure had to be transported across the Antarctic wilderness. The WISSARD equipment traverse travelled approximately <strong>625 miles</strong> (1,000 kilometres) from McMurdo Station across the Ross Ice Shelf to the remote drill camp at Lake Whillans.
+              Before a single litre of hot water could be pumped, the entire drill infrastructure had to be transported across the Antarctic wilderness. The WISSARD equipment traverse travelled approximately <strong>625 miles</strong> (1,000 kilometres) from the McMurdo region across the Ross Ice Sheet to the remote drill camp at Lake Whillans.
             </p>
             <p>
               Contemporary University of Nebraska reporting describes <strong>13 Caterpillar tracked tractors</strong> towing <strong>26 ski-mounted modules</strong> carrying more than <strong>500,000 pounds</strong> of specialised drill gear, generators, laboratory containers, fuel bladders, and the Alkota heating skids over crevassed terrain and wind-scoured sastrugi.
@@ -242,7 +282,7 @@ export default function AntarcticaCaseStudyPage() {
           </h2>
           <div className="space-y-6 text-base sm:text-lg text-[#444] leading-relaxed mb-12">
             <p>
-              On <strong>28 January 2013</strong> local Antarctic operating time (27 January in the United States), after days of continuous thermal melting, the sensor package on the drill stem registered a sudden pressure drop. The hot-water drill nozzle had broken through approximately <strong>800 metres (half a mile)</strong> of West Antarctic ice into Subglacial Lake Whillans.
+              On <strong>28 January 2013</strong> local Antarctic operating time (27 January in the United States), after days of continuous thermal melting, the sensor package on the drill stem registered a sudden pressure transition. The hot-water drill nozzle had broken through approximately <strong>800 metres (half a mile)</strong> of West Antarctic ice into Subglacial Lake Whillans.
             </p>
             <p>
               The borehole was approximately <strong>30 centimetres in diameter</strong>. The achievement represented the first successful clean access through the Antarctic ice sheet into a subglacial lake. Scientists subsequently recovered pristine water and sediment samples through the borehole.
@@ -250,22 +290,52 @@ export default function AntarcticaCaseStudyPage() {
           </div>
         </section>
 
-        {/* Chapter 06 */}
+        {/* Visual Timeline Section */}
+        <section className="mb-24 p-8 sm:p-12 bg-white border border-[#E8E8E4]">
+          <div className="flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-[#FF6900] mb-4 font-mono">
+            <Calendar className="h-4 w-4" />
+            <span>Chronological Timeline // Engineering & Scientific Milestones</span>
+          </div>
+          <h3 className="font-extralight text-2xl sm:text-3xl uppercase tracking-tight text-alkota-black mb-8">
+            From Fabrication to Nature Discovery
+          </h3>
+          <div className="space-y-8 relative pl-6 border-l-2 border-[#E8E8E4]">
+            {caseStudy.timeline?.map((evt, idx) => (
+              <div key={idx} className="relative">
+                <div className="absolute -left-[31px] top-1 w-3 h-3 rounded-full bg-[#FF6900] border-2 border-white" />
+                <span className="font-mono text-xs uppercase tracking-wider text-[#FF6900] block mb-1">
+                  {evt.yearOrDate}
+                </span>
+                <h4 className="text-base font-light uppercase tracking-tight text-alkota-black mb-1">
+                  {evt.headline}
+                </h4>
+                <p className="text-xs sm:text-sm text-[#666] leading-relaxed">
+                  {evt.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Chapter 06: Scientifically Rigorous Wording */}
         <section id="chapter-06" className="mb-24 pt-16 border-t border-[#E8E8E4]">
           <div className="flex items-center gap-3 mb-3">
             <span className="font-mono text-xs text-[#FF6900] tracking-widest">CHAPTER 06</span>
             <span className="h-[1px] w-8 bg-[#FF6900]" />
-            <span className="text-xs uppercase tracking-[0.2em] text-[#777]">Scientific Discovery</span>
+            <span className="text-xs uppercase tracking-[0.2em] text-[#777]">Scientific Analysis & Findings</span>
           </div>
           <h2 className="font-extralight text-3xl sm:text-5xl uppercase tracking-tight text-alkota-black leading-tight mb-8">
-            What They Found
+            What the Samples Revealed
           </h2>
           <div className="space-y-6 text-base sm:text-lg text-[#444] leading-relaxed mb-12">
             <p>
-              The WISSARD scientific programme used the access provided by the drill to collect samples that subsequently produced important evidence of active microbial ecosystems beneath the Antarctic ice sheet.
+              The breakthrough in January 2013 was only the beginning. Water and sediment recovered through the clean-access borehole were subsequently preserved, catalogued, and subjected to rigorous laboratory analysis by the WISSARD science team.
             </p>
             <p>
-              Subsequent peer-reviewed papers in <em>Nature</em> confirmed that microorganisms thrive in total darkness beneath the ice, deriving metabolic energy from mineral reactions rather than sunlight. While Alkota’s role was strictly the engineering delivery of thermal water, the reliability of that heating core made the clean scientific recovery possible.
+              In August 2014, peer-reviewed scientific research published in <em>Nature</em> (Christner et al.) reported a diverse community of metabolically active microorganisms within Subglacial Lake Whillans. The research concluded that aquatic environments beneath the Antarctic ice sheet can support viable microbial ecosystems living in total darkness, drawing energy from mineral and chemical reactions rather than sunlight.
+            </p>
+            <p className="p-6 bg-[#F8F7F4] border-l-2 border-[#121212] text-sm text-[#333] italic">
+              Alkota equipment formed part of the engineered hot-water drilling system that enabled access to the subglacial lake; Alkota did not independently discover microbial life. The distinction between the engineering delivery of thermal access and the subsequent scientific analysis remains fundamental to our technical integrity.
             </p>
           </div>
         </section>
@@ -321,21 +391,37 @@ export default function AntarcticaCaseStudyPage() {
           subtitle="Data verified against UNL Science Management Office & Cambridge University Press Annals of Glaciology"
         />
 
-        {/* Academic Bibliography / Sources of Truth */}
-        <section className="my-16 p-8 bg-white border border-[#E8E8E4]">
+        {/* Academic Bibliography / Sources of Truth: Clean Publication-Style Bibliography */}
+        <section className="my-16 p-8 sm:p-10 bg-white border border-[#E8E8E4]">
           <div className="flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-[#FF6900] mb-3">
             <BookOpen className="h-4 w-4" />
-            <span>Academic Sourcing & Sources of Truth</span>
+            <span>SOURCES & FURTHER READING</span>
           </div>
           <h3 className="font-extralight text-2xl uppercase tracking-tight text-alkota-black mb-6">
-            Verified Historical References
+            Verified Academic & Engineering References
           </h3>
           <div className="space-y-4 text-xs text-[#555]">
             {caseStudy.externalSources?.map((src, idx) => (
-              <div key={idx} className="p-3 bg-[#F8F7F4] border border-[#E8E8E4]">
-                <span className="text-alkota-black font-medium block">{src.title}</span>
-                <span className="text-[#777] block mt-0.5">{src.publisher} ({src.year})</span>
-                {src.note && <span className="text-[#888] italic block mt-1">{src.note}</span>}
+              <div key={idx} className="p-4 bg-[#F8F7F4] border border-[#E8E8E4] flex flex-col justify-between">
+                <div>
+                  <div className="flex items-start justify-between gap-4">
+                    <span className="text-sm text-alkota-black font-normal">{src.title}</span>
+                    {src.url && (
+                      <a
+                        href={src.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-[#FF6900] hover:underline shrink-0 text-[11px] uppercase tracking-wider"
+                      >
+                        <span>View Source</span>
+                        <ExternalLink className="h-3 w-3" />
+                      </a>
+                    )}
+                  </div>
+                  {src.author && <span className="text-[#666] block mt-0.5">{src.author}</span>}
+                  <span className="text-[#888] block mt-0.5">{src.publisher} ({src.year})</span>
+                  {src.note && <span className="text-[#777] italic block mt-1.5">{src.note}</span>}
+                </div>
               </div>
             ))}
           </div>
@@ -346,6 +432,15 @@ export default function AntarcticaCaseStudyPage() {
           productSlugs={caseStudy.relatedProductSlugs}
           fallbackCategory="hot-water"
           headline="The Schedule 80 Hot-Water Technology"
+        />
+
+        {/* Consultative Conversion CTA */}
+        <CaseStudyConsultationCTA
+          eyebrow="ENGINEERING CONSULTATION"
+          headline="Your Job May Not Involve 800 Metres of Ice. The Engineering Principle Is the Same."
+          description="Whether melting a subglacial borehole or degreasing heavy plant in a UK quarry, dependable hot-water thermal capacity is non-negotiable. Discuss your industrial requirements with Alkota UK engineers."
+          primaryCTA={caseStudy.primaryCTA}
+          secondaryCTA={caseStudy.secondaryCTA}
         />
       </div>
 

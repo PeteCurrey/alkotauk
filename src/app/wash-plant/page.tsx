@@ -7,6 +7,8 @@ import WashPlantSubNav from '@/components/wash-plant/WashPlantSubNav';
 import WashPlantCapabilityBadge from '@/components/wash-plant/WashPlantCapabilityBadge';
 import WashPlantSpecifierCta from '@/components/wash-plant/WashPlantSpecifierCta';
 import WashPlantSchema from '@/components/wash-plant/WashPlantSchema';
+import WashPlantVariablesMatrix from '@/components/wash-plant/WashPlantVariablesMatrix';
+import WashPlantAnatomyDiagram from '@/components/wash-plant/WashPlantAnatomyDiagram';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowRight,
@@ -14,24 +16,23 @@ import {
   Zap,
   Droplets,
   Cpu,
-  Layout,
   RefreshCw,
   Clock,
   CheckCircle2,
   ChevronRight,
   Settings,
-  Factory,
   Layers,
   Sliders,
-  FileText,
   Truck,
   Building2,
   Wrench,
   Activity,
-  Award,
   BarChart3,
   Flame,
-  ArrowDown
+  ArrowDown,
+  ChevronDown,
+  Sparkles,
+  ExternalLink
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -41,12 +42,10 @@ interface Architecture {
   name: string;
   badge: 'VERIFIED ALKOTA BUILD' | 'PROJECT DEPENDENT' | 'ENGINEERED TO APPLICATION' | 'DATA-READY';
   headline: string;
-  description: string;
-  typicalAssets: string;
-  operatorModel: string;
-  automationLevel: string;
-  throughputConsiderations: string;
-  waterConsiderations: string;
+  bestSuitedTo: string;
+  cleaningChallenge: string;
+  operatingPrinciple: string;
+  potentialIntegration: string;
   keySpecs: string[];
 }
 
@@ -56,15 +55,13 @@ const ARCHITECTURES: Architecture[] = [
     name: 'Manual Industrial Wash Bay',
     badge: 'VERIFIED ALKOTA BUILD',
     headline: 'Centralised high-pressure delivery with heavy-duty multi-bay reticulation.',
-    description: 'Designed for depots and industrial yards requiring operator-controlled washing with fixed overhead 360° boom arms, balanced high-temperature lances, and frost-protected cabinet enclosures.',
-    typicalAssets: 'HGVs, municipal vehicles, general plant, trailers, chassis.',
-    operatorModel: 'Dedicated trained operator with balanced ergonomic lance drop stations.',
-    automationLevel: 'Operator-controlled with interlocked run timers and auto-shutdown.',
-    throughputConsiderations: '4 to 12 vehicles per operator shift depending on soil mass.',
-    waterConsiderations: 'Graded bay sumps, silt catchpits & Class 1 coalescing oil interception.',
+    bestSuitedTo: 'Fleet depots, equipment yards, municipal maintenance depots, and multi-asset transport facilities.',
+    cleaningChallenge: 'Variable soil profiles on irregular asset geometry requiring operator inspection and targeted lance access.',
+    operatingPrinciple: 'Dedicated trained operator utilizing overhead 360° stainless boom arms, balanced ergonomic lances, and remote low-voltage chemical control.',
+    potentialIntegration: 'Automated underbody chassis flush nozzles, frost purge loops, and multi-stage coalescing oil separators.',
     keySpecs: [
-      'Overhead 360° stainless steel boom arms with high-pressure swivel joints',
-      'Centralised triplex ceramic plunger pump skid in secure plant room',
+      'Overhead 360° stainless steel boom arms with heavy-duty swivels',
+      'Centralised triplex ceramic plunger pump skid in dedicated plant room',
       'Continuous Schedule 80 ASTM A53 heating coil thermal water delivery',
       'Low-voltage operator remote touchpoints with pneumatic chemical selection'
     ]
@@ -74,12 +71,10 @@ const ARCHITECTURES: Architecture[] = [
     name: 'Multi-Operator Wash Reticulation',
     badge: 'VERIFIED ALKOTA BUILD',
     headline: 'Single powerhouse plant room feeding up to 8 simultaneous operator stations.',
-    description: 'Centralises heavy motor assemblies, continuous-wound Schedule 80 heating coils, and automated chemical metering into a dedicated plant room away from the wash apron, feeding high-pressure ring mains across multiple bays.',
-    typicalAssets: 'Logistics fleets, bus depots, waste collection vehicles, mining plant.',
-    operatorModel: 'Simultaneous multi-lance operator deployment across parallel bays.',
-    automationLevel: 'PLC-managed pressure balancing and automatic N+1 pump staging on demand.',
-    throughputConsiderations: 'Continuous multi-bay operational availability without pressure drop.',
-    waterConsiderations: 'Central trench drainage with high-capacity continuous solids separation.',
+    bestSuitedTo: 'High-frequency logistics hubs, municipal waste collection depots, bus garages, and large plant hire depots.',
+    cleaningChallenge: 'Multiple operators washing simultaneously during tight shift-change windows without line pressure collapse.',
+    operatingPrinciple: 'N+1 triplex pump staging in a soundproof plant room feeding high-pressure stainless ring mains with automated pressure balancing.',
+    potentialIntegration: 'Individual bay lockout fobs, automatic run-hour counters, and centralised chemical distribution manifolds.',
     keySpecs: [
       'N+1 pump redundancy for zero-downtime operations during servicing',
       'PLC-managed pressure and temperature load-balancing manifolds',
@@ -88,21 +83,19 @@ const ARCHITECTURES: Architecture[] = [
     ]
   },
   {
-    id: 'automated_drive_through',
-    name: 'Automated Drive-Through Wash',
-    badge: 'ENGINEERED TO APPLICATION',
-    headline: 'High-speed automated washing for high-frequency transport operations.',
-    description: 'Optical vehicle profiling and sonar-triggered arch arrays clean commercial chassis, wheels, and side panels in under 3 minutes per vehicle as they traverse the wash apron.',
-    typicalAssets: 'Buses, coaches, logistics trailers, municipal refuse trucks.',
-    operatorModel: 'Driver-only drive-through or automated traffic control signaling.',
-    automationLevel: 'Fully automated sonar and optical contour vehicle profiling.',
-    throughputConsiderations: 'Up to 25 to 30 commercial vehicles per hour during peak windows.',
-    waterConsiderations: 'High-volume closed-loop water recovery & media sand recycling essential.',
+    id: 'heavy_demucking',
+    name: 'Heavy Plant De-Mucking System',
+    badge: 'VERIFIED ALKOTA BUILD',
+    headline: 'Extreme-volume water delivery for rapid bulk mud, clay, and slurry evacuation.',
+    bestSuitedTo: 'Quarries, mining sites, major civil earthworks, landfill sites, and demolition plant maintenance yards.',
+    cleaningChallenge: 'Tonnes of compacted clay, aggregate, and slurry encrusting tracked excavators and 40-tonne dumpers.',
+    operatingPrinciple: 'High-volume water monitors (water cannons) delivering 80+ GPM to break mass soil structure before precision pressure detailing.',
+    potentialIntegration: 'Drive-over heavy steel rumble grids, under-chassis spray headers, and automated sludge screw evacuation augers.',
     keySpecs: [
-      'Sonar vehicle entry detection & automated multi-stage sequencing',
-      'High-impact oscillating contour spray arches for cab and side panels',
-      'Automated high-pressure underbody & tyre wash spinner manifolds',
-      'Rapid cycle turnaround with integrated traffic light guidance'
+      'Industrial wash monitors (water cannons) with remote joystick console options',
+      'Multi-stage high-volume centrifugal and plunger pump assemblies',
+      'Reinforced drive-over steel rumble grids and underbody flush ramps',
+      'High-solids slurry evacuation sumps with submersible vortex slurry pumps'
     ]
   },
   {
@@ -110,12 +103,10 @@ const ARCHITECTURES: Architecture[] = [
     name: 'Conveyorised Cleaning Tunnel',
     badge: 'ENGINEERED TO APPLICATION',
     headline: 'Heavy mechanical handling with 360° synchronized high-pressure cleaning.',
-    description: 'Continuous heavy-duty variable-speed conveyor systems engineered for repetitive planar assets, stripping heavy mud, grease, and biological contamination through synchronized multi-angle rotating spray arrays.',
-    typicalAssets: 'Rig mats, access roadways, sheet piling, trench boxes, heavy panels.',
-    operatorModel: 'Forklift loading/unloading at tunnel entry and exit staging buffers.',
-    automationLevel: 'Automated variable-speed conveyor with sensor interlocks & auto-wash.',
-    throughputConsiderations: '30 to 60 units per hour continuous process throughput.',
-    waterConsiderations: '100% Closed-loop continuous multi-stage recycling & solids screw extraction.',
+    bestSuitedTo: 'Rig & access roadway mat hire depots, sheet pile yards, modular building components, and repetitive planar assets.',
+    cleaningChallenge: 'High-volume repetitive cleaning of heavily soiled planar assets required back-to-back at industrial throughput.',
+    operatingPrinciple: 'Variable-speed mechanical conveyor drives assets through enclosed spray chambers equipped with 20+ synchronized rotating spray bars.',
+    potentialIntegration: 'Dual 1,000,000 BTU thermal heating skids, 100% closed-loop media sand recycling, and automated de-silting augers.',
     keySpecs: [
       'Variable-speed heavy-duty chain or roller conveyor drive assembly',
       '20+ synchronized rotating spray manifolds (top, bottom, and side coverage)',
@@ -124,16 +115,30 @@ const ARCHITECTURES: Architecture[] = [
     ]
   },
   {
+    id: 'automated_drive_through',
+    name: 'Automated Drive-Through Wash',
+    badge: 'ENGINEERED TO APPLICATION',
+    headline: 'High-speed automated washing for high-frequency transport operations.',
+    bestSuitedTo: 'Bus and coach operators, commercial logistics fleets, distribution centres, and refuse collection depots.',
+    cleaningChallenge: 'Strict 3-minute vehicle turnaround times for high-volume fleets returning during peak evening windows.',
+    operatingPrinciple: 'Sonar and optical profiling triggers automated contouring spray arches and underbody spinner bars as vehicles traverse the bay.',
+    potentialIntegration: 'Closed-loop water reclaim systems, biocide dosing, traffic light guidance, and optical number-plate cycle logging.',
+    keySpecs: [
+      'Sonar vehicle entry detection & automated multi-stage sequencing',
+      'High-impact oscillating contour spray arches for cab and side panels',
+      'Automated high-pressure underbody & tyre wash spinner manifolds',
+      'Rapid cycle turnaround with integrated traffic light guidance'
+    ]
+  },
+  {
     id: 'gantry_moving',
     name: 'Gantry / Moving Wash System',
     badge: 'PROJECT DEPENDENT',
     headline: 'Motorized gantry traversing stationary assets with contour-tracking arches.',
-    description: 'Engineered for extremely large or rail-bound assets where the vehicle remains stationary and an overhead or track-mounted gantry travels the length of the asset executing staged wash cycles.',
-    typicalAssets: 'Locomotives, passenger trains, heavy mining haulers, aerospace components.',
-    operatorModel: 'Push-button or HMI cycle initialization by facility technician.',
-    automationLevel: 'PLC-controlled automated gantry traversal with anti-collision laser sensors.',
-    throughputConsiderations: 'Programmed cycle times calibrated to asset length (10–25 mins).',
-    waterConsiderations: 'Trackside trench collection with coalescing oil separation and reuse.',
+    bestSuitedTo: 'Locomotives, passenger rail rolling stock, oversized mining machinery, and aerospace structures.',
+    cleaningChallenge: 'Stationary, non-manoeuvrable or oversized assets where equipment must travel around the vehicle envelope.',
+    operatingPrinciple: 'Track-mounted motorized gantry moves along the stationary asset executing pre-programmed multi-pass wash and rinse cycles.',
+    potentialIntegration: 'Demineralised / RO water final rinse systems, laser distance profiling, and catenary safety interlocks.',
     keySpecs: [
       'Precision track-guided motorized gantry carriage structure',
       'Multi-nozzle contouring side, skirt, and roof rinse arches',
@@ -146,12 +151,10 @@ const ARCHITECTURES: Architecture[] = [
     name: 'Mat & Sheet Pile Cleaning Rig',
     badge: 'ENGINEERED TO APPLICATION',
     headline: 'Specialist high-volume washing for temporary infrastructure and groundworks.',
-    description: 'Groundwork and access matting systems return from sites encrusted with clay, aggregate, and environmental contaminants. Our specialized rigs restore assets to clean condition for re-hire or biosecure transfer.',
-    typicalAssets: 'Timber and composite rig mats, steel sheet piles, trench shoring.',
-    operatorModel: 'Mechanical crane or loader placement with automated hydraulic feed.',
-    automationLevel: 'Automated hydraulic feed with variable pressure modulation.',
-    throughputConsiderations: 'High-speed continuous cleaning to match rapid hire turnaround.',
-    waterConsiderations: 'Massive solids settlement lagoons & closed-loop clarification.',
+    bestSuitedTo: 'Timber and composite access mat hire, steel trench shoring, sheet piling, and construction formwork depots.',
+    cleaningChallenge: 'Extreme aggregate, oil, and clay encrustation across thousands of square metres of heavy hire assets.',
+    operatingPrinciple: 'Mechanical crane or loader placement onto specialized wash tables with high-pressure oscillating knife-jet manifolds.',
+    potentialIntegration: 'Agricultural biosecurity disinfectant injection, settlement lagoons, and closed-loop filtration.',
     keySpecs: [
       'High-flow multi-pump assemblies generating up to 40 GPM at 4,000 PSI',
       'Integrated biosecurity disinfectant dosing options for agricultural compliance',
@@ -160,104 +163,118 @@ const ARCHITECTURES: Architecture[] = [
     ]
   },
   {
-    id: 'heavy_demucking',
-    name: 'Heavy Plant De-Mucking System',
-    badge: 'VERIFIED ALKOTA BUILD',
-    headline: 'Extreme-volume water delivery for rapid bulk mud and clay evacuation.',
-    description: 'Before mechanical inspection, servicing, or highway transit, heavy earthmoving equipment must be stripped of tonnes of compacted soil. High-volume de-mucking delivers high flow (up to 80 GPM) combined with targeted pressure.',
-    typicalAssets: 'Excavators, tracked dozers, dump trucks, crushers, agricultural machinery.',
-    operatorModel: 'Remote joystick operator console or high-volume manual wash monitors.',
-    automationLevel: 'Remote joystick wash monitors & sonar-triggered underbody flush.',
-    throughputConsiderations: 'Reduces de-mucking time from 4 hours to 15–20 minutes.',
-    waterConsiderations: 'High-capacity settlement lagoons with automated mud-hopper discharge.',
-    keySpecs: [
-      'Heavy-duty industrial wash monitors (water cannons) with joystick control',
-      'Multi-stage high-volume centrifugal and plunger pump arrays',
-      'Reinforced drive-over steel rumble grids and underbody chassis flush ramps',
-      'High-solids slurry evacuation sumps with submersible slurry pumps'
-    ]
-  },
-  {
-    id: 'sanitary_process',
-    name: 'Sanitary Process & Hygiene Cleaning',
+    id: 'bespoke_process',
+    name: 'Custom Process & Hygiene Cleaning',
     badge: 'PROJECT DEPENDENT',
     headline: 'Sanitary Grade 316 stainless reticulation and clean-in-place (CIP) integration.',
-    description: 'Custom-engineered wash stations and hygienic clean-down systems designed for food processing facilities, abattoirs, pharmaceutical production, and chemical processing facilities.',
-    typicalAssets: 'Food contact containers, mixing vessels, tote boxes, process machinery.',
-    operatorModel: 'Recipe-driven automated CIP or hygienic wash station operation.',
-    automationLevel: 'Automated recipe-driven thermal sanitation and chemical proportioning.',
-    throughputConsiderations: 'Calibrated to production line sanitation and shift changeover schedules.',
-    waterConsiderations: 'Thermal heat recovery & compliant trade effluent neutralisation.',
+    bestSuitedTo: 'Food and beverage manufacturing, pharmaceutical production, chemical blending facilities, and non-standard industrial plants.',
+    cleaningChallenge: 'Stringent hygiene standards, chemical exposure, thermal sanitation, and custom vessel geometry.',
+    operatingPrinciple: 'Recipe-driven automated clean-in-place or sanitary wash stations built from AISI 316 stainless components.',
+    potentialIntegration: 'Thermal heat recovery, pH effluent neutralisation, and cleanroom IP66 stainless wash-down control suites.',
     keySpecs: [
       'Full AISI 316 stainless steel frame, pipework, and delivery manifolds',
       'High-temperature 95°C water plus 140°C dry steam generation',
       'Automated sanitiser manifold and chemical dosing integration',
       'IP66 stainless wash-down control enclosures with hygienic seals'
     ]
-  },
-  {
-    id: 'bespoke_engineering',
-    name: 'Bespoke Infrastructure Engineering',
-    badge: 'ENGINEERED TO APPLICATION',
-    headline: 'Custom mechanical, hydraulic, and electrical engineering for non-standard assets.',
-    description: 'When standard configurations do not fit site footprints, power envelopes, or unique contamination profiles, Alkota engineers bespoke systems from first principles.',
-    typicalAssets: 'Specialized industrial assets, offshore containers, defense equipment.',
-    operatorModel: 'Engineered strictly to facility EHS and operating model requirements.',
-    automationLevel: 'Configurable from manual operator lances to automated PLC integration.',
-    throughputConsiderations: 'Modelled during discovery and verified during Factory Acceptance Testing.',
-    waterConsiderations: 'Custom-designed water treatment and trade effluent balance.',
-    keySpecs: [
-      'Full CAD mechanical and electrical layout design',
-      'Site feasibility survey and civil engineering interface scoping',
-      'Custom pump skid fabrication and thermal power integration',
-      'Comprehensive O&M documentation and operator training'
-    ]
   }
 ];
 
-// ─── 02. ANATOMY OF A WASH PLANT (12 STAGES) ────────────────────────────────
-interface Stage {
+// ─── 02. SIX MACRO PROJECT DELIVERY PHASES ──────────────────────────────────
+interface MacroPhase {
+  phase: string;
   num: string;
-  name: string;
-  category: 'Cleaning Stream' | 'Water Stream' | 'Control Stream';
-  classification: 'CORE' | 'OPTIONAL' | 'PROJECT DEPENDENT';
-  description: string;
+  headline: string;
+  summary: string;
+  milestones: string[];
+  deliverables: string;
 }
 
-const STAGES: Stage[] = [
-  { num: '01', name: 'Asset Entry & Positioning', category: 'Control Stream', classification: 'CORE', description: 'Optical sensors, ground loops, and guidance curbing ensure the asset is safely positioned with correct clearances before sequence initialization.' },
-  { num: '02', name: 'Pre-Wash / Bulk De-Muck', category: 'Cleaning Stream', classification: 'OPTIONAL', description: 'High-volume low-pressure flood arches or wash monitors soften compacted mud, road salt, and heavy aggregate prior to detergent application.' },
-  { num: '03', name: 'Chemical Proportioning & Dwell', category: 'Cleaning Stream', classification: 'OPTIONAL', description: 'Automated chemical proportioners apply clinging alkaline foam or degreasing agents to break down traffic film and hydrocarbon bonds.' },
-  { num: '04', name: 'Primary High-Pressure Wash', category: 'Cleaning Stream', classification: 'CORE', description: 'Continuous-wound Schedule 80 thermal heating coils deliver water at up to 95°C and 345 BAR across oscillating spray arches or lance drops.' },
-  { num: '05', name: 'Underbody & Wheel Wash', category: 'Cleaning Stream', classification: 'OPTIONAL', description: 'Targeted high-pressure spinner nozzles flush wheel arches, brake assemblies, axles, and under-chassis cavities from below-ground spray bars.' },
-  { num: '06', name: 'Effluent Collection & Sumps', category: 'Water Stream', classification: 'CORE', description: 'Graded impermeable concrete bays and heavy-duty galvanized trench gratings route all wash water into primary collection sumps.' },
-  { num: '07', name: 'Solids & Sediment Separation', category: 'Water Stream', classification: 'PROJECT DEPENDENT', description: 'Gravity settlement pits, sediment baskets, and automated screw conveyors remove heavy gravel, sand, and suspended silt down to 50 microns.' },
-  { num: '08', name: 'Coalescing Oil Separation', category: 'Water Stream', classification: 'PROJECT DEPENDENT', description: 'BS EN 858 coalescing plate interceptors and floating surface skimmers strip free petroleum hydrocarbons and oily films from the effluent stream.' },
-  { num: '09', name: 'Water Treatment & Filtration', category: 'Water Stream', classification: 'PROJECT DEPENDENT', description: 'Deep-bed silica sand, multi-stage cartridge polishing, or vacuum filtration systems remove fine particulate and chemical residues.' },
-  { num: '10', name: 'Buffer Reservoir & Closed Loop', category: 'Water Stream', classification: 'PROJECT DEPENDENT', description: 'Treated water is transferred to high-capacity holding reservoirs with automated level controls, supplying up to 90% recycled water back to pumps.' },
-  { num: '11', name: 'Automation & PLC Master Controls', category: 'Control Stream', classification: 'CORE', description: 'IP66 PLC control suites govern pump sequencing, variable speed drives, interlocks, temperature modulation, cycle logs, and safety systems.' },
-  { num: '12', name: 'Asset Exit & Clearance Logging', category: 'Control Stream', classification: 'CORE', description: 'Automated exit barriers open, wash counters increment, and throughput telemetry records the completed cycle into the site operations register.' }
-];
-
-// ─── 03. ENGINEERING DELIVERY METHODOLOGY (12 STAGES) ──────────────────────
-const DELIVERY_STEPS = [
-  { step: '01', title: 'Operational Discovery', desc: 'Throughput modelling, asset geometry review, and contamination profiling.' },
-  { step: '02', title: 'Site Feasibility Survey', desc: 'Power verification, drainage assessment, and civil works review.' },
-  { step: '03', title: 'Concept Engineering', desc: 'Process flow diagrams, hydraulic sizing, and initial GA layouts.' },
-  { step: '04', title: 'Water Balance Scoping', desc: 'Water balance calculations, trade effluent strategy, and closed-loop design.' },
-  { step: '05', title: 'Detailed CAD Design', desc: 'Mechanical, electrical, PLC control architecture, and pipe reticulation.' },
-  { step: '06', title: 'Workshop Fabrication', desc: 'Heavy-gauge steel frames, Schedule 80 coils, and pump skid assembly.' },
-  { step: '07', title: 'Factory Acceptance (FAT)', desc: 'Rigorous pressure, electrical, and sensor validation prior to dispatch.' },
-  { step: '08', title: 'Site Mechanical Install', desc: 'Pipework reticulation, gantry placement, and plant room fit-out.' },
-  { step: '09', title: 'Commissioning & SAT', desc: 'Flow calibration, temperature tuning, and full operational cycle sign-off.' },
-  { step: '10', title: 'Operator & EHS Training', desc: 'Safety protocols, daily pre-checks, and emergency response procedures.' },
-  { step: '11', title: 'Handover & Documentation', desc: 'Full O&M manuals, asset registers, and electrical schematic delivery.' },
-  { step: '12', title: 'Lifecycle PPM Governance', desc: 'Planned preventative maintenance, critical spares holding, and telemetry.' }
+const MACRO_PHASES: MacroPhase[] = [
+  {
+    phase: 'DISCOVER',
+    num: '01',
+    headline: 'Application & Operational Discovery',
+    summary: 'We evaluate the asset envelope, contamination profile, target cycle time, operator model, and business objectives from first principles.',
+    milestones: [
+      'Asset geometry and sensitive component mapping',
+      'Soil classification (clay, hydrocarbons, concrete, process soils)',
+      'Throughput modelling (peak dispatch windows & shift cycles)',
+      'EHS, water discharge, and statutory compliance scoping'
+    ],
+    deliverables: 'Preliminary Project Definition & Feasibility Matrix'
+  },
+  {
+    phase: 'SURVEY',
+    num: '02',
+    headline: 'Site & Civil Infrastructure Survey',
+    summary: 'A technical engineering survey of the physical site to verify civil interfaces, drainage gradients, utility supplies, and access routes.',
+    milestones: [
+      '3-Phase electrical capacity and substation headroom check',
+      'Water supply mains flow, pressure, and buffer tank footprint',
+      'Apron gradient, trench drainage, and invert level survey',
+      'Plant room space allocation or containerised plant footprint'
+    ],
+    deliverables: 'Site Survey Engineering Report & Interface Scope'
+  },
+  {
+    phase: 'ENGINEER',
+    num: '03',
+    headline: 'Process & Detailed System Engineering',
+    summary: 'Development of detailed mechanical, hydraulic, thermal, and electrical architectures tailored strictly to the application.',
+    milestones: [
+      'Process Flow Diagrams (PFD) and hydraulic mass balance',
+      'Schedule 80 thermal coil & pump skid sizing calculations',
+      '3D CAD general arrangement and pipe reticulation drawings',
+      'PLC control philosophy, safety interlocks, and HMI design'
+    ],
+    deliverables: 'Approved Engineering Design Package & Technical Spec'
+  },
+  {
+    phase: 'BUILD',
+    num: '04',
+    headline: 'Workshop Fabrication & Factory Acceptance',
+    summary: 'Precision fabrication of structural frames, cold-wound Schedule 80 heating coils, stainless manifolds, and pre-wired PLC control suites.',
+    milestones: [
+      'Heavy-gauge steel frame and stainless pipe fabrication',
+      'Triplex pump assembly and N+1 manifold integration',
+      'Control panel wiring, sensor calibration, and PLC programming',
+      'Factory Acceptance Testing (FAT) under hydrostatic test pressure'
+    ],
+    deliverables: 'FAT Sign-Off Certificate & Pre-Dispatch Documentation'
+  },
+  {
+    phase: 'INSTALL',
+    num: '05',
+    headline: 'Site Mechanical Install & Commissioning',
+    summary: 'Delivery, positioning, mechanical pipe reticulation, electrical tie-in, and Site Acceptance Testing (SAT) on live site infrastructure.',
+    milestones: [
+      'Skid placement and civils tie-in by certified Alkota engineers',
+      'Stainless overhead boom, gantry, or conveyor mechanical erection',
+      'Hydraulic pressure testing, burner tuning, and flow calibration',
+      'Site Acceptance Testing (SAT) with live asset cleaning cycles'
+    ],
+    deliverables: 'SAT Commissioning Certificate & Completed Handover Dossier'
+  },
+  {
+    phase: 'SUPPORT',
+    num: '06',
+    headline: 'Asset Governance & Lifecycle PPM',
+    summary: 'Structured operator handover, digital asset register onboarding, scheduled planned maintenance, critical spares holding, and remote diagnostics.',
+    milestones: [
+      'Operator EHS training and daily pre-check certification',
+      'Digital asset register population and maintenance scheduling',
+      'Guaranteed emergency breakdown SLA and critical spares holding',
+      'Condition monitoring and planned lifecycle component overhauls'
+    ],
+    deliverables: 'O&M Manuals, Asset Register & PPM Service Contract'
+  }
 ];
 
 export default function WashPlantPage() {
   const [selectedArchIdx, setSelectedArchIdx] = useState<number>(3); // Default to conveyorised tunnel
   const selectedArch = ARCHITECTURES[selectedArchIdx];
+  const [activePhaseIdx, setActivePhaseIdx] = useState<number>(0);
 
   return (
     <main className="min-h-screen bg-alkota-bg text-alkota-black">
@@ -270,7 +287,7 @@ export default function WashPlantPage() {
       {/* Global nav overlays the hero — transparent until scrolled (existing nav behaviour) */}
       <Navigation />
 
-      {/* ── CHAPTER 1: FULL-SCREEN INDUSTRIAL HERO ────────────────────────── */}
+      {/* ── CHAPTER 0: FULL-SCREEN INDUSTRIAL HERO (LOCKED) ────────────────── */}
       <section
         className="relative flex flex-col justify-end text-white overflow-hidden border-b border-[#222]"
         style={{ minHeight: '100svh' }}
@@ -327,7 +344,7 @@ export default function WashPlantPage() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
+              transition={{ delay: 0.25, duration: 0.6 }}
               className="flex flex-wrap items-center gap-4"
             >
               <Link
@@ -349,7 +366,7 @@ export default function WashPlantPage() {
         </div>
 
         {/* Hero Restrained Capability Footer */}
-        <div className="relative z-10 mx-auto max-w-7xl w-full pt-12 border-t border-white/10 mt-12 flex flex-col md:flex-row md:items-center justify-between gap-4 text-xs font-ibm-plex-mono text-alkota-silver uppercase tracking-widest">
+        <div className="relative z-10 mx-auto max-w-7xl w-full pt-12 border-t border-white/10 mt-12 flex flex-col md:flex-row md:items-center justify-between gap-4 text-xs font-ibm-plex-mono text-alkota-silver uppercase tracking-widest px-6 sm:px-12 pb-6">
           <div className="flex items-center gap-4 sm:gap-6 flex-wrap">
             <span>DESIGN</span>
             <span>·</span>
@@ -364,79 +381,52 @@ export default function WashPlantPage() {
         </div>
       </section>
 
-      {/* ── CHAPTER 2: A WASH PLANT IS A PROCESS SYSTEM (EDITORIAL) ───────── */}
       {/* WashPlantSubNav appears here in its solid sticky state after hero */}
       <WashPlantSubNav />
+
+      {/* ── CHAPTER 1: THE MACHINE IS ONLY ONE PART OF THE SYSTEM (WARM WHITE) */}
       <section id="process-system" className="py-24 px-6 sm:px-12 bg-white border-b border-alkota-iron">
         <div className="mx-auto max-w-7xl">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start mb-16">
             <div className="lg:col-span-5">
+              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.35em] text-alkota-orange block mb-3">
+                SYSTEMIC PROCESS ENGINEERING
+              </span>
               <h2 className="font-extralight text-4xl sm:text-5xl uppercase tracking-tight text-alkota-black leading-tight">
-                A wash plant is a production system.
+                The machine is only one part of the system.
               </h2>
             </div>
 
             <div className="lg:col-span-7 space-y-6 text-sm text-alkota-silver leading-relaxed">
               <p className="text-base text-alkota-black font-normal">
-                When an industrial facility must process commercial vehicles, heavy plant, rail rolling stock, or roadway matting through repeated high-intensity cleaning cycles, the correct solution depends on far more than PSI.
+                A pressure washer is an individual tool. An industrial wash plant is a process infrastructure asset: combining heavy mechanical reticulation, thermal water generation, automated sequencing, civils interfaces, solids evacuation, oil separation, water recycling, and long-term asset management.
               </p>
               <p>
-                A high-pressure washer is an individual tool. A wash plant is an integrated infrastructure asset: combining heavy mechanical reticulation, thermal water generation, automatic sequencing, civils interfaces, solids evacuation, oil separation, water recycling, and long-term asset management.
+                A successful installation is engineered around what must be cleaned, what is attached to it, how quickly it must move through the process, where the contaminated water goes, and how the plant will be operated and maintained.
               </p>
               <p>
                 We design systems from first principles — calculating asset geometry, cycle dwell time, effluent loading, and power constraints to guarantee operational continuity and statutory environmental compliance.
               </p>
-
-              {/* 10 Operational Vectors */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-4 font-ibm-plex-mono text-[10px] uppercase tracking-wider text-alkota-black">
-                <div className="p-3 bg-alkota-bg border border-alkota-iron">
-                  <span className="text-alkota-orange block mb-0.5">01</span> Asset Envelope
-                </div>
-                <div className="p-3 bg-alkota-bg border border-alkota-iron">
-                  <span className="text-alkota-orange block mb-0.5">02</span> Soil Chemistry
-                </div>
-                <div className="p-3 bg-alkota-bg border border-alkota-iron">
-                  <span className="text-alkota-orange block mb-0.5">03</span> Throughput & Dwell
-                </div>
-                <div className="p-3 bg-alkota-bg border border-alkota-iron">
-                  <span className="text-alkota-orange block mb-0.5">04</span> Flow vs Pressure
-                </div>
-                <div className="p-3 bg-alkota-bg border border-alkota-iron">
-                  <span className="text-alkota-orange block mb-0.5">05</span> Water Balance
-                </div>
-                <div className="p-3 bg-alkota-bg border border-alkota-iron">
-                  <span className="text-alkota-orange block mb-0.5">06</span> Drainage & Recovery
-                </div>
-                <div className="p-3 bg-alkota-bg border border-alkota-iron">
-                  <span className="text-alkota-orange block mb-0.5">07</span> Operator Safety
-                </div>
-                <div className="p-3 bg-alkota-bg border border-alkota-iron">
-                  <span className="text-alkota-orange block mb-0.5">08</span> Automation Level
-                </div>
-                <div className="p-3 bg-alkota-bg border border-alkota-iron">
-                  <span className="text-alkota-orange block mb-0.5">09</span> Redundancy
-                </div>
-                <div className="p-3 bg-alkota-bg border border-alkota-iron">
-                  <span className="text-alkota-orange block mb-0.5">10</span> Downtime Risk
-                </div>
-              </div>
             </div>
           </div>
+
+          {/* Interactive 6-Vector Dynamic Matrix */}
+          <WashPlantVariablesMatrix />
         </div>
       </section>
 
-      {/* ── CHAPTER 3: SYSTEM ARCHITECTURES (INTERACTIVE SELECTOR) ─────────── */}
+      {/* ── CHAPTER 2: CHOOSE THE ARCHITECTURE AROUND THE PROCESS (LIGHT) ──── */}
       <section id="architectures" className="py-24 px-6 sm:px-12 bg-alkota-bg border-b border-alkota-iron">
         <div className="mx-auto max-w-7xl">
-          <div className="mb-12">
+          <div className="mb-12 max-w-3xl">
             <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.35em] text-alkota-orange block mb-2">
-              WASH SYSTEM CONFIGURATIONS
-              </span>
+              WASH SYSTEM ARCHITECTURES
+            </span>
             <h2 className="font-extralight text-4xl sm:text-6xl uppercase tracking-tight text-alkota-black">
-              Purpose-Built Configurations.
+              One cleaning problem does not have one wash plant solution.
             </h2>
-            <p className="text-xs text-alkota-silver uppercase tracking-widest mt-2">
-              Select an architecture to inspect mechanical configuration, automation level, and water balance.
+            <p className="text-xs sm:text-sm text-alkota-silver uppercase tracking-widest mt-2">
+              Select an architecture family to inspect operational principles, mechanical scope, and verified capability ratings.
             </p>
           </div>
 
@@ -459,7 +449,7 @@ export default function WashPlantPage() {
                       <div className="flex items-center gap-2 mb-1">
                         <WashPlantCapabilityBadge label={arch.badge} />
                       </div>
-                      <h4 className="text-sm uppercase tracking-tight">
+                      <h4 className="text-sm uppercase tracking-tight font-medium">
                         {arch.name}
                       </h4>
                     </div>
@@ -476,7 +466,7 @@ export default function WashPlantPage() {
               <div>
                 <div className="flex items-center justify-between pb-4 border-b border-alkota-iron/60 mb-6">
                   <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-orange">
-                  SPECIFICATION PROFILE
+                    SPECIFICATION PROFILE
                   </span>
                   <WashPlantCapabilityBadge label={selectedArch.badge} />
                 </div>
@@ -484,45 +474,42 @@ export default function WashPlantPage() {
                 <h3 className="font-extralight text-2xl sm:text-3xl uppercase tracking-tight text-alkota-black mb-2">
                   {selectedArch.name}
                 </h3>
-                <p className="text-sm text-alkota-black font-normal leading-snug mb-4">
+                <p className="text-sm text-alkota-black font-normal leading-snug mb-6">
                   {selectedArch.headline}
                 </p>
-                <p className="text-xs sm:text-sm text-alkota-silver leading-relaxed mb-8">
-                  {selectedArch.description}
-                </p>
 
-                {/* Key Parameter Matrix */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8 bg-alkota-bg p-5 border border-alkota-iron/60 text-xs">
+                {/* Structured Engineering Scope Matrix */}
+                <div className="space-y-4 mb-8 bg-alkota-bg p-5 border border-alkota-iron/60 text-xs">
                   <div>
                     <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-alkota-silver block mb-1">
-                      Typical Assets
+                      Best Suited To:
                     </span>
-                    <p className="text-alkota-black">{selectedArch.typicalAssets}</p>
+                    <p className="text-alkota-black font-medium">{selectedArch.bestSuitedTo}</p>
                   </div>
                   <div>
                     <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-alkota-silver block mb-1">
-                      Operator Model
+                      Cleaning Challenge:
                     </span>
-                    <p className="text-alkota-black">{selectedArch.operatorModel}</p>
+                    <p className="text-alkota-silver">{selectedArch.cleaningChallenge}</p>
                   </div>
                   <div>
                     <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-alkota-silver block mb-1">
-                      Automation Level
+                      Operating Principle:
                     </span>
-                    <p className="text-alkota-black">{selectedArch.automationLevel}</p>
+                    <p className="text-alkota-silver">{selectedArch.operatingPrinciple}</p>
                   </div>
                   <div>
                     <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-alkota-silver block mb-1">
-                      Throughput Profile
+                      Potential Integration:
                     </span>
-                    <p className="text-alkota-black">{selectedArch.throughputConsiderations}</p>
+                    <p className="text-alkota-silver">{selectedArch.potentialIntegration}</p>
                   </div>
                 </div>
 
                 {/* Core Mechanical Specs */}
                 <div className="space-y-2 mb-8">
                   <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-alkota-orange block mb-2">
-                    Core Engineering Elements:
+                    Core Mechanical & Hydraulic Elements:
                   </span>
                   {selectedArch.keySpecs.map((spec, sIdx) => (
                     <div key={sIdx} className="flex items-center gap-2.5 text-xs text-alkota-black uppercase tracking-wide">
@@ -534,14 +521,17 @@ export default function WashPlantPage() {
               </div>
 
               <div className="pt-6 border-t border-alkota-iron/60 flex flex-wrap items-center justify-between gap-4">
-                <span className="text-[11px] font-ibm-plex-mono text-alkota-silver uppercase tracking-widest">
-                  Every project is engineered bespoke.
-                </span>
+                <Link
+                  href={`/contact?enquiry=wash-plant-architecture&type=${selectedArch.id}`}
+                  className="inline-flex items-center gap-2 text-xs font-ibm-plex-mono uppercase tracking-widest text-alkota-black hover:text-alkota-orange transition-colors"
+                >
+                  <span>Discuss This Application →</span>
+                </Link>
                 <Link
                   href="/wash-plant/architect"
                   className="inline-flex items-center gap-2 bg-alkota-orange text-white px-6 py-3 text-xs uppercase tracking-widest hover:bg-alkota-black transition-colors"
                 >
-                  <span>Scope This Architecture</span>
+                  <span>Scope in Architect</span>
                   <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
               </div>
@@ -550,157 +540,95 @@ export default function WashPlantPage() {
         </div>
       </section>
 
-      {/* ── CHAPTER 4: ANATOMY OF A WASH PLANT (INTERACTIVE MAP) ──────────── */}
-      <section className="py-24 px-6 sm:px-12 bg-[#0D0D0D] text-white border-b border-[#222]">
+      {/* ── CHAPTER 3: ANATOMY OF AN INDUSTRIAL WASH PLANT (SIGNATURE DARK) ── */}
+      <section className="py-24 px-6 sm:px-12 bg-[#0A0A0A] border-b border-[#222]">
         <div className="mx-auto max-w-7xl">
-          <div className="max-w-3xl mb-16">
-            <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.35em] text-alkota-orange block mb-2">
-              SYSTEM INTEGRATION
-              </span>
-            <h2 className="font-extralight text-4xl sm:text-6xl uppercase tracking-tight text-white mb-4">
-              Anatomy of a Wash Plant.
-            </h2>
-            <p className="text-sm text-alkota-silver leading-relaxed">
-              The cleaning equipment and the water infrastructure are designed together. Below are the 12 functional stages of a comprehensive high-throughput industrial wash installation.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {STAGES.map((stage) => (
-              <div
-                key={stage.num}
-                className="bg-[#141414] border border-[#222] p-6 flex flex-col justify-between hover:border-alkota-orange transition-colors"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="font-extralight text-3xl text-alkota-orange">
-                      {stage.num}
-                    </span>
-                    <span className={`font-ibm-plex-mono text-[8px] uppercase tracking-widest px-2 py-0.5 border ${
-                      stage.classification === 'CORE' ? 'bg-[#222] text-[#ccc] border-[#333]' :
-                      stage.classification === 'OPTIONAL' ? 'bg-blue-950/60 text-blue-400 border-blue-800' :
-                      'bg-purple-950/60 text-purple-400 border-purple-800'
-                    }`}>
-                      {stage.classification}
-                    </span>
-                  </div>
-                  <span className="font-ibm-plex-mono text-[9px] text-[#777] uppercase tracking-wider block mb-1">
-                    {stage.category}
-                  </span>
-                  <h3 className="font-light text-lg uppercase tracking-tight text-white mb-2">
-                    {stage.name}
-                  </h3>
-                  <p className="text-xs text-[#999] leading-relaxed">
-                    {stage.description}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Water Treatment Link Banner */}
-          <div className="mt-12 p-8 bg-[#181818] border border-[#2A2A2A] flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <div className="space-y-1 max-w-2xl">
-              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-orange block">
-              WATER MANAGEMENT
-              </span>
-              <h4 className="text-lg uppercase text-white font-light">
-                Need detailed water filtration, vacuum recovery, or trade effluent solutions?
-              </h4>
-              <p className="text-xs text-[#888]">
-                Explore our full water treatment technology range including media sand filtration, oil separators, and vacuum scuppers.
-              </p>
-            </div>
-            <Link
-              href="/water-treatment"
-              className="inline-flex items-center gap-2 bg-white text-alkota-black px-6 py-3 text-xs uppercase tracking-widest hover:bg-alkota-orange hover:text-white transition-colors shrink-0"
-            >
-              <span>Explore Water Treatment</span>
-              <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
-          </div>
+          <WashPlantAnatomyDiagram />
         </div>
       </section>
 
-      {/* ── CHAPTER 5: WASH PLANT ARCHITECT EMBEDDED PREVIEW ─────────────── */}
+      {/* ── CHAPTER 4: START WITH THE PROCESS (WASH PLANT ARCHITECT INTRO) ─── */}
       <section className="py-20 px-6 sm:px-12 bg-white border-b border-alkota-iron">
         <div className="mx-auto max-w-7xl">
-          <div className="grid grid-cols-1 lg:grid-cols-12 bg-[#121212] text-white overflow-hidden shadow-xl">
+          <div className="grid grid-cols-1 lg:grid-cols-12 bg-[#121212] text-white overflow-hidden shadow-2xl">
             <div className="lg:col-span-7 p-8 sm:p-14 flex flex-col justify-between">
               <div>
                 <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.35em] text-alkota-orange block mb-3">
-              WASH PLANT ARCHITECT
-              </span>
+                  WASH PLANT ARCHITECT
+                </span>
                 <h2 className="font-extralight text-4xl sm:text-5xl uppercase tracking-tight text-white mb-4 leading-tight">
-                  The Wash Plant Architect.
+                  Start with the process.
                 </h2>
-                <p className="text-sm text-alkota-steel leading-relaxed mb-8">
-                  Not an instant shopping basket. Industrial wash plants are complex engineered capital projects. The Wash Plant Architect allows you to structure your asset profile, throughput demands, water constraints, and site requirements into a preliminary engineering project brief.
+                <p className="text-sm text-alkota-steel leading-relaxed mb-6">
+                  Industrial wash plants are engineered capital projects. The Wash Plant Architect captures the primary engineering inputs needed to understand your application before a site survey or concept design.
+                </p>
+                <p className="text-xs text-[#888] leading-relaxed mb-8">
+                  Structure your asset dimensions, throughput rates, contamination profile, site constraints, and water strategy into an actionable project brief. No premature sales pressure; only structured engineering definition.
                 </p>
               </div>
 
-              <div className="space-y-4 pt-4 border-t border-white/10">
+              <div className="space-y-4 pt-6 border-t border-white/10">
                 <div className="flex flex-wrap items-center gap-4">
                   <Link
                     href="/wash-plant/architect"
-                    className="inline-flex items-center gap-3 bg-alkota-orange text-white px-8 py-4 text-xs uppercase tracking-[0.25em] hover:bg-white hover:text-alkota-black transition-colors"
+                    className="inline-flex items-center gap-3 bg-alkota-orange text-white px-8 py-4 text-xs uppercase tracking-[0.25em] hover:bg-white hover:text-alkota-black transition-colors shadow-lg"
                   >
-                    <span>Start Scoping Brief (9 Steps)</span>
+                    <span>Build a Preliminary Project Brief</span>
                     <ArrowRight className="h-4 w-4" />
                   </Link>
                   <Link
-                    href="/lobby"
-                    className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-alkota-silver hover:text-white transition-colors"
+                    href="/contact?enquiry=wash-plant-site-survey"
+                    className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-alkota-silver hover:text-white transition-colors px-4 py-4 border border-white/20 hover:border-white"
                   >
-                    <span>Read Technical Guides in The Lobby →</span>
+                    <span>Request a Site Survey</span>
                   </Link>
                 </div>
                 <span className="block font-ibm-plex-mono text-[9px] text-[#666] uppercase tracking-widest">
-                  Generates branded PDF brief & routes directly to Alkota engineering
+                  Generates downloadable project brief & routes directly to Alkota engineering
                 </span>
               </div>
             </div>
 
-            <div className="lg:col-span-5 bg-[#181818] p-8 sm:p-12 border-l border-white/10 flex flex-col justify-center">
+            <div className="lg:col-span-5 bg-[#181818] p-8 sm:p-12 border-t lg:border-t-0 lg:border-l border-white/10 flex flex-col justify-center">
               <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.25em] text-alkota-orange block mb-6">
-                // 9-STEP SCOPING FRAMEWORK
+                9-STEP SCOPING FRAMEWORK
               </span>
-              <div className="space-y-2.5 font-ibm-plex-mono text-xs text-[#aaa]">
-                <div className="flex items-center justify-between p-2 bg-[#101010] border border-[#222]">
+              <div className="space-y-2 font-ibm-plex-mono text-xs text-[#aaa]">
+                <div className="flex items-center justify-between p-2.5 bg-[#101010] border border-[#222]">
                   <span>01. ASSET PROFILE</span>
                   <span className="text-alkota-orange">Vehicles, Plant, Mats</span>
                 </div>
-                <div className="flex items-center justify-between p-2 bg-[#101010] border border-[#222]">
-                  <span>02. GEOMETRY & DATA</span>
+                <div className="flex items-center justify-between p-2.5 bg-[#101010] border border-[#222]">
+                  <span>02. ENVELOPE & CLEARANCES</span>
                   <span className="text-[#666]">Dimensions, No-Spray</span>
                 </div>
-                <div className="flex items-center justify-between p-2 bg-[#101010] border border-[#222]">
-                  <span>03. THROUGHPUT</span>
-                  <span className="text-alkota-orange">Units/hr, Shift Hours</span>
+                <div className="flex items-center justify-between p-2.5 bg-[#101010] border border-[#222]">
+                  <span>03. THROUGHPUT DEMAND</span>
+                  <span className="text-alkota-orange">Units/hr, Shift Windows</span>
                 </div>
-                <div className="flex items-center justify-between p-2 bg-[#101010] border border-[#222]">
+                <div className="flex items-center justify-between p-2.5 bg-[#101010] border border-[#222]">
                   <span>04. CONTAMINATION</span>
-                  <span className="text-[#666]">Mud, Bitumen, Salt</span>
+                  <span className="text-[#666]">Mud, Bitumen, Slurry</span>
                 </div>
-                <div className="flex items-center justify-between p-2 bg-[#101010] border border-[#222]">
-                  <span>05. ARCHITECTURE</span>
+                <div className="flex items-center justify-between p-2.5 bg-[#101010] border border-[#222]">
+                  <span>05. AUTOMATION STRATEGY</span>
                   <span className="text-alkota-orange">Manual vs Automated</span>
                 </div>
-                <div className="flex items-center justify-between p-2 bg-[#101010] border border-[#222]">
-                  <span>06. WATER & RECOVERY</span>
+                <div className="flex items-center justify-between p-2.5 bg-[#101010] border border-[#222]">
+                  <span>06. WATER & EFFLUENT</span>
                   <span className="text-[#666]">Mains, Closed-Loop</span>
                 </div>
-                <div className="flex items-center justify-between p-2 bg-[#101010] border border-[#222]">
+                <div className="flex items-center justify-between p-2.5 bg-[#101010] border border-[#222]">
                   <span>07. SITE & CIVILS</span>
-                  <span className="text-[#666]">Footprint, Power</span>
+                  <span className="text-[#666]">Footprint, Power, Trenches</span>
                 </div>
-                <div className="flex items-center justify-between p-2 bg-[#101010] border border-[#222]">
+                <div className="flex items-center justify-between p-2.5 bg-[#101010] border border-[#222]">
                   <span>08. PROJECT STAGE</span>
-                  <span className="text-alkota-orange">Budget, Tender, Stage</span>
+                  <span className="text-alkota-orange">Budget, Feasibility, Tender</span>
                 </div>
-                <div className="flex items-center justify-between p-2 bg-[#101010] border border-[#222]">
+                <div className="flex items-center justify-between p-2.5 bg-[#101010] border border-[#222]">
                   <span>09. LIFECYCLE PPM</span>
-                  <span className="text-[#666]">Spares, SLA, Response</span>
+                  <span className="text-[#666]">Spares, SLA, Maintenance</span>
                 </div>
               </div>
             </div>
@@ -708,283 +636,421 @@ export default function WashPlantPage() {
         </div>
       </section>
 
-      {/* ── CHAPTER 6: CONTROLS & PROCESS AUTOMATION ──────────────────────── */}
-      <section className="py-24 px-6 sm:px-12 bg-white border-b border-alkota-iron">
+      {/* ── CHAPTER 5: CONTROLS & AUTOMATION (DARK / INDUSTRIAL CONTROLS) ──── */}
+      <section className="py-24 px-6 sm:px-12 bg-[#101010] text-white border-b border-[#222]">
         <div className="mx-auto max-w-7xl">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start mb-16">
             <div className="lg:col-span-6 space-y-6">
               <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.35em] text-alkota-orange block">
-              CONTROLS & AUTOMATION
+                CONTROLS & AUTOMATION PHILOSOPHY
               </span>
-              <h2 className="font-extralight text-4xl sm:text-5xl uppercase tracking-tight text-alkota-black leading-tight">
-                Industrial instrumentation. <br />
-                <span className="text-alkota-orange">Engineered reliability.</span>
+              <h2 className="font-extralight text-4xl sm:text-5xl uppercase tracking-tight text-white leading-tight">
+                Automate what creates value.
               </h2>
-              <p className="text-sm text-alkota-silver leading-relaxed">
-                Modern industrial wash plants operate as integrated process control systems. We design bespoke electrical and automation architectures utilizing industrial PLCs, variable speed drives, optical profiling sensors, and safety interlocks.
+              <p className="text-sm text-alkota-steel leading-relaxed">
+                Modern industrial wash plants operate as integrated process control systems. We design electrical and automation architectures utilizing industrial PLCs, variable speed drives, optical profiling sensors, and safety interlocks.
               </p>
-              <p className="text-sm text-alkota-silver leading-relaxed">
-                Where specified, wash systems are delivered <strong className="text-alkota-black font-normal">remote monitoring capable</strong> — structured to accommodate live telemetry for operating hours, cycle counters, filter differentials, and predictive maintenance alerts.
+              <p className="text-sm text-alkota-steel leading-relaxed">
+                Where specified, wash systems are delivered <strong className="text-white font-normal">remote monitoring capable</strong> and <strong className="text-white font-normal">data-ready</strong> — structured to accommodate telemetry for operating hours, cycle counters, filter differential pressures, and predictive maintenance alerts.
               </p>
 
-              <div className="pt-2">
-                <Link
-                  href="/contact?enquiry=automation-consultation"
-                  className="inline-flex items-center gap-2 text-xs font-ibm-plex-mono uppercase tracking-widest text-alkota-black hover:text-alkota-orange transition-colors"
-                >
-                  <span>Discuss PLC & Automation Specifications →</span>
-                </Link>
+              {/* Automation Spectrum */}
+              <div className="pt-4 space-y-2">
+                <span className="font-ibm-plex-mono text-[10px] text-[#777] uppercase tracking-widest block">
+                  The Automation Spectrum:
+                </span>
+                <div className="grid grid-cols-5 gap-1 font-ibm-plex-mono text-[9px] uppercase tracking-wider text-center">
+                  <div className="p-2 bg-[#181818] border border-[#252525] text-white">Manual</div>
+                  <div className="p-2 bg-[#181818] border border-[#252525] text-white">Assisted</div>
+                  <div className="p-2 bg-[#181818] border border-[#252525] text-alkota-orange font-medium">Semi-Auto</div>
+                  <div className="p-2 bg-[#181818] border border-[#252525] text-alkota-orange font-medium">Automatic</div>
+                  <div className="p-2 bg-[#181818] border border-[#252525] text-white">Integrated</div>
+                </div>
               </div>
             </div>
 
-            <div className="lg:col-span-6 grid grid-cols-2 gap-3 font-ibm-plex-mono text-xs uppercase tracking-wider text-alkota-black">
-              <div className="p-4 bg-alkota-bg border border-alkota-iron">
-                <Cpu className="h-5 w-5 text-alkota-orange mb-2" />
-                <span className="block text-alkota-black">PLC Master Control</span>
-                <span className="text-[10px] text-alkota-silver">Siemens / Mitsubishi Architecture</span>
+            <div className="lg:col-span-6 space-y-6">
+              {/* Illustrative Control Interface Preview */}
+              <div className="bg-[#161616] border border-[#2A2A2A] p-6 shadow-xl">
+                <div className="flex items-center justify-between pb-3 border-b border-[#2A2A2A] mb-4">
+                  <span className="font-ibm-plex-mono text-[10px] text-alkota-orange uppercase tracking-widest">
+                    ILLUSTRATIVE CONTROL INTERFACE
+                  </span>
+                  <span className="font-ibm-plex-mono text-[9px] bg-[#222] text-[#888] px-2 py-0.5 uppercase">
+                    DATA-READY
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 font-ibm-plex-mono text-xs text-white mb-4">
+                  <div className="p-3 bg-[#101010] border border-[#222]">
+                    <span className="text-[9px] text-[#777] block">PUMP STATUS</span>
+                    <span className="text-alkota-orange font-medium">RUNNING / 160 BAR</span>
+                  </div>
+                  <div className="p-3 bg-[#101010] border border-[#222]">
+                    <span className="text-[9px] text-[#777] block">WATER TEMP</span>
+                    <span className="text-white font-medium">85°C (THERMAL)</span>
+                  </div>
+                  <div className="p-3 bg-[#101010] border border-[#222]">
+                    <span className="text-[9px] text-[#777] block">SAND FILTER</span>
+                    <span className="text-green-400 font-medium">ΔP NORMAL (0.4 BAR)</span>
+                  </div>
+                  <div className="p-3 bg-[#101010] border border-[#222]">
+                    <span className="text-[9px] text-[#777] block">RECLAIM LEVEL</span>
+                    <span className="text-blue-400 font-medium">82% (16,400 L)</span>
+                  </div>
+                  <div className="p-3 bg-[#101010] border border-[#222]">
+                    <span className="text-[9px] text-[#777] block">ACTIVE RECIPE</span>
+                    <span className="text-white font-medium">CHASSIS & ARCH DE-MUCK</span>
+                  </div>
+                  <div className="p-3 bg-[#101010] border border-[#222]">
+                    <span className="text-[9px] text-[#777] block">CYCLE COUNT</span>
+                    <span className="text-white font-medium">42 UNITS (SHIFT 1)</span>
+                  </div>
+                </div>
+
+                <span className="block text-[10px] font-ibm-plex-mono text-[#666] italic text-center">
+                  * Interface parameters configured strictly per project specification. We do not publish fabricated live telemetry.
+                </span>
               </div>
-              <div className="p-4 bg-alkota-bg border border-alkota-iron">
-                <Sliders className="h-5 w-5 text-alkota-orange mb-2" />
-                <span className="block text-alkota-black">Variable Speed Drives</span>
-                <span className="text-[10px] text-alkota-silver">Soft-start & pressure ramping</span>
-              </div>
-              <div className="p-4 bg-alkota-bg border border-alkota-iron">
-                <Layers className="h-5 w-5 text-alkota-orange mb-2" />
-                <span className="block text-alkota-black">Sonar Profiling</span>
-                <span className="text-[10px] text-alkota-silver">Asset detection & zone firing</span>
-              </div>
-              <div className="p-4 bg-alkota-bg border border-alkota-iron">
-                <Activity className="h-5 w-5 text-alkota-orange mb-2" />
-                <span className="block text-alkota-black">Safety Interlocks</span>
-                <span className="text-[10px] text-alkota-silver">Category 4 E-stop architectures</span>
-              </div>
-              <div className="p-4 bg-alkota-bg border border-alkota-iron">
-                <BarChart3 className="h-5 w-5 text-alkota-orange mb-2" />
-                <span className="block text-alkota-black">Wash Recipes</span>
-                <span className="text-[10px] text-alkota-silver">Touchscreen HMI cycle presets</span>
-              </div>
-              <div className="p-4 bg-alkota-bg border border-alkota-iron">
-                <Zap className="h-5 w-5 text-alkota-orange mb-2" />
-                <span className="block text-alkota-black">Telemetry Ready</span>
-                <span className="text-[10px] text-alkota-silver">Data-ready cloud diagnostics</span>
+
+              <div className="grid grid-cols-2 gap-3 font-ibm-plex-mono text-xs uppercase tracking-wider text-white">
+                <div className="p-3.5 bg-[#141414] border border-[#222]">
+                  <Cpu className="h-4 w-4 text-alkota-orange mb-1.5" />
+                  <span className="block font-medium">Industrial PLC</span>
+                  <span className="text-[10px] text-[#777]">IP-rated enclosure — spec to application</span>
+                </div>
+                <div className="p-3.5 bg-[#141414] border border-[#222]">
+                  <Sliders className="h-4 w-4 text-alkota-orange mb-1.5" />
+                  <span className="block font-medium">Variable Speed Drives</span>
+                  <span className="text-[10px] text-[#777]">Soft-start & power staging</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── CHAPTER 7: WATER IS A PROCESS STREAM ──────────────────────────── */}
-      <section className="py-24 px-6 sm:px-12 bg-alkota-bg border-b border-alkota-iron">
+      {/* ── CHAPTER 6: WATER IS A PROCESS STREAM (LIGHT STEEL) ─────────────── */}
+      <section className="py-24 px-6 sm:px-12 bg-white border-b border-alkota-iron">
         <div className="mx-auto max-w-7xl">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start mb-16">
             <div className="lg:col-span-5 space-y-4">
               <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.35em] text-alkota-orange block">
-              WATER PROCESS
+                WATER PROCESS & EFFLUENT GOVERNANCE
               </span>
               <h2 className="font-extralight text-4xl sm:text-5xl uppercase tracking-tight text-alkota-black leading-tight">
                 Water is a process stream.
               </h2>
               <p className="text-sm text-alkota-silver leading-relaxed">
-                A wash plant does not simply consume water; it manages an entire effluent cycle. From primary sediment settlement and coalescing oil separation (BS EN 858) through deep-bed media sand filtration, we engineer water recovery systems that deliver up to 90% water recirculation while protecting high-pressure pump components.
+                A wash plant does not simply consume water; it manages an entire effluent cycle. From primary sediment settlement and coalescing oil separation through deep-bed media filtration, we engineer water treatment systems that enable closed-loop recirculation or statutory trade effluent compliance.
               </p>
-              <div className="pt-2">
+              <p className="text-xs text-alkota-silver leading-relaxed">
+                Actual water treatment scope is engineered around site soil chemistry, local water authority discharge consents, and operational recovery objectives.
+              </p>
+              <div className="pt-4">
                 <Link
                   href="/water-treatment"
-                  className="inline-flex items-center gap-2 text-xs font-ibm-plex-mono uppercase tracking-widest text-alkota-orange hover:text-alkota-black transition-colors"
+                  className="inline-flex items-center gap-2 text-xs font-ibm-plex-mono uppercase tracking-widest text-alkota-orange hover:text-alkota-black transition-colors font-medium"
                 >
-                  <span>Explore Water Treatment Technology →</span>
+                  <span>Explore Water Treatment Systems Range →</span>
                 </Link>
               </div>
             </div>
 
             <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4 font-ibm-plex-mono text-xs text-alkota-black">
-              <div className="p-5 bg-white border border-alkota-iron space-y-2">
-                <span className="text-alkota-orange block">01. COLLECTION & SUMPS</span>
-                <p className="text-alkota-silver leading-relaxed">Impermeable graded concrete aprons and heavy galvanized sumps with silt catchbaskets.</p>
+              <div className="p-5 bg-alkota-bg border border-alkota-iron space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-alkota-orange font-bold">01. COLLECTION & SUMPS</span>
+                  <span className="text-[9px] text-alkota-silver">CONTAINMENT</span>
+                </div>
+                <p className="text-alkota-silver leading-relaxed">Impermeable graded concrete aprons and heavy galvanized sumps with silt catchbaskets prevent uncontrolled runoff.</p>
               </div>
-              <div className="p-5 bg-white border border-alkota-iron space-y-2">
-                <span className="text-alkota-orange block">02. SOLIDS SEPARATION</span>
-                <p className="text-alkota-silver leading-relaxed">Gravity settlement chambers and automated screw conveyors extract heavy aggregate and clay.</p>
+              <div className="p-5 bg-alkota-bg border border-alkota-iron space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-alkota-orange font-bold">02. SOLIDS SETTLEMENT</span>
+                  <span className="text-[9px] text-alkota-silver">SLURRY EXTRACTION</span>
+                </div>
+                <p className="text-alkota-silver leading-relaxed">Gravity settlement weir chambers and optional automated screw augers drop out heavy gravel, aggregate, and clay.</p>
               </div>
-              <div className="p-5 bg-white border border-alkota-iron space-y-2">
-                <span className="text-alkota-orange block">03. COALESCING OIL INTERCEPTION</span>
-                <p className="text-alkota-silver leading-relaxed">Class 1 coalescing plate packs separate free hydrocarbons to meet UK trade effluent standards.</p>
+              <div className="p-5 bg-alkota-bg border border-alkota-iron space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-alkota-orange font-bold">03. COALESCING SEPARATION</span>
+                  <span className="text-[9px] text-alkota-silver">CONSENT STANDARD</span>
+                </div>
+                <p className="text-alkota-silver leading-relaxed">Class 1 oleophilic coalescing plate packs separate free hydrocarbons and fuels to meet UK trade effluent standards.</p>
               </div>
-              <div className="p-5 bg-white border border-alkota-iron space-y-2">
-                <span className="text-alkota-orange block">04. CLOSED-LOOP RECIRCULATION</span>
-                <p className="text-alkota-silver leading-relaxed">Media sand filtration vessels polish water for return into high-pressure booster feeds.</p>
+              <div className="p-5 bg-alkota-bg border border-alkota-iron space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-alkota-orange font-bold">04. CLOSED-LOOP POLISHING</span>
+                  <span className="text-[9px] text-alkota-silver">RECIRCULATION</span>
+                </div>
+                <p className="text-alkota-silver leading-relaxed">Pressurized multi-media filter vessels remove suspended solids to the clarity required for closed-loop pump protection and recirculation.</p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── CHAPTER 8: PROJECT DELIVERY METHODOLOGY & CASE STUDIES ────────── */}
+      {/* ── CHAPTER 7: FROM SITE SURVEY TO COMMISSIONING (DARK METHODOLOGY) ── */}
       <section className="py-24 px-6 sm:px-12 bg-[#0D0D0D] text-white border-b border-[#222]">
         <div className="mx-auto max-w-7xl">
-          <div className="mb-16 text-center max-w-3xl mx-auto">
+          <div className="mb-16 max-w-3xl">
             <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.35em] text-alkota-orange block mb-2">
-              PROJECT DELIVERY
-              </span>
+              CAPITAL PROJECT DELIVERY
+            </span>
             <h2 className="font-extralight text-4xl sm:text-6xl uppercase tracking-tight text-white mb-4">
-              From discovery to lifecycle support.
+              From site survey to commissioning.
             </h2>
-            <p className="text-xs text-[#888] uppercase tracking-widest">
-              Every major capital installation follows a rigorous 12-stage engineering methodology.
+            <p className="text-xs sm:text-sm text-[#888] uppercase tracking-widest">
+              Every major capital installation follows our six-phase engineering delivery framework.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-[#222] border border-[#222] mb-16">
-            {DELIVERY_STEPS.map((step) => (
-              <div key={step.step} className="bg-[#111] p-6 sm:p-8 flex flex-col justify-between hover:bg-[#161616] transition-colors">
-                <div>
-                  <span className="font-extralight text-4xl text-alkota-orange block mb-3">
-                    {step.step}
+          {/* 6 Macro Phases Horizontal Flow */}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 mb-8">
+            {MACRO_PHASES.map((p, idx) => {
+              const isSelected = idx === activePhaseIdx;
+              return (
+                <button
+                  key={p.num}
+                  onClick={() => setActivePhaseIdx(idx)}
+                  className={`p-4 text-left border transition-all flex flex-col justify-between min-h-[120px] ${
+                    isSelected
+                      ? 'bg-alkota-black border-alkota-orange text-white shadow-lg ring-1 ring-alkota-orange'
+                      : 'bg-[#141414] border-[#222] text-[#aaa] hover:border-[#444] hover:bg-[#181818]'
+                  }`}
+                >
+                  <span className={`font-ibm-plex-mono text-xs font-bold ${
+                    isSelected ? 'text-alkota-orange' : 'text-[#666]'
+                  }`}>
+                    PHASE {p.num}
                   </span>
-                  <h4 className="font-light text-base uppercase tracking-tight text-white mb-2">
-                    {step.title}
-                  </h4>
-                </div>
-                <p className="text-xs text-[#888] leading-relaxed mt-4">
-                  {step.desc}
-                </p>
-              </div>
-            ))}
+                  <div>
+                    <h5 className="font-light text-sm uppercase tracking-tight text-white mt-1">
+                      {p.phase}
+                    </h5>
+                  </div>
+                </button>
+              );
+            })}
           </div>
 
-          {/* Featured Project Case Studies */}
-          <div className="border-t border-[#222] pt-16">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
-              <div>
-                <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.35em] text-alkota-orange block mb-2">
-              CASE STUDIES
-              </span>
-                <h3 className="font-extralight text-3xl sm:text-4xl uppercase tracking-tight text-white">
-                  Recent Wash Plant Projects.
+          {/* Detailed Selected Phase Breakdown */}
+          <div className="bg-[#141414] border border-[#252525] p-8 sm:p-10">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+              <div className="lg:col-span-6 space-y-4">
+                <div className="flex items-center gap-3">
+                  <span className="font-ibm-plex-mono text-[10px] bg-alkota-orange text-white px-2.5 py-0.5 uppercase tracking-widest">
+                    Phase {MACRO_PHASES[activePhaseIdx].num}
+                  </span>
+                  <span className="font-ibm-plex-mono text-xs text-[#888] uppercase tracking-wider">
+                    {MACRO_PHASES[activePhaseIdx].phase}
+                  </span>
+                </div>
+
+                <h3 className="font-extralight text-2xl sm:text-3xl uppercase tracking-tight text-white">
+                  {MACRO_PHASES[activePhaseIdx].headline}
                 </h3>
+
+                <p className="text-xs sm:text-sm text-[#bbb] leading-relaxed">
+                  {MACRO_PHASES[activePhaseIdx].summary}
+                </p>
+
+                <div className="p-4 bg-[#101010] border border-[#222] font-ibm-plex-mono text-xs">
+                  <span className="text-[9px] uppercase tracking-widest text-alkota-orange block mb-1">
+                    Primary Phase Deliverable:
+                  </span>
+                  <span className="text-white font-medium">
+                    {MACRO_PHASES[activePhaseIdx].deliverables}
+                  </span>
+                </div>
+              </div>
+
+              <div className="lg:col-span-6 space-y-3 bg-[#111] p-6 border border-[#222]">
+                <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-white block mb-2">
+                  Engineering Activities & Quality Gates:
+                </span>
+                <div className="space-y-2.5 font-ibm-plex-mono text-xs text-[#ccc]">
+                  {MACRO_PHASES[activePhaseIdx].milestones.map((m, mIdx) => (
+                    <div key={mIdx} className="flex items-start gap-2.5">
+                      <CheckCircle2 className="h-4 w-4 text-alkota-orange shrink-0 mt-0.5" />
+                      <span>{m}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── CHAPTER 8: ENGINEERED INSTALLATIONS (CASE STUDIES IN PREPARATION) ── */}
+      <section className="py-24 px-6 sm:px-12 bg-white border-b border-alkota-iron">
+        <div className="mx-auto max-w-7xl">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+            <div>
+              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.35em] text-alkota-orange block mb-2">
+                PROJECT CASE STUDIES
+              </span>
+              <h2 className="font-extralight text-4xl sm:text-5xl uppercase tracking-tight text-alkota-black">
+                Engineered installations.
+              </h2>
+            </div>
+            <Link
+              href="/wash-plant/projects"
+              className="inline-flex items-center gap-2 font-ibm-plex-mono text-xs uppercase tracking-widest text-alkota-orange hover:text-alkota-black transition-colors font-medium shrink-0"
+            >
+              <span>Project Archive →</span>
+            </Link>
+          </div>
+
+          {/* Case Studies — awaiting verified project authorisation */}
+          <div className="bg-white border border-alkota-iron p-8 sm:p-12 shadow-sm">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+              <div className="lg:col-span-7 space-y-5">
+                <div>
+                  <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-orange block mb-2">
+                    PROJECT ARCHIVE IN PREPARATION
+                  </span>
+                  <h3 className="font-extralight text-3xl sm:text-4xl uppercase tracking-tight text-alkota-black mb-4">
+                    Case studies are compiled with client authorisation.
+                  </h3>
+                  <p className="text-sm text-alkota-silver leading-relaxed">
+                    Each installation we commission involves confidential site, operational, and commercial data. We do not publish project case studies without the express approval of the client organisation.
+                  </p>
+                  <p className="text-sm text-alkota-silver leading-relaxed mt-3">
+                    If you are evaluating Alkota for a capital wash plant project, our engineering team can provide relevant project references on a confidential basis during your appraisal process.
+                  </p>
+                </div>
+
+                <div className="pt-4">
+                  <Link
+                    href="/contact?enquiry=wash-plant-project-references"
+                    className="inline-flex items-center gap-3 bg-alkota-orange text-white px-8 py-4 text-xs uppercase tracking-[0.25em] hover:bg-alkota-black transition-colors"
+                  >
+                    <span>Request Project References</span>
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </div>
+              </div>
+
+              <div className="lg:col-span-5 bg-alkota-bg border border-alkota-iron p-6 space-y-4 font-ibm-plex-mono text-xs">
+                <span className="text-[9px] uppercase tracking-[0.3em] text-alkota-orange block">SECTORS WE HAVE WORKED ACROSS</span>
+                {[
+                  'Commercial Fleet & HGV Depots',
+                  'Heavy Plant & Earthmoving Sites',
+                  'Quarrying, Mining & Aggregate',
+                  'Access Matting & Groundworks',
+                  'Steel Sheet Piling & Formwork',
+                  'Rail & Passenger Transport',
+                  'Agriculture & Forestry',
+                  'Industrial Components & Process Equipment'
+                ].map((sector) => (
+                  <div key={sector} className="flex items-center gap-2 text-alkota-black">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-alkota-orange shrink-0" />
+                    <span>{sector}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── CHAPTER 9: OWN THE LIFECYCLE (LIFECYCLE ECOSYSTEM) ─────────────── */}
+      <section className="py-24 px-6 sm:px-12 bg-alkota-bg border-b border-alkota-iron">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-16 max-w-3xl">
+            <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.35em] text-alkota-orange block mb-2">
+              LIFECYCLE ECOSYSTEM
+            </span>
+            <h2 className="font-extralight text-4xl sm:text-6xl uppercase tracking-tight text-alkota-black">
+              Commissioning is the start of the asset life.
+            </h2>
+            <p className="text-xs sm:text-sm text-alkota-silver uppercase tracking-widest mt-2">
+              Three commercial service lines supporting your wash plant before, during, and for decades after installation.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            {/* Service 1: Service & Maintenance */}
+            <div className="bg-white border border-alkota-iron p-8 flex flex-col justify-between shadow-sm">
+              <div>
+                <span className="font-ibm-plex-mono text-[9px] bg-alkota-black text-white px-2.5 py-1 uppercase tracking-widest inline-block mb-4">
+                  OPERATIONAL AVAILABILITY
+                </span>
+                <h3 className="font-extralight text-2xl uppercase tracking-tight text-alkota-black mb-3">
+                  Service & Maintenance
+                </h3>
+                <p className="text-xs text-alkota-silver leading-relaxed mb-6">
+                  Planned preventative maintenance, rapid emergency response, pump overhauls, combustion tuning, and multi-manufacturer support for all third-party industrial wash plants.
+                </p>
+                <div className="space-y-1.5 font-ibm-plex-mono text-xs text-alkota-black border-t border-alkota-iron/60 pt-4 mb-6">
+                  <p>• 4 Tiered PPM & SLA Contracts</p>
+                  <p>• Multi-Brand Third-Party Support</p>
+                  <p>• Critical Spares Inventory Holding</p>
+                </div>
               </div>
               <Link
-                href="/wash-plant/projects"
-                className="inline-flex items-center gap-2 font-ibm-plex-mono text-xs uppercase tracking-widest text-alkota-orange hover:text-white transition-colors"
+                href="/wash-plant/service-maintenance"
+                className="inline-flex items-center gap-2 bg-alkota-black text-white px-6 py-3 text-xs uppercase tracking-widest hover:bg-alkota-orange transition-colors"
               >
-                <span>View Full Project Archive →</span>
+                <span>Explore Service Line</span>
+                <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="bg-[#141414] border border-[#222] p-8 flex flex-col justify-between">
-                <div>
-                  <span className="font-ibm-plex-mono text-[9px] bg-[#222] text-white px-2.5 py-1 uppercase tracking-widest inline-block mb-4">
-                    FLEET & LOGISTICS
-                  </span>
-                  <h4 className="font-extralight text-2xl uppercase tracking-tight text-white mb-2">
-                    4-Bay Fleet Depot Installation
-                  </h4>
-                  <p className="text-xs text-[#888] leading-relaxed mb-6">
-                    Turnkey multi-bay installation featuring dual triplex pump skids in a secure plant room, overhead 360° stainless boom arms, and automatic underbody chassis rinse.
-                  </p>
+            {/* Service 2: Asset Management */}
+            <div className="bg-white border border-alkota-iron p-8 flex flex-col justify-between shadow-sm">
+              <div>
+                <span className="font-ibm-plex-mono text-[9px] bg-alkota-black text-white px-2.5 py-1 uppercase tracking-widest inline-block mb-4">
+                  DIGITAL ASSET GOVERNANCE
+                </span>
+                <h3 className="font-extralight text-2xl uppercase tracking-tight text-alkota-black mb-3">
+                  Asset Management
+                </h3>
+                <p className="text-xs text-alkota-silver leading-relaxed mb-6">
+                  Digital 5-level component registers, 45-point maintenance inspection scopes, condition grading, replacement forecasting, and data-ready telemetry integration.
+                </p>
+                <div className="space-y-1.5 font-ibm-plex-mono text-xs text-alkota-black border-t border-alkota-iron/60 pt-4 mb-6">
+                  <p>• 5-Level Asset Hierarchy Register</p>
+                  <p>• Obsolescence Risk Mapping</p>
+                  <p>• Lifecycle Replacement Forecasting</p>
                 </div>
-                <div className="pt-4 border-t border-[#222] text-xs font-ibm-plex-mono flex items-center justify-between text-[#aaa]">
-                  <span>Throughput: 60 HGVs/day</span>
-                  <Link href="/wash-plant/projects/multi-bay-fleet-depot-warrington" className="text-alkota-orange hover:underline">Dossier →</Link>
-                </div>
-              </div>
-
-              <div className="bg-[#141414] border border-[#222] p-8 flex flex-col justify-between">
-                <div>
-                  <span className="font-ibm-plex-mono text-[9px] bg-[#222] text-white px-2.5 py-1 uppercase tracking-widest inline-block mb-4">
-                    GROUNDWORKS & ENERGY
-                  </span>
-                  <h4 className="font-extralight text-2xl uppercase tracking-tight text-white mb-2">
-                    Automated 360° Rig Mat Washer
-                  </h4>
-                  <p className="text-xs text-[#888] leading-relaxed mb-6">
-                    Continuous variable-speed conveyor cleaning system with 20 rotating spray bars, 100% closed-loop media filtration, and continuous solids screw evacuation.
-                  </p>
-                </div>
-                <div className="pt-4 border-t border-[#222] text-xs font-ibm-plex-mono flex items-center justify-between text-[#aaa]">
-                  <span>Throughput: 45 mats/hr</span>
-                  <Link href="/wash-plant/projects/automated-rig-mat-washer-aberdeen" className="text-alkota-orange hover:underline">Dossier →</Link>
-                </div>
-              </div>
-
-              <div className="bg-[#141414] border border-[#222] p-8 flex flex-col justify-between">
-                <div>
-                  <span className="font-ibm-plex-mono text-[9px] bg-[#222] text-white px-2.5 py-1 uppercase tracking-widest inline-block mb-4">
-                    MINING & QUARRY
-                  </span>
-                  <h4 className="font-extralight text-2xl uppercase tracking-tight text-white mb-2">
-                    Heavy Plant De-Mucking System
-                  </h4>
-                  <p className="text-xs text-[#888] leading-relaxed mb-6">
-                    High-volume 80 GPM water monitors with remote joystick operator stations, drive-over rumble grids, and deep settlement pit interception.
-                  </p>
-                </div>
-                <div className="pt-4 border-t border-[#222] text-xs font-ibm-plex-mono flex items-center justify-between text-[#aaa]">
-                  <span>Throughput: 15 mins/dumper</span>
-                  <Link href="/wash-plant/projects/heavy-plant-demucking-quarry-buxton" className="text-alkota-orange hover:underline">Dossier →</Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── CHAPTER 9: OWN THE LIFECYCLE & COMMERCIAL PATHWAYS ───────────── */}
-      <section className="py-24 px-6 sm:px-12 bg-white border-b border-alkota-iron">
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-16">
-            <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.35em] text-alkota-orange block mb-2">
-              LIFECYCLE & ASSET MANAGEMENT
-              </span>
-            <h2 className="font-extralight text-4xl sm:text-6xl uppercase tracking-tight text-alkota-black">
-              Own the lifecycle.
-            </h2>
-            <p className="text-xs text-alkota-silver uppercase tracking-widest mt-2">
-              From new capital project delivery to brownfield asset overhaul and structured PPM.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 font-ibm-plex-mono text-xs">
-            {/* CAPEX -> Lifecycle Pathway */}
-            <div className="bg-alkota-bg border border-alkota-iron p-8 space-y-4">
-              <span className="text-alkota-orange text-[10px] uppercase font-bold block">
-                01. NEW CAPITAL PROJECT LIFECYCLE
-              </span>
-              <div className="space-y-2 text-[#555]">
-                <p>• Discovery & Throughput Modelling</p>
-                <p>• Turnkey CAD Engineering & Fabrication</p>
-                <p>• Site Installation & SAT Commissioning</p>
-                <p>• Handover into Digital Asset Register</p>
-                <p>• Configurable PPM & Scheduled Inspections</p>
-                <p>• Condition Tracking & Planned Upgrades</p>
               </div>
               <Link
                 href="/wash-plant/asset-management"
-                className="inline-flex items-center gap-2 text-alkota-black hover:text-alkota-orange uppercase tracking-wider pt-2 border-t border-alkota-iron block"
+                className="inline-flex items-center gap-2 bg-alkota-black text-white px-6 py-3 text-xs uppercase tracking-widest hover:bg-alkota-orange transition-colors"
               >
-                <span>Explore Asset Management →</span>
+                <span>Explore Asset Governance</span>
+                <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             </div>
 
-            {/* Existing Plant Pathway */}
-            <div className="bg-alkota-bg border border-alkota-iron p-8 space-y-4">
-              <span className="text-alkota-orange text-[10px] uppercase font-bold block">
-                02. EXISTING / THIRD-PARTY PLANT LIFE EXTENSION
-              </span>
-              <div className="space-y-2 text-[#555]">
-                <p>• Site Survey & Condition Assessment</p>
-                <p>• Obsolescence & Failure Risk Mapping</p>
-                <p>• Pump & Burner Overhaul / Replacement</p>
-                <p>• PLC & Control Suite Modernization</p>
-                <p>• Water Treatment & Recycling Retrofit</p>
-                <p>• Managed PPM & Critical Spares Strategy</p>
+            {/* Service 3: Refurbishment & Upgrades */}
+            <div className="bg-white border border-alkota-iron p-8 flex flex-col justify-between shadow-sm">
+              <div>
+                <span className="font-ibm-plex-mono text-[9px] bg-alkota-black text-white px-2.5 py-1 uppercase tracking-widest inline-block mb-4">
+                  BROWNFIELD LIFE EXTENSION
+                </span>
+                <h3 className="font-extralight text-2xl uppercase tracking-tight text-alkota-black mb-3">
+                  Refurbishment & Upgrades
+                </h3>
+                <p className="text-xs text-alkota-silver leading-relaxed mb-6">
+                  Targeted engineering overhauls on existing live wash sites: pump swaps, PLC migrations, water recycling retrofits, and automation upgrades without plant replacement.
+                </p>
+                <div className="space-y-1.5 font-ibm-plex-mono text-xs text-alkota-black border-t border-alkota-iron/60 pt-4 mb-6">
+                  <p>• Brownfield Live-Site Delivery</p>
+                  <p>• PLC Modernization & VSD Retrofit</p>
+                  <p>• Water Treatment Plant Upgrades</p>
+                </div>
               </div>
               <Link
                 href="/wash-plant/refurbishment-upgrades"
-                className="inline-flex items-center gap-2 text-alkota-black hover:text-alkota-orange uppercase tracking-wider pt-2 border-t border-alkota-iron block"
+                className="inline-flex items-center gap-2 bg-alkota-black text-white px-6 py-3 text-xs uppercase tracking-widest hover:bg-alkota-orange transition-colors"
               >
-                <span>Explore Refurbishment & Upgrades →</span>
+                <span>Explore Upgrades</span>
+                <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             </div>
           </div>

@@ -391,7 +391,7 @@ export default function ChemicalsMainLandingPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {CHEMICAL_CATEGORIES.map((cat) => (
               <Link
-                key={cat.id}
+                key={cat.slug}
                 href={`/chemicals/${cat.slug}`}
                 className="group flex flex-col justify-between bg-[#FAFAF8] border border-[#E5E5E0] hover:border-[#FF6900] transition-colors p-8 no-underline shadow-xs"
               >

@@ -11,7 +11,7 @@ export default function CaseStudyTelemetryMap() {
             <span>Expedition Telemetry // Overland Traverse</span>
           </div>
           <h3 className="font-extralight text-3xl sm:text-4xl uppercase tracking-tight text-white">
-            625-Mile Ross Ice Shelf Traverse
+            625-Mile Ross Ice Sheet Traverse
           </h3>
         </div>
         <div className="text-xs uppercase tracking-wider text-[#94A3B8] font-mono">
@@ -45,7 +45,7 @@ export default function CaseStudyTelemetryMap() {
             <div className="flex items-center gap-4 pl-4">
               <div className="h-10 border-l border-dashed border-[#38BDF8]/40" />
               <span className="text-[11px] font-mono text-[#64748B]">
-                Traversing 1,000 km across Ross Ice Shelf sastrugi
+                Traversing 1,000 km across Ross Ice Sheet sastrugi
               </span>
             </div>
 

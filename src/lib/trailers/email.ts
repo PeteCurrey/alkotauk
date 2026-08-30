@@ -25,6 +25,7 @@ export interface TrailerEmailPayload {
   partDescription?: string;
   eventVersion?: number;
   authorizedBy?: string;
+  idempotencyKey?: string;
 }
 
 export interface EmailDispatchResult {

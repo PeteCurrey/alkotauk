@@ -25,19 +25,27 @@ export default async function LobbyHubPage() {
       <AskTheLobbyHero />
 
       {/* 02. LATEST INTELLIGENCE (EDITORIAL LEAD STORY & DISPATCHES) */}
-      <LatestIntelligence articles={articles} />
+      <div id="latest">
+        <LatestIntelligence articles={articles} />
+      </div>
 
       {/* 03. REGULATORY WATCH (ENVIRONMENT AGENCY & BS EN 858 TRACKER) */}
-      <RegulatoryWatch />
+      <div id="regulatory">
+        <RegulatoryWatch />
+      </div>
 
       {/* 04. INDUSTRY NEWS & MARKET DEVELOPMENTS */}
       <IndustryNews />
 
       {/* 05. TRAINING & PROFESSIONAL LEARNING */}
-      <TrainingAndLearning />
+      <div id="training">
+        <TrainingAndLearning />
+      </div>
 
       {/* 06. INDUSTRY EVENTS & FIELD DEMO CALENDAR */}
-      <IndustryEvents />
+      <div id="events">
+        <IndustryEvents />
+      </div>
 
       {/* 07. APPLICATION & INDUSTRY HUBS */}
       <IndustryHubs />
@@ -46,7 +54,9 @@ export default async function LobbyHubPage() {
       <MessQuestLobbySection />
 
       {/* 09. TECHNICAL LIBRARY & DOWNLOADS */}
-      <TechnicalLibrary resources={resources} />
+      <div id="technical">
+        <TechnicalLibrary resources={resources} />
+      </div>
 
       {/* 10. THE SPEC DESK & ENGINEERING TOOLS */}
       <LobbyTools />

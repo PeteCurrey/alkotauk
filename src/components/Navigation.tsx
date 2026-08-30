@@ -370,39 +370,68 @@ export default function Navigation() {
                 {/* 2. SERVICE MEGA MENU */}
                 {activeMenu === 'Service' && (
                   <div className="grid grid-cols-12 gap-10 items-stretch">
-                    {/* Zone 1: Unboxed Links */}
-                    <div className="col-span-4 border-r border-[#E0DFD8] pr-8">
-                      <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-alkota-orange block mb-4 font-medium">
-                        Lifecycle Engineering
-                      </span>
-                      <div className="divide-y divide-[#EAE9E2] border-t border-[#1A1A18]">
-                        {[
-                          { title: 'Service & Support Hub', desc: 'Nationwide engineering overview', href: '/service' },
-                          { title: 'Parts & Attachments', desc: 'OEM spares, Mosmatic, Cox Reels & tooling', href: '/parts-attachments' },
-                          { title: 'Planned Maintenance (PPM)', desc: 'Hours-based & annual schedules', href: '/service/planned-maintenance' },
-                          { title: 'Breakdown & Repairs', desc: 'Emergency triage & mobile dispatch', href: '/service/repairs' },
-                          { title: 'Pump Overhaul Workshop', desc: 'General Pump & CAT bench rebuild', href: '/service/pump-repair' },
-                          { title: 'Site Commissioning', desc: 'Utilities verification & training', href: '/service/commissioning' },
-                          { title: 'Register Alkota Machine', desc: 'Activate 7-Year coil warranty', href: '/service/machine-registration' },
-                          { title: 'Fleet Service Contracts', desc: 'Multi-site SLA agreements', href: '/service/contracts' },
-                        ].map((item) => (
-                          <Link
-                            key={item.href}
-                            href={item.href}
-                            onClick={() => setActiveMenu(null)}
-                            className="group flex items-center justify-between py-2.5 transition-colors no-underline"
-                          >
+                    {/* Zone 1: Unboxed Links & Featured Parts Store CTA */}
+                    <div className="col-span-4 border-r border-[#E0DFD8] pr-8 flex flex-col justify-between">
+                      <div>
+                        <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-alkota-orange block mb-3 font-medium">
+                          Lifecycle Engineering
+                        </span>
+
+                        {/* HIGHLIGHTED CTA: Parts & Attachments Store */}
+                        <Link
+                          href="/parts-attachments"
+                          onClick={() => setActiveMenu(null)}
+                          className="group relative overflow-hidden flex items-center justify-between p-3.5 bg-[#141412] text-white border border-alkota-orange/40 hover:border-alkota-orange transition-all mb-4 no-underline shadow-sm"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="h-8 w-8 bg-alkota-orange/20 border border-alkota-orange/40 flex items-center justify-center text-alkota-orange group-hover:bg-alkota-orange group-hover:text-white transition-colors shrink-0">
+                              <Wrench className="h-4 w-4" />
+                            </div>
                             <div>
-                              <h4 className="text-xs font-normal uppercase tracking-wider text-[#1A1A18] group-hover:text-alkota-orange">
-                                {item.title}
-                              </h4>
-                              <p className="text-[11px] text-[#777] font-normal mt-0.5">
-                                {item.desc}
+                              <div className="flex items-center gap-2">
+                                <span className="text-xs font-bold uppercase tracking-wider text-white group-hover:text-alkota-orange transition-colors">
+                                  Parts & Attachments
+                                </span>
+                                <span className="px-1.5 py-0.2 text-[9px] font-mono font-bold uppercase tracking-wider bg-alkota-orange text-white">
+                                  Store
+                                </span>
+                              </div>
+                              <p className="text-[11px] text-[#AAA] font-normal mt-0.5">
+                                400+ OEM spares, Mosmatic & tooling
                               </p>
                             </div>
-                            <ArrowRight className="h-3.5 w-3.5 text-alkota-orange opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
-                          </Link>
-                        ))}
+                          </div>
+                          <ArrowRight className="h-3.5 w-3.5 text-alkota-orange group-hover:translate-x-1 transition-transform shrink-0" />
+                        </Link>
+
+                        <div className="divide-y divide-[#EAE9E2] border-t border-[#1A1A18]">
+                          {[
+                            { title: 'Service & Support Hub', desc: 'Nationwide engineering overview', href: '/service' },
+                            { title: 'Planned Maintenance (PPM)', desc: 'Hours-based & annual schedules', href: '/service/planned-maintenance' },
+                            { title: 'Breakdown & Repairs', desc: 'Emergency triage & mobile dispatch', href: '/service/repairs' },
+                            { title: 'Pump Overhaul Workshop', desc: 'General Pump & CAT bench rebuild', href: '/service/pump-repair' },
+                            { title: 'Site Commissioning', desc: 'Utilities verification & training', href: '/service/commissioning' },
+                            { title: 'Register Alkota Machine', desc: 'Activate 7-Year coil warranty', href: '/service/machine-registration' },
+                            { title: 'Fleet Service Contracts', desc: 'Multi-site SLA agreements', href: '/service/contracts' },
+                          ].map((item) => (
+                            <Link
+                              key={item.href}
+                              href={item.href}
+                              onClick={() => setActiveMenu(null)}
+                              className="group flex items-center justify-between py-2.5 transition-colors no-underline"
+                            >
+                              <div>
+                                <h4 className="text-xs font-normal uppercase tracking-wider text-[#1A1A18] group-hover:text-alkota-orange">
+                                  {item.title}
+                                </h4>
+                                <p className="text-[11px] text-[#777] font-normal mt-0.5">
+                                  {item.desc}
+                                </p>
+                              </div>
+                              <ArrowRight className="h-3.5 w-3.5 text-alkota-orange opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                            </Link>
+                          ))}
+                        </div>
                       </div>
                     </div>
 
@@ -975,6 +1004,17 @@ export default function Navigation() {
                             ))}
                           {link.name === 'Service' && (
                             <>
+                              <Link
+                                href="/parts-attachments"
+                                onClick={() => setMobileMenuOpen(false)}
+                                className="flex items-center justify-between p-2.5 bg-[#141412] text-white border border-alkota-orange/40 hover:border-alkota-orange no-underline my-1"
+                              >
+                                <div className="flex items-center gap-2">
+                                  <Wrench className="h-3.5 w-3.5 text-alkota-orange" />
+                                  <span className="text-xs font-bold uppercase tracking-wider text-white">Parts & Attachments Store</span>
+                                </div>
+                                <ArrowRight className="h-3 w-3 text-alkota-orange" />
+                              </Link>
                               <Link href="/service" onClick={() => setMobileMenuOpen(false)} className="text-sm text-[#CCC] hover:text-alkota-orange no-underline py-0.5">Service &amp; Support Hub</Link>
                               <Link href="/service/planned-maintenance" onClick={() => setMobileMenuOpen(false)} className="text-sm text-[#CCC] hover:text-alkota-orange no-underline py-0.5">Planned Maintenance (PPM)</Link>
                               <Link href="/service/repairs" onClick={() => setMobileMenuOpen(false)} className="text-sm text-[#CCC] hover:text-alkota-orange no-underline py-0.5">Breakdown &amp; Repairs</Link>

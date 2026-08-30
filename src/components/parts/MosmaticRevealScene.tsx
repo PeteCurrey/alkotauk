@@ -132,8 +132,8 @@ export default function MosmaticRevealScene() {
             className="font-extralight text-[#0A0A0A] tracking-tight uppercase leading-[0.95]"
             style={{ fontSize: 'clamp(2rem, 3.5vw, 3rem)' }}
           >
-            Zero zebra striping.<br />
-            <span className="text-[#777] font-light">Consistent high-speed pass.</span>
+            Clean more<br />
+            <span className="text-[#777] font-light">ground.</span>
           </h3>
           <p className="text-sm sm:text-base text-[#555] font-normal leading-relaxed max-w-md">
             Wand cleaning creates uneven pressure peaks and leaves zebra stripes on concrete. Mosmatic rotary arm geometry maintains a constant 25mm clearance and uniform pass coverage across thousands of square metres.
@@ -147,6 +147,18 @@ export default function MosmaticRevealScene() {
               <ArrowRight className="w-3.5 h-3.5 text-alkota-orange" />
             </Link>
           </div>
+        </div>
+      </div>
+
+      {/* ── 03: SCENE TRANSITION — CONCRETE TO ALL-STEEL HOSE MANAGEMENT ── */}
+      <div className="py-16 px-6 sm:px-12 lg:px-24 bg-[#FAF9F5]">
+        <div className="max-w-7xl mx-auto w-full flex flex-col sm:flex-row sm:items-baseline justify-between gap-4 font-ibm-plex-mono text-[10px] uppercase text-[#888]">
+          <span className="tracking-[0.35em]">
+            Scene 02 · Fluid &amp; Hose Management
+          </span>
+          <span className="tracking-widest text-[#AAA]">
+            All-Steel Construction ↓
+          </span>
         </div>
       </div>
 

@@ -49,8 +49,8 @@ export default function GeneralPumpSculpturalScene() {
               className="font-extralight text-[#0A0A0A] tracking-tight uppercase leading-[0.92]"
               style={{ fontSize: 'clamp(2.5rem, 4.2vw, 4rem)' }}
             >
-              The benchmark<br />
-              <span className="text-[#777] font-light">industrial pump.</span>
+              Built to<br />
+              <span className="text-[#777] font-light">keep pumping.</span>
             </h2>
             <p className="text-base sm:text-lg text-[#555] font-normal leading-relaxed pt-2">
               Solid 99.8% alumina ceramic plungers and heavy forged brass manifold. Engineered for continuous daily hot or cold washdown in the harshest UK environments.

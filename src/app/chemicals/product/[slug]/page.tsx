@@ -145,39 +145,39 @@ export default async function ChemicalProductDetailPage({ params }: PageProps) {
               </div>
             </div>
 
-            {/* Right: Technical Specs & SDS Download (5 Cols) */}
-            <div className="lg:col-span-5 space-y-6">
+            {/* Right: Technical Specs & SDS Download (5 Cols, Unboxed Clean Table) */}
+            <div className="lg:col-span-5 space-y-8">
               
-              <div className="p-6 bg-[#FAF9F5] border border-[#E8E8E4] space-y-4">
+              <div className="space-y-4">
                 <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-[#777] block font-medium">
                   Formulation Reference
                 </span>
-                <div className="divide-y divide-[#E8E8E4] text-xs font-ibm-plex-mono">
-                  <div className="py-2.5 flex justify-between">
+                <div className="divide-y divide-[#E8E8E4] border-y border-[#E8E8E4] text-xs font-ibm-plex-mono">
+                  <div className="py-3 flex justify-between">
                     <span className="text-[#777]">Master Code:</span>
                     <span className="font-bold text-alkota-black">{product.originating_master_code}</span>
                   </div>
-                  <div className="py-2.5 flex justify-between">
+                  <div className="py-3 flex justify-between">
                     <span className="text-[#777]">Original Name:</span>
                     <span className="font-medium text-alkota-black">{product.originating_master_name}</span>
                   </div>
-                  <div className="py-2.5 flex justify-between">
+                  <div className="py-3 flex justify-between">
                     <span className="text-[#777]">Family:</span>
                     <span className="text-alkota-black">{product.retail_family}</span>
                   </div>
-                  <div className="py-2.5 flex justify-between">
+                  <div className="py-3 flex justify-between">
                     <span className="text-[#777]">Compliance:</span>
                     <span className="text-emerald-800 font-medium">100% GB-CLP Verified</span>
                   </div>
-                  <div className="py-2.5 flex justify-between">
+                  <div className="py-3 flex justify-between">
                     <span className="text-[#777]">Induction:</span>
                     <span className="text-alkota-black">High/Low Pressure Injector</span>
                   </div>
                 </div>
               </div>
 
-              {/* Safety Data Sheet Card */}
-              <div className="bg-[#FAF9F5] border border-[#E8E8E4] p-6 space-y-3">
+              {/* Safety Data Sheet Direct Action */}
+              <div className="pt-4 border-t border-[#E8E8E4] space-y-3">
                 <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-[#777] block font-medium">
                   Safety Documentation
                 </span>
@@ -185,20 +185,19 @@ export default async function ChemicalProductDetailPage({ params }: PageProps) {
                   Safety Data Sheet (SDS)
                 </h4>
                 <p className="text-xs text-[#666] leading-relaxed font-normal">
-                  Official UK CLP safety dossier for {product.originating_master_code} covering composition, PPE, first aid, and storage.
+                  Official UK CLP safety dossier for {product.originating_master_code} covering active composition, PPE requirements, first aid protocols, and storage.
                 </p>
                 <div className="pt-2">
                   <a
                     href={`/api/chemicals/sds?code=${product.originating_master_code}`}
                     target="_blank"
-                    className="inline-flex items-center gap-2 bg-alkota-black hover:bg-alkota-orange text-white px-5 py-3 text-xs font-ibm-plex-mono uppercase tracking-widest transition-colors font-medium"
+                    className="inline-flex items-center gap-2 bg-alkota-black hover:bg-alkota-orange text-white px-6 py-3.5 text-xs font-ibm-plex-mono uppercase tracking-widest transition-colors font-medium shadow-sm"
                   >
                     <FileText className="w-3.5 h-3.5" />
                     <span>Download SDS PDF</span>
                   </a>
                 </div>
               </div>
-
             </div>
 
           </div>

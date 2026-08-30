@@ -34,8 +34,8 @@ export default function CoxReelsDarkScene() {
             className="font-extralight text-white tracking-tight uppercase leading-[0.92]"
             style={{ fontSize: 'clamp(2.5rem, 4.2vw, 4rem)' }}
           >
-            All-steel hose<br />
-            <span className="text-white/40 font-light">management.</span>
+            Keep the hose<br />
+            <span className="text-white/40 font-light">ready.</span>
           </h2>
           <p className="text-sm sm:text-base text-[#AAA] font-normal leading-relaxed max-w-sm pt-2">
             Keep 30 metres of high-pressure hose tidy, protected from vehicle runovers, and ready to deploy in seconds. Heavy-gauge welded A-frame with CPC brass live swivel.

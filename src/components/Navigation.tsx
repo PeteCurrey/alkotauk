@@ -159,24 +159,24 @@ export default function Navigation() {
         }`}
         aria-label="Main Navigation"
       >
-        <div className="mx-auto flex max-w-7xl w-full items-center justify-between">
+        <div className="mx-auto flex max-w-7xl w-full items-center justify-between gap-3 lg:gap-6 flex-nowrap">
           {/* Brand Logo */}
-          <Link href="/" className="flex items-center group" aria-label="Alkota UK Home">
-            <Logo className={`${isScrolled || activeMenu !== null ? 'h-8' : 'h-10'} transition-all duration-300`} />
+          <Link href="/" className="flex items-center group shrink-0" aria-label="Alkota UK Home">
+            <Logo className={`${isScrolled || activeMenu !== null ? 'h-7 sm:h-8' : 'h-8 sm:h-10'} transition-all duration-300`} />
           </Link>
 
           {/* Desktop Nav Links */}
-          <div className="hidden items-center gap-7 xl:gap-8 lg:flex font-normal">
+          <div className="hidden items-center gap-3.5 xl:gap-6 2xl:gap-7 lg:flex font-normal flex-nowrap whitespace-nowrap">
             {navLinks.map((link) => (
               <div
                 key={link.name}
-                className="relative py-2"
+                className="relative py-1.5 shrink-0"
                 onMouseEnter={() => link.hasMega && handleMouseEnter(link.name)}
               >
                 {!link.hasMega ? (
                   <Link
                     href={link.href}
-                    className={`flex items-center gap-1 text-[12px] uppercase tracking-[0.18em] transition-colors no-underline font-normal ${textColorClass}`}
+                    className={`flex items-center gap-1 text-[11px] xl:text-[12px] uppercase tracking-[0.14em] xl:tracking-[0.18em] transition-colors no-underline font-normal whitespace-nowrap ${textColorClass}`}
                   >
                     {link.name}
                   </Link>
@@ -186,11 +186,11 @@ export default function Navigation() {
                     onClick={() => setActiveMenu(activeMenu === link.name ? null : link.name)}
                     aria-expanded={activeMenu === link.name}
                     aria-controls={`mega-menu-${link.name.toLowerCase()}`}
-                    className={`flex items-center gap-1.5 text-[12px] uppercase tracking-[0.18em] transition-colors bg-transparent border-none cursor-pointer p-0 font-normal ${textColorClass}`}
+                    className={`flex items-center gap-1 text-[11px] xl:text-[12px] uppercase tracking-[0.14em] xl:tracking-[0.18em] transition-colors bg-transparent border-none cursor-pointer p-0 font-normal whitespace-nowrap ${textColorClass}`}
                   >
                     <span>{link.name}</span>
                     <ChevronDown
-                      className={`h-3 w-3 transition-transform duration-200 ${
+                      className={`h-3 w-3 transition-transform duration-200 shrink-0 ${
                         activeMenu === link.name
                           ? 'rotate-180 text-alkota-orange'
                           : isScrolled || activeMenu !== null
@@ -202,7 +202,7 @@ export default function Navigation() {
                 )}
                 {/* Active Orange Indicator */}
                 <span
-                  className={`absolute -bottom-1 left-0 h-[2px] bg-alkota-orange transition-all duration-200 ${
+                  className={`absolute -bottom-0.5 left-0 h-[2px] bg-alkota-orange transition-all duration-200 ${
                     activeMenu === link.name ? 'w-full' : 'w-0'
                   }`}
                 />
@@ -211,17 +211,17 @@ export default function Navigation() {
           </div>
 
           {/* Right Action CTAs */}
-          <div className="flex items-center gap-3 sm:gap-4 font-normal">
+          <div className="flex items-center gap-2 sm:gap-3 font-normal shrink-0 flex-nowrap">
             <Link
               href="/lobby"
-              className="hidden md:inline-flex items-center gap-2 bg-black text-white px-4 py-2 text-[11px] uppercase tracking-[0.2em] transition-all hover:bg-alkota-orange no-underline group shadow-sm border border-white/20 font-normal"
+              className="hidden xl:inline-flex items-center gap-1.5 bg-black text-white px-3 py-1.5 text-[10px] xl:text-[11px] uppercase tracking-[0.18em] transition-all hover:bg-alkota-orange no-underline group shadow-sm border border-white/20 font-normal whitespace-nowrap"
             >
-              <span className="h-1.5 w-1.5 rounded-full bg-alkota-orange group-hover:bg-white animate-pulse" />
+              <span className="h-1.5 w-1.5 rounded-full bg-alkota-orange group-hover:bg-white animate-pulse shrink-0" />
               <span>The Lobby</span>
             </Link>
             <Link
               href="/tools/configurator"
-              className={`hidden sm:inline-flex px-4 py-2 text-[11px] uppercase tracking-[0.2em] transition-all no-underline font-normal ${
+              className={`hidden 2xl:inline-flex px-3 py-1.5 text-[10px] xl:text-[11px] uppercase tracking-[0.18em] transition-all no-underline font-normal whitespace-nowrap ${
                 isScrolled || activeMenu !== null
                   ? 'border border-[#333] text-[#1A1A18] hover:border-alkota-orange hover:text-alkota-orange'
                   : 'border border-white/60 bg-black/40 backdrop-blur-sm text-white hover:border-white hover:bg-white hover:text-black'
@@ -230,7 +230,7 @@ export default function Navigation() {
               Configurator
             </Link>
             <button
-              className={`${isScrolled || activeMenu !== null ? 'text-[#1A1A18]' : 'text-white'} lg:hidden p-2 cursor-pointer transition-colors bg-transparent border-none`}
+              className={`${isScrolled || activeMenu !== null ? 'text-[#1A1A18]' : 'text-white'} lg:hidden p-2 cursor-pointer transition-colors bg-transparent border-none shrink-0`}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Toggle navigation menu"
             >

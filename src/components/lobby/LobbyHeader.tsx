@@ -46,14 +46,14 @@ export default function LobbyHeader() {
       }`}
       aria-label="The Lobby Navigation"
     >
-      <div className="mx-auto flex max-w-7xl w-full items-center justify-between gap-4">
+      <div className="mx-auto flex max-w-7xl w-full items-center justify-between gap-3 lg:gap-6 flex-nowrap">
         {/* ── LEFT GROUP: Parent site context + Lobby Identity + Date ─────── */}
-        <div className="flex items-center gap-3 sm:gap-4 shrink-0">
+        <div className="flex items-center gap-2.5 sm:gap-3 shrink-0 flex-nowrap">
           <Link
             href="/"
-            className="flex items-center gap-1.5 text-xs text-white/70 hover:text-white transition-colors no-underline uppercase tracking-[0.18em] font-normal"
+            className="flex items-center gap-1 text-[11px] xl:text-xs text-white/70 hover:text-white transition-colors no-underline uppercase tracking-[0.14em] xl:tracking-[0.18em] font-normal whitespace-nowrap"
           >
-            <ArrowLeft className="h-3 w-3 text-alkota-orange" />
+            <ArrowLeft className="h-3 w-3 text-alkota-orange shrink-0" />
             <span className="hidden sm:inline">Alkota.co.uk</span>
             <span className="sm:hidden">Alkota</span>
           </Link>
@@ -62,29 +62,29 @@ export default function LobbyHeader() {
 
           <Link
             href="/lobby"
-            className="text-xs sm:text-sm font-light uppercase tracking-[0.25em] text-white hover:text-alkota-orange transition-colors no-underline whitespace-nowrap"
+            className="text-[11px] xl:text-xs font-light uppercase tracking-[0.2em] xl:tracking-[0.25em] text-white hover:text-alkota-orange transition-colors no-underline whitespace-nowrap"
           >
             The Lobby
           </Link>
 
-          <span className="hidden xl:inline text-white/25 font-light">|</span>
+          <span className="hidden 2xl:inline text-white/25 font-light">|</span>
 
-          <span className="hidden xl:inline text-[11px] font-mono text-white/40 tracking-wider">
+          <span className="hidden 2xl:inline text-[10px] font-mono text-white/40 tracking-wider whitespace-nowrap">
             {currentDate}
           </span>
         </div>
 
         {/* ── CENTRE GROUP: Clean Horizontal Editorial Nav ─────────────────── */}
-        <nav className="hidden lg:flex items-center gap-5 xl:gap-7 font-normal" aria-label="Lobby editorial sections">
+        <nav className="hidden lg:flex items-center gap-3 xl:gap-5 2xl:gap-6 font-normal flex-nowrap whitespace-nowrap" aria-label="Lobby editorial sections">
           {NAV_ITEMS.map(item => {
             if (item.isAsk) {
               return (
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="flex items-center gap-1.5 text-xs uppercase tracking-[0.18em] text-alkota-orange hover:text-white transition-colors font-medium whitespace-nowrap no-underline"
+                  className="flex items-center gap-1 text-[11px] xl:text-xs uppercase tracking-[0.14em] xl:tracking-[0.18em] text-alkota-orange hover:text-white transition-colors font-medium whitespace-nowrap no-underline"
                 >
-                  <Sparkles className="h-3.5 w-3.5 shrink-0" />
+                  <Sparkles className="h-3 w-3 shrink-0" />
                   <span>{item.name}</span>
                 </Link>
               );
@@ -93,7 +93,7 @@ export default function LobbyHeader() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-xs uppercase tracking-[0.18em] text-white/75 hover:text-alkota-orange transition-colors no-underline font-normal whitespace-nowrap"
+                className="text-[11px] xl:text-xs uppercase tracking-[0.14em] xl:tracking-[0.18em] text-white/75 hover:text-alkota-orange transition-colors no-underline font-normal whitespace-nowrap"
               >
                 {item.name}
               </Link>
@@ -102,24 +102,24 @@ export default function LobbyHeader() {
         </nav>
 
         {/* ── RIGHT GROUP: Commercial Links + Consult CTA ─────────────────── */}
-        <div className="flex items-center gap-3 sm:gap-5 font-normal shrink-0">
+        <div className="flex items-center gap-2.5 sm:gap-4 font-normal shrink-0 flex-nowrap">
           <Link
             href="/tools/machine-match"
-            className="hidden xl:inline text-xs uppercase tracking-[0.18em] text-white/70 hover:text-alkota-orange transition-colors no-underline font-normal whitespace-nowrap"
+            className="hidden 2xl:inline text-[11px] uppercase tracking-[0.14em] text-white/70 hover:text-alkota-orange transition-colors no-underline font-normal whitespace-nowrap"
           >
             Machine Match
           </Link>
 
           <Link
             href="/contact"
-            className="hidden sm:inline-flex items-center bg-alkota-orange hover:bg-white hover:text-black text-white px-4 py-2 text-xs uppercase tracking-[0.18em] font-normal transition-all shadow-sm whitespace-nowrap no-underline"
+            className="hidden sm:inline-flex items-center bg-alkota-orange hover:bg-white hover:text-black text-white px-3.5 py-1.5 xl:px-4 xl:py-2 text-[10px] xl:text-xs uppercase tracking-[0.14em] xl:tracking-[0.18em] font-normal transition-all shadow-sm whitespace-nowrap no-underline"
           >
             Consult an Engineer
           </Link>
 
           {/* Mobile Menu Button */}
           <button
-            className="lg:hidden text-white p-1.5 cursor-pointer bg-transparent border-none flex items-center justify-center"
+            className="lg:hidden text-white p-1.5 cursor-pointer bg-transparent border-none flex items-center justify-center shrink-0"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle mobile menu"
           >

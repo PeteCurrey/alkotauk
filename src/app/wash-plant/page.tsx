@@ -287,10 +287,9 @@ export default function WashPlantPage() {
       {/* Global nav overlays the hero — transparent until scrolled (existing nav behaviour) */}
       <Navigation />
 
-      {/* ── CHAPTER 0: FULL-SCREEN INDUSTRIAL HERO (LOCKED) ────────────────── */}
+      {/* ── CHAPTER 0: FULL-SCREEN INDUSTRIAL HERO ────────────────── */}
       <section
-        className="relative flex flex-col justify-end text-white overflow-hidden border-b border-[#222]"
-        style={{ minHeight: '100svh' }}
+        className="relative flex flex-col justify-between text-white overflow-hidden border-b border-[#222] min-h-[100svh]"
       >
         {/* Photography — the primary communication device */}
         {/* Source: rigmatwasher.com / hotandmighty.com — conveyorised industrial mat wash plant */}
@@ -314,14 +313,26 @@ export default function WashPlantPage() {
         {/* Subtle bottom darkening for capability strip legibility */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
 
-        {/* WashPlantSubNav — transparent while in hero, transitions on scroll */}
-        <div className="absolute top-0 left-0 right-0 z-40 mt-20">
+        {/* Top spacer and SubNav overlay */}
+        <div className="w-full pt-24">
           <WashPlantSubNav heroOverlay />
         </div>
 
-        {/* Hero content — sits in the lower-left over the image */}
-        <div className="relative z-10 mx-auto max-w-7xl w-full px-6 sm:px-12 pb-16 pt-48">
-          <div className="max-w-2xl">
+        {/* Hero content — vertically centered with my-auto, horizontally aligned with logo */}
+        <div className="relative z-10 mx-auto max-w-7xl w-full px-6 sm:px-12 my-auto py-12">
+          <div className="max-w-3xl">
+            <motion.div
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+              className="flex items-center gap-3 mb-6"
+            >
+              <div className="h-[2px] w-8 bg-alkota-orange" />
+              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.35em] text-alkota-orange">
+                HEAVY INDUSTRIAL INFRASTRUCTURE
+              </span>
+            </motion.div>
+
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -336,7 +347,7 @@ export default function WashPlantPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.15, duration: 0.6 }}
-              className="text-base sm:text-lg text-white/75 max-w-xl leading-relaxed mb-10"
+              className="text-base sm:text-lg text-white/80 max-w-xl leading-relaxed mb-10 font-normal"
             >
               Bespoke industrial wash systems engineered around the asset, contamination, throughput, site and water strategy — with installation, commissioning and lifecycle support from one team.
             </motion.p>
@@ -349,14 +360,14 @@ export default function WashPlantPage() {
             >
               <Link
                 href="/wash-plant/architect"
-                className="inline-flex items-center gap-3 bg-alkota-orange text-white px-8 py-4 text-xs uppercase tracking-[0.25em] hover:bg-white hover:text-alkota-black transition-all shadow-lg"
+                className="inline-flex items-center gap-3 bg-alkota-orange text-white px-8 py-4 text-xs uppercase tracking-[0.25em] hover:bg-white hover:text-alkota-black transition-all shadow-lg font-normal"
               >
                 <span>Start a Wash Plant Project</span>
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <a
                 href="#process-system"
-                className="inline-flex items-center gap-3 border border-white/30 bg-white/5 text-white px-8 py-4 text-xs uppercase tracking-[0.25em] hover:border-white hover:bg-white hover:text-black transition-all"
+                className="inline-flex items-center gap-3 border border-white/30 bg-white/5 text-white px-8 py-4 text-xs uppercase tracking-[0.25em] hover:border-white hover:bg-white hover:text-black transition-all font-normal"
               >
                 <span>Explore the System</span>
                 <ArrowDown className="h-4 w-4" />
@@ -366,7 +377,7 @@ export default function WashPlantPage() {
         </div>
 
         {/* Hero Restrained Capability Footer */}
-        <div className="relative z-10 mx-auto max-w-7xl w-full pt-12 border-t border-white/10 mt-12 flex flex-col md:flex-row md:items-center justify-between gap-4 text-xs font-ibm-plex-mono text-alkota-silver uppercase tracking-widest px-6 sm:px-12 pb-6">
+        <div className="relative z-10 mx-auto max-w-7xl w-full pt-8 border-t border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-4 text-xs font-ibm-plex-mono text-alkota-silver uppercase tracking-widest px-6 sm:px-12 pb-8">
           <div className="flex items-center gap-4 sm:gap-6 flex-wrap">
             <span>DESIGN</span>
             <span>·</span>

@@ -7,6 +7,7 @@ import ProductCard from '@/components/parts/ProductCard';
 import { MASTER_TAXONOMY } from '@/lib/parts/taxonomy';
 import SafeImage from '@/components/ui/SafeImage';
 import { Metadata } from 'next';
+import SortSelect from '@/components/parts/SortSelect';
 
 export const dynamic = 'force-dynamic';
 
@@ -249,19 +250,13 @@ export default async function CategoryBrowsePage({ params, searchParams }: PageP
           {/* Sort Menu */}
           <div className="flex items-center gap-2 text-xs font-ibm-plex-mono text-[#777]">
             <span className="text-[10px] uppercase tracking-wider text-[#888]">Sort:</span>
-            <select
+            <SortSelect
               value={sortOption}
-              onChange={(e) => {
-                const target = buildUrl({ sort: e.target.value });
-                window.location.href = target;
-              }}
-              className="bg-[#FAF9F5] border border-[#DCDAD4] text-alkota-black px-2.5 py-1 text-xs focus:outline-none focus:border-black font-normal"
-            >
-              <option value="default">Default Order</option>
-              <option value="price_asc">Price: Low to High</option>
-              <option value="price_desc">Price: High to Low</option>
-              <option value="newest">Newest Additions</option>
-            </select>
+              categorySlug={categorySlug}
+              brand={selectedBrand}
+              available={sp.available}
+              searchQuery={searchQuery}
+            />
           </div>
         </div>
       </section>

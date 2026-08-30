@@ -9,6 +9,10 @@ import { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
 
+interface PageProps {
+  params: Promise<{ brand: string }>;
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { brand: brandSlug } = await params;
   const { data: brand } = await supabaseAdmin

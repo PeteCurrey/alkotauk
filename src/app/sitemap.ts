@@ -45,12 +45,32 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  const lobbyUrls = lobbyArticles.map((a) => ({
-    url: `${baseUrl}/lobby/${a.category_slug}/${a.slug}`,
-    lastModified: new Date(a.published_at || new Date()),
-    changeFrequency: 'monthly' as const,
-    priority: 0.85,
+  const lobbyPillars = [
+    'good-clean-news',
+    'knowledge',
+    'workshop',
+    'field-notes',
+    'industries',
+    'trade-desk',
+    'inside-alkota',
+  ];
+
+  const lobbyPillarUrls = lobbyPillars.map((p) => ({
+    url: `${baseUrl}/lobby/${p}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.9,
   }));
+
+  const lobbyUrls = [
+    ...lobbyPillarUrls,
+    ...lobbyArticles.map((a) => ({
+      url: `${baseUrl}/lobby/${a.category_slug}/${a.slug}`,
+      lastModified: new Date(a.published_at || new Date()),
+      changeFrequency: 'monthly' as const,
+      priority: 0.85,
+    })),
+  ];
 
   const dealerUrls = dealers.map((d) => ({
     url: `${baseUrl}/dealers/${d.slug}`,

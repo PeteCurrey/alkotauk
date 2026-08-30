@@ -41,14 +41,14 @@ export default function CaseStudyDepthIndicator() {
         <div>
           <div className="flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-[#38BDF8] mb-2 font-mono">
             <Layers className="h-4 w-4" />
-            <span>Telemetry Scale // Subglacial Depth Profile</span>
+            <span>Telemetry Scale // Borehole Depth Profile</span>
           </div>
           <h3 className="font-extralight text-3xl sm:text-4xl uppercase tracking-tight text-white">
             800 Metres Through Glacial Ice
           </h3>
         </div>
         <div className="flex items-center gap-4 bg-[#0F172A] px-6 py-3 border border-[#1E293B]">
-          <span className="text-xs uppercase tracking-wider text-[#94A3B8]">Live Depth:</span>
+          <span className="text-xs uppercase tracking-wider text-[#94A3B8]">Borehole Depth:</span>
           <span className="font-mono text-2xl text-[#38BDF8] font-bold">-{activeDepth} M</span>
         </div>
       </div>

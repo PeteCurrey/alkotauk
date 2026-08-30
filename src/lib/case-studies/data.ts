@@ -256,21 +256,21 @@ export const CASE_STUDIES: CaseStudy[] = [
   // ── 01: ONE GREAT NORTHERN ───────────────────────────────────────────────
   {
     slug: 'one-great-northern',
-    title: 'One Great Northern: Keeping Heavy Plant Ready for the Next Lift',
+    title: 'One Great Northern × Alkota | Heavy Plant Cleaning Case Study',
     shortTitle: 'One Great Northern',
-    eyebrow: 'CRANE HIRE & HEAVY PLANT / CHESTERFIELD',
+    eyebrow: 'NAMED CUSTOMER // FIELD APPLICATION',
     sector: 'Crane Hire / Heavy Plant Maintenance',
     hierarchyLevel: 'CUSTOMER_STORY',
     clientName: 'One Great Northern',
     clientVisibility: 'named',
     location: 'Chesterfield, Derbyshire, UK',
-    date: 'Commercial Fleet Installation',
+    date: 'Commercial Fleet Application',
     heroImage: 'https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=2400&q=85',
     heroAlt: 'Specialist mobile crane and heavy plant washdown in UK industrial depot',
     heroCaption: 'Heavy mobile crane chassis and outrigger maintenance in a working yard depot.',
-    headline: 'KEEPING HEAVY EQUIPMENT READY FOR THE NEXT LIFT.',
+    headline: 'WHEN THE MACHINES ARE THE BUSINESS.',
     standfirst:
-      'Operating specialist mobile cranes and heavy lifting plant requires uncompromising maintenance. Chesterfield-based One Great Northern uses Alkota hot-water pressure washing equipment to keep high-value assets clean, inspected, and ready for critical contract lifts.',
+      'Crane hire and heavy plant don’t get the luxury of staying clean. They have to arrive on site ready to work. The cleaning system therefore becomes part of the operational infrastructure.',
     verified: false,
     sourceType: 'NAMED CUSTOMER / FIELD APPLICATION',
     problem:
@@ -333,13 +333,33 @@ export const CASE_STUDIES: CaseStudy[] = [
       { label: 'Sector', value: 'Mobile Crane Hire & Heavy Plant' },
       { label: 'Primary Wash Duty', value: 'Crane chassis, outriggers, boom slides & undercarriages' },
       { label: 'Heating Technology', value: 'Alkota Schedule 80 Continuous-Wound Hydro-Insulated Coil' },
-      { label: 'Pump Architecture', value: 'Ceramic triplex low-RPM plunger pump' },
+      { label: 'Pump Architecture', value: 'Ceramic triplex low-RPM plunger pump (1,450 RPM)' },
     ],
     evidence: {
       projectLocation: 'Chesterfield, Derbyshire, UK',
       suppliedBy: 'Alkota UK Regional Network',
       verificationNotes: 'Named customer field application. Formal machine model verification and workshop photography pending submission.',
     },
+    externalSources: [
+      {
+        title: 'One Great Northern Heavy Lifting Operations',
+        publisher: 'One Great Northern Company Information',
+        year: 'Commercial Operations Profile',
+        note: 'Specialist mobile crane hire and contract lifting services in Chesterfield and nationwide UK.',
+      },
+      {
+        title: 'Safe Use of Lifting Equipment (LOLER 1998 Approved Code of Practice)',
+        publisher: 'Health and Safety Executive (HSE)',
+        year: 'Statutory Guidance L113',
+        note: 'Outlines statutory requirements for thorough examination and visual cleanliness of lifting gear.',
+      },
+      {
+        title: 'ASTM A53 Schedule 80 Steel Pipe Pressure Vessel Specifications',
+        publisher: 'Alkota Cleaning Systems Engineering Archive',
+        year: 'Technical Documentation',
+        note: 'Engineering standards for hydro-insulated continuous-wound pressure washer heating coils.',
+      },
+    ],
     nextStorySlug: 'entirefm-industrial-cleaning',
     relatedProductSlugs: ['alkota-420x4', 'alkota-4305xd4'],
     relatedIndustries: ['industrial', 'transport-fleet'],
@@ -352,9 +372,9 @@ export const CASE_STUDIES: CaseStudy[] = [
       href: '/tools/configurator',
     },
     seo: {
-      title: 'One Great Northern Crane Hire Case Study | Alkota UK',
+      title: 'One Great Northern × Alkota | Heavy Plant Cleaning Case Study',
       description:
-        'See how Chesterfield crane specialist One Great Northern maintains mobile crane fleets and heavy lifting plant using Alkota hot-water pressure washers.',
+        'See how Alkota pressure-washing equipment supports heavy-plant and crane cleaning, with the One Great Northern application explored through real-world engineering requirements.',
       ogImage: 'https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=1200&q=80',
     },
   },

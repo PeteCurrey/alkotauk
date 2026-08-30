@@ -8,14 +8,14 @@ export default function CaseStudyTelemetryMap() {
         <div>
           <div className="flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-[#38BDF8] mb-2 font-mono">
             <Radio className="h-4 w-4 animate-pulse" />
-            <span>Expedition Telemetry // Overland Traverse</span>
+            <span>Expedition Telemetry // Approximate Overland Traverse</span>
           </div>
           <h3 className="font-extralight text-3xl sm:text-4xl uppercase tracking-tight text-white">
             625-Mile Ross Ice Sheet Traverse
           </h3>
         </div>
         <div className="text-xs uppercase tracking-wider text-[#94A3B8] font-mono">
-          Route: McMurdo Station → Subglacial Lake Whillans
+          Route: McMurdo Station → Subglacial Lake Whillans (Approximate)
         </div>
       </div>
 

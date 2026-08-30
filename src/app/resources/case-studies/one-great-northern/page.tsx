@@ -26,16 +26,18 @@ import {
   Layers,
   ArrowRight,
   Sparkles,
+  ExternalLink,
+  BookOpen,
 } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'One Great Northern | Crane & Heavy Plant Cleaning Case Study | Alkota UK',
+  title: 'One Great Northern × Alkota | Heavy Plant Cleaning Case Study',
   description:
-    'See how industrial hot-water pressure washing fits the demanding cleaning requirements of mobile cranes, heavy plant, and professional fleet operations at One Great Northern.',
+    'See how Alkota pressure-washing equipment supports heavy-plant and crane cleaning, with the One Great Northern application explored through real-world engineering requirements.',
   openGraph: {
-    title: 'One Great Northern | Crane & Heavy Plant Cleaning Case Study | Alkota UK',
+    title: 'One Great Northern × Alkota | Heavy Plant Cleaning Case Study',
     description:
-      'See how industrial hot-water pressure washing fits the demanding cleaning requirements of mobile cranes, heavy plant, and professional fleet operations at One Great Northern.',
+      'See how Alkota pressure-washing equipment supports heavy-plant and crane cleaning, with the One Great Northern application explored through real-world engineering requirements.',
     url: 'https://alkota.co.uk/resources/case-studies/one-great-northern',
     type: 'article',
     images: [
@@ -125,6 +127,19 @@ export default function OneGreatNorthernPage() {
       {/* ── 00: FULL-VIEWPORT HERO ─────────────────────────────────── */}
       <CaseStudyHeader caseStudy={caseStudy} />
 
+      {/* ── 00B: CUSTOMER & PROJECT VERIFICATION BADGE ─────────────── */}
+      <div className="bg-[#EFEFEA] border-b border-[#E8E8E4] px-6 sm:px-12 py-4">
+        <div className="mx-auto max-w-5xl flex items-center justify-between gap-4 text-xs font-mono">
+          <div className="flex items-center gap-2 text-[#333]">
+            <ShieldCheck className="h-4 w-4 text-[#10B981] shrink-0" />
+            <span>Named Customer // Commercial Field Application · Chesterfield, Derbyshire</span>
+          </div>
+          <span className="hidden sm:inline-block px-2 py-0.5 bg-white border border-[#DDD] text-[10px] uppercase text-[#666]">
+            Application Analysis
+          </span>
+        </div>
+      </div>
+
       {/* ── 01: OPENING EDITORIAL SEQUENCE ─────────────────────────── */}
       <section className="border-b border-[#E8E8E4] bg-white py-20 sm:py-28 px-6 sm:px-12">
         <div className="mx-auto max-w-5xl">
@@ -132,8 +147,8 @@ export default function OneGreatNorthernPage() {
             01 // Operational Value
           </span>
           <h2 className="font-extralight text-3xl sm:text-5xl lg:text-6xl uppercase tracking-tight text-alkota-black leading-[1.05] mb-8">
-            A crane can be worth hundreds of thousands.<br />
-            <span className="text-[#FF6900]">The dirt is the cheap part.</span>
+            When the machines<br />
+            <span className="text-[#FF6900]">are the business.</span>
           </h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start text-base sm:text-lg text-[#444] leading-relaxed">
@@ -146,32 +161,28 @@ export default function OneGreatNorthernPage() {
               </p>
             </div>
 
-            <div className="lg:col-span-5 bg-[#F8F7F4] p-6 sm:p-8 border border-[#E8E8E4] space-y-4">
-              <span className="font-mono text-xs uppercase tracking-wider text-[#888] block border-b border-[#E8E8E4] pb-2">
-                Five Fleet Cleanliness Demands
+            <div className="lg:col-span-5 bg-[#F8F7F4] p-6 sm:p-8 border border-[#E8E8E4] space-y-4 font-mono text-xs">
+              <span className="text-[#888] block uppercase tracking-wider border-b border-[#E8E8E4] pb-2">
+                Customer & Application Profile
               </span>
-              <ul className="space-y-3 text-xs sm:text-sm text-alkota-black">
-                <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#FF6900] shrink-0" />
-                  <span><strong>Presentable:</strong> High-profile arrival on Tier-1 customer sites.</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#FF6900] shrink-0" />
-                  <span><strong>Inspectable:</strong> Clear visibility of critical structural welds and pins.</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#FF6900] shrink-0" />
-                  <span><strong>Maintainable:</strong> Preventing abrasive grit from tearing rod packings.</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#FF6900] shrink-0" />
-                  <span><strong>Serviceable:</strong> Rapid access to lubrication fittings and hydraulic lines.</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#FF6900] shrink-0" />
-                  <span><strong>Ready for Deployment:</strong> Swift turnaround between contract hires.</span>
-                </li>
-              </ul>
+              <div className="space-y-3 text-alkota-black">
+                <div>
+                  <span className="text-[#888] block text-[10px] uppercase">Customer</span>
+                  <span className="font-medium text-sm">One Great Northern</span>
+                </div>
+                <div>
+                  <span className="text-[#888] block text-[10px] uppercase">Industry</span>
+                  <span>Specialist Crane Hire & Contract Lifting</span>
+                </div>
+                <div>
+                  <span className="text-[#888] block text-[10px] uppercase">Location</span>
+                  <span>Chesterfield, Derbyshire, UK</span>
+                </div>
+                <div>
+                  <span className="text-[#888] block text-[10px] uppercase">Primary Equipment Class</span>
+                  <span>High-Output Continuous Hot-Water Wash Bay Skid</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -183,7 +194,7 @@ export default function OneGreatNorthernPage() {
           <div className="flex items-center gap-3 mb-4">
             <span className="font-mono text-xs text-[#FF6900] tracking-widest">02</span>
             <span className="h-[1px] w-8 bg-[#FF6900]" />
-            <span className="text-xs uppercase tracking-[0.2em] text-[#777]">The Operator Profile</span>
+            <span className="text-xs uppercase tracking-[0.2em] text-[#777] font-mono">The Operator Profile</span>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
@@ -203,22 +214,22 @@ export default function OneGreatNorthernPage() {
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 mt-8 pt-6 border-t border-[#E8E8E4] text-xs">
+              <div className="grid grid-cols-2 gap-4 mt-8 pt-6 border-t border-[#E8E8E4] text-xs font-mono">
                 <div>
                   <span className="text-[#888] uppercase tracking-wider block text-[10px]">Headquarters</span>
-                  <span className="text-alkota-black font-normal">Chesterfield, Derbyshire</span>
+                  <span className="text-alkota-black">Chesterfield, Derbyshire</span>
                 </div>
                 <div>
                   <span className="text-[#888] uppercase tracking-wider block text-[10px]">Primary Capability</span>
-                  <span className="text-alkota-black font-normal">Mobile Crane & Plant Hire</span>
+                  <span className="text-alkota-black">Mobile Crane & Plant Hire</span>
                 </div>
                 <div>
                   <span className="text-[#888] uppercase tracking-wider block text-[10px]">Geographic Reach</span>
-                  <span className="text-alkota-black font-normal">National UK Operations</span>
+                  <span className="text-alkota-black">National UK Operations</span>
                 </div>
                 <div>
                   <span className="text-[#888] uppercase tracking-wider block text-[10px]">Engineering Focus</span>
-                  <span className="text-alkota-black font-normal">Plant Maintenance & Overhaul</span>
+                  <span className="text-alkota-black">Plant Maintenance & Overhaul</span>
                 </div>
               </div>
             </div>
@@ -230,7 +241,7 @@ export default function OneGreatNorthernPage() {
                   alt="Industrial plant depot and mobile crane maintenance yard"
                   className="w-full h-full object-cover filter contrast-105"
                 />
-                <div className="absolute bottom-0 inset-x-0 bg-black/80 backdrop-blur-sm p-3 text-[11px] text-white flex items-center justify-between border-t border-white/10">
+                <div className="absolute bottom-0 inset-x-0 bg-black/80 backdrop-blur-sm p-3 text-[11px] text-white flex items-center justify-between border-t border-white/10 font-mono">
                   <span>Industrial depot hardstanding and heavy plant staging</span>
                   <span className="text-[#AAA] uppercase tracking-wider text-[10px]">Yard Operations</span>
                 </div>
@@ -246,11 +257,11 @@ export default function OneGreatNorthernPage() {
           <div className="flex items-center gap-3 mb-4">
             <span className="font-mono text-xs text-[#FF6900] tracking-widest">03</span>
             <span className="h-[1px] w-8 bg-[#FF6900]" />
-            <span className="text-xs uppercase tracking-[0.2em] text-[#777]">The Physical Challenge</span>
+            <span className="text-xs uppercase tracking-[0.2em] text-[#777] font-mono">The Physical Challenge</span>
           </div>
 
           <h2 className="font-extralight text-3xl sm:text-5xl uppercase tracking-tight text-alkota-black leading-tight mb-8">
-            The machine works. So does the dirt.
+            Heavy equipment creates heavy cleaning problems.
           </h2>
 
           <p className="text-base sm:text-lg text-[#555] leading-relaxed max-w-3xl mb-12">
@@ -321,13 +332,13 @@ export default function OneGreatNorthernPage() {
         </div>
       </section>
 
-      {/* ── 04: WHY HOT WATER (PHYSICS OF CLEANING) ────────────────── */}
+      {/* ── 04: WHY HOT WATER & FLOW DYNAMICS ──────────────────────── */}
       <section className="py-20 sm:py-28 px-6 sm:px-12 bg-[#121212] text-white border-b border-[#222]">
         <div className="mx-auto max-w-5xl">
           <div className="flex items-center gap-3 mb-4">
             <span className="font-mono text-xs text-[#FF6900] tracking-widest">04</span>
             <span className="h-[1px] w-8 bg-[#FF6900]" />
-            <span className="text-xs uppercase tracking-[0.2em] text-[#AAA]">The Science of Heat</span>
+            <span className="text-xs uppercase tracking-[0.2em] text-[#AAA] font-mono">The Science of Heat & Flow</span>
           </div>
 
           <h2 className="font-extralight text-3xl sm:text-5xl lg:text-6xl uppercase tracking-tight text-white leading-[1.05] mb-6">
@@ -336,7 +347,7 @@ export default function OneGreatNorthernPage() {
           </h2>
 
           <p className="text-base sm:text-lg text-[#CCC] leading-relaxed max-w-3xl mb-14 font-normal">
-            Cold water delivers mechanical force, but when contamination is bound by grease and oils, pressure alone merely pushes oily films across painted steel. Professional cleaning performance is a balanced system.
+            Cold water delivers mechanical impact, but when contamination is bound by grease and hydraulic oil, pressure alone merely pushes oily films across painted steel.
           </p>
 
           {/* 5-Factor Cleaning Dynamics Breakdown */}
@@ -347,8 +358,8 @@ export default function OneGreatNorthernPage() {
                 <span>Pressure</span>
               </div>
               <h4 className="font-light text-base uppercase tracking-tight text-white mb-2">Mechanical Force</h4>
-              <p className="text-xs text-[#AAA] leading-relaxed">
-                Provides the initial shear velocity to break the physical bond between caked mud and bare metal.
+              <p className="text-xs text-[#AAA] leading-relaxed font-normal">
+                Provides initial shear velocity to break the physical bond between caked mud and bare metal.
               </p>
             </div>
 
@@ -358,8 +369,8 @@ export default function OneGreatNorthernPage() {
                 <span>Flow Rate</span>
               </div>
               <h4 className="font-light text-base uppercase tracking-tight text-white mb-2">Flushing Volume</h4>
-              <p className="text-xs text-[#AAA] leading-relaxed">
-                Hydraulic litres-per-minute that carry loosened clay and slurry away from recesses and into drains.
+              <p className="text-xs text-[#AAA] leading-relaxed font-normal">
+                Hydraulic litres-per-minute (18–25+ L/min) that carry loosened clay away from multi-axle recesses into drains.
               </p>
             </div>
 
@@ -369,7 +380,7 @@ export default function OneGreatNorthernPage() {
                 <span>Thermal Heat</span>
               </div>
               <h4 className="font-light text-base uppercase tracking-tight text-white mb-2">Emulsification</h4>
-              <p className="text-xs text-[#AAA] leading-relaxed">
+              <p className="text-xs text-[#AAA] leading-relaxed font-normal">
                 80°C–90°C heat melts grease and hydraulic oil into liquid emulsions that rinse without abrasive friction.
               </p>
             </div>
@@ -380,7 +391,7 @@ export default function OneGreatNorthernPage() {
                 <span>Chemical</span>
               </div>
               <h4 className="font-light text-base uppercase tracking-tight text-white mb-2">Targeted Dwell</h4>
-              <p className="text-xs text-[#AAA] leading-relaxed">
+              <p className="text-xs text-[#AAA] leading-relaxed font-normal">
                 Low-chemical reliance. Hot water allows biodegradable detergents to work at peak chemical activation.
               </p>
             </div>
@@ -391,7 +402,7 @@ export default function OneGreatNorthernPage() {
                 <span>Turnaround</span>
               </div>
               <h4 className="font-light text-base uppercase tracking-tight text-white mb-2">Labour Output</h4>
-              <p className="text-xs text-[#AAA] leading-relaxed">
+              <p className="text-xs text-[#AAA] leading-relaxed font-normal">
                 Dramatically reduces wash times per axle, returning high-value mobile plant to service faster.
               </p>
             </div>
@@ -405,14 +416,14 @@ export default function OneGreatNorthernPage() {
           <div className="flex items-center gap-3 mb-4">
             <span className="font-mono text-xs text-[#FF6900] tracking-widest">05</span>
             <span className="h-[1px] w-8 bg-[#FF6900]" />
-            <span className="text-xs uppercase tracking-[0.2em] text-[#777]">Depot Operations</span>
+            <span className="text-xs uppercase tracking-[0.2em] text-[#777] font-mono">Depot Operations</span>
           </div>
 
           <h2 className="font-extralight text-3xl sm:text-5xl uppercase tracking-tight text-alkota-black leading-tight mb-4">
             Back from site. Cleaned. Checked. Ready again.
           </h2>
           <p className="text-sm text-[#777] uppercase tracking-wider font-mono mb-12">
-            A typical professional heavy-fleet turnaround workflow
+            A representative professional heavy-fleet turnaround workflow
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -452,7 +463,7 @@ export default function OneGreatNorthernPage() {
               <span className="font-mono text-xs text-[#FF6900] block mb-1">STAGE 05</span>
               <h3 className="font-light text-xl uppercase tracking-tight text-alkota-black mb-2">05 / Inspect</h3>
               <p className="text-xs sm:text-sm text-[#666] leading-relaxed">
-                Pristine structural steel allows technicians to inspect weld lines, hydraulic fittings, and pivot pins with total visual clarity.
+                Pristine structural steel allows technicians to inspect weld lines, hydraulic fittings, and pivot pins with visual clarity.
               </p>
             </div>
 
@@ -467,240 +478,24 @@ export default function OneGreatNorthernPage() {
         </div>
       </section>
 
-      {/* ── 06: CLEANING + MAINTENANCE CONNECTION ─────────────────── */}
-      <section className="py-20 sm:py-28 px-6 sm:px-12 bg-[#F8F7F4] border-b border-[#E8E8E4]">
+      {/* ── 06: ALKOTA FIELD NOTE ──────────────────────────────────── */}
+      <section className="py-12 px-6 sm:px-12 bg-[#F8F7F4] border-b border-[#E8E8E4]">
         <div className="mx-auto max-w-5xl">
-          <div className="flex items-center gap-3 mb-4">
-            <span className="font-mono text-xs text-[#FF6900] tracking-widest">06</span>
-            <span className="h-[1px] w-8 bg-[#FF6900]" />
-            <span className="text-xs uppercase tracking-[0.2em] text-[#777]">Maintenance & Overhaul</span>
-          </div>
-
-          <h2 className="font-extralight text-3xl sm:text-5xl uppercase tracking-tight text-alkota-black leading-tight mb-8">
-            You can see more when the machine is clean.
-          </h2>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-            <div className="lg:col-span-7 space-y-6 text-base sm:text-lg text-[#444] leading-relaxed">
-              <p>
-                In specialist crane hire and machinery maintenance, thorough cleaning is the prerequisite for rigorous engineering inspection. Thick layers of road grime and hydraulic film can obscure early warning signs of mechanical wear.
-              </p>
-              <p>
-                A clean chassis enables mechanics and certified inspectors to instantly spot hydraulic hose micro-cracks, loose retaining bolts, weeping fittings, pin play, and subtle structural weld fatigue before the machine travels to another site.
-              </p>
-              <div className="p-6 bg-white border-l-4 border-[#121212] border-y border-r border-[#E8E8E4] text-xs sm:text-sm text-[#333] italic">
-                <strong>Important Engineering Note:</strong> Cleaning supports inspection. It does not replace scheduled statutory LOLER/PUWER examinations, manufacturer servicing, or non-destructive testing protocols.
-              </div>
+          <div className="p-8 bg-white border-l-4 border-[#FF6900] border-y border-r border-[#E8E8E4]">
+            <div className="text-xs font-mono uppercase tracking-wider text-[#FF6900] mb-2">
+              Alkota Field Note // Operational Infrastructure
             </div>
-
-            <div className="lg:col-span-5 bg-white p-8 border border-[#E8E8E4] space-y-4">
-              <span className="font-mono text-xs uppercase tracking-wider text-[#FF6900] block border-b border-[#E8E8E4] pb-2">
-                Key Visual Inspection Points
-              </span>
-              <ul className="space-y-3 text-xs sm:text-sm text-[#555]">
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-[#FF6900] shrink-0 mt-0.5" />
-                  <span>Hydraulic cylinder seals and rod surface pitting</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-[#FF6900] shrink-0 mt-0.5" />
-                  <span>Outrigger box structural weld seams</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-[#FF6900] shrink-0 mt-0.5" />
-                  <span>Multi-axle steering linkages and kingpin grease seals</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-[#FF6900] shrink-0 mt-0.5" />
-                  <span>Brake chamber fittings and air lines</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-[#FF6900] shrink-0 mt-0.5" />
-                  <span>Slew ring bolt tension and gear teeth condition</span>
-                </li>
-              </ul>
-            </div>
+            <p className="text-base sm:text-lg text-alkota-black italic leading-relaxed mb-4">
+              “Cleaning is part of maintaining equipment ready for work. When capital assets earn revenue through uptime and inspection pass-rates, washdown infrastructure is part of the operational fleet.”
+            </p>
+            <span className="text-xs text-[#777] font-mono uppercase tracking-wider block">
+              Editorial Observation · Heavy Plant Maintenance Dynamics
+            </span>
           </div>
         </div>
       </section>
 
-      {/* ── 07: FLEET PRESENTATION ─────────────────────────────────── */}
-      <section className="py-20 sm:py-28 px-6 sm:px-12 bg-white border-b border-[#E8E8E4]">
-        <div className="mx-auto max-w-5xl">
-          <div className="flex items-center gap-3 mb-4">
-            <span className="font-mono text-xs text-[#FF6900] tracking-widest">07</span>
-            <span className="h-[1px] w-8 bg-[#FF6900]" />
-            <span className="text-xs uppercase tracking-[0.2em] text-[#777]">Brand & Perception</span>
-          </div>
-
-          <h2 className="font-extralight text-3xl sm:text-5xl uppercase tracking-tight text-alkota-black leading-tight mb-8">
-            The machine is part of your reputation.
-          </h2>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-            <div className="lg:col-span-6 space-y-6 text-base sm:text-lg text-[#444] leading-relaxed">
-              <p>
-                A modern crane fleet is both a productive engineering asset and a highly visible representation of the operator behind it. When equipment arrives on client premises — whether a nuclear power station, a busy steel fabrication yard, or a major highway bridge lift — initial visual presentation communicates competence.
-              </p>
-              <p>
-                Keeping working machinery clean is not about turning heavy plant into a delicate showroom ornament. It is about operating valuable working iron with the pride, discipline, and attention to detail that industrial clients expect.
-              </p>
-            </div>
-
-            <div className="lg:col-span-6">
-              <div className="relative aspect-[16/10] overflow-hidden bg-[#EFEFEA] border border-[#E8E8E4]">
-                <img
-                  src="https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=1200&q=80"
-                  alt="Specialist mobile crane operating on site"
-                  className="w-full h-full object-cover filter contrast-105"
-                />
-                <div className="absolute bottom-0 inset-x-0 bg-black/80 backdrop-blur-sm p-3 text-[11px] text-white flex items-center justify-between border-t border-white/10">
-                  <span>Professional crane fleet presentation on commercial contract site</span>
-                  <span className="text-[#AAA] uppercase tracking-wider text-[10px]">Client Staging</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 08: WHY INDUSTRIAL EQUIPMENT ───────────────────────────── */}
-      <section className="py-20 sm:py-28 px-6 sm:px-12 bg-[#0D0D0B] text-white border-b border-[#222]">
-        <div className="mx-auto max-w-5xl">
-          <div className="flex items-center gap-3 mb-4">
-            <span className="font-mono text-xs text-[#FF6900] tracking-widest">08</span>
-            <span className="h-[1px] w-8 bg-[#FF6900]" />
-            <span className="text-xs uppercase tracking-[0.2em] text-[#AAA]">The Alkota Difference</span>
-          </div>
-
-          <h2 className="font-extralight text-3xl sm:text-5xl lg:text-6xl uppercase tracking-tight text-white leading-[1.05] mb-8">
-            A pressure washer is easy to buy.<br />
-            <span className="text-[#FF6900]">An industrial machine has to keep working.</span>
-          </h2>
-
-          <p className="text-base sm:text-lg text-[#CCC] leading-relaxed max-w-3xl mb-12 font-normal">
-            Under daily commercial wash bay duty cycles, consumer or lightweight commercial pressure washers quickly suffer pump fatigue, electrical failures, and cracked heating coils. Alkota is built around pure industrial longevity.
-          </p>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="p-6 bg-white/5 border border-white/10">
-              <span className="font-mono text-xs text-[#FF6900] block mb-2">METALLURGY</span>
-              <h4 className="font-light text-base uppercase tracking-tight text-white mb-2">
-                Schedule 80 Steel Coils
-              </h4>
-              <p className="text-xs text-[#AAA] leading-relaxed">
-                ASTM A53 seamless cold-rolled steel pipe resists extreme thermal shock and aggressive hard water. Backed by our 7-year coil guarantee.
-              </p>
-            </div>
-
-            <div className="p-6 bg-white/5 border border-white/10">
-              <span className="font-mono text-xs text-[#FF6900] block mb-2">HYDRAULICS</span>
-              <h4 className="font-light text-base uppercase tracking-tight text-white mb-2">
-                Low-RPM Triplex Pumps
-              </h4>
-              <p className="text-xs text-[#AAA] leading-relaxed">
-                Slow-running ceramic plunger pumps operate at cooler temperatures with reduced seal friction for thousands of trouble-free hours.
-              </p>
-            </div>
-
-            <div className="p-6 bg-white/5 border border-white/10">
-              <span className="font-mono text-xs text-[#FF6900] block mb-2">DESIGN</span>
-              <h4 className="font-light text-base uppercase tracking-tight text-white mb-2">
-                Open-Chassis Serviceability
-              </h4>
-              <p className="text-xs text-[#AAA] leading-relaxed">
-                No fragile plastic housings. Fuel strainers, pump oil drains, and unloader valves are instantly accessible with standard hand tools.
-              </p>
-            </div>
-
-            <div className="p-6 bg-white/5 border border-white/10">
-              <span className="font-mono text-xs text-[#FF6900] block mb-2">SUPPORT</span>
-              <h4 className="font-light text-base uppercase tracking-tight text-white mb-2">
-                UK Parts & Servicing
-              </h4>
-              <p className="text-xs text-[#AAA] leading-relaxed">
-                Direct UK technical support, preventative maintenance contracts, and rapid dispatch on genuine factory replacement parts.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 09: WHAT THE SYSTEM IS THERE TO DELIVER ───────────────── */}
-      <section className="py-20 sm:py-28 px-6 sm:px-12 bg-white border-b border-[#E8E8E4]">
-        <div className="mx-auto max-w-5xl">
-          <div className="flex items-center gap-3 mb-4">
-            <span className="font-mono text-xs text-[#FF6900] tracking-widest">09</span>
-            <span className="h-[1px] w-8 bg-[#FF6900]" />
-            <span className="text-xs uppercase tracking-[0.2em] text-[#777]">Operational Objectives</span>
-          </div>
-
-          <h2 className="font-extralight text-3xl sm:text-5xl uppercase tracking-tight text-alkota-black leading-tight mb-4">
-            What the system is there to deliver.
-          </h2>
-          <p className="text-sm text-[#777] uppercase tracking-wider font-mono mb-12">
-            Qualitative performance goals for heavy fleet wash bays
-          </p>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="p-6 bg-[#F8F7F4] border border-[#E8E8E4]">
-              <h3 className="font-light text-base uppercase tracking-tight text-alkota-black mb-2">
-                Effective Heavy-Equipment Cleaning
-              </h3>
-              <p className="text-xs sm:text-sm text-[#666] leading-relaxed">
-                Reliable removal of stubborn road film, clay slurry, and traffic contamination across multi-axle undercarriages.
-              </p>
-            </div>
-
-            <div className="p-6 bg-[#F8F7F4] border border-[#E8E8E4]">
-              <h3 className="font-light text-base uppercase tracking-tight text-alkota-black mb-2">
-                Support for Fleet Presentation
-              </h3>
-              <p className="text-xs sm:text-sm text-[#666] leading-relaxed">
-                Maintaining corporate identity and professional equipment standards on client contract arrivals.
-              </p>
-            </div>
-
-            <div className="p-6 bg-[#F8F7F4] border border-[#E8E8E4]">
-              <h3 className="font-light text-base uppercase tracking-tight text-alkota-black mb-2">
-                Grease & Oil Emulsification
-              </h3>
-              <p className="text-xs sm:text-sm text-[#666] leading-relaxed">
-                High continuous water temperatures to liquefy sticky hydrocarbons around outriggers and hubs without harsh chemicals.
-              </p>
-            </div>
-
-            <div className="p-6 bg-[#F8F7F4] border border-[#E8E8E4]">
-              <h3 className="font-light text-base uppercase tracking-tight text-alkota-black mb-2">
-                Dependable Industrial Duty
-              </h3>
-              <p className="text-xs sm:text-sm text-[#666] leading-relaxed">
-                Continuous-duty components that run without thermal cutouts during intensive multi-vehicle wash shifts.
-              </p>
-            </div>
-
-            <div className="p-6 bg-[#F8F7F4] border border-[#E8E8E4]">
-              <h3 className="font-light text-base uppercase tracking-tight text-alkota-black mb-2">
-                Maintainable Architecture
-              </h3>
-              <p className="text-xs sm:text-sm text-[#666] leading-relaxed">
-                Straightforward mechanical design enabling yard technicians to perform routine servicing quickly.
-              </p>
-            </div>
-
-            <div className="p-6 bg-[#F8F7F4] border border-[#E8E8E4]">
-              <h3 className="font-light text-base uppercase tracking-tight text-alkota-black mb-2">
-                Practical Day-to-Day Usability
-              </h3>
-              <p className="text-xs sm:text-sm text-[#666] leading-relaxed">
-                Simple trigger operation, heavy-duty hose reels, and rapid winterisation procedures for harsh British weather.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 10: TECHNICAL SPECIFICATIONS TABLE ─────────────────────── */}
+      {/* ── 07: TECHNICAL SPECIFICATIONS & EVIDENCE PANEL ──────────── */}
       <div className="mx-auto max-w-5xl px-6 sm:px-12 py-16">
         <CaseStudySpecifications
           specifications={caseStudy.specifications || []}
@@ -714,30 +509,66 @@ export default function OneGreatNorthernPage() {
           clientName={caseStudy.clientName}
         />
 
-        {/* Canonical Equipment: Clearly distinguished as recommended for this application */}
+        {/* Sources & References Register */}
+        <section className="my-16 p-8 sm:p-10 bg-white border border-[#E8E8E4]">
+          <div className="flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-[#FF6900] mb-3 font-mono">
+            <BookOpen className="h-4 w-4" />
+            <span>SOURCES & FURTHER READING // SOURCE REGISTER</span>
+          </div>
+          <h3 className="font-extralight text-2xl uppercase tracking-tight text-alkota-black mb-6">
+            Verified Operational & Engineering References
+          </h3>
+          <div className="space-y-4 text-xs text-[#555]">
+            {caseStudy.externalSources?.map((src, idx) => (
+              <div key={idx} className="p-4 bg-[#F8F7F4] border border-[#E8E8E4] flex flex-col justify-between">
+                <div>
+                  <div className="flex items-start justify-between gap-4">
+                    <span className="text-sm text-alkota-black font-normal">{src.title}</span>
+                    {src.url && (
+                      <a
+                        href={src.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-[#FF6900] hover:underline shrink-0 text-[11px] uppercase tracking-wider font-mono"
+                      >
+                        <span>View Source</span>
+                        <ExternalLink className="h-3 w-3" />
+                      </a>
+                    )}
+                  </div>
+                  {src.author && <span className="text-[#666] block mt-0.5">{src.author}</span>}
+                  <span className="text-[#888] block mt-0.5">{src.publisher} ({src.year})</span>
+                  {src.note && <span className="text-[#777] italic block mt-1.5">{src.note}</span>}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Canonical Equipment */}
         <CaseStudyRelatedProducts
           productSlugs={caseStudy.relatedProductSlugs}
           fallbackCategory="hot-water"
           headline="Recommended Equipment for Heavy Fleet Washdowns"
         />
 
-        {/* ── 11: CONSULTATIVE CONVERSION CTA ──────────────────────── */}
+        {/* ── 08: CONSULTATIVE CONVERSION CTA ──────────────────────── */}
         <CaseStudyConsultationCTA
           eyebrow="FLEET WASHDOWN SPECIFICATION"
-          headline="Your Machine Doesn’t Have to Lift 100 Tonnes to Deserve the Right Cleaning System."
+          headline="Your Equipment Works Hard. Your Cleaning System Should Too."
           description="Tell us what you're cleaning, how often it works and what contamination you're dealing with. We'll help specify the system around the job."
           primaryCTA={{
-            label: 'Specify My Cleaning System',
-            href: '/industries/transport-fleet',
+            label: 'Specify My System',
+            href: '/tools/configurator',
           }}
           secondaryCTA={{
-            label: 'Explore Hot Water Machines',
-            href: '/machines/hot-water',
+            label: 'Talk to an Engineer',
+            href: '/contact',
           }}
         />
       </div>
 
-      {/* ── 12: NEXT FIELD STORY ───────────────────────────────────── */}
+      {/* ── 09: NEXT FIELD STORY ───────────────────────────────────── */}
       <CaseStudyNextStory nextSlug={caseStudy.nextStorySlug} />
 
       {/* ── GLOBAL FOOTER ─────────────────────────────────────────── */}

@@ -68,19 +68,13 @@ export default async function ChemicalCategoryHubPage({ params }: CategoryPagePr
 
   const chemicals = getChemicalsByCategory(categorySlug);
 
-  // Category specific narratives
-  const isFleet = categorySlug === 'fleet-vehicle' || categorySlug === 'transportation-fleet';
-  const isDegreaser = categorySlug === 'degreasers' || categorySlug === 'degreaser' || categorySlug === 'heavy-industrial';
-  const isAg = categorySlug === 'industrial' || categorySlug === 'farm-ag' || categorySlug === 'agriculture';
-  const isPartsWasher = categorySlug === 'parts-washers' || categorySlug === 'parts-washer' || categorySlug === 'parts-washer-solution';
-
   return (
-    <main className="min-h-screen bg-[#0D0D0D] text-white selection:bg-alkota-orange selection:text-white pt-28 pb-0">
+    <div className="min-h-screen bg-[#FAF9F5] text-[#1A1A18] selection:bg-alkota-orange selection:text-white">
       <Navigation />
 
-      {/* Hero Header */}
-      <section className="relative border-b border-[#222] bg-[#0A0A0A]">
-        <div className="mx-auto max-w-7xl px-6 sm:px-12 pt-12 pb-16">
+      {/* ── CHAPTER 01: EDITORIAL LIGHT HERO ── */}
+      <section className="relative pt-32 pb-20 px-6 sm:px-12 lg:px-24 border-b border-[#E8E7E0] bg-[#FAF9F5]">
+        <div className="max-w-7xl mx-auto">
           <Breadcrumbs
             items={[
               { label: 'Chemicals', href: '/chemicals' },
@@ -91,7 +85,7 @@ export default async function ChemicalCategoryHubPage({ params }: CategoryPagePr
           <div className="mt-8 max-w-4xl">
             <Link
               href="/chemicals"
-              className="inline-flex items-center gap-1.5 text-[10px] font-ibm-plex-mono uppercase tracking-widest text-[#888] hover:text-alkota-orange transition-colors mb-6"
+              className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-[#777] hover:text-alkota-orange transition-colors mb-6 font-normal"
             >
               <ChevronLeft className="h-3.5 w-3.5" />
               <span>Back to All Chemical Families</span>
@@ -99,328 +93,287 @@ export default async function ChemicalCategoryHubPage({ params }: CategoryPagePr
 
             <div className="flex items-center gap-3 mb-4">
               <span className="h-2 w-2 rounded-full bg-alkota-orange" />
-              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.3em] text-alkota-orange">
-                // {categoryDef.badge} // VERIFIED UK RANGE
+              <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-alkota-orange font-medium">
+                {categoryDef.badge} // VERIFIED UK SPECIFICATION
               </span>
             </div>
 
-            <h1 className="text-4xl sm:text-6xl font-extralight tracking-tight uppercase leading-[0.95] text-white mb-6">
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extralight tracking-tight uppercase leading-[0.98] text-[#1A1A18] mb-6">
               {categoryDef.name.split('&')[0]} <br />
-              <span className="text-alkota-orange font-light">
+              <span className="text-alkota-orange font-normal italic">
                 {categoryDef.name.includes('&') ? `& ${categoryDef.name.split('&')[1]}` : 'ENGINEERING CHEMISTRY.'}
               </span>
             </h1>
 
-            <p className="text-sm sm:text-base text-[#AAA] leading-relaxed font-normal mb-8 max-w-3xl">
+            <p className="text-base sm:text-lg text-[#555] leading-relaxed font-normal mb-8 max-w-3xl">
               {categoryDef.description}
             </p>
 
             <div className="flex flex-wrap gap-4 pt-2">
               <Link
                 href="/chemicals/match"
-                className="inline-flex items-center gap-2 bg-alkota-orange text-white px-6 py-3 text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-colors font-normal shadow-lg shadow-alkota-orange/10"
+                className="inline-flex items-center gap-2 bg-alkota-orange text-white px-7 py-3.5 font-mono text-xs uppercase tracking-widest hover:bg-black transition-colors font-medium shadow-md"
               >
-                <span>Run Chemical Match Diagnostic</span>
+                <span>Launch Chemical Diagnostic</span>
                 <ArrowRight className="h-3.5 w-3.5" />
               </Link>
               <Link
                 href="/chemicals/safety-data"
-                className="inline-flex items-center gap-2 border border-[#333] bg-[#141414] text-[#CCC] px-5 py-3 text-xs uppercase tracking-widest hover:text-white transition-colors font-normal"
+                className="inline-flex items-center gap-2 border border-[#D5D5D0] bg-white text-[#333] px-6 py-3.5 font-mono text-xs uppercase tracking-widest hover:border-black transition-colors font-normal"
               >
                 <FileText className="h-3.5 w-3.5 text-alkota-orange" />
-                <span>Category SDS Technical Library</span>
+                <span>Safety Data Sheets (SDS)</span>
               </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Target Application & Metallurgy Matrix */}
-      <section className="py-12 bg-[#111111] border-b border-[#222]">
-        <div className="mx-auto max-w-7xl px-6 sm:px-12">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="p-5 bg-[#141414] border border-[#262626]">
-              <span className="block font-ibm-plex-mono text-[9px] uppercase tracking-widest text-alkota-orange mb-2">
+      {/* ── CHAPTER 02: TARGET APPLICATION & METALLURGY MATRIX (LIGHT EDITORIAL) ── */}
+      <section className="py-16 px-6 sm:px-12 lg:px-24 bg-white border-b border-[#E8E7E0]">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="border-t border-[#1A1A18] pt-6">
+              <span className="block font-mono text-[10px] uppercase tracking-widest text-alkota-orange mb-3 font-medium">
                 Primary Contaminants
               </span>
-              <ul className="space-y-1.5 text-xs text-[#CCC] font-normal">
+              <ul className="space-y-2 text-xs sm:text-sm text-[#444] font-normal">
                 {categoryDef.keyContaminants.map((c, i) => (
-                  <li key={i} className="flex items-center gap-2">
-                    <span className="h-1 w-1 rounded-full bg-alkota-orange" />
+                  <li key={i} className="flex items-start gap-2">
+                    <span className="text-alkota-orange font-mono">0{i+1}.</span>
                     <span>{c}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            <div className="p-5 bg-[#141414] border border-[#262626]">
-              <span className="block font-ibm-plex-mono text-[9px] uppercase tracking-widest text-alkota-orange mb-2">
+            <div className="border-t border-[#1A1A18] pt-6">
+              <span className="block font-mono text-[10px] uppercase tracking-widest text-alkota-orange mb-3 font-medium">
                 Compatible Substrates
               </span>
-              <ul className="space-y-1.5 text-xs text-[#CCC] font-normal">
+              <ul className="space-y-2 text-xs sm:text-sm text-[#444] font-normal">
                 {categoryDef.keySurfaces.map((s, i) => (
-                  <li key={i} className="flex items-center gap-2">
-                    <CheckCircle2 className="h-3 w-3 text-emerald-400 shrink-0" />
+                  <li key={i} className="flex items-start gap-2">
+                    <span className="text-alkota-orange font-mono">0{i+1}.</span>
                     <span>{s}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            <div className="p-5 bg-[#141414] border border-[#262626]">
-              <span className="block font-ibm-plex-mono text-[9px] uppercase tracking-widest text-alkota-orange mb-2">
-                Equipment Synergy
+            <div className="border-t border-[#1A1A18] pt-6">
+              <span className="block font-mono text-[10px] uppercase tracking-widest text-alkota-orange mb-3 font-medium">
+                Machine Equipment Synergy
               </span>
-              <p className="text-xs text-[#AAA] leading-relaxed font-normal">
+              <p className="text-xs sm:text-sm text-[#444] font-normal leading-relaxed mb-4">
                 {categoryDef.equipmentSynergy}
               </p>
+              <Link
+                href="/machines"
+                className="inline-flex items-center gap-1.5 text-xs font-mono text-alkota-orange hover:text-black uppercase tracking-wider font-medium"
+              >
+                <span>View Compatible Wash Systems</span>
+                <ArrowRight className="h-3 w-3" />
+              </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ─── BESPOKE CATEGORY EDITORIAL CHAPTERS ───────────────────────────── */}
-      {isFleet && (
-        <section className="py-16 bg-[#0E0E0E] border-b border-[#222]">
-          <div className="mx-auto max-w-7xl px-6 sm:px-12 space-y-8">
-            <div className="max-w-3xl">
-              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.25em] text-alkota-orange block mb-2">
-                // FLEET ENGINEERING ARCHITECTURE
-              </span>
-              <h2 className="text-2xl sm:text-3xl uppercase tracking-tight text-white font-light mb-4">
-                The Science of Touchless Road-Film Elimination
-              </h2>
-              <p className="text-xs sm:text-sm text-[#AAA] leading-relaxed font-normal">
-                Traffic film is not simple dirt; it is an electrostatically bonded compound of unburnt diesel soot, microscopic tire rubber dust, and oxidised bitumen oils. Alkota Fleet chemistry uses high-performance polar surfactants to neutralize this surface charge, allowing high-pressure hot rinse water to sheet away road grime without abrasive brush swirls.
-              </p>
-            </div>
+      {/* ── CHAPTER 03: VERIFIED CHEMICAL FORMULATIONS (LIGHT PRODUCT COMPARISON) ── */}
+      <section className="py-24 px-6 sm:px-12 lg:px-24 max-w-7xl mx-auto">
+        <div className="max-w-3xl mb-16">
+          <span className="font-mono text-[10px] uppercase tracking-widest text-alkota-orange block mb-2 font-medium">
+            Formulation Roster
+          </span>
+          <h2 className="font-extralight text-3xl sm:text-5xl text-[#1A1A18] tracking-tight leading-tight mb-4">
+            Verified {categoryDef.name} Products
+          </h2>
+          <p className="text-base text-[#666] font-normal leading-relaxed">
+            High-concentration concentrates formulated for downstream injector delivery, high-pressure foam cannons, or direct tank immersion.
+          </p>
+        </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
-              <div className="p-6 bg-[#141414] border border-[#262626] space-y-3">
-                <span className="font-ibm-plex-mono text-[10px] uppercase text-alkota-orange block">
-                  01. Alloy & Clear-Coat Preservation
-                </span>
-                <p className="text-xs text-[#CCC] leading-relaxed font-normal">
-                  High-pH caustics strip clear-coat gloss and permanently pit polished aluminium wheels. Alkota Power Blast TR-407 and Touchless TR-470 are engineered with sacrificial corrosion buffers to protect mirror finishes.
-                </p>
-              </div>
-              <div className="p-6 bg-[#141414] border border-[#262626] space-y-3">
-                <span className="font-ibm-plex-mono text-[10px] uppercase text-alkota-orange block">
-                  02. Interceptor & Wash Bay Compliance
-                </span>
-                <p className="text-xs text-[#CCC] leading-relaxed font-normal">
-                  All Alkota UK fleet formulations feature quick-break emulsion chemistry, allowing oil-water separators and interceptors to efficiently separate fuel and oil droplets before discharging.
-                </p>
-              </div>
-            </div>
+        {chemicals.length === 0 ? (
+          <div className="p-12 bg-white border border-[#E8E7E0] text-center">
+            <Beaker className="h-10 w-10 text-[#AAA] mx-auto mb-3" />
+            <h3 className="font-light text-xl text-[#1A1A18] mb-2">Category Formulations Under Technical Review</h3>
+            <p className="text-xs text-[#666] max-w-md mx-auto mb-6">
+              Our UK chemical laboratory is currently updating dilution matrices for this category. Contact an application engineer for interim formulation advice.
+            </p>
+            <Link
+              href="/chemicals"
+              className="inline-flex items-center gap-2 bg-alkota-black text-white px-6 py-3 font-mono text-xs uppercase tracking-widest"
+            >
+              <span>Explore Active Chemical Families</span>
+            </Link>
           </div>
-        </section>
-      )}
-
-      {isDegreaser && (
-        <section className="py-16 bg-[#0E0E0E] border-b border-[#222]">
-          <div className="mx-auto max-w-7xl px-6 sm:px-12 space-y-8">
-            <div className="max-w-3xl">
-              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.25em] text-alkota-orange block mb-2">
-                // INDUSTRIAL DEGREASING MECHANISM
-              </span>
-              <h2 className="text-2xl sm:text-3xl uppercase tracking-tight text-white font-light mb-4">
-                Grease is Not One Contaminant
-              </h2>
-              <p className="text-xs sm:text-sm text-[#AAA] leading-relaxed font-normal">
-                Industrial grease ranges from polymerised fifth-wheel lithium grease to high-temperature engine block varnish and bitumen tack. Alkota degreasers pair solvent solvency with thermal liquefaction to chemically penetrate the sludge barrier on contact.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
-              <div className="p-6 bg-[#141414] border border-[#262626] space-y-2">
-                <span className="font-ibm-plex-mono text-[10px] uppercase text-alkota-orange block">
-                  Thermal Synergy
-                </span>
-                <p className="text-xs text-[#CCC] font-normal leading-relaxed">
-                  Hot water at 80°C liquefies heavy waxes; alkaline builders then saponify greases into water-soluble soaps.
-                </p>
-              </div>
-              <div className="p-6 bg-[#141414] border border-[#262626] space-y-2">
-                <span className="font-ibm-plex-mono text-[10px] uppercase text-alkota-orange block">
-                  Soil Re-suspension
-                </span>
-                <p className="text-xs text-[#CCC] font-normal leading-relaxed">
-                  Hydrotropic agents form stable micelles, preventing dislodged grease from re-sticking to newly washed metal.
-                </p>
-              </div>
-              <div className="p-6 bg-[#141414] border border-[#262626] space-y-2">
-                <span className="font-ibm-plex-mono text-[10px] uppercase text-alkota-orange block">
-                  Heavy Cast Iron Protection
-                </span>
-                <p className="text-xs text-[#CCC] font-normal leading-relaxed">
-                  Alkaline environments leave clean machine blocks temporarily passivated against immediate atmospheric oxidation.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {isAg && (
-        <section className="py-16 bg-[#0E0E0E] border-b border-[#222]">
-          <div className="mx-auto max-w-7xl px-6 sm:px-12 space-y-8">
-            <div className="max-w-3xl">
-              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.25em] text-alkota-orange block mb-2">
-                // AGRICULTURAL HERO FORMULATION
-              </span>
-              <h2 className="text-2xl sm:text-3xl uppercase tracking-tight text-white font-light mb-4">
-                Farm Soap TR-440: Equipment Restoration Science
-              </h2>
-              <p className="text-xs sm:text-sm text-[#AAA] leading-relaxed font-normal">
-                Agricultural machinery operates in punishing weather, UV sunlight, manure acids, and caked clay. Farm Soap TR-440 is specifically formulated to remove micro-oxidised surface paint layers on weathered tractors and combines, permanently renewing colour depth and leaving a protective rinse barrier.
-              </p>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {isPartsWasher && (
-        <section className="py-16 bg-[#0E0E0E] border-b border-[#222]">
-          <div className="mx-auto max-w-7xl px-6 sm:px-12 space-y-8">
-            <div className="max-w-3xl">
-              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.25em] text-alkota-orange block mb-2">
-                // CLOSED-LOOP AQUEOUS PROCESS
-              </span>
-              <h2 className="text-2xl sm:text-3xl uppercase tracking-tight text-white font-light mb-4">
-                Non-Foaming Aqueous Degreasing with Flash-Rust Passivation
-              </h2>
-              <p className="text-xs sm:text-sm text-[#AAA] leading-relaxed font-normal">
-                Enclosed automatic rotary parts washers subject detergents to 10+ BAR mechanical impact pressures at 70°C. Standard detergents foam aggressively, cavitating pumps. Alkota APW chemistry uses temperature-activated de-foamers and vapour phase rust inhibitors to passivate bare cast iron for up to 60 days.
-              </p>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Products Listing Grid */}
-      <section className="py-20 bg-[#0D0D0D] border-b border-[#222]">
-        <div className="mx-auto max-w-7xl px-6 sm:px-12">
-          <div className="flex items-center justify-between mb-10 pb-4 border-b border-[#222]">
-            <span className="font-ibm-plex-mono text-xs uppercase tracking-widest text-[#888]">
-              // Verified Formulations in this Family ({chemicals.length})
-            </span>
-            <span className="text-[10px] font-ibm-plex-mono text-emerald-400 uppercase">
-              100% GB CLP Validated
-            </span>
-          </div>
-
-          {chemicals.length === 0 ? (
-            <div className="p-16 text-center bg-[#141414] border border-[#262626]">
-              <p className="text-xs font-ibm-plex-mono uppercase text-[#777] mb-4">
-                Additional formulations in this category are currently under UK REACH / GB CLP technical review.
-              </p>
-              <Link
-                href="/contact"
-                className="inline-flex items-center gap-2 bg-alkota-orange text-white px-6 py-3 text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-colors font-normal"
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {chemicals.map((prod) => (
+              <div
+                key={prod.id}
+                className="bg-white border border-[#E8E7E0] hover:border-[#1A1A18] p-8 flex flex-col justify-between transition-all"
               >
-                <span>Enquire About Custom Formulation Supply</span>
-                <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {chemicals.map((item) => (
-                <div
-                  key={item.id}
-                  className="bg-[#141414] border border-[#262626] hover:border-alkota-orange p-6 sm:p-8 flex flex-col justify-between transition-all group"
-                >
-                  <div>
-                    <div className="flex items-center justify-between text-[10px] font-ibm-plex-mono text-[#666] mb-3">
-                      <span className="bg-alkota-orange/10 text-alkota-orange px-2 py-0.5 border border-alkota-orange/30">
-                        {item.code || 'HYDRUS'}
+                <div>
+                  <div className="flex items-start justify-between gap-4 mb-4">
+                    <div>
+                      <span className="font-mono text-[10px] uppercase tracking-wider text-alkota-orange block mb-1">
+                        {prod.formulaCode || 'CONCENTRATE'}
                       </span>
-                      <span>{item.form}</span>
+                      <h3 className="font-light text-2xl sm:text-3xl tracking-tight text-[#1A1A18]">
+                        {prod.name}
+                      </h3>
                     </div>
 
-                    <h3 className="text-2xl uppercase tracking-tight text-white font-normal group-hover:text-alkota-orange transition-colors mb-2">
-                      {item.name}
-                    </h3>
-
-                    <p className="text-xs text-[#AAA] leading-relaxed font-normal mb-6">
-                      {item.tagline}
-                    </p>
-
-                    {/* Specification Highlights */}
-                    <div className="grid grid-cols-2 gap-3 p-3 bg-black/40 border border-[#222] text-[11px] font-ibm-plex-mono mb-6">
-                      <div>
-                        <span className="block text-[#555] text-[9px] uppercase">pH Level</span>
-                        <span className="text-white">{item.ph_level?.split(' ')[0] || '--'}</span>
-                      </div>
-                      <div>
-                        <span className="block text-[#555] text-[9px] uppercase">Dilution Rate</span>
-                        <span className="text-white">{item.dilution_hot || item.dilution_cold || 'As Directed'}</span>
-                      </div>
-                      <div>
-                        <span className="block text-[#555] text-[9px] uppercase">Biodegradable</span>
-                        <span className={item.biodegradable ? 'text-emerald-400' : 'text-[#888]'}>
-                          {item.biodegradable ? 'YES (OECD)' : 'NO'}
-                        </span>
-                      </div>
-                      <div>
-                        <span className="block text-[#555] text-[9px] uppercase">Available Sizes</span>
-                        <span className="text-white">{item.available_sizes?.length || 3} Pack Sizes</span>
-                      </div>
-                    </div>
+                    <span className="font-mono text-xs bg-[#FAF9F5] border border-[#DDD] px-3 py-1 text-[#444] shrink-0 font-medium">
+                      pH: {prod.pH || 'Neutral'}
+                    </span>
                   </div>
 
-                  <div className="space-y-2 pt-4 border-t border-[#222]">
-                    <Link
-                      href={`/chemicals/${categorySlug}/${item.slug}`}
-                      className="w-full flex items-center justify-center gap-2 bg-alkota-orange text-white py-3 text-xs uppercase tracking-wider hover:bg-white hover:text-black transition-colors font-normal shadow"
-                    >
-                      <span>View Technical Specification</span>
-                      <ArrowRight className="h-3 w-3" />
-                    </Link>
-                    <div className="flex gap-2">
-                      <a
-                        href={item.sds_url || '#'}
-                        className="flex-1 text-center py-2 bg-[#1C1C1C] hover:bg-[#262626] text-[#AAA] hover:text-white border border-[#333] text-[10px] font-ibm-plex-mono uppercase transition-colors"
-                      >
-                        SDS
-                      </a>
-                      <a
-                        href={item.tds_url || '#'}
-                        className="flex-1 text-center py-2 bg-[#1C1C1C] hover:bg-[#262626] text-[#AAA] hover:text-white border border-[#333] text-[10px] font-ibm-plex-mono uppercase transition-colors"
-                      >
-                        TDS
-                      </a>
+                  <p className="text-xs sm:text-sm text-[#555] leading-relaxed font-normal mb-6">
+                    {prod.description}
+                  </p>
+
+                  {/* Clean Technical Specs Grid */}
+                  <div className="border-t border-[#F0EFEB] pt-4 mb-6 space-y-2.5 font-mono text-xs">
+                    <div className="flex items-center justify-between text-[#666]">
+                      <span className="text-[#888]">Dilution Ratio:</span>
+                      <span className="text-[#1A1A18] font-medium">{prod.dilutionRatio || '1:20 to 1:100'}</span>
+                    </div>
+                    <div className="flex items-center justify-between text-[#666]">
+                      <span className="text-[#888]">Foam Profile:</span>
+                      <span className="text-[#1A1A18] font-medium">{prod.foamProfile || 'Medium High-Cling'}</span>
+                    </div>
+                    <div className="flex items-center justify-between text-[#666]">
+                      <span className="text-[#888]">Pack Sizes:</span>
+                      <span className="text-[#1A1A18] font-medium">25L Drum / 205L Barrel / 1000L IBC</span>
                     </div>
                   </div>
                 </div>
+
+                <div className="border-t border-[#E8E7E0] pt-5 flex items-center justify-between gap-4">
+                  <Link
+                    href={`/chemicals/product/${prod.slug}`}
+                    className="font-mono text-xs uppercase tracking-widest text-[#1A1A18] hover:text-alkota-orange transition-colors font-medium"
+                  >
+                    View Formulation Specs →
+                  </Link>
+
+                  <Link
+                    href="/chemicals/safety-data"
+                    className="inline-flex items-center gap-1.5 text-xs font-mono text-[#777] hover:text-black transition-colors"
+                  >
+                    <Download className="h-3.5 w-3.5 text-alkota-orange" />
+                    <span>Download SDS</span>
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* ── CHAPTER 04: ONE DARK CINEMATIC WASH CHAPTER (THERMAL SYNERGY) ── */}
+      <section className="py-24 px-6 sm:px-12 lg:px-24 bg-[#0A0A0A] text-white border-y border-[#222]">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div className="lg:col-span-7">
+              <span className="font-mono text-[10px] uppercase tracking-widest text-alkota-orange bg-[#1A1A1A] px-3 py-1 border border-[#333] inline-block mb-4">
+                Thermal Emulsification Thermodynamics
+              </span>
+
+              <h2 className="font-extralight text-3xl sm:text-5xl text-white tracking-tight leading-tight mb-6">
+                Why Alkota chemistry is formulated for heat.
+              </h2>
+
+              <p className="text-base text-[#AAA] font-normal leading-relaxed mb-6">
+                Standard consumer detergents break down and evaporate when exposed to 80°C hot water. Alkota industrial chemistry is chemically engineered with heat-stable surfactants that accelerate saponification under high thermal exchange.
+              </p>
+              <p className="text-sm text-[#777] font-normal leading-relaxed mb-8">
+                Combining Alkota hot-water Schedule 80 coil delivery with our verified chemical range allows operators to reduce chemical dosage by up to 60% while cutting wash time in half.
+              </p>
+
+              <div className="flex flex-wrap items-center gap-4">
+                <Link
+                  href="/machines/hot-water"
+                  className="inline-flex items-center gap-2 bg-alkota-orange hover:bg-white hover:text-black text-white px-7 py-3.5 font-mono text-xs uppercase tracking-widest transition-all font-medium"
+                >
+                  <span>Explore Hot Water Systems</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+                <Link
+                  href="/lobby/application-science/chemical-saponification-mechanics"
+                  className="inline-flex items-center gap-2 border border-[#444] hover:border-white text-white px-7 py-3.5 font-mono text-xs uppercase tracking-widest transition-all font-normal"
+                >
+                  Read Saponification Science
+                </Link>
+              </div>
+            </div>
+
+            <div className="lg:col-span-5 bg-[#141414] border border-[#222] p-8 space-y-4">
+              <h3 className="font-mono text-xs uppercase tracking-widest text-alkota-orange mb-4">
+                Alkota Chemical Advantages:
+              </h3>
+              {[
+                { title: 'Downstream Injection Safe', desc: 'Prevents aggressive chemical exposure to high-pressure pump valves and seals.' },
+                { title: 'Coil Scaling Inhibitors', desc: 'Chelating agents bind calcium and magnesium to prevent internal heat exchanger furring.' },
+                { title: 'Rapid Phase Separation', desc: 'Designed for wash bay oil-water interceptors to satisfy Environment Agency trade effluent rules.' },
+                { title: 'Full COSHH Compliance', desc: 'UK CLP compliant safety data sheets and bilingual container labeling.' },
+              ].map((item, idx) => (
+                <div key={idx} className="border-b border-[#222] pb-3 last:border-b-0">
+                  <h4 className="text-xs font-medium text-white mb-0.5">{item.title}</h4>
+                  <p className="text-[11px] text-[#777] leading-relaxed font-normal">{item.desc}</p>
+                </div>
               ))}
             </div>
-          )}
+          </div>
         </div>
       </section>
 
-      {/* Commercial Orders & Supply Banner */}
-      <section className="py-16 bg-[#0A0A0A]">
-        <div className="mx-auto max-w-7xl px-6 sm:px-12 flex flex-col md:flex-row items-center justify-between gap-8 bg-[#141412] border border-[#262626] p-8 sm:p-12">
-          <div className="space-y-3 max-w-2xl">
-            <h3 className="text-2xl uppercase tracking-tight text-white font-light">
-              Bulk 1000L IBC & Multi-Site Fleet Supply
-            </h3>
-            <p className="text-xs text-[#AAA] leading-relaxed font-normal">
-              Hydrus formulations in this category are available in palletized 25L drums, 200L barrels, and 1000L IBC totes with nationwide scheduled replenishment.
-            </p>
+      {/* ── CHAPTER 05: COMPLIANCE & BULK DISTRIBUTION (LIGHT) ── */}
+      <section className="py-24 px-6 sm:px-12 lg:px-24 max-w-7xl mx-auto">
+        <div className="bg-white border border-[#E8E7E0] p-8 sm:p-12 shadow-sm">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div className="lg:col-span-7">
+              <span className="font-mono text-[10px] uppercase tracking-widest text-alkota-orange block mb-2 font-medium">
+                UK Supply &amp; Storage
+              </span>
+              <h2 className="font-extralight text-3xl sm:text-4xl text-[#1A1A18] tracking-tight leading-tight mb-4">
+                Regional Chemical Delivery &amp; IBC Dosing
+              </h2>
+              <p className="text-sm text-[#555] leading-relaxed mb-6 font-normal">
+                Alkota authorised regional dealers provide regular route delivery of 25-litre polycans, 205-litre barrels, and 1,000-litre IBCs directly to your depot or wash bay with automated dosing integration.
+              </p>
+              <Link
+                href="/dealers"
+                className="inline-flex items-center gap-2 bg-alkota-black hover:bg-alkota-orange text-white px-7 py-3.5 font-mono text-xs uppercase tracking-widest transition-colors font-medium"
+              >
+                <span>Find Your Local Chemical Stockist</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+
+            <div className="lg:col-span-5 bg-[#FAF9F5] border border-[#E8E7E0] p-6 text-center">
+              <ShieldCheck className="w-10 h-10 text-alkota-orange mx-auto mb-3" />
+              <h4 className="font-medium text-sm text-[#1A1A18] mb-1">
+                COSHH Assessment &amp; Dilution Training
+              </h4>
+              <p className="text-xs text-[#666] mb-6 font-normal leading-relaxed">
+                We supply wallcharts, dilution proportioners, and staff chemical safety briefings with every fleet supply contract.
+              </p>
+              <Link
+                href="/chemicals/safety-data"
+                className="inline-flex items-center gap-2 border border-[#CCC] hover:border-black text-[#1A1A18] px-6 py-2.5 font-mono text-xs uppercase tracking-widest transition-colors"
+              >
+                <span>Access Safety Data Portal →</span>
+              </Link>
+            </div>
           </div>
-          <Link
-            href={`/contact?subject=Bulk%20Pricing%20for%20${encodeURIComponent(categoryDef.name)}`}
-            className="inline-flex items-center gap-2 bg-alkota-orange text-white px-8 py-4 text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-colors font-normal shrink-0"
-          >
-            <span>Request Category Pricing</span>
-            <ArrowRight className="h-4 w-4" />
-          </Link>
         </div>
       </section>
 
       <Footer />
-    </main>
+    </div>
   );
 }

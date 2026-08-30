@@ -5,12 +5,12 @@ import Link from 'next/link';
 import { Menu, X, ArrowLeft, Sparkles } from 'lucide-react';
 
 const NAV_ITEMS = [
-  { name: 'Ask The Lobby', href: '#ask-the-lobby', isAsk: true },
-  { name: 'Latest', href: '#latest' },
-  { name: 'Regulations', href: '#regulatory' },
-  { name: 'Technical', href: '#technical' },
-  { name: 'Training', href: '#training' },
-  { name: 'Events', href: '#events' },
+  { name: 'Ask The Lobby', href: '/lobby#ask-the-lobby', isAsk: true },
+  { name: 'Good Clean News', href: '/lobby/good-clean-news' },
+  { name: 'Knowledge', href: '/lobby/knowledge' },
+  { name: 'Workshop', href: '/lobby/workshop' },
+  { name: 'Field Notes', href: '/lobby/field-notes' },
+  { name: 'Trade Desk', href: '/lobby/trade-desk' },
 ];
 
 export default function LobbyHeader() {
@@ -79,24 +79,24 @@ export default function LobbyHeader() {
           {NAV_ITEMS.map(item => {
             if (item.isAsk) {
               return (
-                <a
+                <Link
                   key={item.name}
                   href={item.href}
-                  className="flex items-center gap-1.5 text-xs uppercase tracking-[0.18em] text-alkota-orange hover:text-white transition-colors font-medium whitespace-nowrap"
+                  className="flex items-center gap-1.5 text-xs uppercase tracking-[0.18em] text-alkota-orange hover:text-white transition-colors font-medium whitespace-nowrap no-underline"
                 >
                   <Sparkles className="h-3.5 w-3.5 shrink-0" />
                   <span>{item.name}</span>
-                </a>
+                </Link>
               );
             }
             return (
-              <a
+              <Link
                 key={item.name}
                 href={item.href}
                 className="text-xs uppercase tracking-[0.18em] text-white/75 hover:text-alkota-orange transition-colors no-underline font-normal whitespace-nowrap"
               >
                 {item.name}
-              </a>
+              </Link>
             );
           })}
         </nav>
@@ -112,7 +112,7 @@ export default function LobbyHeader() {
 
           <Link
             href="/contact"
-            className="hidden sm:inline-flex items-center bg-alkota-orange hover:bg-white hover:text-black text-white px-4 py-2 text-xs uppercase tracking-[0.18em] font-normal transition-all shadow-sm whitespace-nowrap"
+            className="hidden sm:inline-flex items-center bg-alkota-orange hover:bg-white hover:text-black text-white px-4 py-2 text-xs uppercase tracking-[0.18em] font-normal transition-all shadow-sm whitespace-nowrap no-underline"
           >
             Consult an Engineer
           </Link>
@@ -135,24 +135,24 @@ export default function LobbyHeader() {
             <Link
               href="/"
               onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-2 py-1.5 text-xs uppercase tracking-[0.18em] text-alkota-orange border-b border-white/10 font-normal"
+              className="flex items-center gap-2 py-1.5 text-xs uppercase tracking-[0.18em] text-alkota-orange border-b border-white/10 font-normal no-underline"
             >
               <ArrowLeft className="h-3.5 w-3.5" />
               <span>Back to Alkota UK Main Site</span>
             </Link>
 
             {NAV_ITEMS.map(item => (
-              <a
+              <Link
                 key={item.name}
                 href={item.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`py-1.5 text-xs uppercase tracking-[0.18em] font-normal transition-colors ${
+                className={`py-1.5 text-xs uppercase tracking-[0.18em] font-normal transition-colors no-underline ${
                   item.isAsk ? 'text-alkota-orange font-medium flex items-center gap-2' : 'text-white/80 hover:text-alkota-orange'
                 }`}
               >
                 {item.isAsk && <Sparkles className="h-3.5 w-3.5" />}
                 <span>{item.name}</span>
-              </a>
+              </Link>
             ))}
 
             <div className="mt-3 pt-3 border-t border-white/10 flex flex-col gap-2.5">

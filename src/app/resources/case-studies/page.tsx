@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { Suspense } from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import CaseStudyHubHero from '@/components/case-studies/CaseStudyHubHero';
@@ -7,13 +8,13 @@ import CaseStudyEditorialGrid from '@/components/case-studies/CaseStudyEditorial
 import { getAllCaseStudies, getFeaturedCaseStudy } from '@/lib/case-studies/data';
 
 export const metadata: Metadata = {
-  title: 'Industrial Pressure Washer Case Studies | Alkota UK',
+  title: 'Pressure Washer Case Studies & Field Stories | Alkota UK',
   description:
-    'See Alkota industrial pressure washers working across extreme environments, crane hire, industrial cleaning, agriculture, marine, oil and gas and bespoke mobile systems.',
+    'Explore Alkota pressure washer case studies, field stories and engineered systems across heavy plant, facilities, agriculture, marine, oilfield, cleaning contractors and bespoke mobile rigs.',
   openGraph: {
-    title: 'Industrial Pressure Washer Case Studies | Alkota UK',
+    title: 'Pressure Washer Case Studies & Field Stories | Alkota UK',
     description:
-      'See Alkota industrial pressure washers working across extreme environments, crane hire, industrial cleaning, agriculture, marine, oil and gas and bespoke mobile systems.',
+      'Explore Alkota pressure washer case studies, field stories and engineered systems across heavy plant, facilities, agriculture, marine, oilfield, cleaning contractors and bespoke mobile rigs.',
     url: 'https://alkota.co.uk/resources/case-studies',
     type: 'website',
     images: [
@@ -41,9 +42,9 @@ export default function CaseStudiesHubPage() {
         '@type': 'CollectionPage',
         '@id': 'https://alkota.co.uk/resources/case-studies#collection',
         url: 'https://alkota.co.uk/resources/case-studies',
-        name: 'Industrial Pressure Washer Case Studies | Alkota UK',
+        name: 'Pressure Washer Case Studies & Field Stories | Alkota UK',
         description:
-          'See Alkota industrial pressure washers working across extreme environments, crane hire, industrial cleaning, agriculture, marine, oil and gas and bespoke mobile systems.',
+          'Explore Alkota pressure washer case studies, field stories and engineered systems across heavy plant, facilities, agriculture, marine, oilfield, cleaning contractors and bespoke mobile rigs.',
         publisher: {
           '@type': 'Organization',
           name: 'Alkota UK',
@@ -88,10 +89,12 @@ export default function CaseStudiesHubPage() {
       <CaseStudyHubHero />
 
       {/* ── 02: FLAGSHIP ANTARCTICA EDITORIAL FEATURE ──────────────── */}
-      <CaseStudyFlagshipCard caseStudy={flagship} />
+      {flagship && <CaseStudyFlagshipCard caseStudy={flagship} />}
 
-      {/* ── 03: ASYMMETRICAL EDITORIAL CASE-STUDY INDEX ────────────── */}
-      <CaseStudyEditorialGrid caseStudies={caseStudies} />
+      {/* ── 03: ASYMMETRICAL EDITORIAL CASE-STUDY INDEX & DISCOVERY ── */}
+      <Suspense fallback={<div className="py-24 text-center font-mono text-xs text-[#888]">Loading Field Stories...</div>}>
+        <CaseStudyEditorialGrid caseStudies={caseStudies} />
+      </Suspense>
 
       {/* ── GLOBAL FOOTER ─────────────────────────────────────────── */}
       <Footer />

@@ -40,7 +40,15 @@ const NAV_SECTIONS = [
       { icon: Truck, label: 'Trailers & Skids', href: '/admin/bespoke' },
       { icon: Wrench, label: 'Parts Washers', href: '/admin/products?category=parts-washer' },
       { icon: Droplets, label: 'Water Treatment', href: '/admin/products?category=water-treatment' },
-      { icon: FlaskConical, label: 'Chemicals & Detergents', href: '/admin/chemicals' },
+    ],
+  },
+  {
+    section: 'Chemical Commerce',
+    items: [
+      { icon: FlaskConical, label: 'Chemical Dashboard', href: '/admin/chemicals' },
+      { icon: Tag, label: 'Master Formulations', href: '/admin/chemicals/formulations' },
+      { icon: Package, label: 'Retail Products', href: '/admin/chemicals/products' },
+      { icon: Globe, label: 'Applications & Sectors', href: '/admin/chemicals/applications' },
     ],
   },
   {

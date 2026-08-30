@@ -1,283 +1,275 @@
-import { supabaseAdmin } from '@/lib/supabase/server';
+import React from 'react';
 import Link from 'next/link';
-import { Plus, Edit, AlertTriangle, ShieldAlert, CheckCircle2, FileText, Image as ImageIcon, Search } from 'lucide-react';
-import { ChemicalProduct } from '@/lib/types/chemical';
-import { VERIFIED_CHEMICAL_PRODUCTS } from '@/lib/chemicals/seed-data';
+import { 
+  FlaskConical, 
+  Tag, 
+  Package, 
+  ShieldCheck, 
+  AlertCircle, 
+  ArrowRight, 
+  Plus, 
+  ExternalLink,
+  Layers,
+  Sparkles,
+  Search
+} from 'lucide-react';
+import { 
+  getMasterFormulations, 
+  getRetailProducts, 
+  getAdminChemicalMetrics,
+  getChemicalApplications
+} from '@/lib/chemicals/service';
 
-const STATUS_TABS = [
-  { label: 'All Statuses', value: 'all' },
-  { label: 'Published', value: 'published' },
-  { label: 'Needs UK Review', value: 'needs_uk_review' },
-  { label: 'UK Approved', value: 'uk_approved' },
-  { label: 'Draft', value: 'draft' },
-  { label: 'Archived', value: 'archived' },
-];
+export const dynamic = 'force-dynamic';
 
-const CATEGORY_TABS = [
-  { label: 'All Categories', value: 'all' },
-  { label: 'Fleet & Transport', value: 'fleet-vehicle' },
-  { label: 'Degreasers', value: 'degreasers' },
-  { label: 'Ag & Heavy Industrial', value: 'industrial' },
-  { label: 'Parts Washer', value: 'parts-washers' },
-  { label: 'Scale Stop & Additives', value: 'specialty' },
-  { label: 'Masonry & Concrete', value: 'masonry' },
-  { label: 'Food & Process', value: 'food-processing' },
-];
-
-export default async function ChemicalsAdminPage({
-  searchParams
-}: {
-  searchParams: Promise<{ status?: string; category?: string; q?: string }>
-}) {
-  const { status = 'all', category = 'all', q = '' } = await searchParams;
-
-  let dbQuery = supabaseAdmin
-    .from('chemicals')
-    .select('*')
-    .order('sort_order')
-    .order('name');
-
-  if (category !== 'all') {
-    dbQuery = dbQuery.or(`category.eq.${category},category.eq.${category.replace(/s$/, '')}`);
-  }
-
-  if (status !== 'all') {
-    dbQuery = dbQuery.eq('uk_status', status);
-  }
-
-  const { data: dbData } = await dbQuery;
-
-  // Combine DB data or fallback to canonical verified data
-  let items: any[] = dbData && dbData.length > 0 ? dbData : VERIFIED_CHEMICAL_PRODUCTS;
-
-  if (q) {
-    const query = q.toLowerCase();
-    items = items.filter(
-      (c) =>
-        c.name.toLowerCase().includes(query) ||
-        (c.code && c.code.toLowerCase().includes(query)) ||
-        (c.tagline && c.tagline.toLowerCase().includes(query))
-    );
-  }
-
-  // Calculate QA Metrics
-  const totalItems = items.length;
-  const needsReviewCount = items.filter((c) => c.uk_status === 'needs_uk_review').length;
-  const missingSdsCount = items.filter((c) => !c.sds_url && !c.pdf_datasheet_url).length;
-  const missingMediaCount = items.filter((c) => !c.primary_image_url && !c.image_url).length;
+export default async function AdminChemicalsDashboard() {
+  const metrics = await getAdminChemicalMetrics();
+  const formulations = await getMasterFormulations();
+  const retailProducts = await getRetailProducts({ limit: 8 });
+  const applications = await getChemicalApplications();
 
   return (
-    <div className="space-y-6">
-      {/* Header Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className="space-y-8 max-w-7xl mx-auto font-sans pb-12">
+      {/* ── HEADER ── */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-[#E2E4E8] shadow-sm">
         <div>
-          <h1 className="font-barlow-condensed text-4xl font-black uppercase italic text-white">
-            Chemical Range & Safety Manager
+          <div className="flex items-center gap-2 mb-1">
+            <span className="h-2 w-2 rounded-full bg-[#FF6900]" />
+            <span className="font-mono text-[10px] uppercase tracking-wider text-[#64748B] font-bold">
+              Alkota UK Chemical Commerce Engine
+            </span>
+          </div>
+          <h1 className="text-2xl font-bold text-[#0F172A] tracking-tight">
+            Chemical Control Centre
           </h1>
-          <p className="font-ibm-plex-mono text-[10px] text-[#555] uppercase tracking-widest mt-1">
-            // {totalItems} products in registry · GB CLP & UK REACH Compliant
+          <p className="text-xs text-[#64748B] mt-0.5">
+            Strict Architecture: Master Formulation → Retail Identity → Application Context → Sellable SKUs
           </p>
         </div>
-        <div className="flex items-center gap-3">
+
+        <div className="flex flex-wrap items-center gap-2.5">
           <Link
             href="/chemicals"
             target="_blank"
-            className="flex items-center gap-1.5 border border-[#333] bg-[#141414] px-4 py-2.5 font-ibm-plex-mono text-[10px] uppercase tracking-widest text-[#CCC] hover:text-white hover:border-[#555] transition-colors"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-[#F8F9FB] hover:bg-[#F1F3F7] text-[#334155] border border-[#E2E4E8] transition-colors"
           >
-            <span>Live Hub</span>
+            <span>Live Chemical Store</span>
+            <ExternalLink className="h-3.5 w-3.5 text-[#94A3B8]" />
           </Link>
           <Link
-            href="/admin/chemicals/new"
-            className="flex items-center gap-2 bg-[#FF6900] px-5 py-2.5 font-ibm-plex-mono text-[10px] font-black uppercase tracking-widest text-white hover:bg-[#e55f00] transition-colors shadow"
+            href="/admin/chemicals/products/new"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-[#FF6900] hover:bg-[#E55D00] text-white shadow-sm transition-all"
           >
-            <Plus className="h-4 w-4" /> Add Chemical
+            <Plus className="h-4 w-4" />
+            <span>New Retail Chemical</span>
           </Link>
         </div>
       </div>
 
-      {/* Safety QA Summary Banner */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-[#222] border border-[#222]">
-        <div className="bg-[#111] p-4">
-          <span className="block font-ibm-plex-mono text-[9px] uppercase text-[#666] mb-1">
-            Total Catalog
-          </span>
-          <span className="font-ibm-plex-mono text-xl text-white font-bold">{totalItems}</span>
+      {/* ── REAL DATABASE METRICS (No AI Slop / Fabrications) ── */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-white p-5 rounded-2xl border border-[#E2E4E8] shadow-sm">
+          <div className="flex items-center justify-between text-[#64748B] mb-2">
+            <span className="text-xs font-semibold">Master Formulations</span>
+            <Tag className="h-4 w-4 text-[#FF6900]" />
+          </div>
+          <p className="text-3xl font-extrabold text-[#0F172A]">{metrics.masterFormulationsCount}</p>
+          <p className="text-[11px] text-[#94A3B8] mt-1 font-medium">Underlying Alkota chemical codes</p>
         </div>
-        <div className="bg-[#111] p-4">
-          <span className="block font-ibm-plex-mono text-[9px] uppercase text-[#666] mb-1">
-            Needs UK Review
-          </span>
-          <span className={`font-ibm-plex-mono text-xl font-bold ${needsReviewCount > 0 ? 'text-amber-400' : 'text-emerald-400'}`}>
-            {needsReviewCount}
-          </span>
+
+        <div className="bg-white p-5 rounded-2xl border border-[#E2E4E8] shadow-sm">
+          <div className="flex items-center justify-between text-[#64748B] mb-2">
+            <span className="text-xs font-semibold">Retail Identities</span>
+            <Package className="h-4 w-4 text-blue-600" />
+          </div>
+          <p className="text-3xl font-extrabold text-[#0F172A]">{metrics.retailProductsCount}</p>
+          <p className="text-[11px] text-[#94A3B8] mt-1 font-medium">{metrics.liveProductsCount} Live in Storefront</p>
         </div>
-        <div className="bg-[#111] p-4">
-          <span className="block font-ibm-plex-mono text-[9px] uppercase text-[#666] mb-1">
-            Missing / Unlinked SDS
-          </span>
-          <span className={`font-ibm-plex-mono text-xl font-bold ${missingSdsCount > 0 ? 'text-red-400' : 'text-emerald-400'}`}>
-            {missingSdsCount}
-          </span>
+
+        <div className="bg-white p-5 rounded-2xl border border-[#E2E4E8] shadow-sm">
+          <div className="flex items-center justify-between text-[#64748B] mb-2">
+            <span className="text-xs font-semibold">Sellable SKUs</span>
+            <Layers className="h-4 w-4 text-emerald-600" />
+          </div>
+          <p className="text-3xl font-extrabold text-[#0F172A]">{metrics.skusCount}</p>
+          <p className="text-[11px] text-[#94A3B8] mt-1 font-medium">5L, 20L, 200L &amp; IBC variants</p>
         </div>
-        <div className="bg-[#111] p-4">
-          <span className="block font-ibm-plex-mono text-[9px] uppercase text-[#666] mb-1">
-            Media Placeholders
-          </span>
-          <span className="font-ibm-plex-mono text-xl text-cyan-400 font-bold">
-            {missingMediaCount} Active
-          </span>
+
+        <div className="bg-white p-5 rounded-2xl border border-[#E2E4E8] shadow-sm">
+          <div className="flex items-center justify-between text-[#64748B] mb-2">
+            <span className="text-xs font-semibold">UK CLP Status</span>
+            <ShieldCheck className="h-4 w-4 text-emerald-600" />
+          </div>
+          <p className="text-3xl font-extrabold text-emerald-600">{metrics.verifiedClpCount}</p>
+          <p className="text-[11px] text-[#94A3B8] mt-1 font-medium">{metrics.needsReviewCount} Pending Tech Review</p>
         </div>
       </div>
 
-      {/* Filter Tabs: UK Status */}
-      <div className="flex flex-wrap items-center gap-1.5 pt-2">
-        <span className="font-ibm-plex-mono text-[9px] uppercase text-[#666] mr-2">Status:</span>
-        {STATUS_TABS.map((tab) => (
+      {/* ── MASTER CHEMICAL CODES DIRECTORY STRIP ── */}
+      <div className="bg-white rounded-2xl border border-[#E2E4E8] shadow-sm overflow-hidden">
+        <div className="p-5 border-b border-[#F0F2F5] flex items-center justify-between">
+          <div>
+            <h2 className="text-sm font-bold text-[#0F172A]">Master Formulation Ledger</h2>
+            <p className="text-xs text-[#64748B]">All retail products originate from these authoritative Alkota formulations</p>
+          </div>
           <Link
-            key={tab.value}
-            href={`/admin/chemicals?status=${tab.value}${category !== 'all' ? `&category=${category}` : ''}`}
-            className="px-3 py-1.5 font-ibm-plex-mono text-[9px] uppercase tracking-widest transition-all"
-            style={{
-              background: status === tab.value ? '#FF6900' : '#141414',
-              color: status === tab.value ? '#fff' : '#777',
-              border: '1px solid',
-              borderColor: status === tab.value ? '#FF6900' : '#262626'
-            }}
+            href="/admin/chemicals/formulations"
+            className="text-xs font-bold text-[#FF6900] hover:underline inline-flex items-center gap-1"
           >
-            {tab.label}
+            <span>View All ({formulations.length})</span>
+            <ArrowRight className="h-3.5 w-3.5" />
           </Link>
-        ))}
-      </div>
+        </div>
 
-      {/* Filter Tabs: Category */}
-      <div className="flex flex-wrap items-center gap-1.5 pb-2 border-b border-[#222]">
-        <span className="font-ibm-plex-mono text-[9px] uppercase text-[#666] mr-2">Category:</span>
-        {CATEGORY_TABS.map((tab) => (
-          <Link
-            key={tab.value}
-            href={`/admin/chemicals?category=${tab.value}${status !== 'all' ? `&status=${status}` : ''}`}
-            className="px-3 py-1.5 font-ibm-plex-mono text-[9px] uppercase tracking-widest transition-all"
-            style={{
-              background: category === tab.value ? '#2A2A2A' : '#0D0D0D',
-              color: category === tab.value ? '#fff' : '#666',
-              border: '1px solid',
-              borderColor: category === tab.value ? '#444' : '#222'
-            }}
-          >
-            {tab.label}
-          </Link>
-        ))}
-      </div>
-
-      {/* Table Container */}
-      <div className="border border-[#222] overflow-x-auto bg-[#0E0E0E]">
-        <table className="w-full text-sm min-w-[840px]">
-          <thead>
-            <tr style={{ background: '#141414', borderBottom: '1px solid #222' }}>
-              {['Product / Code', 'Category', 'UK Status', 'QA & Safety Flags', 'pH / Form', 'Active', 'Actions'].map((h) => (
-                <th key={h} className="text-left px-4 py-3 font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#666]">
-                  {h}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-[#1A1A1A]">
-            {items.length === 0 ? (
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs">
+            <thead className="bg-[#F8F9FB] border-b border-[#F0F2F5] text-[#64748B] font-bold uppercase text-[10px] tracking-wider">
               <tr>
-                <td colSpan={7} className="px-4 py-16 text-center font-ibm-plex-mono text-[10px] text-[#444] uppercase tracking-widest">
-                  No chemicals match the current filters —{' '}
-                  <Link href="/admin/chemicals/new" className="text-[#FF6900] hover:underline">
-                    create chemical
-                  </Link>
-                </td>
+                <th className="py-3 px-5">Master Code</th>
+                <th className="py-3 px-5">Original Formulation Name</th>
+                <th className="py-3 px-5">Family</th>
+                <th className="py-3 px-5">pH Level</th>
+                <th className="py-3 px-5">Retail Products</th>
+                <th className="py-3 px-5">Compliance</th>
+                <th className="py-3 px-5 text-right">Actions</th>
               </tr>
-            ) : (
-              items.map((c: any, i: number) => {
-                const hasSds = !!(c.sds_url || c.pdf_datasheet_url);
-                const hasImage = !!(c.primary_image_url || c.image_url);
-                const isNeedsReview = c.uk_status === 'needs_uk_review';
+            </thead>
+            <tbody className="divide-y divide-[#F0F2F5] font-medium text-[#334155]">
+              {formulations.slice(0, 7).map((form) => (
+                <tr key={form.id} className="hover:bg-[#F8F9FB] transition-colors">
+                  <td className="py-3.5 px-5 font-mono font-bold text-[#FF6900]">
+                    {form.master_code}
+                  </td>
+                  <td className="py-3.5 px-5 font-semibold text-[#0F172A]">
+                    {form.original_name}
+                  </td>
+                  <td className="py-3.5 px-5 text-[#64748B]">
+                    {form.formulation_family}
+                  </td>
+                  <td className="py-3.5 px-5 font-mono text-[11px]">
+                    {form.ph_level?.split(' ')[0] || '—'}
+                  </td>
+                  <td className="py-3.5 px-5">
+                    <span className="px-2 py-0.5 rounded-md bg-[#F1F5F9] font-bold text-[#475569] text-[10px]">
+                      {form.retail_products_count} {form.retail_products_count === 1 ? 'Product' : 'Products'}
+                    </span>
+                  </td>
+                  <td className="py-3.5 px-5">
+                    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                      form.compliance_status === 'VERIFIED_UK_CLP'
+                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                        : 'bg-amber-50 text-amber-700 border border-amber-200'
+                    }`}>
+                      <ShieldCheck className="h-3 w-3" />
+                      {form.compliance_status.replace(/_/g, ' ')}
+                    </span>
+                  </td>
+                  <td className="py-3.5 px-5 text-right">
+                    <Link
+                      href={`/admin/chemicals/formulations/${form.id}`}
+                      className="font-bold text-[#FF6900] hover:underline"
+                    >
+                      Inspect →
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* ── RETAIL PRODUCT INVENTORY WITH ORIGINATING CODE MANDATORY ── */}
+      <div className="bg-white rounded-2xl border border-[#E2E4E8] shadow-sm overflow-hidden">
+        <div className="p-5 border-b border-[#F0F2F5] flex items-center justify-between">
+          <div>
+            <h2 className="text-sm font-bold text-[#0F172A]">Retail Chemical Products</h2>
+            <p className="text-xs text-[#64748B]">
+              Every retail SKU displays its mandatory <span className="font-bold text-[#FF6900]">Originating Master Chemical Code</span>
+            </p>
+          </div>
+          <Link
+            href="/admin/chemicals/products"
+            className="text-xs font-bold text-[#FF6900] hover:underline inline-flex items-center gap-1"
+          >
+            <span>All Retail Products ({retailProducts.length})</span>
+            <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs">
+            <thead className="bg-[#F8F9FB] border-b border-[#F0F2F5] text-[#64748B] font-bold uppercase text-[10px] tracking-wider">
+              <tr>
+                <th className="py-3 px-5">Retail Product Name</th>
+                <th className="py-3 px-5 bg-orange-50/50 text-[#FF6900]">Originating Master Code</th>
+                <th className="py-3 px-5">Primary Application</th>
+                <th className="py-3 px-5">Pack Options</th>
+                <th className="py-3 px-5">Price (Base 5L / 20L)</th>
+                <th className="py-3 px-5">Status</th>
+                <th className="py-3 px-5 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-[#F0F2F5] font-medium text-[#334155]">
+              {retailProducts.map((prod) => {
+                const base5L = prod.skus?.find(s => s.volume_litres === 5)?.price;
+                const base20L = prod.skus?.find(s => s.volume_litres === 20)?.price;
 
                 return (
-                  <tr
-                    key={c.id || c.slug}
-                    className="hover:bg-[#141414] transition-colors"
-                  >
-                    {/* Name & Code */}
-                    <td className="px-4 py-3.5">
-                      <p className="font-inter text-[13px] text-white font-medium">{c.name}</p>
-                      <p className="font-ibm-plex-mono text-[10px] text-[#666]">{c.code || c.slug}</p>
+                  <tr key={prod.id} className="hover:bg-[#F8F9FB] transition-colors">
+                    <td className="py-3.5 px-5">
+                      <div className="font-bold text-[#0F172A]">{prod.retail_name}</div>
+                      <div className="text-[10px] text-[#94A3B8]">{prod.retail_family} Series</div>
                     </td>
-
-                    {/* Category */}
-                    <td className="px-4 py-3.5 font-ibm-plex-mono text-[10px] text-[#888] uppercase">
-                      {c.category?.replace(/-/g, ' ')}
+                    <td className="py-3.5 px-5 bg-orange-50/30">
+                      <div className="font-mono font-extrabold text-[#FF6900] flex items-center gap-1.5">
+                        <span className="h-1.5 w-1.5 rounded-full bg-[#FF6900]" />
+                        {prod.originating_master_code}
+                      </div>
+                      <div className="text-[10px] text-[#64748B] font-normal">{prod.originating_master_name}</div>
                     </td>
-
-                    {/* UK Status */}
-                    <td className="px-4 py-3.5">
-                      <span
-                        className={`font-ibm-plex-mono text-[9px] px-2 py-0.5 border ${
-                          c.uk_status === 'published'
-                            ? 'text-emerald-400 border-emerald-900/60 bg-emerald-950/20'
-                            : c.uk_status === 'uk_approved'
-                            ? 'text-cyan-400 border-cyan-900/60 bg-cyan-950/20'
-                            : c.uk_status === 'needs_uk_review'
-                            ? 'text-amber-400 border-amber-900/60 bg-amber-950/20'
-                            : 'text-[#666] border-[#333]'
-                        }`}
-                      >
-                        {c.uk_status?.replace(/_/g, ' ').toUpperCase() || 'PUBLISHED'}
-                      </span>
+                    <td className="py-3.5 px-5 text-[#475569]">
+                      {prod.primary_application}
                     </td>
-
-                    {/* QA Flags */}
-                    <td className="px-4 py-3.5">
-                      <div className="flex flex-wrap gap-1.5">
-                        {!hasSds && (
-                          <span className="inline-flex items-center gap-1 font-ibm-plex-mono text-[8px] uppercase px-1.5 py-0.5 bg-red-950/40 text-red-400 border border-red-800/40">
-                            <AlertTriangle className="h-2.5 w-2.5" /> NO SDS
+                    <td className="py-3.5 px-5">
+                      <div className="flex flex-wrap gap-1">
+                        {prod.skus?.map(s => (
+                          <span key={s.id} className="px-1.5 py-0.5 rounded bg-[#F1F5F9] font-mono text-[9px] text-[#475569]">
+                            {s.pack_size.split(' ')[0]}
                           </span>
-                        )}
-                        {!hasImage && (
-                          <span className="inline-flex items-center gap-1 font-ibm-plex-mono text-[8px] uppercase px-1.5 py-0.5 bg-cyan-950/30 text-cyan-400 border border-cyan-800/30">
-                            <ImageIcon className="h-2.5 w-2.5" /> PLACEHOLDER
-                          </span>
-                        )}
-                        {hasSds && hasImage && !isNeedsReview && (
-                          <span className="inline-flex items-center gap-1 font-ibm-plex-mono text-[8px] uppercase px-1.5 py-0.5 text-emerald-400">
-                            <CheckCircle2 className="h-2.5 w-2.5" /> QA READY
-                          </span>
-                        )}
+                        ))}
                       </div>
                     </td>
-
-                    {/* pH & Form */}
-                    <td className="px-4 py-3.5 font-ibm-plex-mono text-[10px] text-[#777]">
-                      <span>{c.ph_level || '--'}</span> · <span>{c.form?.split(' ')[0] || 'Liquid'}</span>
+                    <td className="py-3.5 px-5 font-mono text-[11px] text-[#0F172A]">
+                      {base5L ? `£${base5L.toFixed(2)} (5L)` : ''} {base20L ? `· £${base20L.toFixed(2)} (20L)` : ''}
                     </td>
-
-                    {/* Active */}
-                    <td className="px-4 py-3.5">
-                      <span className={`font-ibm-plex-mono text-[9px] px-2 py-0.5 border ${c.active ? 'text-emerald-400 border-emerald-900/50' : 'text-red-400 border-red-900/50'}`}>
-                        {c.active ? 'Live' : 'Hidden'}
+                    <td className="py-3.5 px-5">
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                        {prod.merchandising_status}
                       </span>
                     </td>
-
-                    {/* Actions */}
-                    <td className="px-4 py-3.5">
+                    <td className="py-3.5 px-5 text-right space-x-2">
                       <Link
-                        href={`/admin/chemicals/${c.id || c.slug}`}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-[#333] font-ibm-plex-mono text-[9px] uppercase text-[#AAA] hover:text-white hover:border-[#FF6900] transition-all"
+                        href={`/chemicals/product/${prod.slug}`}
+                        target="_blank"
+                        className="text-[#64748B] hover:text-[#0F172A]"
+                        title="View Public Page"
                       >
-                        <Edit className="h-3 w-3" /> Edit
+                        <ExternalLink className="h-3.5 w-3.5 inline" />
+                      </Link>
+                      <Link
+                        href={`/admin/chemicals/products/${prod.id}`}
+                        className="font-bold text-[#FF6900] hover:underline"
+                      >
+                        Edit →
                       </Link>
                     </td>
                   </tr>
                 );
-              })
-            )}
-          </tbody>
-        </table>
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

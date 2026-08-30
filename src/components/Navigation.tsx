@@ -702,12 +702,12 @@ export default function Navigation() {
                       </span>
                       <div className="divide-y divide-[#EAE9E2] border-t border-[#1A1A18]">
                         {[
-                          { title: 'Fleet & Commercial Vehicle', desc: 'Road film, diesel soot & touchless wash', href: '/chemicals/fleet-vehicle' },
-                          { title: 'Industrial Degreasers', desc: 'Fifth-wheel, bitumen & heavy machinery', href: '/chemicals/degreasers' },
-                          { title: 'Agriculture & Heavy Plant', desc: 'Farm Soap TR-440 & clay/slurry removal', href: '/chemicals/industrial' },
-                          { title: 'Parts Washing Chemistry', desc: 'Low-foaming aqueous & rust inhibitor', href: '/chemicals/parts-washers' },
-                          { title: 'Scale Stop & Coil Care', desc: 'Hard water scale prevention for Schedule 80', href: '/chemicals/specialty' },
-                          { title: 'Safety Data Sheets (SDS)', desc: 'GB CLP compliant technical library', href: '/chemicals/safety-data' },
+                          { title: 'Trucks & Commercial HGV', desc: 'RoadForce Fleet TR-407 & heavy road film', href: '/chemicals/applications/trucks-hgv' },
+                          { title: 'Agricultural Machinery', desc: 'FieldForce TR-428 & slurry/mud removal', href: '/chemicals/applications/agriculture' },
+                          { title: 'Plant & Heavy Equipment', desc: 'Forge TS-608 & heavy carbon/oil strippers', href: '/chemicals/applications/plant-machinery' },
+                          { title: 'Aluminium & Metal Care', desc: 'AlumaRestore TS-602 acid brighteners', href: '/chemicals/applications/aluminium-metal' },
+                          { title: 'Machine & Coil Care', desc: 'ScaleGuard SD-927 coil scale protection', href: '/chemicals/applications/machine-care' },
+                          { title: 'All Chemical Applications', desc: 'Explore all 8 commercial industry sectors', href: '/chemicals/applications' },
                         ].map((item) => (
                           <Link
                             key={item.href}

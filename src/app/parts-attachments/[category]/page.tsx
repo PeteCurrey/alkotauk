@@ -1,19 +1,10 @@
 import React from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { 
-  Wrench, 
-  ArrowRight, 
-  Filter, 
-  Check, 
-  ChevronRight, 
-  SlidersHorizontal,
-  ArrowUpDown,
-  Search,
-  RotateCcw
-} from 'lucide-react';
+import { ArrowRight, ArrowLeft, ChevronRight, Sparkles, Search } from 'lucide-react';
 import { supabaseAdmin } from '@/lib/supabase/server';
 import ProductCard from '@/components/parts/ProductCard';
+import { MASTER_TAXONOMY } from '@/lib/parts/taxonomy';
 
 export const dynamic = 'force-dynamic';
 
@@ -24,7 +15,7 @@ interface PageProps {
     available?: string; 
     sort?: string; 
     q?: string;
-    attachment?: string;
+    sub?: string;
   }>;
 }
 
@@ -35,11 +26,14 @@ export default async function CategoryBrowsePage({ params, searchParams }: PageP
   const isAvailableOnly = sp.available === 'yes';
   const sortOption = sp.sort || 'default';
   const searchQuery = sp.q;
-  const isAttachmentOnly = sp.attachment === 'yes';
+  const selectedSub = sp.sub;
 
-  // Fetch category info
-  let catName = 'All Parts & Attachments';
-  let catDesc = 'Browse the complete Alkota UK parts and tooling catalogue.';
+  // Resolve category from taxonomy first (fast, no DB needed for structure)
+  const taxonomyCat = MASTER_TAXONOMY.find(c => c.slug === categorySlug);
+
+  // Also try DB for enhanced description
+  let catName = taxonomyCat?.name || 'All Parts & Attachments';
+  let catDesc = taxonomyCat?.shortDesc || 'Browse the complete Alkota UK parts and tooling catalogue.';
   
   if (categorySlug !== 'all') {
     const { data: catInfo } = await supabaseAdmin
@@ -50,27 +44,20 @@ export default async function CategoryBrowsePage({ params, searchParams }: PageP
 
     if (catInfo) {
       catName = catInfo.name;
-      catDesc = catInfo.short_desc || '';
-    } else {
-      catName = categorySlug.replace(/-/g, ' ').toUpperCase();
+      catDesc = catInfo.short_desc || catDesc;
+    } else if (!taxonomyCat) {
+      catName = categorySlug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
     }
   }
 
-  // Fetch all brands for filter sidebar
+  // Fetch brands for filters — DB only
   const { data: brands } = await supabaseAdmin
     .from('brand_partners')
     .select('slug,name')
     .eq('active', true)
     .order('sort_order');
 
-  // Fetch all categories for navigation
-  const { data: allCategories } = await supabaseAdmin
-    .from('part_categories')
-    .select('slug,name')
-    .eq('active', true)
-    .order('sort_order');
-
-  // Build query for parts
+  // Build product query
   let query = supabaseAdmin
     .from('parts')
     .select('id,part_number,name,slug,category,brand,price,in_stock,availability_status,image_url,manufacturer,oem_genuine,featured,is_attachment,weight_kg')
@@ -79,19 +66,8 @@ export default async function CategoryBrowsePage({ params, searchParams }: PageP
   if (categorySlug !== 'all') {
     query = query.eq('category', categorySlug);
   }
-
-  if (selectedBrand) {
-    query = query.eq('brand', selectedBrand);
-  }
-
-  if (isAvailableOnly) {
-    query = query.eq('in_stock', true);
-  }
-
-  if (isAttachmentOnly) {
-    query = query.eq('is_attachment', true);
-  }
-
+  if (selectedBrand) query = query.eq('brand', selectedBrand);
+  if (isAvailableOnly) query = query.eq('in_stock', true);
   if (searchQuery) {
     query = query.or(`name.ilike.%${searchQuery}%,part_number.ilike.%${searchQuery}%,manufacturer.ilike.%${searchQuery}%`);
   }
@@ -110,257 +86,203 @@ export default async function CategoryBrowsePage({ params, searchParams }: PageP
   const { data: parts } = await query.limit(60);
   const partList = parts || [];
 
-  // Helper function to build URL queries
+  // URL builder helper
   const buildUrl = (newParams: Record<string, string | undefined>) => {
     const p = new URLSearchParams();
     if (selectedBrand) p.set('brand', selectedBrand);
     if (isAvailableOnly) p.set('available', 'yes');
     if (sortOption && sortOption !== 'default') p.set('sort', sortOption);
     if (searchQuery) p.set('q', searchQuery);
-    if (isAttachmentOnly) p.set('attachment', 'yes');
-
     for (const [k, v] of Object.entries(newParams)) {
-      if (v === undefined || v === '') {
-        p.delete(k);
-      } else {
-        p.set(k, v);
-      }
+      if (v === undefined || v === '') p.delete(k);
+      else p.set(k, v);
     }
     const qs = p.toString();
     return `/parts-attachments/${categorySlug}${qs ? `?${qs}` : ''}`;
   };
 
+  const hasActiveFilters = !!(selectedBrand || isAvailableOnly || searchQuery);
+
   return (
-    <main className="min-h-screen bg-[#FAF9F5] text-alkota-black pb-24">
-      {/* Header Banner */}
-      <div className="bg-[#0A0A0A] text-white border-b border-[#222] px-6 sm:px-12 lg:px-24 py-12">
+    <main className="min-h-screen bg-[#FAF9F5] text-alkota-black pb-24 font-sans">
+
+      {/* ── EDITORIAL CATEGORY HEADER ── */}
+      <section className="bg-[#0A0A0A] text-white pt-28 pb-14 px-6 sm:px-12 lg:px-24 border-b border-[#222]">
         <div className="max-w-7xl mx-auto">
-          <nav className="flex items-center gap-2 font-ibm-plex-mono text-[10px] uppercase tracking-widest text-[#777] mb-4">
-            <Link href="/parts-attachments" className="hover:text-white transition-colors">
-              Parts &amp; Attachments
+          {/* Breadcrumb */}
+          <nav className="flex items-center gap-2 font-ibm-plex-mono text-[10px] uppercase tracking-widest text-[#777] mb-5">
+            <Link href="/parts-attachments" className="hover:text-alkota-orange transition-colors">
+              Parts Hub
             </Link>
-            <ChevronRight className="h-3 w-3" />
+            <ChevronRight className="h-3 w-3 text-[#444]" />
             <span className="text-alkota-orange">{catName}</span>
           </nav>
 
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <div>
-              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-orange block mb-2">
-                // OEM &amp; Industrial Spares Catalogue
-              </span>
-              <h1 className="font-extralight text-3xl sm:text-5xl text-white tracking-tight">
-                {catName}
-              </h1>
-              {catDesc && (
-                <p className="text-[#AAA] text-sm font-normal leading-relaxed mt-2 max-w-2xl">
-                  {catDesc}
-                </p>
-              )}
-            </div>
+          {/* Category Title — No product count here, that's below the fold */}
+          <h1 className="font-extralight text-white tracking-tight mb-3" style={{ fontSize: 'clamp(2.4rem, 6vw, 5rem)' }}>
+            {catName}
+          </h1>
+          {catDesc && (
+            <p className="text-[#888] text-sm sm:text-base max-w-2xl font-light leading-relaxed mb-8">
+              {catDesc}
+            </p>
+          )}
 
-            <div className="flex items-center gap-3">
-              <span className="font-ibm-plex-mono text-xs uppercase tracking-wider text-[#AAA]">
-                {partList.length} {partList.length === 1 ? 'Product' : 'Products'} Available
+          {/* Subcategory Text Navigation */}
+          {taxonomyCat && taxonomyCat.subcategories.length > 0 && (
+            <div className="flex flex-wrap gap-x-6 gap-y-2">
+              <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.2em] text-[#555] self-center">
+                Subcategories:
               </span>
+              {taxonomyCat.subcategories.slice(0, 10).map((sub) => (
+                <Link
+                  key={sub.slug}
+                  href={buildUrl({ sub: selectedSub === sub.slug ? undefined : sub.slug })}
+                  className={`font-ibm-plex-mono text-[10px] uppercase tracking-widest transition-colors ${
+                    selectedSub === sub.slug 
+                      ? 'text-alkota-orange' 
+                      : 'text-[#888] hover:text-white'
+                  }`}
+                >
+                  {sub.name}
+                </Link>
+              ))}
             </div>
-          </div>
+          )}
         </div>
-      </div>
+      </section>
 
-      {/* Main Grid & Filters */}
-      <div className="max-w-7xl mx-auto px-6 sm:px-12 lg:px-24 py-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      {/* ── FILTER ROW — horizontal, not a sidebar ── */}
+      <section className="bg-white border-b border-[#E0DEDC] px-6 sm:px-12 lg:px-24 py-4 sticky top-[68px] z-30">
+        <div className="max-w-7xl mx-auto flex flex-wrap items-center gap-3">
+          <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.2em] text-[#999]">
+            Filter:
+          </span>
 
-          {/* Left Filter Sidebar */}
-          <aside className="lg:col-span-3 space-y-6">
-            {/* Search within category */}
-            <div className="bg-white border border-[#E8E8E4] p-5">
-              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-orange block mb-3">
-                // Search Category
-              </span>
-              <form action={`/parts-attachments/${categorySlug}`} method="GET" className="relative">
-                {selectedBrand && <input type="hidden" name="brand" value={selectedBrand} />}
-                {isAvailableOnly && <input type="hidden" name="available" value="yes" />}
-                {sortOption && <input type="hidden" name="sort" value={sortOption} />}
-                <input
-                  type="text"
-                  name="q"
-                  defaultValue={searchQuery || ''}
-                  placeholder="Part name or SKU..."
-                  className="w-full bg-[#F7F7F5] border border-[#E0E0DA] text-xs px-3 py-2 pr-8 focus:outline-none focus:border-alkota-orange"
-                />
-                <button type="submit" className="absolute right-2 top-2.5 text-[#888] hover:text-alkota-orange">
-                  <Search className="h-3.5 w-3.5" />
-                </button>
-              </form>
-            </div>
+          {/* In Stock */}
+          <Link
+            href={buildUrl({ available: isAvailableOnly ? undefined : 'yes' })}
+            className={`font-ibm-plex-mono text-[10px] uppercase tracking-widest px-3.5 py-1.5 border transition-colors ${
+              isAvailableOnly
+                ? 'bg-alkota-orange border-alkota-orange text-white'
+                : 'border-[#D0CEC9] text-[#666] hover:border-alkota-orange hover:text-alkota-orange'
+            }`}
+          >
+            In Stock
+          </Link>
 
-            {/* Category Switcher */}
-            <div className="bg-white border border-[#E8E8E4] p-5">
-              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-orange block mb-3">
-                // Categories
-              </span>
-              <div className="space-y-1 max-h-64 overflow-y-auto pr-1">
-                <Link
-                  href={buildUrl({})}
-                  className={`block text-xs py-1 px-2 rounded-xs transition-colors no-underline ${
-                    categorySlug === 'all'
-                      ? 'bg-[#141414] text-white font-normal'
-                      : 'text-[#555] hover:text-alkota-orange'
-                  }`}
-                >
-                  All Categories
-                </Link>
-                {(allCategories || []).map((c) => (
-                  <Link
-                    key={c.slug}
-                    href={`/parts-attachments/${c.slug}${selectedBrand ? `?brand=${selectedBrand}` : ''}`}
-                    className={`block text-xs py-1 px-2 rounded-xs transition-colors no-underline ${
-                      categorySlug === c.slug
-                        ? 'bg-[#141414] text-white font-normal'
-                        : 'text-[#555] hover:text-alkota-orange'
-                    }`}
-                  >
-                    {c.name}
-                  </Link>
-                ))}
-              </div>
-            </div>
+          {/* Brand Filter Pills — DB-driven */}
+          {(brands || []).map((b) => (
+            <Link
+              key={b.slug}
+              href={buildUrl({ brand: selectedBrand === b.slug ? undefined : b.slug })}
+              className={`font-ibm-plex-mono text-[10px] uppercase tracking-widest px-3.5 py-1.5 border transition-colors ${
+                selectedBrand === b.slug
+                  ? 'bg-alkota-orange border-alkota-orange text-white'
+                  : 'border-[#D0CEC9] text-[#666] hover:border-alkota-orange hover:text-alkota-orange'
+              }`}
+            >
+              {b.name}
+            </Link>
+          ))}
 
-            {/* Brand Filter */}
-            <div className="bg-white border border-[#E8E8E4] p-5">
-              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-orange block mb-3">
-                // Filter by Brand
-              </span>
-              <div className="space-y-1.5">
-                <Link
-                  href={buildUrl({ brand: undefined })}
-                  className={`flex items-center justify-between text-xs py-1 px-2 transition-colors no-underline ${
-                    !selectedBrand ? 'bg-alkota-orange text-white' : 'text-[#555] hover:text-alkota-orange'
-                  }`}
-                >
-                  <span>All Brands</span>
-                  {!selectedBrand && <Check className="h-3 w-3" />}
-                </Link>
-                {(brands || []).map((b) => {
-                  const isSel = selectedBrand === b.slug;
-                  return (
-                    <Link
-                      key={b.slug}
-                      href={buildUrl({ brand: isSel ? undefined : b.slug })}
-                      className={`flex items-center justify-between text-xs py-1 px-2 transition-colors no-underline ${
-                        isSel ? 'bg-alkota-orange text-white' : 'text-[#555] hover:text-alkota-orange'
-                      }`}
-                    >
-                      <span>{b.name}</span>
-                      {isSel && <Check className="h-3 w-3" />}
-                    </Link>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Availability Filter */}
-            <div className="bg-white border border-[#E8E8E4] p-5">
-              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-orange block mb-3">
-                // Stock Availability
-              </span>
+          {/* Sort */}
+          <div className="ml-auto flex items-center gap-2">
+            {[
+              { key: 'default', label: 'Recommended' },
+              { key: 'price_asc', label: 'Price ↑' },
+              { key: 'price_desc', label: 'Price ↓' },
+              { key: 'newest', label: 'Newest' },
+            ].map((s) => (
               <Link
-                href={buildUrl({ available: isAvailableOnly ? undefined : 'yes' })}
-                className={`flex items-center justify-between p-2.5 border text-xs transition-colors no-underline ${
-                  isAvailableOnly 
-                    ? 'border-green-600 bg-green-50 text-green-800' 
-                    : 'border-[#E0E0DA] bg-[#F7F7F5] text-[#555] hover:border-alkota-orange'
+                key={s.key}
+                href={buildUrl({ sort: s.key === 'default' ? undefined : s.key })}
+                className={`font-ibm-plex-mono text-[10px] uppercase tracking-widest px-3 py-1.5 transition-colors ${
+                  (sortOption === s.key) || (s.key === 'default' && sortOption === 'default')
+                    ? 'bg-[#0A0A0A] text-white'
+                    : 'text-[#888] hover:text-alkota-black'
                 }`}
               >
-                <span>In Stock Lines Only</span>
-                {isAvailableOnly && <Check className="h-3.5 w-3.5 text-green-700" />}
+                {s.label}
               </Link>
-            </div>
+            ))}
+          </div>
 
-            {/* Reset Filters */}
-            {(selectedBrand || isAvailableOnly || searchQuery || sortOption !== 'default') && (
-              <Link
-                href={`/parts-attachments/${categorySlug}`}
-                className="flex items-center justify-center gap-2 w-full py-2.5 border border-[#CCC] bg-[#EFEFEA] hover:bg-white text-xs font-ibm-plex-mono uppercase tracking-widest text-alkota-black transition-colors no-underline"
-              >
-                <RotateCcw className="h-3 w-3" />
-                <span>Reset All Filters</span>
-              </Link>
-            )}
-          </aside>
-
-          {/* Right Product Grid */}
-          <section className="lg:col-span-9">
-            {/* Top Toolbar (Sorting & Summary) */}
-            <div className="bg-white border border-[#E8E8E4] p-4 mb-6 flex flex-wrap items-center justify-between gap-4">
-              <div className="flex items-center gap-2">
-                <span className="font-ibm-plex-mono text-[10px] uppercase tracking-wider text-[#888]">
-                  Sort By:
-                </span>
-                <div className="flex flex-wrap items-center gap-1">
-                  {[
-                    { key: 'default', label: 'Recommended' },
-                    { key: 'price_asc', label: 'Price: Low → High' },
-                    { key: 'price_desc', label: 'Price: High → Low' },
-                    { key: 'newest', label: 'New Arrivals' },
-                  ].map((s) => (
-                    <Link
-                      key={s.key}
-                      href={buildUrl({ sort: s.key === 'default' ? undefined : s.key })}
-                      className={`px-2.5 py-1 font-ibm-plex-mono text-[10px] uppercase tracking-wider transition-colors no-underline ${
-                        (sortOption === s.key) || (s.key === 'default' && sortOption === 'default')
-                          ? 'bg-[#141414] text-white'
-                          : 'bg-[#F5F5F2] text-[#666] hover:text-black'
-                      }`}
-                    >
-                      {s.label}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-
-              {searchQuery && (
-                <div className="text-xs text-[#777]">
-                  Searching for: <span className="font-mono text-alkota-orange font-normal">"{searchQuery}"</span>
-                </div>
-              )}
-            </div>
-
-            {/* Products Grid */}
-            {partList.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                {partList.map((part) => (
-                  <ProductCard key={part.id} part={part} />
-                ))}
-              </div>
-            ) : (
-              <div className="bg-white border border-[#E8E8E4] p-16 text-center space-y-4">
-                <Wrench className="h-10 w-10 text-[#CCC] mx-auto" />
-                <h3 className="text-xl font-light text-alkota-black">No components found</h3>
-                <p className="text-xs text-[#777] max-w-md mx-auto">
-                  No parts matched your exact combination of category, brand, or search filters.
-                </p>
-                <div className="pt-2 flex justify-center gap-4">
-                  <Link
-                    href={`/parts-attachments/${categorySlug}`}
-                    className="inline-flex items-center gap-2 bg-[#141414] text-white px-5 py-2.5 font-ibm-plex-mono text-[10px] uppercase tracking-widest hover:bg-alkota-orange transition-colors"
-                  >
-                    Clear Category Filters
-                  </Link>
-                  <Link
-                    href="/parts-attachments/enquiry"
-                    className="inline-flex items-center gap-2 border border-[#CCC] px-5 py-2.5 font-ibm-plex-mono text-[10px] uppercase tracking-widest hover:border-black transition-colors"
-                  >
-                    Request Custom Sourcing
-                  </Link>
-                </div>
-              </div>
-            )}
-          </section>
-
+          {/* Clear Filters */}
+          {hasActiveFilters && (
+            <Link
+              href={`/parts-attachments/${categorySlug}`}
+              className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-orange hover:text-alkota-black transition-colors"
+            >
+              Clear ×
+            </Link>
+          )}
         </div>
-      </div>
+      </section>
+
+      {/* ── PRODUCT GRID ── */}
+      <section className="max-w-7xl mx-auto px-6 sm:px-12 lg:px-24 py-12">
+
+        {/* Result Count — below the fold, not screamed in the header */}
+        {partList.length > 0 && (
+          <p className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-[#AAA] mb-6">
+            {partList.length} {partList.length === 1 ? 'component' : 'components'} in {catName}
+            {selectedBrand && ` · ${brands?.find(b => b.slug === selectedBrand)?.name || selectedBrand}`}
+            {isAvailableOnly && ' · In Stock Only'}
+          </p>
+        )}
+
+        {partList.length > 0 ? (
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-px bg-[#E0DEDC]">
+            {partList.map((part) => (
+              <div key={part.id} className="bg-[#FAF9F5]">
+                <ProductCard part={part} />
+              </div>
+            ))}
+          </div>
+        ) : (
+          /* Premium empty state */
+          <div className="py-28 flex flex-col items-center text-center space-y-8">
+            <div className="space-y-3">
+              <p className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-[#AAA]">
+                // No Components Found
+              </p>
+              <h2 className="text-3xl font-extralight text-alkota-black">
+                Nothing here yet.
+              </h2>
+              <p className="text-sm font-light text-[#666] max-w-md leading-relaxed">
+                {hasActiveFilters
+                  ? 'No parts match your current filter combination. Try clearing some filters.'
+                  : 'This category is being built. Parts will appear here as they are catalogued and verified.'}
+              </p>
+            </div>
+            <div className="flex flex-wrap justify-center gap-4">
+              {hasActiveFilters && (
+                <Link
+                  href={`/parts-attachments/${categorySlug}`}
+                  className="inline-flex items-center gap-2 bg-[#0A0A0A] text-white px-8 py-3.5 text-xs font-ibm-plex-mono uppercase tracking-widest hover:bg-alkota-orange transition-colors"
+                >
+                  Clear Filters
+                </Link>
+              )}
+              <Link
+                href="/parts-attachments/finder"
+                className="inline-flex items-center gap-2 bg-alkota-orange text-white px-8 py-3.5 text-xs font-ibm-plex-mono uppercase tracking-widest hover:bg-black transition-colors"
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                Parts Finder Wizard
+              </Link>
+              <Link
+                href="/parts-attachments/enquiry"
+                className="inline-flex items-center gap-2 border border-[#CCC] px-8 py-3.5 text-xs font-ibm-plex-mono uppercase tracking-widest hover:border-black transition-colors"
+              >
+                Submit Parts Enquiry
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+          </div>
+        )}
+      </section>
     </main>
   );
 }

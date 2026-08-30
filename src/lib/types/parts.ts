@@ -149,6 +149,29 @@ export interface PartCategoryAdmin {
   subcategories?: PartCategoryAdmin[];
 }
 
+export type SupplierIntegrationMethod = 
+  | 'rest_api'
+  | 'graphql'
+  | 'xml_feed'
+  | 'json_feed'
+  | 'pim'
+  | 'ftp'
+  | 'sftp'
+  | 'csv'
+  | 'xlsx'
+  | 'pdf'
+  | 'manual';
+
+export type SupplierAuthMethod = 'api_key' | 'oauth2' | 'basic' | 'bearer' | 'none';
+
+export type SupplierSyncStatus = 
+  | 'idle' 
+  | 'running' 
+  | 'completed' 
+  | 'completed_with_warnings' 
+  | 'failed' 
+  | 'cancelled';
+
 export interface Supplier {
   id: string;
   slug: string;
@@ -164,7 +187,18 @@ export interface Supplier {
   default_margin_pct: number;
   feed_type: 'api' | 'xml' | 'csv' | 'manual';
   feed_url?: string | null;
+  integration_method?: SupplierIntegrationMethod;
+  api_endpoint?: string | null;
+  auth_method?: SupplierAuthMethod;
+  credential_ref?: string | null;
   last_sync_at?: string | null;
+  last_sync_attempted_at?: string | null;
+  sync_status?: SupplierSyncStatus;
+  sync_error?: string | null;
+  sync_frequency_hours?: number;
+  products_discovered?: number;
+  products_changed?: number;
+  new_products?: number;
   notes?: string | null;
   active: boolean;
   sort_order?: number;
@@ -172,87 +206,32 @@ export interface Supplier {
   updated_at?: string;
 }
 
-export interface SupplierProduct {
+export interface ImportBatch {
   id: string;
-  part_id: string;
   supplier_id: string;
-  supplier_sku: string;
-  supplier_title?: string | null;
-  cost_price: number;
-  stock_quantity: number;
-  in_stock: boolean;
-  lead_time_days: number;
-  min_order_qty: number;
-  is_preferred: boolean;
-  product_url?: string | null;
-  last_synced_at: string;
-  supplier?: Supplier;
-  part?: Part;
-}
-
-export interface MachineFamily {
-  id: string;
-  slug: string;
-  name: string;
-  manufacturer: string;
-  description?: string | null;
-  image_url?: string | null;
-  sort_order: number;
-  active: boolean;
-  models?: MachineModel[];
-}
-
-export interface MachineModel {
-  id: string;
-  family_id?: string | null;
-  slug: string;
-  model_code: string;
-  name: string;
-  manufacturer: string;
-  series?: string | null;
-  pressure_psi?: number | null;
-  flow_gpm?: number | null;
-  flow_lpm?: number | null;
-  power_source?: string | null;
-  heating_type?: string | null;
-  specs_summary?: string | null;
-  image_url?: string | null;
-  manual_pdf_url?: string | null;
-  schematic_pdf_url?: string | null;
-  sort_order: number;
-  active: boolean;
-  family?: MachineFamily;
-}
-
-export interface Application {
-  id: string;
-  slug: string;
-  name: string;
-  tagline?: string | null;
-  hero_image_url?: string | null;
-  editorial_intro?: string | null;
-  buying_guidance?: string | null;
-  recommended_specs?: string | null;
-  faqs?: { question: string; answer: string }[];
-  sort_order: number;
-  active: boolean;
-  meta_title?: string | null;
-  meta_description?: string | null;
-}
-
-export interface PartApplication {
-  id: string;
-  part_id: string;
-  application_id: string;
-  is_primary: boolean;
+  status: 'queued' | 'running' | 'completed' | 'completed_with_warnings' | 'failed' | 'cancelled';
+  trigger_method: 'manual' | 'scheduled' | 'webhook' | 'file_upload';
+  triggered_by?: string | null;
+  started_at: string;
+  completed_at?: string | null;
+  products_discovered: number;
+  products_new: number;
+  products_changed: number;
+  products_duplicate: number;
+  products_failed: number;
+  products_requiring_review: number;
+  error_message?: string | null;
   notes?: string | null;
-  part?: Part;
-  application?: Application;
+  metadata?: Record<string, any>;
+  created_at: string;
+  updated_at: string;
+  supplier?: Supplier;
 }
 
 export interface StagedSupplierProduct {
   id: string;
   supplier_id: string;
+  batch_id?: string | null;
   supplier_sku: string;
   raw_title: string;
   raw_description?: string | null;
@@ -261,16 +240,120 @@ export interface StagedSupplierProduct {
   cost_price: number;
   stock_quantity: number;
   in_stock: boolean;
+  retrieved_at?: string;
+  raw_supplier_id?: string | null;
+  mpn?: string | null;
+  manufacturer?: string | null;
+  image_urls?: string[];
+  document_urls?: string[];
   suggested_category?: string | null;
   suggested_brand?: string | null;
   matched_part_id?: string | null;
   match_confidence?: number | null;
   match_reason?: string | null;
+  ai_category?: string | null;
+  ai_brand?: string | null;
+  ai_confidence?: number | null;
+  ai_model?: string | null;
+  ai_reasoning?: string | null;
+  ai_run_at?: string | null;
+  ai_task_type?: string | null;
+  anomaly_flags?: string[];
+  validation_warnings?: string[];
   import_status: 'pending' | 'matched_duplicate' | 'new_product' | 'imported' | 'ignored' | 'rejected';
+  admin_action?: 'approved' | 'rejected' | 'merged' | 'mapped' | null;
+  admin_action_by?: string | null;
+  admin_action_at?: string | null;
+  published_at?: string | null;
   raw_payload?: Record<string, any>;
   created_at: string;
+  updated_at?: string;
   supplier?: Supplier;
   matched_part?: Part;
+  batch?: ImportBatch;
+}
+
+export interface AIDecisionLog {
+  id: string;
+  task_type: 'classification' | 'brand_match' | 'product_match' | 'duplicate_detection' | 'attribute_extraction' | 'anomaly_scan';
+  source_type: 'staged_product' | 'batch' | 'manual' | 'canonical_part';
+  source_id: string;
+  input_summary: string;
+  result: Record<string, any>;
+  confidence: number;
+  model: string;
+  human_approved?: boolean | null;
+  human_action_by?: string | null;
+  human_action_at?: string | null;
+  overridden: boolean;
+  override_value?: Record<string, any>;
+  created_at: string;
+}
+
+export interface SupplierSyncLog {
+  id: string;
+  batch_id: string;
+  level: 'info' | 'warn' | 'error';
+  event: string;
+  message: string;
+  payload?: Record<string, any>;
+  part_number?: string | null;
+  supplier_sku?: string | null;
+  created_at: string;
+}
+
+export interface PricingMarginRule {
+  id: string;
+  rule_type: 'global' | 'category' | 'brand' | 'supplier' | 'product';
+  target_id?: string | null;
+  margin_pct: number;
+  fixed_markup: number;
+  min_margin_pct?: number | null;
+  trade_discount_pct: number;
+  active: boolean;
+  notes?: string | null;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface RawSupplierProduct {
+  supplier_sku: string;
+  title: string;
+  description?: string;
+  brand?: string;
+  category?: string;
+  mpn?: string;
+  cost_price: number;
+  stock_quantity?: number;
+  in_stock?: boolean;
+  lead_time_days?: number;
+  weight_kg?: number;
+  dimensions?: string;
+  images?: string[];
+  documents?: string[];
+  specifications?: Record<string, any>;
+  raw_payload?: Record<string, any>;
+}
+
+export interface NormalisedProduct {
+  supplier_sku: string;
+  raw_title: string;
+  raw_description?: string;
+  raw_brand?: string;
+  raw_category?: string;
+  cost_price: number;
+  stock_quantity: number;
+  in_stock: boolean;
+  lead_time_days: number;
+  mpn?: string;
+  manufacturer?: string;
+  weight_kg?: number;
+  dimensions_cm?: string;
+  image_urls: string[];
+  document_urls: string[];
+  specifications: Record<string, any>;
+  validation_warnings: string[];
+  raw_payload: Record<string, any>;
 }
 
 export interface PartsEnquiry {

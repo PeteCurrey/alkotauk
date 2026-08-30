@@ -145,7 +145,7 @@ export default function PartsFinderClient() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-28">
       {/* ── PROGRESS BAR ── */}
       <div className="mb-10">
         <div className="flex items-center justify-between text-xs font-ibm-plex-mono uppercase tracking-widest text-[#777] mb-2">

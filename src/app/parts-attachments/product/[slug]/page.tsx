@@ -135,7 +135,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
       />
 
       {/* Breadcrumb Navigation Bar */}
-      <div className="bg-white border-b border-[#E8E8E4] px-6 sm:px-12 lg:px-24 py-3.5">
+      <div className="bg-white border-b border-[#E8E8E4] px-6 sm:px-12 lg:px-24 pt-28 pb-3.5">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <nav className="flex items-center gap-2 font-ibm-plex-mono text-[10px] uppercase tracking-widest text-[#777] overflow-x-auto whitespace-nowrap">
             <Link href="/parts-attachments" className="hover:text-alkota-orange transition-colors">

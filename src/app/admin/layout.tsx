@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Logo from '@/components/Logo';
@@ -9,7 +9,8 @@ import {
   Building2, Globe, Settings, ExternalLink, LogOut,
   Flame, Waves, Wind, Truck, Factory,
   Droplets, Zap, PenSquare, BookOpen, Film,
-  Bell, Package, Tag, ChevronDown, User, ShieldCheck, HardDrive
+  Bell, Package, Tag, ChevronDown, User, ShieldCheck, HardDrive,
+  ShoppingBag, AlertTriangle, ArrowRight, CheckCircle2, Clock
 } from 'lucide-react';
 
 const NAV_SECTIONS = [
@@ -17,6 +18,15 @@ const NAV_SECTIONS = [
     section: 'Overview',
     items: [
       { icon: LayoutDashboard, label: 'Dashboard Overview', href: '/admin/dashboard' },
+    ],
+  },
+  {
+    section: 'Orders & Commerce',
+    items: [
+      { icon: ShoppingBag, label: 'Orders & Dispatch', href: '/admin/orders', badge: 'orders' },
+      { icon: FileText, label: 'Quote Requests', href: '/admin/quotes', badge: 'quotes' },
+      { icon: Inbox, label: 'Contact Leads', href: '/admin/leads', badge: 'leads' },
+      { icon: Truck, label: 'Trailer Builds Pipeline', href: '/admin/trailer-builds' },
     ],
   },
   {
@@ -42,11 +52,8 @@ const NAV_SECTIONS = [
     ],
   },
   {
-    section: 'Commercial & Inquiries',
+    section: 'Commercial & Solutions',
     items: [
-      { icon: FileText, label: 'Quote Requests', href: '/admin/quotes', badge: 'quotes' },
-      { icon: Inbox, label: 'Contact Leads', href: '/admin/leads', badge: 'leads' },
-      { icon: Truck, label: 'Trailer Builds Pipeline', href: '/admin/trailer-builds' },
       { icon: Building2, label: 'Dealer Network', href: '/admin/dealers' },
       { icon: Globe, label: 'Industry Solutions', href: '/admin/industries' },
     ],
@@ -117,27 +124,60 @@ function NavItem({
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const [newOrderCount, setNewOrderCount] = useState(0);
   const [newQuoteCount, setNewQuoteCount] = useState(0);
   const [newLeadCount, setNewLeadCount] = useState(0);
-  const [showUserMenu, setShowUserMenu] = useState(false);
+  const [lowStockCount, setLowStockCount] = useState(0);
+  const [notifications, setNotifications] = useState<{
+    totalCount: number;
+    newOrders: any[];
+    newQuotes: any[];
+    newLeads: any[];
+    lowStockParts: any[];
+  }>({
+    totalCount: 0,
+    newOrders: [],
+    newQuotes: [],
+    newLeads: [],
+    lowStockParts: [],
+  });
 
-  // Fetch live badge counts
+  const [showNotifications, setShowNotifications] = useState(false);
+  const notifRef = useRef<HTMLDivElement>(null);
+
+  // Fetch live notifications stream
   useEffect(() => {
-    fetch('/api/admin/enquiries?status=new&type=quote&countOnly=true')
+    fetch('/api/admin/notifications')
       .then(r => r.json())
-      .then(d => { if (typeof d.count === 'number') setNewQuoteCount(d.count); })
-      .catch(() => {});
-
-    fetch('/api/admin/enquiries?status=new&countOnly=true')
-      .then(r => r.json())
-      .then(d => { if (typeof d.count === 'number') setNewLeadCount(d.count); })
+      .then(d => {
+        if (d) {
+          setNotifications(d);
+          setNewOrderCount(d.newOrders?.length || 0);
+          setNewQuoteCount(d.newQuotes?.length || 0);
+          setNewLeadCount(d.newLeads?.length || 0);
+          setLowStockCount(d.lowStockParts?.length || 0);
+        }
+      })
       .catch(() => {});
   }, [pathname]);
+
+  // Click outside to close notification dropdown
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (notifRef.current && !notifRef.current.contains(event.target as Node)) {
+        setShowNotifications(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   // Login page — clean light canvas with no shell
   if (pathname === '/admin' || pathname === '/admin/login') {
     return <div className="min-h-screen bg-[#EBECEF] text-[#0F172A]">{children}</div>;
   }
+
+  const totalAlerts = notifications.totalCount || (newOrderCount + newQuoteCount + newLeadCount + lowStockCount);
 
   return (
     <div className="flex min-h-screen bg-[#EBECEF] text-[#0F172A] antialiased selection:bg-[#FF6900] selection:text-white font-sans">
@@ -174,7 +214,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 <NavItem
                   key={item.href}
                   {...item}
-                  badgeCount={item.badge === 'quotes' ? newQuoteCount : item.badge === 'leads' ? newLeadCount : undefined}
+                  badgeCount={
+                    item.badge === 'orders' ? newOrderCount :
+                    item.badge === 'quotes' ? newQuoteCount :
+                    item.badge === 'leads' ? newLeadCount : undefined
+                  }
                 />
               ))}
             </div>
@@ -218,24 +262,157 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               </span>
             </div>
 
-            {/* Right Tools & Operator Profile Capsule */}
+            {/* Right Tools, Notification Bell, & Profile */}
             <div className="flex items-center gap-3">
-              {(newQuoteCount > 0 || newLeadCount > 0) && (
-                <Link
-                  href="/admin/quotes"
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#FF6900] text-white text-xs font-bold shadow-sm hover:bg-[#e55f00] transition-all"
+              {/* Notification Bell with Dropdown */}
+              <div className="relative" ref={notifRef}>
+                <button
+                  type="button"
+                  onClick={() => setShowNotifications(!showNotifications)}
+                  className={`relative h-10 w-10 rounded-full border flex items-center justify-center transition-all ${
+                    showNotifications || totalAlerts > 0
+                      ? 'bg-[#111111] text-white border-[#111111]'
+                      : 'bg-[#F6F7F9] text-[#64748B] hover:text-[#0F172A] border-[#E2E4E8]'
+                  }`}
+                  title="Alerts & Notifications"
                 >
-                  <Bell className="h-3.5 w-3.5" />
-                  <span>{newQuoteCount + newLeadCount} Inquiries</span>
-                </Link>
-              )}
+                  <Bell className="h-4 w-4" />
+                  {totalAlerts > 0 && (
+                    <span className="absolute -top-1 -right-1 h-5 min-w-5 px-1 rounded-full bg-[#FF6900] text-white text-[10px] font-extrabold flex items-center justify-center shadow-sm animate-pulse">
+                      {totalAlerts}
+                    </span>
+                  )}
+                </button>
+
+                {/* Notifications Dropdown Modal */}
+                {showNotifications && (
+                  <div className="absolute right-0 mt-3 w-96 bg-white rounded-2xl border border-[#E2E4E8] shadow-2xl p-4 z-50 animate-in fade-in zoom-in-95 space-y-4">
+                    <div className="flex items-center justify-between border-b border-[#F0F2F5] pb-3">
+                      <div>
+                        <h4 className="text-xs font-bold text-[#0F172A]">Notification Center</h4>
+                        <p className="text-[11px] text-[#64748B]">Real-time operational alerts</p>
+                      </div>
+                      <span className="px-2 py-0.5 rounded-full bg-[#FF6900]/10 text-[#FF6900] text-[10px] font-bold">
+                        {totalAlerts} Pending Action
+                      </span>
+                    </div>
+
+                    <div className="space-y-3 max-h-80 overflow-y-auto pr-1">
+                      {/* New Orders Section */}
+                      {notifications.newOrders && notifications.newOrders.length > 0 && (
+                        <div className="space-y-1.5">
+                          <p className="text-[10px] font-bold uppercase text-[#FF6900] tracking-wider px-1">
+                            New Orders ({notifications.newOrders.length})
+                          </p>
+                          {notifications.newOrders.map((o) => (
+                            <Link
+                              key={o.id}
+                              href="/admin/orders"
+                              onClick={() => setShowNotifications(false)}
+                              className="flex items-center justify-between p-2.5 rounded-xl bg-[#F8F9FB] hover:bg-[#F1F3F7] border border-[#F0F2F5] transition-colors"
+                            >
+                              <div className="min-w-0 pr-2">
+                                <p className="text-xs font-bold text-[#0F172A] truncate">
+                                  {o.order_number} · £{o.total?.toFixed(2)}
+                                </p>
+                                <p className="text-[10px] text-[#64748B] truncate">{o.customer_name}</p>
+                              </div>
+                              <span className="px-2 py-0.5 rounded-full bg-[#FF6900] text-white text-[9px] font-bold shrink-0">
+                                Unprocessed
+                              </span>
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* New Quotes Section */}
+                      {notifications.newQuotes && notifications.newQuotes.length > 0 && (
+                        <div className="space-y-1.5">
+                          <p className="text-[10px] font-bold uppercase text-blue-600 tracking-wider px-1">
+                            New Quote Inquiries ({notifications.newQuotes.length})
+                          </p>
+                          {notifications.newQuotes.map((q) => (
+                            <Link
+                              key={q.id}
+                              href={`/admin/quotes/${q.id}`}
+                              onClick={() => setShowNotifications(false)}
+                              className="flex items-center justify-between p-2.5 rounded-xl bg-[#F8F9FB] hover:bg-[#F1F3F7] border border-[#F0F2F5] transition-colors"
+                            >
+                              <div className="min-w-0 pr-2">
+                                <p className="text-xs font-bold text-[#0F172A] truncate">
+                                  {q.name} {q.company ? `(${q.company})` : ''}
+                                </p>
+                                <p className="text-[10px] text-[#64748B] truncate">
+                                  {q.metadata?.product_name || q.subject || 'Machinery Quote'}
+                                </p>
+                              </div>
+                              <span className="px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 text-[9px] font-bold shrink-0">
+                                Pricing Request
+                              </span>
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Low Stock Section */}
+                      {notifications.lowStockParts && notifications.lowStockParts.length > 0 && (
+                        <div className="space-y-1.5">
+                          <p className="text-[10px] font-bold uppercase text-amber-700 tracking-wider px-1">
+                            Low Stock Alerts ({notifications.lowStockParts.length})
+                          </p>
+                          {notifications.lowStockParts.map((p) => (
+                            <Link
+                              key={p.id}
+                              href="/admin/parts"
+                              onClick={() => setShowNotifications(false)}
+                              className="flex items-center justify-between p-2.5 rounded-xl bg-amber-50/70 hover:bg-amber-100/70 border border-amber-200/70 transition-colors"
+                            >
+                              <div className="min-w-0 pr-2">
+                                <p className="text-xs font-bold text-amber-900 truncate">{p.name}</p>
+                                <p className="text-[10px] text-amber-700">SKU: {p.sku || 'N/A'}</p>
+                              </div>
+                              <span className="px-2 py-0.5 rounded-full bg-amber-200 text-amber-900 text-[9px] font-extrabold shrink-0">
+                                {p.stock_quantity ?? 0} Left
+                              </span>
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+
+                      {totalAlerts === 0 && (
+                        <div className="py-8 text-center text-xs text-[#64748B]">
+                          <CheckCircle2 className="h-6 w-6 text-emerald-500 mx-auto mb-1.5" />
+                          All orders fulfilled, quotes processed, and stock levels healthy.
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="pt-2 border-t border-[#F0F2F5] flex items-center justify-between text-xs">
+                      <Link
+                        href="/admin/orders"
+                        onClick={() => setShowNotifications(false)}
+                        className="font-bold text-[#FF6900] hover:underline"
+                      >
+                        All Orders →
+                      </Link>
+                      <Link
+                        href="/admin/parts"
+                        onClick={() => setShowNotifications(false)}
+                        className="font-bold text-[#64748B] hover:text-[#0F172A]"
+                      >
+                        Parts Inventory →
+                      </Link>
+                    </div>
+                  </div>
+                )}
+              </div>
 
               <Link
                 href="/machines"
                 target="_blank"
                 className="hidden sm:flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#F6F7F9] hover:bg-[#E2E4E8] text-xs font-semibold text-[#334155] transition-colors border border-[#E2E4E8]"
               >
-                <span>Live Catalogue</span>
+                <span>Live Storefront</span>
                 <ExternalLink className="h-3 w-3 text-[#94A3B8]" />
               </Link>
 

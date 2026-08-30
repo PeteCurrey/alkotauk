@@ -68,7 +68,7 @@ export default async function SearchResultsPage({
   return (
     <main className="min-h-screen bg-[#FAF9F5] text-alkota-black pb-24 font-sans">
       {/* ── HEADER SEARCH STRIP ── */}
-      <section className="bg-[#0A0A0A] text-white py-12 px-6 sm:px-12 lg:px-24 border-b border-[#222]">
+      <section className="bg-[#0A0A0A] text-white pt-28 pb-12 px-6 sm:px-12 lg:px-24 border-b border-[#222]">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center gap-2 font-ibm-plex-mono text-[10px] uppercase tracking-widest text-[#777] mb-3">
             <Link href="/parts-attachments" className="hover:text-alkota-orange transition-colors">

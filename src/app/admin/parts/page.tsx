@@ -95,6 +95,30 @@ export default async function AdminPartsPage({ searchParams }: PageProps) {
             All Products ({totalParts})
           </Link>
           <Link
+            href="/admin/parts/supplier-centre"
+            className="px-3.5 py-2 text-[#64748B] hover:text-[#0F172A] hover:bg-[#F1F3F7] rounded-lg transition-colors shrink-0"
+          >
+            Supplier Centre
+          </Link>
+          <Link
+            href="/admin/parts/staging"
+            className="px-3.5 py-2 text-[#64748B] hover:text-[#0F172A] hover:bg-[#F1F3F7] rounded-lg transition-colors shrink-0 font-semibold text-[#FF6900]"
+          >
+            Staging Review
+          </Link>
+          <Link
+            href="/admin/parts/ai-review"
+            className="px-3.5 py-2 text-[#64748B] hover:text-[#0F172A] hover:bg-[#F1F3F7] rounded-lg transition-colors shrink-0"
+          >
+            AI Review Queue
+          </Link>
+          <Link
+            href="/admin/parts/import/batches"
+            className="px-3.5 py-2 text-[#64748B] hover:text-[#0F172A] hover:bg-[#F1F3F7] rounded-lg transition-colors shrink-0"
+          >
+            Sync Batches
+          </Link>
+          <Link
             href="/admin/parts/categories"
             className="px-3.5 py-2 text-[#64748B] hover:text-[#0F172A] hover:bg-[#F1F3F7] rounded-lg transition-colors shrink-0"
           >
@@ -107,34 +131,22 @@ export default async function AdminPartsPage({ searchParams }: PageProps) {
             Brands
           </Link>
           <Link
-            href="/admin/parts/suppliers"
-            className="px-3.5 py-2 text-[#64748B] hover:text-[#0F172A] hover:bg-[#F1F3F7] rounded-lg transition-colors shrink-0"
-          >
-            Suppliers & Feeds
-          </Link>
-          <Link
             href="/admin/parts/compatibility"
             className="px-3.5 py-2 text-[#64748B] hover:text-[#0F172A] hover:bg-[#F1F3F7] rounded-lg transition-colors shrink-0"
           >
-            Machine Compatibility
+            Machine Fitment
           </Link>
           <Link
             href="/admin/parts/applications"
             className="px-3.5 py-2 text-[#64748B] hover:text-[#0F172A] hover:bg-[#F1F3F7] rounded-lg transition-colors shrink-0"
           >
-            Applications CMS
-          </Link>
-          <Link
-            href="/admin/parts/import"
-            className="px-3.5 py-2 text-[#64748B] hover:text-[#0F172A] hover:bg-[#F1F3F7] rounded-lg transition-colors shrink-0"
-          >
-            Import Staging & Duplicates
+            Applications
           </Link>
           <Link
             href="/admin/parts/enquiries"
             className="px-3.5 py-2 text-[#64748B] hover:text-[#0F172A] hover:bg-[#F1F3F7] rounded-lg transition-colors shrink-0"
           >
-            Parts Enquiries CRM
+            Enquiries CRM
           </Link>
           <Link
             href="/admin/parts/analytics"

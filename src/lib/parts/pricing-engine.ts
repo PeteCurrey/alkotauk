@@ -96,3 +96,9 @@ export function formatPrice(
   const val = includeVat ? amount * 1.20 : amount;
   return `${prefix}${val.toFixed(2)}`;
 }
+
+export function calculateRetailPrice(cost: number, marginPct: number = 35.0): number {
+  if (!cost || cost <= 0) return 0;
+  const marginFraction = Math.min(Math.max(marginPct / 100, 0), 0.95);
+  return Number((cost / (1 - marginFraction)).toFixed(2));
+}

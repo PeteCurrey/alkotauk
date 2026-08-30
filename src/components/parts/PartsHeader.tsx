@@ -83,19 +83,25 @@ export default function PartsHeader() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full font-sans bg-[#0A0A0A] border-b border-[#222] text-white select-none">
+    <header className={`fixed top-0 z-50 w-full font-sans text-white select-none transition-all duration-300 ${
+      isScrolled
+        ? 'bg-black/85 backdrop-blur-md border-b border-white/10 shadow-xl'
+        : 'bg-gradient-to-b from-black/90 via-black/40 to-transparent border-b border-transparent'
+    }`}>
       {/* ── TOP UTILITY STRIP ── */}
-      <div className="bg-[#050505] border-b border-[#1A1A1A] px-4 sm:px-8 py-1.5 text-[11px] font-ibm-plex-mono text-[#777] flex items-center justify-between">
+      <div className={`px-4 sm:px-8 py-1.5 text-[11px] font-ibm-plex-mono text-[#AAA] flex items-center justify-between transition-all duration-300 ${
+        isScrolled ? 'bg-black/40 border-b border-white/5' : 'bg-transparent'
+      }`}>
         <div className="flex items-center gap-4">
           <Link
             href="/"
-            className="flex items-center gap-1 text-[#666] hover:text-[#CCC] transition-colors uppercase tracking-widest"
+            className="flex items-center gap-1 text-[#BBB] hover:text-white transition-colors uppercase tracking-widest"
           >
             <ArrowLeft className="w-3 h-3 text-alkota-orange" />
             <span>alkota.co.uk</span>
           </Link>
-          <span className="hidden md:inline text-[#333]">|</span>
-          <span className="hidden md:inline text-[#888]">
+          <span className="hidden md:inline text-[#555]">|</span>
+          <span className="hidden md:inline text-[#CCC]">
             OEM Spares · Specialist Attachments · Next-Day UK Despatch
           </span>
         </div>

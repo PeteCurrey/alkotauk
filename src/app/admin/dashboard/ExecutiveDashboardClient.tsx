@@ -25,6 +25,8 @@ interface ExecutiveDashboardProps {
     totalLeads: number;
     newLeads: number;
     totalChemicals: number;
+    totalOrders?: number;
+    newOrders?: number;
   };
 }
 
@@ -157,37 +159,72 @@ export default function ExecutiveDashboardClient({
         </div>
       </div>
 
-      {/* ── 2. EXECUTIVE KPI CARDS ROW ─────────────────────────────────────── */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Card 1: Parts & Attachments Store Revenue */}
+      {/* ── 2. EXECUTIVE KPI CARDS ROW (5 CARDS) ─────────────────────────── */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        {/* Card 1: New Orders (Unprocessed / Not yet moved to pending, hold, shipped, completed) */}
+        <div className="bg-white rounded-2xl p-5 border border-[#E2E4E8] shadow-[0_2px_12px_rgba(0,0,0,0.02)] flex flex-col justify-between">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-[#FF6900]">
+              New Orders
+            </span>
+            <Link 
+              href="/admin/orders"
+              className="h-8 w-8 rounded-xl bg-[#FF6900]/10 text-[#FF6900] flex items-center justify-center font-bold text-xs hover:bg-[#FF6900] hover:text-white transition-colors"
+              title="View Orders"
+            >
+              <ShoppingCart className="h-4 w-4" />
+            </Link>
+          </div>
+          <div>
+            <div className="flex items-baseline gap-2">
+              <p className="text-3xl font-black text-[#0F172A] tracking-tight">
+                {stats.newOrders ?? 0}
+              </p>
+              {(stats.newOrders ?? 0) > 0 ? (
+                <span className="px-2 py-0.5 rounded-full bg-[#FF6900] text-white text-[10px] font-extrabold uppercase">
+                  Action Required
+                </span>
+              ) : (
+                <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold">
+                  Up to date
+                </span>
+              )}
+            </div>
+            <p className="text-xs text-[#64748B] font-medium mt-2">
+              Awaiting triage / not moved to processing
+            </p>
+          </div>
+        </div>
+
+        {/* Card 2: Parts Store Revenue */}
         <div className="bg-white rounded-2xl p-5 border border-[#E2E4E8] shadow-[0_2px_12px_rgba(0,0,0,0.02)] flex flex-col justify-between">
           <div className="flex items-center justify-between mb-3">
             <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">
-              Parts Store Revenue ({revenue.label})
+              Parts Revenue ({revenue.label})
             </span>
             <div className="h-8 w-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-xs">
-              <ShoppingCart className="h-4 w-4" />
+              <DollarSign className="h-4 w-4" />
             </div>
           </div>
           <div>
             <p className="text-3xl font-black text-[#0F172A] tracking-tight">
               £{revenue.partsRevenue.toLocaleString()}
             </p>
-            <div className="flex items-center gap-2 mt-2 text-xs font-medium">
-              <span className="text-emerald-700 font-bold flex items-center gap-0.5">
+            <div className="flex items-center gap-1.5 mt-2 text-xs font-medium">
+              <span className="text-emerald-700 font-bold flex items-center">
                 <ArrowUpRight className="h-3.5 w-3.5" /> +{revenue.growth}%
               </span>
               <span className="text-[#94A3B8]">·</span>
-              <span className="text-[#64748B]">{revenue.orderCount} orders (£{revenue.avgOrder} AOV)</span>
+              <span className="text-[#64748B]">{revenue.orderCount} orders</span>
             </div>
           </div>
         </div>
 
-        {/* Card 2: Quotation Pipeline */}
+        {/* Card 3: Quotation Pipeline */}
         <div className="bg-white rounded-2xl p-5 border border-[#E2E4E8] shadow-[0_2px_12px_rgba(0,0,0,0.02)] flex flex-col justify-between">
           <div className="flex items-center justify-between mb-3">
             <span className="text-[11px] font-bold uppercase tracking-wider text-[#FF6900]">
-              Machinery Quote Requests
+              Machinery Quotes
             </span>
             <Link 
               href="/admin/quotes" 
@@ -207,17 +244,17 @@ export default function ExecutiveDashboardClient({
                 </span>
               )}
             </div>
-            <p className="text-xs text-[#64748B] font-medium mt-2">
-              Est. Pipeline Value: <span className="font-bold text-[#0F172A]">£{revenue.quotePipeline.toLocaleString()}</span>
+            <p className="text-xs text-[#64748B] font-medium mt-2 truncate">
+              Pipeline: <span className="font-bold text-[#0F172A]">£{revenue.quotePipeline.toLocaleString()}</span>
             </p>
           </div>
         </div>
 
-        {/* Card 3: Commercial Leads */}
+        {/* Card 4: Commercial Leads */}
         <div className="bg-white rounded-2xl p-5 border border-[#E2E4E8] shadow-[0_2px_12px_rgba(0,0,0,0.02)] flex flex-col justify-between">
           <div className="flex items-center justify-between mb-3">
             <span className="text-[11px] font-bold uppercase tracking-wider text-blue-600">
-              Customer Leads & Trials
+              Customer Leads
             </span>
             <Link 
               href="/admin/leads"
@@ -238,36 +275,36 @@ export default function ExecutiveDashboardClient({
               )}
             </div>
             <p className="text-xs text-[#64748B] font-medium mt-2">
-              Contact forms, bespoke builds & trial demos
+              Trial demos & contact forms
             </p>
           </div>
         </div>
 
-        {/* Card 4: Storefront Catalogue Assets */}
+        {/* Card 5: Storefront Catalogue Assets */}
         <div className="bg-white rounded-2xl p-5 border border-[#E2E4E8] shadow-[0_2px_12px_rgba(0,0,0,0.02)] flex flex-col justify-between">
           <div className="flex items-center justify-between mb-3">
             <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">
-              Active Store Catalogue
+              Active Store Assets
             </span>
             <div className="h-8 w-8 rounded-xl bg-[#F6F7F9] text-[#475569] flex items-center justify-center font-bold text-xs">
               <Package className="h-4 w-4" />
             </div>
           </div>
           <div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center justify-between">
               <div>
                 <p className="text-2xl font-black text-[#0F172A]">{stats.activeProducts}</p>
                 <p className="text-[10px] text-[#94A3B8] font-bold uppercase">Machines</p>
               </div>
-              <div className="h-8 w-[1px] bg-[#E2E4E8]" />
+              <div className="h-7 w-[1px] bg-[#E2E4E8]" />
               <div>
                 <p className="text-2xl font-black text-[#0F172A]">{stats.activeParts || initialParts.length || 420}</p>
-                <p className="text-[10px] text-[#94A3B8] font-bold uppercase">Live Parts</p>
+                <p className="text-[10px] text-[#94A3B8] font-bold uppercase">Parts</p>
               </div>
-              <div className="h-8 w-[1px] bg-[#E2E4E8]" />
+              <div className="h-7 w-[1px] bg-[#E2E4E8]" />
               <div>
                 <p className="text-2xl font-black text-[#0F172A]">{stats.totalChemicals || 12}</p>
-                <p className="text-[10px] text-[#94A3B8] font-bold uppercase">Chemicals</p>
+                <p className="text-[10px] text-[#94A3B8] font-bold uppercase">Chems</p>
               </div>
             </div>
           </div>

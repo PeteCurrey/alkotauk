@@ -159,14 +159,16 @@ export default function Navigation() {
         }`}
         aria-label="Main Navigation"
       >
-        <div className="mx-auto flex max-w-7xl w-full items-center justify-between gap-3 lg:gap-6 flex-nowrap">
-          {/* Brand Logo */}
-          <Link href="/" className="flex items-center group shrink-0" aria-label="Alkota UK Home">
-            <Logo className={`${isScrolled || activeMenu !== null ? 'h-7 sm:h-8' : 'h-8 sm:h-10'} transition-all duration-300`} />
-          </Link>
+        <div className="mx-auto flex max-w-7xl w-full items-center justify-between gap-4 flex-nowrap relative">
+          {/* Brand Logo (flex-1 for balanced centering) */}
+          <div className="flex items-center flex-1 justify-start shrink-0">
+            <Link href="/" className="flex items-center group shrink-0" aria-label="Alkota UK Home">
+              <Logo className={`${isScrolled || activeMenu !== null ? 'h-7 sm:h-8' : 'h-8 sm:h-10'} transition-all duration-300`} />
+            </Link>
+          </div>
 
-          {/* Desktop Nav Links */}
-          <div className="hidden items-center gap-3.5 xl:gap-6 2xl:gap-7 lg:flex font-normal flex-nowrap whitespace-nowrap">
+          {/* Desktop Nav Links (Centered) */}
+          <div className="hidden items-center justify-center gap-3.5 xl:gap-6 2xl:gap-7 lg:flex font-normal flex-nowrap whitespace-nowrap shrink-0">
             {navLinks.map((link) => (
               <div
                 key={link.name}
@@ -210,8 +212,8 @@ export default function Navigation() {
             ))}
           </div>
 
-          {/* Right Action CTAs */}
-          <div className="flex items-center gap-2 sm:gap-3 font-normal shrink-0 flex-nowrap">
+          {/* Right Action CTAs (flex-1 for balanced centering) */}
+          <div className="flex items-center gap-2 sm:gap-3 font-normal flex-1 justify-end shrink-0 flex-nowrap">
             <Link
               href="/lobby"
               className="hidden xl:inline-flex items-center gap-1.5 bg-black text-white px-3 py-1.5 text-[10px] xl:text-[11px] uppercase tracking-[0.18em] transition-all hover:bg-alkota-orange no-underline group shadow-sm border border-white/20 font-normal whitespace-nowrap"

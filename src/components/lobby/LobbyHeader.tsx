@@ -46,9 +46,9 @@ export default function LobbyHeader() {
       }`}
       aria-label="The Lobby Navigation"
     >
-      <div className="mx-auto flex max-w-7xl w-full items-center justify-between gap-3 lg:gap-6 flex-nowrap">
-        {/* ── LEFT GROUP: Parent site context + Lobby Identity + Date ─────── */}
-        <div className="flex items-center gap-2.5 sm:gap-3 shrink-0 flex-nowrap">
+      <div className="mx-auto flex max-w-7xl w-full items-center justify-between gap-4 flex-nowrap relative">
+        {/* ── LEFT GROUP: Parent site context + Lobby Identity + Date (flex-1 for balanced centering) ─────── */}
+        <div className="flex items-center gap-2.5 sm:gap-3 flex-1 justify-start min-w-0 shrink-0 flex-nowrap">
           <Link
             href="/"
             className="flex items-center gap-1 text-[11px] xl:text-xs text-white/70 hover:text-white transition-colors no-underline uppercase tracking-[0.14em] xl:tracking-[0.18em] font-normal whitespace-nowrap"
@@ -74,8 +74,8 @@ export default function LobbyHeader() {
           </span>
         </div>
 
-        {/* ── CENTRE GROUP: Clean Horizontal Editorial Nav ─────────────────── */}
-        <nav className="hidden lg:flex items-center gap-3 xl:gap-5 2xl:gap-6 font-normal flex-nowrap whitespace-nowrap" aria-label="Lobby editorial sections">
+        {/* ── CENTRE GROUP: Exactly Centered Horizontal Editorial Nav ─────────────────── */}
+        <nav className="hidden lg:flex items-center justify-center gap-3.5 xl:gap-5 2xl:gap-6 font-normal flex-nowrap whitespace-nowrap shrink-0" aria-label="Lobby editorial sections">
           {NAV_ITEMS.map(item => {
             if (item.isAsk) {
               return (
@@ -101,8 +101,8 @@ export default function LobbyHeader() {
           })}
         </nav>
 
-        {/* ── RIGHT GROUP: Commercial Links + Consult CTA ─────────────────── */}
-        <div className="flex items-center gap-2.5 sm:gap-4 font-normal shrink-0 flex-nowrap">
+        {/* ── RIGHT GROUP: Commercial Links + Consult CTA (flex-1 for balanced centering) ─────────────────── */}
+        <div className="flex items-center gap-2.5 sm:gap-4 font-normal flex-1 justify-end shrink-0 flex-nowrap">
           <Link
             href="/tools/machine-match"
             className="hidden 2xl:inline text-[11px] uppercase tracking-[0.14em] text-white/70 hover:text-alkota-orange transition-colors no-underline font-normal whitespace-nowrap"

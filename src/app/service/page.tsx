@@ -182,6 +182,46 @@ export default function ServicePage() {
         </div>
       </section>
 
+      {/* ── CHAPTER 02.5: PARTS & ATTACHMENTS CALLOUT ── */}
+      <section className="py-12 px-6 sm:px-12 lg:px-24">
+        <div className="max-w-7xl mx-auto">
+          <div className="bg-[#0A0A0A] text-white border border-[#222] flex flex-col lg:flex-row items-stretch overflow-hidden shadow-xl">
+            <div className="flex-1 p-10 lg:p-14">
+              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-orange block mb-3">
+                // OEM Spares &amp; Attachments
+              </span>
+              <h2 className="font-extralight text-3xl lg:text-4xl text-white tracking-tight mb-4">
+                Parts for every Alkota. Attachments for every application.
+              </h2>
+              <p className="text-[#AAA] text-sm leading-relaxed mb-8 max-w-xl font-normal">
+                OEM-genuine pump components, Mosmatic rotary tooling, Cox Reels hose management, Steel Eagle surface cleaners, and Dual Pumps fluid power — all stocked, sourced, and despatched from the UK.
+              </p>
+              <Link
+                href="/parts-attachments"
+                className="inline-flex items-center gap-3 bg-alkota-orange hover:bg-white hover:text-alkota-black text-white px-8 py-4 font-ibm-plex-mono text-xs uppercase tracking-widest transition-all"
+              >
+                Browse Parts &amp; Attachments
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+            <div className="lg:w-80 bg-[#141414] border-t lg:border-t-0 lg:border-l border-[#262626] flex items-center justify-center p-10">
+              <div className="grid grid-cols-2 gap-4 text-center w-full">
+                {[
+                  { val: '500+', label: 'Components' },
+                  { val: '5', label: 'Partner Brands' },
+                  { val: 'OEM', label: 'Genuine Stock' },
+                  { val: 'Next-Day', label: 'UK Despatch' },
+                ].map((item) => (
+                  <div key={item.label} className="p-3 bg-[#0D0D0D] border border-[#1F1F1F]">
+                    <span className="block text-2xl font-extralight text-alkota-orange mb-1">{item.val}</span>
+                    <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#777] block">{item.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* ── CHAPTER 03: SERVICE CAPABILITY NAVIGATOR ── */}
       <section className="py-20 px-6 sm:px-12 lg:px-24 bg-[#F0EFEB] border-y border-[#E8E8E4]">

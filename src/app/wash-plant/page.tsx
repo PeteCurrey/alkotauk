@@ -4,7 +4,6 @@ import { useState } from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import WashPlantSubNav from '@/components/wash-plant/WashPlantSubNav';
-import WashPlantCapabilityBadge from '@/components/wash-plant/WashPlantCapabilityBadge';
 import WashPlantSpecifierCta from '@/components/wash-plant/WashPlantSpecifierCta';
 import WashPlantSchema from '@/components/wash-plant/WashPlantSchema';
 import WashPlantVariablesMatrix from '@/components/wash-plant/WashPlantVariablesMatrix';
@@ -12,29 +11,13 @@ import WashPlantAnatomyDiagram from '@/components/wash-plant/WashPlantAnatomyDia
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowRight,
-  ShieldCheck,
-  Zap,
-  Droplets,
-  Cpu,
-  RefreshCw,
-  Clock,
-  CheckCircle2,
-  ChevronRight,
-  Settings,
-  Layers,
-  Sliders,
-  Truck,
-  Building2,
-  Wrench,
-  Activity,
-  BarChart3,
-  Flame,
   ArrowDown,
-  ChevronDown,
+  Sliders,
   Sparkles,
   ExternalLink
 } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 // ─── 01. SYSTEM ARCHITECTURES ───────────────────────────────────────────────
 interface Architecture {
@@ -47,6 +30,8 @@ interface Architecture {
   operatingPrinciple: string;
   potentialIntegration: string;
   keySpecs: string[];
+  image: string;
+  imageAlt: string;
 }
 
 const ARCHITECTURES: Architecture[] = [
@@ -64,7 +49,9 @@ const ARCHITECTURES: Architecture[] = [
       'Centralised triplex ceramic plunger pump skid in dedicated plant room',
       'Continuous Schedule 80 ASTM A53 heating coil thermal water delivery',
       'Low-voltage operator remote touchpoints with pneumatic chemical selection'
-    ]
+    ],
+    image: '/assets/wash-plant/hero-plant-wide.jpg',
+    imageAlt: 'Manual industrial wash bay installation'
   },
   {
     id: 'multi_operator',
@@ -80,7 +67,9 @@ const ARCHITECTURES: Architecture[] = [
       'PLC-managed pressure and temperature load-balancing manifolds',
       'Heavy-wall Schedule 80 stainless distribution ring main reticulation',
       'Individual bay lockouts and automated frost purge cycles'
-    ]
+    ],
+    image: '/assets/wash-plant/hero-plant-spray.jpg',
+    imageAlt: 'Multi-operator wash plant reticulation'
   },
   {
     id: 'heavy_demucking',
@@ -96,7 +85,9 @@ const ARCHITECTURES: Architecture[] = [
       'Multi-stage high-volume centrifugal and plunger pump assemblies',
       'Reinforced drive-over steel rumble grids and underbody flush ramps',
       'High-solids slurry evacuation sumps with submersible vortex slurry pumps'
-    ]
+    ],
+    image: '/assets/wash-plant/scratch/wash-water-recycling-16.JPG',
+    imageAlt: 'Heavy plant de-mucking pump station'
   },
   {
     id: 'conveyorised_tunnel',
@@ -112,7 +103,9 @@ const ARCHITECTURES: Architecture[] = [
       '20+ synchronized rotating spray manifolds (top, bottom, and side coverage)',
       'Dual 1,000,000 BTU thermal water heating generation skids',
       'Heavy solids screw conveyor for continuous de-watering and mud evacuation'
-    ]
+    ],
+    image: '/assets/wash-plant/hero-plant-conveyor.jpg',
+    imageAlt: 'Conveyorised continuous wash tunnel system'
   },
   {
     id: 'automated_drive_through',
@@ -128,7 +121,9 @@ const ARCHITECTURES: Architecture[] = [
       'High-impact oscillating contour spray arches for cab and side panels',
       'Automated high-pressure underbody & tyre wash spinner manifolds',
       'Rapid cycle turnaround with integrated traffic light guidance'
-    ]
+    ],
+    image: '/assets/wash-plant/hero-plant-system.jpg',
+    imageAlt: 'Automated drive-through wash system'
   },
   {
     id: 'gantry_moving',
@@ -144,7 +139,9 @@ const ARCHITECTURES: Architecture[] = [
       'Multi-nozzle contouring side, skirt, and roof rinse arches',
       'Chemical pre-soak, high-pressure wash, and final RO rinse stages',
       'Category 4 safety interlocks, light curtains, and emergency stop loops'
-    ]
+    ],
+    image: '/assets/wash-plant/scratch/wash-water-recycling-13.JPG',
+    imageAlt: 'Traversing gantry wash plant'
   },
   {
     id: 'mat_sheet_rig',
@@ -160,7 +157,9 @@ const ARCHITECTURES: Architecture[] = [
       'Integrated biosecurity disinfectant dosing options for agricultural compliance',
       'Automated scraper and de-silting primary containment troughs',
       'Heavy structural steel frame construction for harsh site environments'
-    ]
+    ],
+    image: '/assets/wash-plant/scratch/rigmat-washer-1.jpg',
+    imageAlt: 'Access mat and sheet pile heavy wash rig'
   },
   {
     id: 'bespoke_process',
@@ -176,7 +175,9 @@ const ARCHITECTURES: Architecture[] = [
       'High-temperature 95°C water plus 140°C dry steam generation',
       'Automated sanitiser manifold and chemical dosing integration',
       'IP66 stainless wash-down control enclosures with hygienic seals'
-    ]
+    ],
+    image: '/assets/wash-plant/recycling-plant-1.jpg',
+    imageAlt: 'Custom process wash and water recycling installation'
   }
 ];
 
@@ -272,32 +273,26 @@ const MACRO_PHASES: MacroPhase[] = [
 ];
 
 export default function WashPlantPage() {
-  const [selectedArchIdx, setSelectedArchIdx] = useState<number>(3); // Default to conveyorised tunnel
+  const [selectedArchIdx, setSelectedArchIdx] = useState<number>(3);
   const selectedArch = ARCHITECTURES[selectedArchIdx];
   const [activePhaseIdx, setActivePhaseIdx] = useState<number>(0);
 
   return (
-    <main className="min-h-screen bg-alkota-bg text-alkota-black">
+    <main className="min-h-screen bg-white text-alkota-black">
       <WashPlantSchema
         pageTitle="Industrial Wash Plant Design, Installation & Lifecycle Support | Alkota UK"
         pageDescription="Alkota UK engineers bespoke industrial cleaning infrastructure: turnkey wash plant design, mechanical fabrication, water treatment, automation and lifecycle PPM for high-throughput commercial and industrial operations."
         pageUrl="https://alkota.co.uk/wash-plant"
       />
 
-      {/* Global nav overlays the hero — transparent until scrolled (existing nav behaviour) */}
       <Navigation />
 
-      {/* ── CHAPTER 0: FULL-SCREEN INDUSTRIAL HERO ────────────────── */}
+      {/* ── CHAPTER 0: FULL-SCREEN INDUSTRIAL HERO ────────────────────────────── */}
       <section
         className="relative flex flex-col justify-between text-white overflow-hidden border-b border-[#222] min-h-[100svh] px-6 sm:px-12 font-normal"
       >
-        {/* Photography — the primary communication device */}
-        {/* Source: rigmatwasher.com / hotandmighty.com — conveyorised industrial mat wash plant */}
         <picture>
-          <source
-            srcSet="/assets/wash-plant/hero-plant-conveyor.webp"
-            type="image/webp"
-          />
+          <source srcSet="/assets/wash-plant/hero-plant-conveyor.webp" type="image/webp" />
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/assets/wash-plant/hero-plant-conveyor.jpg"
@@ -308,17 +303,13 @@ export default function WashPlantPage() {
           />
         </picture>
 
-        {/* Art-directed gradient — left-to-right, preserves industrial detail on right half */}
         <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-black/20 pointer-events-none" />
-        {/* Subtle bottom darkening for capability strip legibility */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
 
-        {/* Top spacer and SubNav overlay */}
         <div className="w-full pt-24 -mx-6 sm:-mx-12">
           <WashPlantSubNav heroOverlay />
         </div>
 
-        {/* Hero content — vertically centered with my-auto, horizontally aligned with logo */}
         <div className="relative z-10 mx-auto max-w-7xl w-full my-auto py-12">
           <div className="max-w-3xl">
             <motion.div
@@ -376,7 +367,6 @@ export default function WashPlantPage() {
           </div>
         </div>
 
-        {/* Hero Restrained Capability Footer */}
         <div className="relative z-10 mx-auto max-w-7xl w-full pt-8 border-t border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-4 text-xs font-ibm-plex-mono text-alkota-silver uppercase tracking-widest pb-8">
           <div className="flex items-center gap-4 sm:gap-6 flex-wrap">
             <span>DESIGN</span>
@@ -392,23 +382,20 @@ export default function WashPlantPage() {
         </div>
       </section>
 
-      {/* WashPlantSubNav appears here in its solid sticky state after hero */}
       <WashPlantSubNav />
 
-      {/* ── CHAPTER 1: THE MACHINE IS ONLY ONE PART OF THE SYSTEM (WARM WHITE) */}
-      <section id="process-system" className="py-24 px-6 sm:px-12 bg-white border-b border-alkota-iron">
-        <div className="mx-auto max-w-7xl">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start mb-16">
-            <div className="lg:col-span-5">
-              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.35em] text-alkota-orange block mb-3">
-                SYSTEMIC PROCESS ENGINEERING
-              </span>
-              <h2 className="font-extralight text-4xl sm:text-5xl uppercase tracking-tight text-alkota-black leading-tight">
-                The machine is only one part of the system.
-              </h2>
-            </div>
-
-            <div className="lg:col-span-7 space-y-6 text-sm text-alkota-silver leading-relaxed">
+      {/* ── CHAPTER 1: THE MACHINE IS ONLY ONE PART OF THE SYSTEM ────────────── */}
+      <section id="process-system" className="py-0 bg-white border-b border-alkota-iron/30">
+        <div className="grid grid-cols-1 lg:grid-cols-2">
+          {/* Left: Text */}
+          <div className="px-6 sm:px-12 py-24 lg:py-32 flex flex-col justify-center">
+            <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.35em] text-alkota-orange block mb-4">
+              SYSTEMIC PROCESS ENGINEERING
+            </span>
+            <h2 className="font-extralight text-4xl sm:text-5xl uppercase tracking-tight text-alkota-black leading-tight mb-8">
+              The machine is only one part of the system.
+            </h2>
+            <div className="space-y-5 text-sm text-alkota-silver leading-relaxed max-w-xl">
               <p className="text-base text-alkota-black font-normal">
                 A pressure washer is an individual tool. An industrial wash plant is a process infrastructure asset: combining heavy mechanical reticulation, thermal water generation, automated sequencing, civils interfaces, solids evacuation, oil separation, water recycling, and long-term asset management.
               </p>
@@ -421,12 +408,29 @@ export default function WashPlantPage() {
             </div>
           </div>
 
-          {/* Interactive 6-Vector Dynamic Matrix */}
-          <WashPlantVariablesMatrix />
+          {/* Right: Real photograph — conveyorised plant in action */}
+          <div className="relative min-h-[400px] lg:min-h-0 overflow-hidden">
+            <Image
+              src="/assets/wash-plant/hero-plant-system.jpg"
+              alt="Industrial wash plant pump skid and pipe reticulation system"
+              fill
+              className="object-cover object-center"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-white/20 via-transparent to-transparent lg:from-white/5 pointer-events-none" />
+          </div>
+        </div>
+
+        {/* Variables Matrix — full width below the image split */}
+        <div className="px-6 sm:px-12 pb-24 bg-[#F8F7F4] pt-16 border-t border-alkota-iron/20">
+          <div className="mx-auto max-w-7xl">
+            <WashPlantVariablesMatrix />
+          </div>
         </div>
       </section>
 
-      <section id="architectures" className="py-28 px-6 sm:px-12 bg-[#F8F7F4] border-b border-alkota-iron/40">
+      {/* ── CHAPTER 2: SYSTEM ARCHITECTURES ──────────────────────────────────── */}
+      <section id="architectures" className="py-28 px-6 sm:px-12 bg-white border-b border-alkota-iron/40">
         <div className="mx-auto max-w-7xl">
           <div className="mb-16 max-w-3xl">
             <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.35em] text-alkota-orange block mb-4">
@@ -438,7 +442,7 @@ export default function WashPlantPage() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
-            {/* Left: Numbered Architecture List — clean typographic selector */}
+            {/* Left: Numbered Architecture List */}
             <div className="lg:col-span-5 space-y-0 divide-y divide-alkota-iron/30">
               {ARCHITECTURES.map((arch, idx) => {
                 const isSelected = idx === selectedArchIdx;
@@ -472,7 +476,7 @@ export default function WashPlantPage() {
               })}
             </div>
 
-            {/* Right: Open Architecture Detail — no card, just structured editorial prose */}
+            {/* Right: Open Architecture Detail with real equipment image */}
             <div className="lg:col-span-7">
               <AnimatePresence mode="wait">
                 <motion.div
@@ -482,6 +486,20 @@ export default function WashPlantPage() {
                   exit={{ opacity: 0, y: -8 }}
                   transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                 >
+                  {/* Photo of selected equipment */}
+                  <div className="relative h-64 sm:h-80 w-full mb-8 overflow-hidden border border-alkota-iron/30 bg-[#FAF9F5]">
+                    <Image
+                      src={selectedArch.image}
+                      alt={selectedArch.imageAlt}
+                      fill
+                      className="object-cover object-center"
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                    />
+                    <div className="absolute bottom-3 left-3 bg-alkota-black/80 backdrop-blur-sm text-white px-3 py-1 font-ibm-plex-mono text-[9px] uppercase tracking-widest">
+                      {selectedArch.name}
+                    </div>
+                  </div>
+
                   <div className="mb-8 pb-8 border-b border-alkota-iron/30">
                     <h3 className="font-extralight text-3xl sm:text-4xl uppercase tracking-tight text-alkota-black mb-3 leading-tight">
                       {selectedArch.name}
@@ -491,7 +509,6 @@ export default function WashPlantPage() {
                     </p>
                   </div>
 
-                  {/* Structured detail rows — no boxes, just spaced type */}
                   <div className="space-y-6 mb-10">
                     {[
                       { label: 'Best Suited To', value: selectedArch.bestSuitedTo },
@@ -510,7 +527,6 @@ export default function WashPlantPage() {
                     ))}
                   </div>
 
-                  {/* Core mechanical elements — clean list, no icons */}
                   <div className="mb-10">
                     <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.3em] text-alkota-orange block mb-4">
                       Core Mechanical &amp; Hydraulic Elements
@@ -525,7 +541,6 @@ export default function WashPlantPage() {
                     </div>
                   </div>
 
-                  {/* CTAs — clean text links */}
                   <div className="flex flex-wrap items-center gap-6 pt-8 border-t border-alkota-iron/30">
                     <Link
                       href="/wash-plant/architect"
@@ -548,16 +563,34 @@ export default function WashPlantPage() {
         </div>
       </section>
 
+      {/* ── PHOTO BREAK: SPRAY IN ACTION ─────────────────────────────────────── */}
+      <div className="relative h-[50vh] sm:h-[60vh] overflow-hidden">
+        <Image
+          src="/assets/wash-plant/hero-plant-spray.jpg"
+          alt="High-pressure industrial wash spray in operation"
+          fill
+          className="object-cover object-center"
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-alkota-black/60 via-alkota-black/20 to-transparent" />
+        <div className="absolute inset-0 flex items-center px-6 sm:px-12">
+          <div className="mx-auto max-w-7xl w-full">
+            <p className="font-extralight text-3xl sm:text-5xl uppercase tracking-tight text-white max-w-2xl leading-tight">
+              Precision.<br /><span className="text-alkota-orange">Under pressure.</span>
+            </p>
+          </div>
+        </div>
+      </div>
 
-      {/* ── CHAPTER 3: ANATOMY OF AN INDUSTRIAL WASH PLANT (SIGNATURE DARK) ── */}
-      <section className="py-24 px-6 sm:px-12 bg-[#0A0A0A] border-b border-[#222]">
+      {/* ── CHAPTER 3: ANATOMY OF AN INDUSTRIAL WASH PLANT (LIGHT ARCHITECTURAL) ── */}
+      <section className="py-24 px-6 sm:px-12 bg-[#F8F7F4] border-b border-alkota-iron/30">
         <div className="mx-auto max-w-7xl">
           <WashPlantAnatomyDiagram />
         </div>
       </section>
 
-      {/* ── CHAPTER 4: START WITH THE PROCESS (WASH PLANT ARCHITECT INTRO) ─── */}
-      <section className="py-28 px-6 sm:px-12 bg-[#0D0D0D] text-white border-b border-[#1A1A1A]">
+      {/* ── CHAPTER 4: WASH PLANT ARCHITECT (SIGNATURE DARK SECTION) ─────────── */}
+      <section id="architect" className="py-28 px-6 sm:px-12 bg-[#0D0D0D] text-white border-b border-[#1A1A1A]">
         <div className="mx-auto max-w-7xl">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
             <div className="lg:col-span-6 space-y-8">
@@ -580,7 +613,7 @@ export default function WashPlantPage() {
                 <div className="flex flex-wrap items-center gap-4">
                   <Link
                     href="/wash-plant/architect"
-                    className="inline-flex items-center gap-3 bg-alkota-orange text-white px-8 py-4 text-xs uppercase tracking-[0.25em] hover:bg-white hover:text-alkota-black transition-colors shadow-lg"
+                    className="inline-flex items-center gap-3 bg-alkota-orange text-white px-8 py-4 text-xs uppercase tracking-[0.25em] hover:bg-white hover:text-alkota-black transition-colors shadow-lg font-normal"
                   >
                     <span>Build a Preliminary Project Brief</span>
                     <ArrowRight className="h-4 w-4" />
@@ -598,7 +631,7 @@ export default function WashPlantPage() {
               </div>
             </div>
 
-            {/* 9-Step Framework — open numbered editorial grid, no row boxes */}
+            {/* 9-Step Framework — open numbered editorial grid */}
             <div className="lg:col-span-6">
               <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.3em] text-alkota-orange block mb-8">
                 9-Step Scoping Framework
@@ -627,7 +660,7 @@ export default function WashPlantPage() {
         </div>
       </section>
 
-      {/* ── CHAPTER 5: CONTROLS & AUTOMATION (DARK / INDUSTRIAL CONTROLS) ──── */}
+      {/* ── CHAPTER 5: CONTROLS & AUTOMATION ─────────────────────────────────── */}
       <section className="py-28 px-6 sm:px-12 bg-white border-b border-alkota-iron/40">
         <div className="mx-auto max-w-7xl">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
@@ -647,7 +680,6 @@ export default function WashPlantPage() {
                 </p>
               </div>
 
-              {/* Automation Spectrum — gradient bar, no boxes */}
               <div className="pt-4 border-t border-alkota-iron/30">
                 <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.3em] text-alkota-orange block mb-3">
                   The Automation Spectrum
@@ -661,7 +693,6 @@ export default function WashPlantPage() {
               </div>
             </div>
 
-            {/* Right: Open editorial live-data display — no nested card boxes */}
             <div className="lg:col-span-7">
               <div className="mb-6 pb-4 border-b border-alkota-iron/30 flex items-center justify-between">
                 <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.3em] text-alkota-orange">
@@ -672,7 +703,6 @@ export default function WashPlantPage() {
                 </span>
               </div>
 
-              {/* Data grid — clean type rows, no card borders */}
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-7 mb-6">
                 {[
                   { label: 'Pump Status', value: 'Running / 160 Bar', accent: true },
@@ -693,7 +723,6 @@ export default function WashPlantPage() {
                 * Interface parameters configured strictly per project specification.
               </span>
 
-              {/* Two capability callouts — open, no box */}
               <div className="grid grid-cols-2 gap-8 mt-8 pt-6 border-t border-alkota-iron/30">
                 <div>
                   <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.3em] text-alkota-orange block mb-1">Industrial PLC</span>
@@ -709,45 +738,35 @@ export default function WashPlantPage() {
         </div>
       </section>
 
-      {/* ── CHAPTER 6: WATER IS A PROCESS STREAM (LIGHT STEEL) ─────────────── */}
-      <section className="py-24 px-6 sm:px-12 bg-white border-b border-alkota-iron">
-        <div className="mx-auto max-w-7xl">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start mb-16">
-            <div className="lg:col-span-5 space-y-4">
-              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.35em] text-alkota-orange block">
-                WATER PROCESS & EFFLUENT GOVERNANCE
-              </span>
-              <h2 className="font-extralight text-4xl sm:text-5xl uppercase tracking-tight text-alkota-black leading-tight">
-                Water is a process stream.
-              </h2>
-              <p className="text-sm text-alkota-silver leading-relaxed">
-                A wash plant does not simply consume water; it manages an entire effluent cycle. From primary sediment settlement and coalescing oil separation through deep-bed media filtration, we engineer water treatment systems that enable closed-loop recirculation or statutory trade effluent compliance.
-              </p>
-              <p className="text-xs text-alkota-silver leading-relaxed">
-                Actual water treatment scope is engineered around site soil chemistry, local water authority discharge consents, and operational recovery objectives.
-              </p>
-              <div className="pt-4">
-                <Link
-                  href="/water-treatment"
-                  className="inline-flex items-center gap-2 text-xs font-ibm-plex-mono uppercase tracking-widest text-alkota-orange hover:text-alkota-black transition-colors font-medium"
-                >
-                  <span>Explore Water Treatment Systems Range →</span>
-                </Link>
-              </div>
-            </div>
+      {/* ── CHAPTER 6: WATER IS A PROCESS STREAM ─────────────────────────────── */}
+      <section className="py-0 bg-[#F8F7F4] border-b border-alkota-iron/30">
+        <div className="grid grid-cols-1 lg:grid-cols-2">
+          {/* Left: Text */}
+          <div className="px-6 sm:px-12 py-24 lg:py-32 flex flex-col justify-center">
+            <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.35em] text-alkota-orange block mb-4">
+              WATER PROCESS &amp; EFFLUENT GOVERNANCE
+            </span>
+            <h2 className="font-extralight text-4xl sm:text-5xl uppercase tracking-tight text-alkota-black leading-tight mb-6">
+              Water is a process stream.
+            </h2>
+            <p className="text-sm text-alkota-silver leading-relaxed mb-4 max-w-lg">
+              A wash plant does not simply consume water; it manages an entire effluent cycle. From primary sediment settlement and coalescing oil separation through deep-bed media filtration, we engineer water treatment systems that enable closed-loop recirculation or statutory trade effluent compliance.
+            </p>
+            <p className="text-xs text-alkota-silver leading-relaxed mb-8 max-w-lg">
+              Actual water treatment scope is engineered around site soil chemistry, local water authority discharge consents, and operational recovery objectives.
+            </p>
 
-            {/* Right: Numbered editorial water stage list */}
-            <div className="lg:col-span-7 space-y-0 divide-y divide-alkota-iron/30">
+            <div className="space-y-0 divide-y divide-alkota-iron/30 max-w-lg">
               {[
                 { n: '01', title: 'Collection & Sumps', sub: 'Containment', body: 'Impermeable graded concrete aprons and heavy galvanized sumps with silt catchbaskets prevent uncontrolled runoff.' },
-                { n: '02', title: 'Solids Settlement', sub: 'Slurry Extraction', body: 'Gravity settlement weir chambers and optional automated screw augers drop out heavy gravel, aggregate, and clay.' },
-                { n: '03', title: 'Coalescing Separation', sub: 'Consent Standard', body: 'Class 1 oleophilic coalescing plate packs separate free hydrocarbons and fuels to meet UK trade effluent standards.' },
-                { n: '04', title: 'Closed-Loop Polishing', sub: 'Recirculation', body: 'Pressurized multi-media filter vessels remove suspended solids to the clarity required for closed-loop pump protection and recirculation.' },
+                { n: '02', title: 'Solids Settlement', sub: 'Slurry Extraction', body: 'Gravity settlement weir chambers and automated screw augers drop out heavy gravel, aggregate, and clay.' },
+                { n: '03', title: 'Coalescing Separation', sub: 'Consent Standard', body: 'Class 1 oleophilic coalescing plate packs separate free hydrocarbons to meet UK trade effluent standards.' },
+                { n: '04', title: 'Closed-Loop Polishing', sub: 'Recirculation', body: 'Pressurized multi-media filter vessels remove suspended solids for closed-loop pump protection and recirculation.' },
               ].map(({ n, title, sub, body }) => (
-                <div key={n} className="py-6 grid grid-cols-12 gap-6">
-                  <span className="col-span-1 font-extralight text-2xl text-alkota-orange leading-none mt-0.5">{n}</span>
+                <div key={n} className="py-5 grid grid-cols-12 gap-4">
+                  <span className="col-span-1 font-extralight text-xl text-alkota-orange leading-none mt-0.5">{n}</span>
                   <div className="col-span-11">
-                    <div className="flex items-baseline gap-3 mb-2">
+                    <div className="flex items-baseline gap-3 mb-1.5">
                       <span className="font-ibm-plex-mono text-[10px] uppercase tracking-tight text-alkota-black font-medium">{title}</span>
                       <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-alkota-silver">{sub}</span>
                     </div>
@@ -756,26 +775,47 @@ export default function WashPlantPage() {
                 </div>
               ))}
             </div>
+
+            <div className="pt-6 mt-4">
+              <Link
+                href="/water-treatment"
+                className="inline-flex items-center gap-2 text-xs font-ibm-plex-mono uppercase tracking-widest text-alkota-orange hover:text-alkota-black transition-colors font-medium"
+              >
+                <span>Explore Water Treatment Systems Range →</span>
+              </Link>
+            </div>
+          </div>
+
+          {/* Right: Real photo of recycling plant */}
+          <div className="relative min-h-[400px] lg:min-h-0 overflow-hidden">
+            <Image
+              src="/assets/wash-plant/recycling-plant-2.jpg"
+              alt="Industrial wash water treatment and recycling plant"
+              fill
+              className="object-cover object-center"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-white/20 via-transparent to-transparent lg:from-white/5 pointer-events-none" />
           </div>
         </div>
       </section>
 
-      {/* ── CHAPTER 7: FROM SITE SURVEY TO COMMISSIONING (DARK METHODOLOGY) ── */}
-      <section className="py-24 px-6 sm:px-12 bg-[#0D0D0D] text-white border-b border-[#222]">
+      {/* ── CHAPTER 7: FROM SITE SURVEY TO COMMISSIONING — LIGHT ─────────────── */}
+      <section className="py-24 px-6 sm:px-12 bg-white border-b border-alkota-iron/30">
         <div className="mx-auto max-w-7xl">
           <div className="mb-16 max-w-3xl">
             <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.35em] text-alkota-orange block mb-2">
               CAPITAL PROJECT DELIVERY
             </span>
-            <h2 className="font-extralight text-4xl sm:text-6xl uppercase tracking-tight text-white mb-4">
+            <h2 className="font-extralight text-4xl sm:text-6xl uppercase tracking-tight text-alkota-black mb-4">
               From site survey to commissioning.
             </h2>
-            <p className="text-xs sm:text-sm text-[#888] uppercase tracking-widest">
+            <p className="text-xs sm:text-sm text-alkota-silver uppercase tracking-widest">
               Every major capital installation follows our six-phase engineering delivery framework.
             </p>
           </div>
 
-          {/* 6 Macro Phases Horizontal Flow */}
+          {/* 6 Macro Phases — light editorial tabs */}
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 mb-8">
             {MACRO_PHASES.map((p, idx) => {
               const isSelected = idx === activePhaseIdx;
@@ -785,17 +825,19 @@ export default function WashPlantPage() {
                   onClick={() => setActivePhaseIdx(idx)}
                   className={`p-4 text-left border transition-all flex flex-col justify-between min-h-[120px] ${
                     isSelected
-                      ? 'bg-alkota-black border-alkota-orange text-white shadow-lg ring-1 ring-alkota-orange'
-                      : 'bg-[#141414] border-[#222] text-[#aaa] hover:border-[#444] hover:bg-[#181818]'
+                      ? 'bg-alkota-black border-alkota-black text-white shadow-lg'
+                      : 'bg-[#FAF9F5] border-alkota-iron/40 text-alkota-silver hover:border-alkota-black hover:text-alkota-black'
                   }`}
                 >
                   <span className={`font-ibm-plex-mono text-xs font-bold ${
-                    isSelected ? 'text-alkota-orange' : 'text-[#666]'
+                    isSelected ? 'text-alkota-orange' : 'text-alkota-iron'
                   }`}>
                     PHASE {p.num}
                   </span>
                   <div>
-                    <h5 className="font-light text-sm uppercase tracking-tight text-white mt-1">
+                    <h5 className={`font-light text-sm uppercase tracking-tight mt-1 ${
+                      isSelected ? 'text-white' : 'text-alkota-black'
+                    }`}>
                       {p.phase}
                     </h5>
                   </div>
@@ -804,59 +846,93 @@ export default function WashPlantPage() {
             })}
           </div>
 
-          {/* Detailed Selected Phase Breakdown */}
-          <div className="bg-[#141414] border border-[#252525] p-8 sm:p-10">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-              <div className="lg:col-span-6 space-y-4">
-                <div className="flex items-center gap-3">
-                  <span className="font-ibm-plex-mono text-[10px] bg-alkota-orange text-white px-2.5 py-0.5 uppercase tracking-widest">
-                    Phase {MACRO_PHASES[activePhaseIdx].num}
-                  </span>
-                  <span className="font-ibm-plex-mono text-xs text-[#888] uppercase tracking-wider">
-                    {MACRO_PHASES[activePhaseIdx].phase}
-                  </span>
+          {/* Detailed Selected Phase */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activePhaseIdx}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.25 }}
+              className="bg-[#FAF9F5] border border-alkota-iron/30 p-8 sm:p-10"
+            >
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <div className="lg:col-span-6 space-y-4">
+                  <div className="flex items-center gap-3">
+                    <span className="font-ibm-plex-mono text-[10px] bg-alkota-orange text-white px-2.5 py-0.5 uppercase tracking-widest">
+                      Phase {MACRO_PHASES[activePhaseIdx].num}
+                    </span>
+                    <span className="font-ibm-plex-mono text-xs text-alkota-silver uppercase tracking-wider">
+                      {MACRO_PHASES[activePhaseIdx].phase}
+                    </span>
+                  </div>
+
+                  <h3 className="font-extralight text-2xl sm:text-3xl uppercase tracking-tight text-alkota-black">
+                    {MACRO_PHASES[activePhaseIdx].headline}
+                  </h3>
+
+                  <p className="text-xs sm:text-sm text-alkota-silver leading-relaxed">
+                    {MACRO_PHASES[activePhaseIdx].summary}
+                  </p>
+
+                  <div className="p-4 bg-white border border-alkota-iron/30 font-ibm-plex-mono text-xs">
+                    <span className="text-[9px] uppercase tracking-widest text-alkota-orange block mb-1">
+                      Primary Phase Deliverable:
+                    </span>
+                    <span className="text-alkota-black font-medium">
+                      {MACRO_PHASES[activePhaseIdx].deliverables}
+                    </span>
+                  </div>
                 </div>
 
-                <h3 className="font-extralight text-2xl sm:text-3xl uppercase tracking-tight text-white">
-                  {MACRO_PHASES[activePhaseIdx].headline}
-                </h3>
-
-                <p className="text-xs sm:text-sm text-[#bbb] leading-relaxed">
-                  {MACRO_PHASES[activePhaseIdx].summary}
-                </p>
-
-                <div className="p-4 bg-[#101010] border border-[#222] font-ibm-plex-mono text-xs">
-                  <span className="text-[9px] uppercase tracking-widest text-alkota-orange block mb-1">
-                    Primary Phase Deliverable:
+                <div className="lg:col-span-6">
+                  <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.3em] text-alkota-orange block mb-6">
+                    Engineering Activities &amp; Quality Gates
                   </span>
-                  <span className="text-white font-medium">
-                    {MACRO_PHASES[activePhaseIdx].deliverables}
-                  </span>
+                  <div className="space-y-0 divide-y divide-alkota-iron/20">
+                    {MACRO_PHASES[activePhaseIdx].milestones.map((m, mIdx) => (
+                      <div key={mIdx} className="py-3 flex items-start gap-4 font-ibm-plex-mono text-xs text-alkota-silver">
+                        <span className="text-alkota-orange shrink-0 font-light">{String(mIdx + 1).padStart(2, '0')}</span>
+                        <span>{m}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
-
-              <div className="lg:col-span-6">
-                <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.3em] text-alkota-orange block mb-6">
-                  Engineering Activities &amp; Quality Gates
-                </span>
-                <div className="space-y-0 divide-y divide-white/10">
-                  {MACRO_PHASES[activePhaseIdx].milestones.map((m, mIdx) => (
-                    <div key={mIdx} className="py-3 flex items-start gap-4 font-ibm-plex-mono text-xs text-[#bbb]">
-                      <span className="text-alkota-orange shrink-0 font-light">{String(mIdx + 1).padStart(2, '0')}</span>
-                      <span>{m}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
+            </motion.div>
+          </AnimatePresence>
         </div>
       </section>
 
-      {/* ── CHAPTER 8: ENGINEERED INSTALLATIONS (CASE STUDIES IN PREPARATION) ── */}
+      {/* ── PHOTO BREAK: WIDE PLANT OVERVIEW ─────────────────────────────────── */}
+      <div className="relative h-[55vh] overflow-hidden">
+        <Image
+          src="/assets/wash-plant/hero-plant-wide.jpg"
+          alt="Industrial wash plant bay — wide view"
+          fill
+          className="object-cover object-center"
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-alkota-black/50 via-alkota-black/10 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 px-6 sm:px-12 pb-10">
+          <div className="mx-auto max-w-7xl flex items-end justify-between">
+            <p className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.35em] text-white/80">
+              Engineered &amp; installed by Alkota UK
+            </p>
+            <Link
+              href="/wash-plant/projects"
+              className="inline-flex items-center gap-2 text-xs font-ibm-plex-mono uppercase tracking-widest text-alkota-orange hover:text-white transition-colors"
+            >
+              Project Archive →
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* ── CHAPTER 8: ENGINEERED INSTALLATIONS ──────────────────────────────── */}
       <section className="py-24 px-6 sm:px-12 bg-white border-b border-alkota-iron">
         <div className="mx-auto max-w-7xl">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
             <div>
               <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.35em] text-alkota-orange block mb-2">
                 PROJECT CASE STUDIES
@@ -873,62 +949,58 @@ export default function WashPlantPage() {
             </Link>
           </div>
 
-          {/* Case Studies — awaiting verified project authorisation */}
-          <div>
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
-              <div className="lg:col-span-7 space-y-5">
-                <div>
-                  <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-orange block mb-2">
-                    PROJECT ARCHIVE IN PREPARATION
-                  </span>
-                  <h3 className="font-extralight text-3xl sm:text-4xl uppercase tracking-tight text-alkota-black mb-4">
-                    Case studies are compiled with client authorisation.
-                  </h3>
-                  <p className="text-sm text-alkota-silver leading-relaxed">
-                    Each installation we commission involves confidential site, operational, and commercial data. We do not publish project case studies without the express approval of the client organisation.
-                  </p>
-                  <p className="text-sm text-alkota-silver leading-relaxed mt-3">
-                    If you are evaluating Alkota for a capital wash plant project, our engineering team can provide relevant project references on a confidential basis during your appraisal process.
-                  </p>
-                </div>
-
-                <div className="pt-4">
-                  <Link
-                    href="/contact?enquiry=wash-plant-project-references"
-                    className="inline-flex items-center gap-3 bg-alkota-orange text-white px-8 py-4 text-xs uppercase tracking-[0.25em] hover:bg-alkota-black transition-colors"
-                  >
-                    <span>Request Project References</span>
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
-                </div>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+            <div className="lg:col-span-7 space-y-5">
+              <div>
+                <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-orange block mb-2">
+                  PROJECT ARCHIVE IN PREPARATION
+                </span>
+                <h3 className="font-extralight text-3xl sm:text-4xl uppercase tracking-tight text-alkota-black mb-4">
+                  Case studies are compiled with client authorisation.
+                </h3>
+                <p className="text-sm text-alkota-silver leading-relaxed">
+                  Each installation we commission involves confidential site, operational, and commercial data. We do not publish project case studies without the express approval of the client organisation.
+                </p>
+                <p className="text-sm text-alkota-silver leading-relaxed mt-3">
+                  If you are evaluating Alkota for a capital wash plant project, our engineering team can provide relevant project references on a confidential basis during your appraisal process.
+                </p>
               </div>
 
-              <div className="lg:col-span-5 space-y-4">
-                <span className="text-[9px] uppercase tracking-[0.3em] text-alkota-orange block">SECTORS WE HAVE WORKED ACROSS</span>
-                <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.3em] text-alkota-orange block mb-5">Sectors We Have Worked Across</span>
-                {[
-                  'Commercial Fleet & HGV Depots',
-                  'Heavy Plant & Earthmoving Sites',
-                  'Quarrying, Mining & Aggregate',
-                  'Access Matting & Groundworks',
-                  'Steel Sheet Piling & Formwork',
-                  'Rail & Passenger Transport',
-                  'Agriculture & Forestry',
-                  'Industrial Components & Process Equipment'
-                ].map((sector, i) => (
-                  <div key={sector} className="py-2.5 border-b border-alkota-iron/30 flex items-baseline gap-3">
-                    <span className="font-extralight text-sm text-alkota-orange shrink-0 tabular-nums">{String(i + 1).padStart(2, '0')}</span>
-                    <span className="font-ibm-plex-mono text-[10px] uppercase tracking-wide text-alkota-black">{sector}</span>
-                  </div>
-                ))}
+              <div className="pt-4">
+                <Link
+                  href="/contact?enquiry=wash-plant-project-references"
+                  className="inline-flex items-center gap-3 bg-alkota-orange text-white px-8 py-4 text-xs uppercase tracking-[0.25em] hover:bg-alkota-black transition-colors"
+                >
+                  <span>Request Project References</span>
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
               </div>
+            </div>
+
+            <div className="lg:col-span-5 space-y-0">
+              <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.3em] text-alkota-orange block mb-5">Sectors We Have Worked Across</span>
+              {[
+                'Commercial Fleet & HGV Depots',
+                'Heavy Plant & Earthmoving Sites',
+                'Quarrying, Mining & Aggregate',
+                'Access Matting & Groundworks',
+                'Steel Sheet Piling & Formwork',
+                'Rail & Passenger Transport',
+                'Agriculture & Forestry',
+                'Industrial Components & Process Equipment'
+              ].map((sector, i) => (
+                <div key={sector} className="py-2.5 border-b border-alkota-iron/30 flex items-baseline gap-3">
+                  <span className="font-extralight text-sm text-alkota-orange shrink-0 tabular-nums">{String(i + 1).padStart(2, '0')}</span>
+                  <span className="font-ibm-plex-mono text-[10px] uppercase tracking-wide text-alkota-black">{sector}</span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── CHAPTER 9: OWN THE LIFECYCLE (LIFECYCLE ECOSYSTEM) ─────────────── */}
-      <section className="py-24 px-6 sm:px-12 bg-alkota-bg border-b border-alkota-iron">
+      {/* ── CHAPTER 9: LIFECYCLE ECOSYSTEM ───────────────────────────────────── */}
+      <section className="py-24 px-6 sm:px-12 bg-[#F8F7F4] border-b border-alkota-iron">
         <div className="mx-auto max-w-7xl">
           <div className="mb-16 max-w-3xl">
             <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.35em] text-alkota-orange block mb-2">
@@ -942,14 +1014,13 @@ export default function WashPlantPage() {
             </p>
           </div>
 
-          {/* Three service lines — open editorial columns, no card boxes */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-0 divide-y md:divide-y-0 md:divide-x divide-alkota-iron/30 mb-16">
             {/* Service 1 */}
             <div className="md:pr-10 pb-10 md:pb-0 flex flex-col justify-between">
               <div>
                 <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.3em] text-alkota-orange block mb-4">Operational Availability</span>
                 <h3 className="font-extralight text-3xl sm:text-4xl uppercase tracking-tight text-alkota-black mb-4 leading-tight">
-                  Service & Maintenance
+                  Service &amp; Maintenance
                 </h3>
                 <p className="text-sm text-alkota-silver leading-relaxed mb-6">
                   Planned preventative maintenance, rapid emergency response, pump overhauls, combustion tuning, and multi-manufacturer support for all third-party industrial wash plants.
@@ -997,7 +1068,7 @@ export default function WashPlantPage() {
               <div>
                 <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.3em] text-alkota-orange block mb-4">Brownfield Life Extension</span>
                 <h3 className="font-extralight text-3xl sm:text-4xl uppercase tracking-tight text-alkota-black mb-4 leading-tight">
-                  Refurbishment & Upgrades
+                  Refurbishment &amp; Upgrades
                 </h3>
                 <p className="text-sm text-alkota-silver leading-relaxed mb-6">
                   Targeted engineering overhauls on existing live wash sites: pump swaps, PLC migrations, water recycling retrofits, and automation upgrades without plant replacement.
@@ -1017,7 +1088,6 @@ export default function WashPlantPage() {
             </div>
           </div>
 
-          {/* Consultant & Specifier Intake Module */}
           <WashPlantSpecifierCta />
         </div>
       </section>

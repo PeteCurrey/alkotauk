@@ -378,6 +378,7 @@ export default function Navigation() {
                       <div className="divide-y divide-[#EAE9E2] border-t border-[#1A1A18]">
                         {[
                           { title: 'Service & Support Hub', desc: 'Nationwide engineering overview', href: '/service' },
+                          { title: 'Parts & Attachments', desc: 'OEM spares, Mosmatic, Cox Reels & tooling', href: '/parts-attachments' },
                           { title: 'Planned Maintenance (PPM)', desc: 'Hours-based & annual schedules', href: '/service/planned-maintenance' },
                           { title: 'Breakdown & Repairs', desc: 'Emergency triage & mobile dispatch', href: '/service/repairs' },
                           { title: 'Pump Overhaul Workshop', desc: 'General Pump & CAT bench rebuild', href: '/service/pump-repair' },

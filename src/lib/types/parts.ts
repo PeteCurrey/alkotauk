@@ -48,6 +48,7 @@ export interface Part {
   category: PartCategorySlug | string;
   assembly_category?: string | null;
   manufacturer?: string | null;
+  brand?: string | null;
   price?: number | null;
   in_stock: boolean;
   availability_status: PartAvailability;
@@ -57,9 +58,44 @@ export interface Part {
   documents?: PartDocument[];
   compatible_machines?: string[];
   image_url?: string | null;
+  image_gallery?: string[];
   oem_genuine: boolean;
+  featured?: boolean;
+  is_attachment?: boolean;
+  tags?: string[];
+  retail_url?: string | null;
   active: boolean;
   sort_order?: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface BrandPartner {
+  id: string;
+  slug: string;
+  name: string;
+  tagline?: string | null;
+  description?: string | null;
+  logo_url?: string | null;
+  hero_image_url?: string | null;
+  website_url?: string | null;
+  country_of_origin?: string | null;
+  sort_order?: number;
+  active: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface PartCategoryAdmin {
+  id: string;
+  slug: string;
+  name: string;
+  short_desc?: string | null;
+  icon_name?: string | null;
+  hero_image_url?: string | null;
+  brand_filter?: string | null;
+  sort_order?: number;
+  active: boolean;
   created_at?: string;
   updated_at?: string;
 }

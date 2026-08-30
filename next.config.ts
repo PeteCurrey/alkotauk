@@ -28,6 +28,11 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: '/parts',
+        destination: '/parts-attachments',
+        permanent: true,
+      },
+      {
         source: '/studio/:path*',
         destination: '/admin/login',
         permanent: false,

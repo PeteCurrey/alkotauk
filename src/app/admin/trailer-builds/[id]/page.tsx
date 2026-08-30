@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, use } from 'react';
 import Link from 'next/link';
 import {
   Truck,
@@ -33,10 +33,11 @@ import {
 } from '@/lib/trailers/build-project-data';
 import type { BuildStageStatus } from '@/lib/trailers/types';
 
-export default function AdminBuildControlCentrePage({ params }: { params: { id: string } }) {
+export default function AdminBuildControlCentrePage({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = use(params);
   const [activeTab, setActiveTab] = useState('overview');
   // Use delivered asset if id matches bp-002, otherwise sample building project
-  const project = params?.id === 'bp-002' ? SAMPLE_DELIVERED_ASSET : SAMPLE_BUILD_PROJECT;
+  const project = resolvedParams?.id === 'bp-002' ? SAMPLE_DELIVERED_ASSET : SAMPLE_BUILD_PROJECT;
   const config = project.accepted_configuration;
   const applicableChecklist = deriveChecklistForConfig(FULL_HANDOVER_CHECKLIST, config);
 

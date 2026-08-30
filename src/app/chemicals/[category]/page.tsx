@@ -219,7 +219,7 @@ export default async function ChemicalCategoryHubPage({ params }: CategoryPagePr
                   <div className="flex items-start justify-between gap-4 mb-4">
                     <div>
                       <span className="font-mono text-[10px] uppercase tracking-wider text-alkota-orange block mb-1">
-                        {prod.formulaCode || 'CONCENTRATE'}
+                        {prod.code || 'CONCENTRATE'}
                       </span>
                       <h3 className="font-light text-2xl sm:text-3xl tracking-tight text-[#1A1A18]">
                         {prod.name}
@@ -227,7 +227,7 @@ export default async function ChemicalCategoryHubPage({ params }: CategoryPagePr
                     </div>
 
                     <span className="font-mono text-xs bg-[#FAF9F5] border border-[#DDD] px-3 py-1 text-[#444] shrink-0 font-medium">
-                      pH: {prod.pH || 'Neutral'}
+                      pH: {prod.ph_level || 'Neutral'}
                     </span>
                   </div>
 
@@ -239,11 +239,11 @@ export default async function ChemicalCategoryHubPage({ params }: CategoryPagePr
                   <div className="border-t border-[#F0EFEB] pt-4 mb-6 space-y-2.5 font-mono text-xs">
                     <div className="flex items-center justify-between text-[#666]">
                       <span className="text-[#888]">Dilution Ratio:</span>
-                      <span className="text-[#1A1A18] font-medium">{prod.dilutionRatio || '1:20 to 1:100'}</span>
+                      <span className="text-[#1A1A18] font-medium">{prod.dilution_hot || prod.dilution_cold || '1:20 to 1:100'}</span>
                     </div>
                     <div className="flex items-center justify-between text-[#666]">
-                      <span className="text-[#888]">Foam Profile:</span>
-                      <span className="text-[#1A1A18] font-medium">{prod.foamProfile || 'Medium High-Cling'}</span>
+                      <span className="text-[#888]">Form:</span>
+                      <span className="text-[#1A1A18] font-medium">{prod.form || 'Concentrated Liquid'}</span>
                     </div>
                     <div className="flex items-center justify-between text-[#666]">
                       <span className="text-[#888]">Pack Sizes:</span>

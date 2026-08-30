@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import { resolveMachineImage } from '@/lib/images';
 import SeenInRealWorld from '@/components/mess-quest/SeenInRealWorld';
+import MachineDetailPricingCta from '@/components/MachineDetailPricingCta';
 
 interface MachineDetailPageProps {
   params: Promise<{
@@ -229,21 +230,18 @@ export default async function MachineDetailPage({ params }: MachineDetailPagePro
             </div>
 
             {/* CTAs */}
-            <div className="flex flex-col sm:flex-row gap-4">
-              <a 
-                href="#quote"
-                className="flex-1 flex items-center justify-center gap-3 bg-alkota-orange p-5 text-xs font-black uppercase tracking-[0.25em] text-white hover:bg-alkota-orange-hover transition-all"
-              >
-                Request Quotation
-                <ArrowRight className="h-4 w-4" />
-              </a>
-              <Link 
-                href={`/contact?enquiry=consultation&product=${machine.slug}&model=${modelCode}`}
-                className="flex-1 flex items-center justify-center gap-3 bg-alkota-black p-5 text-xs font-black uppercase tracking-[0.25em] text-white hover:bg-neutral-800 transition-all"
-              >
-                Technical Consultation
-              </Link>
-            </div>
+            <MachineDetailPricingCta
+              machine={{
+                id: machine.id,
+                name: machine.name,
+                slug: machine.slug,
+                category: machine.category,
+                series: machine.series,
+                model_code: modelCode,
+                pressure_bar: bar,
+                flow_rate_lpm: lpm,
+              }}
+            />
           </div>
         </div>
 

@@ -749,7 +749,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     standfirst:
       'Every cleaning operation has different constraints. Water, power, mobility, duty cycle, contamination and workflow all change what the right system looks like.',
     verified: false,
-    sourceType: 'ENGINEERED SYSTEM / BESPOKE RIG',
+    sourceType: 'ALKOTA ENGINEERING / BESPOKE SYSTEMS',
     problem:
       'Commercial contractors, municipal councils, and facilities operators need self-contained mobile cleaning platforms that can deploy anywhere: motorway central reservations, railway sidings, shopping precincts, or remote construction yards. Combining mismatched pressure washers, unbaffled water tanks, and loose hoses into an uncertified trailer creates dangerous axle overloads, compliance breaches, and operational bottlenecks.',
     requirements: [

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { supabaseAdmin } from '@/lib/supabase/server';
-import { Inbox, Phone, Mail, MapPin, Building2, Flame, Droplets, CheckCircle2, Clock, Filter, ArrowRight, UserCheck } from 'lucide-react';
+import { Inbox, Phone, Mail, MapPin, Building2, Flame, Droplets, CheckCircle2, Clock, Filter, ArrowRight, UserCheck, ShieldCheck } from 'lucide-react';
 
 export const revalidate = 0;
 
@@ -55,95 +55,106 @@ export default async function AdminLeadsPage() {
   const technicalCount = combinedLeads.filter(l => l.lead_type === 'industrial' || l.lead_type === 'compliance' || l.lead_type === 'service').length;
 
   return (
-    <div>
+    <div className="space-y-8 max-w-7xl mx-auto">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-barlow-condensed text-4xl font-black uppercase italic text-white">
-            Lead Management & Commercial Pipeline
+          <h1 className="text-3xl font-extrabold text-[#0F172A] tracking-tight">
+            Commercial Leads & Inquiries
           </h1>
-          <p className="font-ibm-plex-mono text-[10px] text-[#777] uppercase tracking-widest mt-1">
-            // {combinedLeads.length} contact form submissions, demo requests, and dealer referrals
+          <p className="text-sm font-medium text-[#64748B] mt-1">
+            {combinedLeads.length} contact form submissions, live demonstration requests, and dealer referrals
           </p>
         </div>
       </div>
 
       {/* Metrics Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-8">
-        <div className="border border-[#222] bg-[#141414] p-5">
-          <p className="font-ibm-plex-mono text-[9px] text-alkota-orange uppercase tracking-widest font-bold">TOTAL LEADS</p>
-          <h3 className="font-barlow-condensed text-4xl font-black text-white mt-1">{combinedLeads.length}</h3>
+      <div className="grid grid-cols-1 sm:grid-cols-4 gap-5">
+        <div className="bg-white rounded-[24px] border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
+          <p className="text-xs font-bold uppercase tracking-wider text-[#64748B]">Total Pipeline Leads</p>
+          <p className="text-3xl font-extrabold text-[#0F172A] mt-2">{combinedLeads.length}</p>
+          <p className="text-[11px] text-[#94A3B8] font-medium mt-1">Direct inquiries & routed forms</p>
         </div>
-        <div className="border border-[#222] bg-[#141414] p-5">
-          <p className="font-ibm-plex-mono text-[9px] text-[#00E5FF] uppercase tracking-widest font-bold">DEMO REQUESTS</p>
-          <h3 className="font-barlow-condensed text-4xl font-black text-white mt-1">{demoCount}</h3>
+        <div className="bg-white rounded-[24px] border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
+          <p className="text-xs font-bold uppercase tracking-wider text-[#FF6900]">Live Demonstrations</p>
+          <p className="text-3xl font-extrabold text-[#FF6900] mt-2">{demoCount}</p>
+          <p className="text-[11px] text-[#94A3B8] font-medium mt-1">On-site plant trial bookings</p>
         </div>
-        <div className="border border-[#222] bg-[#141414] p-5">
-          <p className="font-ibm-plex-mono text-[9px] text-[#FFD700] uppercase tracking-widest font-bold">GENERAL ENQUIRIES</p>
-          <h3 className="font-barlow-condensed text-4xl font-black text-white mt-1">{contactCount}</h3>
+        <div className="bg-white rounded-[24px] border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
+          <p className="text-xs font-bold uppercase tracking-wider text-blue-600">General Inquiries</p>
+          <p className="text-3xl font-extrabold text-blue-600 mt-2">{contactCount}</p>
+          <p className="text-[11px] text-[#94A3B8] font-medium mt-1">Contact form submissions</p>
         </div>
-        <div className="border border-[#222] bg-[#141414] p-5">
-          <p className="font-ibm-plex-mono text-[9px] text-[#00E676] uppercase tracking-widest font-bold">TECHNICAL & SERVICE</p>
-          <h3 className="font-barlow-condensed text-4xl font-black text-white mt-1">{technicalCount}</h3>
+        <div className="bg-white rounded-[24px] border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
+          <p className="text-xs font-bold uppercase tracking-wider text-emerald-600">Technical & Service</p>
+          <p className="text-3xl font-extrabold text-emerald-600 mt-2">{technicalCount}</p>
+          <p className="text-[11px] text-[#94A3B8] font-medium mt-1">Service & maintenance support</p>
         </div>
       </div>
 
       {combinedLeads.length === 0 ? (
-        <div className="border border-[#222] bg-[#0E0E0E] p-12 text-center">
-          <Inbox className="h-10 w-10 text-[#444] mx-auto mb-3" />
-          <h3 className="font-barlow-condensed text-2xl font-bold uppercase text-white mb-2">
+        <div className="bg-white rounded-[24px] border border-[#E6E8EC] p-16 text-center shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
+          <Inbox className="h-10 w-10 text-[#CBD5E1] mx-auto mb-3" />
+          <h3 className="text-lg font-bold text-[#0F172A] mb-1">
             No Website Leads Recorded Yet
           </h3>
-          <p className="font-inter text-xs text-[#666] max-w-md mx-auto">
-            When prospective buyers fill out contact forms or book demonstrations, they are automatically logged here.
+          <p className="text-xs text-[#64748B] max-w-md mx-auto">
+            When prospective buyers fill out contact forms or book on-site demonstrations, they are automatically logged here in real time.
           </p>
         </div>
       ) : (
-        <div className="border border-[#222] bg-[#0E0E0E] divide-y divide-[#1A1A1A]">
+        <div className="space-y-4">
           {combinedLeads.map((lead) => (
-            <div key={lead.id} className="p-6 hover:bg-[#141414] transition-colors">
-              <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-4">
-                <div>
-                  <div className="flex items-center gap-2 mb-1.5">
-                    <span className="font-ibm-plex-mono text-[9px] bg-alkota-orange text-white px-2 py-0.5 uppercase font-bold">
-                      {lead.lead_type?.toUpperCase() || 'ENQUIRY'}
+            <div 
+              key={lead.id} 
+              className="bg-white rounded-[24px] border border-[#E6E8EC] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)] hover:border-[#CBD5E1] transition-all"
+            >
+              <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 mb-4">
+                <div className="flex-1">
+                  <div className="flex items-center gap-2.5 mb-2.5">
+                    <span className="px-3 py-1 rounded-full text-xs font-bold bg-[#FF6900]/10 text-[#FF6900] uppercase">
+                      {lead.lead_type?.replace('-', ' ') || 'ENQUIRY'}
                     </span>
-                    <span className="font-ibm-plex-mono text-[9px] text-[#777]">
+                    <span className="text-xs text-[#94A3B8] font-mono">
                       {new Date(lead.created_at).toLocaleDateString('en-GB')} at {new Date(lead.created_at).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
                     </span>
-                    <span className="font-ibm-plex-mono text-[9px] text-alkota-orange bg-alkota-orange/10 px-2 py-0.5 border border-alkota-orange/20">
+                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#F1F3F7] text-[#64748B]">
                       Via {lead.routed_via?.replace('_', ' ')}
                     </span>
                   </div>
 
-                  <h3 className="font-barlow-condensed text-2xl font-bold uppercase text-white">
-                    {lead.customer_name} {lead.customer_company ? `— ${lead.customer_company}` : ''}
+                  <h3 className="text-xl font-bold text-[#0F172A]">
+                    {lead.customer_name} {lead.customer_company ? <span className="text-[#64748B] font-normal">— {lead.customer_company}</span> : ''}
                   </h3>
 
-                  <div className="flex flex-wrap items-center gap-4 mt-2 font-ibm-plex-mono text-xs text-[#aaa]">
+                  <div className="flex flex-wrap items-center gap-4 mt-3 text-xs text-[#64748B]">
                     {lead.customer_phone && (
-                      <a href={`tel:${lead.customer_phone}`} className="hover:text-white flex items-center gap-1">
-                        <Phone className="h-3 w-3 text-[#FF6900]" /> {lead.customer_phone}
+                      <a href={`tel:${lead.customer_phone}`} className="hover:text-[#FF6900] flex items-center gap-1.5 transition-colors font-medium">
+                        <Phone className="h-3.5 w-3.5 text-[#FF6900]" /> {lead.customer_phone}
                       </a>
                     )}
                     {lead.customer_email && (
-                      <a href={`mailto:${lead.customer_email}`} className="hover:text-white flex items-center gap-1">
-                        <Mail className="h-3 w-3 text-[#FF6900]" /> {lead.customer_email}
+                      <a href={`mailto:${lead.customer_email}`} className="hover:text-[#FF6900] flex items-center gap-1.5 transition-colors font-medium">
+                        <Mail className="h-3.5 w-3.5 text-[#FF6900]" /> {lead.customer_email}
                       </a>
                     )}
-                    {lead.customer_postcode && <span>📍 {lead.customer_postcode}</span>}
+                    {lead.customer_postcode && (
+                      <span className="flex items-center gap-1 font-medium text-[#475569]">
+                        <MapPin className="h-3.5 w-3.5 text-[#94A3B8]" /> {lead.customer_postcode}
+                      </span>
+                    )}
                   </div>
                 </div>
 
                 {/* Assigned Dealer / Handling Hub Box */}
-                <div className="bg-[#181818] border border-[#262626] p-3.5 text-right shrink-0">
-                  <span className="font-ibm-plex-mono text-[8px] text-alkota-orange uppercase font-bold block">
+                <div className="p-4 rounded-2xl bg-[#F6F7F9] border border-[#E6E8EC] text-right shrink-0 min-w-[200px]">
+                  <span className="text-[10px] font-bold text-[#FF6900] uppercase tracking-wider block">
                     ASSIGNED ROUTE
                   </span>
-                  <p className="font-barlow-condensed text-lg font-bold uppercase text-white">
-                    {lead.dealer?.name || 'Alkota UK Factory Hub'}
+                  <p className="text-sm font-bold text-[#0F172A] mt-0.5">
+                    {lead.dealer?.name || 'Alkota UK Direct Hub'}
                   </p>
-                  <p className="font-ibm-plex-mono text-[9px] text-[#777]">
+                  <p className="text-xs font-medium text-[#64748B] mt-0.5">
                     {lead.dealer?.phone || '+44 7912 506738'}
                   </p>
                 </div>
@@ -151,19 +162,19 @@ export default async function AdminLeadsPage() {
 
               {/* Message & Context */}
               {(lead.product_name || lead.message || lead.application_notes) && (
-                <div className="bg-[#121212] border border-[#222] p-4 text-xs font-ibm-plex-mono text-[#ccc] space-y-2 mt-3">
+                <div className="bg-[#F8F9FB] rounded-2xl border border-[#F0F2F5] p-4 text-xs text-[#475569] space-y-2 mt-4">
                   {lead.product_name && (
                     <p>
-                      <strong className="text-[#888]">Subject / Focus:</strong> <span className="text-white">{lead.product_name}</span>
+                      <strong className="text-[#0F172A]">Subject / Machine:</strong> <span>{lead.product_name}</span>
                     </p>
                   )}
                   {lead.application_notes && (
                     <p>
-                      <strong className="text-[#888]">Application:</strong> {lead.application_notes}
+                      <strong className="text-[#0F172A]">Application Notes:</strong> {lead.application_notes}
                     </p>
                   )}
                   {lead.message && (
-                    <p className="text-[#aaa] font-inter italic">
+                    <p className="text-[#64748B] italic">
                       "{lead.message}"
                     </p>
                   )}
@@ -176,4 +187,5 @@ export default async function AdminLeadsPage() {
     </div>
   );
 }
+
 

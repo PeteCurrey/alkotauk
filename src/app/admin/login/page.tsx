@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Logo from '@/components/Logo';
-import { Eye, EyeOff, Lock } from 'lucide-react';
+import { Eye, EyeOff, Lock, ShieldCheck } from 'lucide-react';
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -37,58 +37,53 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0D0D0D] flex items-center justify-center px-4">
-      <div className="w-full max-w-sm">
-        <div className="flex justify-center mb-12">
-          <Logo className="h-10 text-white" />
-        </div>
-
-        <div className="mb-10 text-center">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[#FF6900]/10 border border-[#FF6900]/30 mb-6">
-            <Lock className="h-5 w-5 text-[#FF6900]" />
+    <div className="min-h-screen bg-[#EBECEF] flex items-center justify-center p-6">
+      <div className="w-full max-w-md bg-white rounded-[32px] border border-[#E2E4E8] p-8 sm:p-10 shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
+        {/* Emblem & Branding */}
+        <div className="flex flex-col items-center text-center mb-8">
+          <div className="h-12 w-12 rounded-2xl bg-[#FF6900] text-white flex items-center justify-center font-black text-xl shadow-md mb-4">
+            A
           </div>
-          <h1 className="font-barlow-condensed text-4xl font-black uppercase italic text-white tracking-tight">
-            Alkota UK Admin
+          <h1 className="text-2xl font-extrabold text-[#0F172A] tracking-tight">
+            Alkota Studio
           </h1>
-          <p className="font-ibm-plex-mono text-[10px] text-[#666] uppercase tracking-widest mt-2">
-            // Restricted access — authorised personnel only
+          <p className="text-xs text-[#64748B] font-medium mt-1">
+            Commercial equipment control and store management suite
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#666] mb-2">
-              Email Address
+            <label className="block text-xs font-bold uppercase tracking-wider text-[#475569] mb-2 pl-1">
+              Operator Email
             </label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              autoComplete="email"
               placeholder="admin@alkota.co.uk"
-              className="w-full bg-[#1A1A1A] border border-[#2A2A2A] text-white px-4 py-3 font-inter text-sm focus:outline-none focus:border-[#FF6900] transition-colors"
+              className="w-full bg-[#F6F7F9] border border-[#E2E4E8] rounded-full text-[#0F172A] px-5 py-3 text-xs font-semibold focus:bg-white focus:outline-none focus:border-[#FF6900] transition-colors placeholder:text-[#94A3B8]"
             />
           </div>
 
           <div>
-            <label className="block font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#666] mb-2">
-              Password
+            <label className="block text-xs font-bold uppercase tracking-wider text-[#475569] mb-2 pl-1">
+              Access Key
             </label>
             <div className="relative">
               <input
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                autoComplete="current-password"
-                placeholder="••••••••••"
-                className="w-full bg-[#1A1A1A] border border-[#2A2A2A] text-white px-4 py-3 font-inter text-sm focus:outline-none focus:border-[#FF6900] transition-colors pr-12"
+                placeholder="••••••••••••"
+                className="w-full bg-[#F6F7F9] border border-[#E2E4E8] rounded-full text-[#0F172A] px-5 py-3 text-xs font-semibold focus:bg-white focus:outline-none focus:border-[#FF6900] transition-colors pr-12 placeholder:text-[#94A3B8]"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#666] hover:text-[#FF6900] transition-colors focus:outline-none p-1"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-[#94A3B8] hover:text-[#0F172A] transition-colors focus:outline-none p-1"
               >
                 {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </button>
@@ -96,26 +91,26 @@ export default function AdminLoginPage() {
           </div>
 
           {error && (
-            <div className="border border-red-900/50 bg-red-950/30 px-4 py-3">
-              <p className="font-ibm-plex-mono text-[10px] text-red-400 uppercase tracking-wider">{error}</p>
+            <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-xs font-semibold text-red-700">
+              {error}
             </div>
           )}
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#FF6900] text-white py-4 font-black uppercase tracking-[0.3em] text-[11px] hover:bg-[#e55f00] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 mt-6"
+            className="w-full bg-[#FF6900] text-white py-3.5 rounded-full font-bold text-xs uppercase tracking-wider hover:bg-[#e55f00] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-6 shadow-md shadow-orange-500/20"
           >
             {loading ? (
-              <span className="animate-pulse">Authenticating...</span>
+              <span className="animate-pulse">Authorizing Session...</span>
             ) : (
-              <>Sign In →</>
+              <>Sign In to Studio →</>
             )}
           </button>
         </form>
 
-        <p className="text-center font-ibm-plex-mono text-[9px] text-[#444] uppercase tracking-widest mt-8">
-          Alkota UK • Secure Admin Portal
+        <p className="text-center text-[11px] text-[#94A3B8] font-medium mt-8">
+          Alkota UK • Authorised Commercial Personnel Only
         </p>
       </div>
     </div>

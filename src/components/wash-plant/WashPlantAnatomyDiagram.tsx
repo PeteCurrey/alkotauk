@@ -3,22 +3,17 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  ArrowRight,
   ArrowDown,
   Droplets,
   Truck,
   Flame,
   Cpu,
-  Layers,
   Settings,
   ShieldCheck,
   CheckCircle2,
   Activity,
-  Zap,
-  Info,
-  Maximize2
+  Zap
 } from 'lucide-react';
-import Link from 'next/link';
 
 interface NodeDetail {
   id: string;
@@ -98,75 +93,75 @@ const NODES: NodeDetail[] = [
     summary: 'Clearance verification, optical exit sensors, cycle completion logging, and automated bay reset.',
     technicalSpecs: ['Exit clearance confirmation', 'Cycle time logging to PLC', 'Automated frost purge trigger', 'Green dispatch signal'],
     operationalRole: 'Logs completed wash cycle to asset history or fleet register and resets the bay for next asset entry.',
-    effluentOrHydraulicNote: 'Automated drainage purge cleans lines if plant is entering idle or frost-protection mode.'
+    effluentOrHydraulicNote: 'Triggers post-cycle drainage sumps and readies reclaim staging buffers.'
   },
 
-  // Water Recovery Stream
+  // Water Treatment & Recovery Stream
   {
     id: 'w1',
     stream: 'water',
-    num: 'W1',
-    name: 'Graded Apron & Catchment Sumps',
-    category: 'Collection',
-    summary: 'Impermeable reinforced concrete aprons graded to central trenches with heavy-duty galvanized catchbaskets.',
-    technicalSpecs: ['D400 load-rated galvanized grating', 'Multi-point silt catch baskets', 'Engineered apron gradient (1:40)', 'Sub-surface sump pumps'],
-    operationalRole: 'Captures 100% of contaminated wash water, preventing uncontrolled site run-off and groundwater contamination.',
-    effluentOrHydraulicNote: 'Primary barrier against uncontained environmental discharge, complying with PPG3 / GPP guidelines.'
+    num: '01',
+    name: 'Impermeable Bay Catchment & Sumps',
+    category: 'Containment',
+    summary: 'Heavy-duty steel rumble grids and reinforced concrete collection channels direct 100% of effluent into primary sumps.',
+    technicalSpecs: ['Class D400 loading ductile iron gratings', 'Continuous perimeter bunding', 'Galvanized silt catchbaskets', 'Submersible vortex pumps'],
+    operationalRole: 'Captures all gross runoff, prevents environmental ground contamination, and feeds the primary separation stage.',
+    effluentOrHydraulicNote: 'Designed with steep invert gradients to maintain self-cleansing velocity and prevent premature silting.'
   },
   {
     id: 'w2',
     stream: 'water',
-    num: 'W2',
-    name: 'Primary Settlement & Solids Extraction',
-    category: 'Solids Management',
-    summary: 'Multi-chamber gravity settlement pits and optional automated screw augers drop out dense grit, aggregate, and clay.',
-    technicalSpecs: ['Multi-chamber baffle weir design', 'Automated sludge auger screw (optional)', 'Hydrocyclone solids separation', 'High-volume sump holding'],
-    operationalRole: 'Eliminates gross particulate matter down to 50 microns before effluent reaches downstream filtration.',
-    effluentOrHydraulicNote: 'Protects pumps and valves from catastrophic abrasive wear by dropping heavy aggregate immediately.'
+    num: '02',
+    name: 'Solids Sedimentation & Slurry Augers',
+    category: 'Solids Drop',
+    summary: 'Multi-stage gravity settlement weir tanks and automated mechanical augers drop out dense aggregate, gravel, and clay.',
+    technicalSpecs: ['Multi-chamber weir baffles', 'Automated screw de-watering augers', 'High-density sludge hopper discharge', 'Level float monitoring'],
+    operationalRole: 'Isolates and de-waters heavy solids before the water reaches pump skids and filtration media.',
+    effluentOrHydraulicNote: 'Reduces total suspended solids (TSS) by up to 85% in the first hydraulic retention window.'
   },
   {
     id: 'w3',
     stream: 'water',
-    num: 'W3',
-    name: 'Coalescing Oil Separation',
-    category: 'Hydrocarbon Removal',
-    summary: 'Coalescing oil interceptor with oleophilic plate packs and automatic closure devices, specified to achieve required discharge quality.',
-    technicalSpecs: ['Class 1 coalescing media pack', 'Discharge oil concentration to consent standard', 'Automatic closure float valve', 'Visual & acoustic oil alarm'],
-    operationalRole: 'Separates free-floating fuels, engine oils, and hydraulic fluids from the effluent stream.',
-    effluentOrHydraulicNote: 'Ensures water quality meets statutory discharge standards or can safely enter closed-loop polishing vessels.'
+    num: '03',
+    name: 'Coalescing Plate Oil/Water Separation',
+    category: 'Hydrocarbon',
+    summary: 'Class 1 oleophilic coalescing plate packs intercept fine emulsified droplets, separating free oils to under 5mg/L.',
+    technicalSpecs: ['Class 1 BS EN 858 compliance (<5ppm oil)', 'Removable oleophilic matrix packs', 'Automated oil skimmer and holding tank', 'High-level alarm interlocks'],
+    operationalRole: 'Removes hydrocarbons to meet statutory UK water authority trade effluent consent standards.',
+    effluentOrHydraulicNote: 'Critical for compliance whether discharging to foul sewer or recycling through closed-loop media.'
   },
   {
     id: 'w4',
     stream: 'water',
-    num: 'W4',
-    name: 'Deep-Bed Media Sand Filtration',
-    category: 'Polishing',
-    summary: 'Pressurized multi-grade media vessels filter suspended solids to the clarity required for pump and system protection.',
-    technicalSpecs: ['Multi-layer silica / anthracite / garnet bed', 'Automated differential backwash valve', 'Continuous differential pressure monitoring', 'Biocide / ozone dosing integration'],
-    operationalRole: 'Polishes water to high optical clarity, stripping fine silt that would damage high-pressure pump ceramic seals.',
-    effluentOrHydraulicNote: 'Automated backwash cycle flushes trapped particulate back to primary settlement chambers on pressure differential.'
+    num: '04',
+    name: 'Pressurized Deep-Bed Media Filtration',
+    category: 'Fine Polishing',
+    summary: 'High-rate multi-media vessels (graded sand, anthracite, and garnet) filter out remaining suspended particulates to 20 microns.',
+    technicalSpecs: ['Automated differential pressure backwash', 'Multi-grade silica sand & anthracite media', 'Stainless internal laterals', 'Continuous turbidity tracking'],
+    operationalRole: 'Protects high-pressure plunger pumps from abrasive wear when operating in 100% closed-loop reclaim mode.',
+    effluentOrHydraulicNote: 'Automated differential pressure switches trigger cyclic backwashing to maintain continuous filtration rate.'
   },
   {
     id: 'w5',
     stream: 'water',
-    num: 'W5',
-    name: 'Reclaim Storage & Buffer Tanks',
-    category: 'Buffer Storage',
-    summary: 'Rotomoulded or stainless steel buffer reservoirs with automated mains top-up and dry-run safety interlocks.',
-    technicalSpecs: ['5,000–25,000L buffer capacity', 'Ultrasonic continuous level sensor', 'Mains fail-safe break tank', 'Submersible booster feed pumps'],
-    operationalRole: 'Provides instantaneous hydraulic buffer capacity for high-volume wash cycles without draining mains supply.',
-    effluentOrHydraulicNote: 'Stores reclaimed water for continuous loop return; balances supply during peak fleet washing shifts.'
+    num: '05',
+    name: 'Biocide / Ozone Bio-Stabilization',
+    category: 'Biological',
+    summary: 'Continuous low-dose biocide dosing or automated ozone injection prevents bacterial proliferation, biofilm, and foul odours.',
+    technicalSpecs: ['Continuous redox/ORP probe feedback', 'Proportional chemical dosing pump', 'Ozone venturi mass-transfer contactor', 'Automated aeration cycles'],
+    operationalRole: 'Eliminates anaerobic bacteria, controls Legionella risks, and ensures recycled water is clean, safe, and odourless.',
+    effluentOrHydraulicNote: 'Essential for EHS compliance in closed-loop systems with extended hydraulic dwell times.'
   },
   {
     id: 'w6',
     stream: 'water',
-    num: 'W6',
-    name: 'Booster Return or Regulated Discharge',
-    category: 'Recirculation / Discharge',
-    summary: 'Pressurized booster pump re-feeds high-pressure skids, or compliant water is discharged under Trade Effluent consent.',
-    technicalSpecs: ['Multistage stainless booster pumps', 'Trade effluent sample point chamber', 'Automated divert valve to sewer / reclaim', 'Flow totalizer & logging'],
-    operationalRole: 'Completes the circular process loop, delivering up to 90% water reduction where closed-loop is specified.',
-    effluentOrHydraulicNote: 'Water is either re-pressurised for the next wash cycle or safely discharged under water company consent.'
+    num: '06',
+    name: 'Recirculation Buffer or Regulated Discharge',
+    category: 'Distribution',
+    summary: 'Polished water is stored in clean-side buffer tanks for pressurized delivery back to wash arches, or discharged under consent.',
+    technicalSpecs: ['Food-grade MDPE or GRP buffer storage', 'Variable-speed booster pump set', 'Fail-safe divert valve to foul sewer', 'Data-logged trade discharge meter'],
+    operationalRole: 'Provides steady, surge-free hydraulic feed back to the primary wash skids, completing the closed-loop cycle.',
+    effluentOrHydraulicNote: 'Can achieve up to 90% water reduction compared to single-pass mains water systems.'
   }
 ];
 
@@ -178,34 +173,34 @@ export default function WashPlantAnatomyDiagram() {
   const waterNodes = NODES.filter((n) => n.stream === 'water');
 
   return (
-    <div className="bg-[#0E0E0E] text-white border border-[#222] p-6 sm:p-10 shadow-2xl">
+    <div className="bg-white text-alkota-black border border-alkota-iron/30 p-6 sm:p-10 shadow-sm">
       {/* Header & Diagram Principle */}
-      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-8 border-b border-[#222] mb-10">
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-8 border-b border-alkota-iron/30 mb-10">
         <div>
           <div className="flex items-center gap-2 mb-2">
             <span className="font-ibm-plex-mono text-[10px] bg-alkota-orange text-white px-2.5 py-0.5 uppercase tracking-widest">
               SYSTEM ARCHITECTURE SCHEMATIC
             </span>
-            <span className="font-ibm-plex-mono text-[10px] text-[#777] uppercase tracking-wider">
+            <span className="font-ibm-plex-mono text-[10px] text-alkota-silver uppercase tracking-wider">
               Project-Specific Engineering
             </span>
           </div>
-          <h3 className="font-extralight text-3xl sm:text-5xl uppercase tracking-tight text-white">
+          <h3 className="font-extralight text-3xl sm:text-5xl uppercase tracking-tight text-alkota-black">
             Anatomy of an Industrial Wash Plant.
           </h3>
-          <p className="text-xs sm:text-sm text-[#999] max-w-2xl mt-2 leading-relaxed">
+          <p className="text-xs sm:text-sm text-alkota-silver max-w-2xl mt-2 leading-relaxed font-normal">
             The washing process and the water treatment stream are designed as a single continuous hydraulic cycle. Select any station below to inspect its operational role and engineering parameters.
           </p>
         </div>
 
-        <div className="flex items-center gap-4 text-[11px] font-ibm-plex-mono text-[#888] shrink-0">
+        <div className="flex items-center gap-4 text-[11px] font-ibm-plex-mono text-alkota-silver shrink-0">
           <div className="flex items-center gap-2">
             <span className="h-3 w-3 rounded-full bg-alkota-orange" />
-            <span>Cleaning Process</span>
+            <span className="text-alkota-black font-medium">Cleaning Process</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="h-3 w-3 rounded-full bg-blue-500" />
-            <span>Water Recovery Stream</span>
+            <span className="h-3 w-3 rounded-full bg-blue-600" />
+            <span className="text-alkota-black font-medium">Water Recovery Stream</span>
           </div>
         </div>
       </div>
@@ -213,15 +208,15 @@ export default function WashPlantAnatomyDiagram() {
       {/* ── DESKTOP & TABLET: DUAL-STREAM SYNCHRONIZED FLOW ─────────────────── */}
       <div className="space-y-8 mb-10">
         {/* Stream 1: Asset Cleaning Sequence */}
-        <div className="bg-[#141414] border border-[#222] p-6">
+        <div className="bg-[#FAF9F5] border border-alkota-iron/30 p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <Truck className="h-4 w-4 text-alkota-orange" />
-              <span className="font-ibm-plex-mono text-xs uppercase tracking-widest text-white font-medium">
+              <span className="font-ibm-plex-mono text-xs uppercase tracking-widest text-alkota-black font-medium">
                 Surface Cleaning Stream (Above Bay)
               </span>
             </div>
-            <span className="font-ibm-plex-mono text-[10px] text-alkota-orange uppercase tracking-wider">
+            <span className="font-ibm-plex-mono text-[10px] text-alkota-orange uppercase tracking-wider font-semibold">
               Asset Progression →
             </span>
           </div>
@@ -235,23 +230,23 @@ export default function WashPlantAnatomyDiagram() {
                   onClick={() => setSelectedNodeId(node.id)}
                   className={`p-3.5 text-left border transition-all flex flex-col justify-between min-h-[110px] ${
                     isSelected
-                      ? 'bg-alkota-black border-alkota-orange text-white ring-1 ring-alkota-orange shadow-lg'
-                      : 'bg-[#101010] border-[#252525] text-[#ccc] hover:border-[#444] hover:bg-[#181818]'
+                      ? 'bg-white border-alkota-orange text-alkota-black ring-2 ring-alkota-orange shadow-md'
+                      : 'bg-white/70 border-alkota-iron/30 text-alkota-silver hover:border-alkota-black/40 hover:bg-white hover:text-alkota-black'
                   }`}
                 >
                   <div className="flex items-center justify-between w-full mb-1">
                     <span className={`font-ibm-plex-mono text-xs font-bold ${
-                      isSelected ? 'text-alkota-orange' : 'text-[#666]'
+                      isSelected ? 'text-alkota-orange' : 'text-alkota-iron'
                     }`}>
                       {node.num}
                     </span>
-                    {isSelected && <span className="h-1.5 w-1.5 rounded-full bg-alkota-orange" />}
+                    {isSelected && <span className="h-2 w-2 rounded-full bg-alkota-orange" />}
                   </div>
                   <div>
-                    <span className="font-ibm-plex-mono text-[9px] text-[#777] uppercase block truncate">
+                    <span className="font-ibm-plex-mono text-[9px] text-alkota-silver uppercase block truncate">
                       {node.category}
                     </span>
-                    <h5 className="font-light text-xs uppercase tracking-tight text-white mt-0.5 leading-snug">
+                    <h5 className="font-normal text-xs uppercase tracking-tight text-alkota-black mt-0.5 leading-snug">
                       {node.name}
                     </h5>
                   </div>
@@ -262,27 +257,27 @@ export default function WashPlantAnatomyDiagram() {
         </div>
 
         {/* Dynamic Hydraulic Return Loop Indicator */}
-        <div className="flex items-center justify-between px-6 py-2 bg-[#121212] border border-[#222] font-ibm-plex-mono text-[10px] text-[#777] uppercase tracking-wider">
-          <div className="flex items-center gap-2 text-alkota-silver">
+        <div className="flex items-center justify-between px-6 py-2.5 bg-[#FAF9F5] border border-alkota-iron/30 font-ibm-plex-mono text-[10px] uppercase tracking-wider">
+          <div className="flex items-center gap-2 text-alkota-silver font-medium">
             <ArrowDown className="h-3.5 w-3.5 text-alkota-orange shrink-0 animate-pulse" />
-            <span>Continuous Bay Drainage & Hydrocarbon Runoff Collection</span>
+            <span>Continuous Bay Drainage &amp; Hydrocarbon Runoff Collection</span>
           </div>
-          <div className="flex items-center gap-2 text-blue-400">
+          <div className="flex items-center gap-2 text-blue-700 font-medium">
             <span>Pressurized Booster Recirculation or Regulated Trade Effluent</span>
-            <Droplets className="h-3.5 w-3.5 text-blue-400 shrink-0" />
+            <Droplets className="h-3.5 w-3.5 text-blue-600 shrink-0" />
           </div>
         </div>
 
         {/* Stream 2: Water Treatment & Recovery Stream */}
-        <div className="bg-[#141414] border border-[#222] p-6">
+        <div className="bg-[#F4F7FB] border border-blue-100 p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
-              <Droplets className="h-4 w-4 text-blue-400" />
-              <span className="font-ibm-plex-mono text-xs uppercase tracking-widest text-white font-medium">
-                Water Recovery & Treatment Stream (Subterranean / Plant Room)
+              <Droplets className="h-4 w-4 text-blue-600" />
+              <span className="font-ibm-plex-mono text-xs uppercase tracking-widest text-alkota-black font-medium">
+                Water Recovery &amp; Treatment Stream (Subterranean / Plant Room)
               </span>
             </div>
-            <span className="font-ibm-plex-mono text-[10px] text-blue-400 uppercase tracking-wider">
+            <span className="font-ibm-plex-mono text-[10px] text-blue-600 uppercase tracking-wider font-semibold">
               Effluent Polishing →
             </span>
           </div>
@@ -296,23 +291,23 @@ export default function WashPlantAnatomyDiagram() {
                   onClick={() => setSelectedNodeId(node.id)}
                   className={`p-3.5 text-left border transition-all flex flex-col justify-between min-h-[110px] ${
                     isSelected
-                      ? 'bg-alkota-black border-blue-500 text-white ring-1 ring-blue-500 shadow-lg'
-                      : 'bg-[#101010] border-[#252525] text-[#ccc] hover:border-[#444] hover:bg-[#181818]'
+                      ? 'bg-white border-blue-600 text-alkota-black ring-2 ring-blue-600 shadow-md'
+                      : 'bg-white/70 border-blue-100 text-alkota-silver hover:border-blue-400 hover:bg-white hover:text-alkota-black'
                   }`}
                 >
                   <div className="flex items-center justify-between w-full mb-1">
                     <span className={`font-ibm-plex-mono text-xs font-bold ${
-                      isSelected ? 'text-blue-400' : 'text-[#666]'
+                      isSelected ? 'text-blue-600' : 'text-blue-300'
                     }`}>
                       {node.num}
                     </span>
-                    {isSelected && <span className="h-1.5 w-1.5 rounded-full bg-blue-400" />}
+                    {isSelected && <span className="h-2 w-2 rounded-full bg-blue-600" />}
                   </div>
                   <div>
-                    <span className="font-ibm-plex-mono text-[9px] text-[#777] uppercase block truncate">
+                    <span className="font-ibm-plex-mono text-[9px] text-alkota-silver uppercase block truncate">
                       {node.category}
                     </span>
-                    <h5 className="font-light text-xs uppercase tracking-tight text-white mt-0.5 leading-snug">
+                    <h5 className="font-normal text-xs uppercase tracking-tight text-alkota-black mt-0.5 leading-snug">
                       {node.name}
                     </h5>
                   </div>
@@ -327,11 +322,11 @@ export default function WashPlantAnatomyDiagram() {
       <AnimatePresence mode="wait">
         <motion.div
           key={activeNode.id}
-          initial={{ opacity: 0, y: 12 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -12 }}
+          exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.2 }}
-          className="bg-[#161616] border border-[#2A2A2A] p-6 sm:p-8"
+          className="bg-[#FAF9F5] border border-alkota-iron/30 p-6 sm:p-8"
         >
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             <div className="lg:col-span-6 space-y-4">
@@ -341,52 +336,52 @@ export default function WashPlantAnatomyDiagram() {
                 }`}>
                   Station {activeNode.num}
                 </span>
-                <span className="font-ibm-plex-mono text-xs text-[#888] uppercase tracking-wider">
+                <span className="font-ibm-plex-mono text-xs text-alkota-silver uppercase tracking-wider">
                   {activeNode.category}
                 </span>
               </div>
 
-              <h4 className="font-extralight text-2xl sm:text-3xl uppercase tracking-tight text-white">
+              <h4 className="font-extralight text-2xl sm:text-3xl uppercase tracking-tight text-alkota-black">
                 {activeNode.name}
               </h4>
 
-              <p className="text-xs sm:text-sm text-[#bbb] leading-relaxed">
+              <p className="text-xs sm:text-sm text-alkota-silver leading-relaxed font-normal">
                 {activeNode.summary}
               </p>
 
-              <div className="p-4 bg-[#101010] border border-[#222]">
+              <div className="p-4 bg-white border border-alkota-iron/30">
                 <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-alkota-orange block mb-1">
                   Operational Objective:
                 </span>
-                <p className="text-xs text-[#aaa] leading-relaxed">
+                <p className="text-xs text-alkota-black leading-relaxed">
                   {activeNode.operationalRole}
                 </p>
               </div>
             </div>
 
-            <div className="lg:col-span-6 space-y-4 bg-[#111] p-6 border border-[#222]">
+            <div className="lg:col-span-6 space-y-4 bg-white p-6 border border-alkota-iron/30">
               <div>
-                <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-white block mb-3">
+                <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-alkota-black font-semibold block mb-3">
                   Core Engineering Elements:
                 </span>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 font-ibm-plex-mono text-xs text-[#ccc]">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 font-ibm-plex-mono text-xs text-alkota-silver">
                   {activeNode.technicalSpecs.map((spec, i) => (
                     <div key={i} className="flex items-center gap-2">
                       <CheckCircle2 className="h-3.5 w-3.5 text-alkota-orange shrink-0" />
-                      <span>{spec}</span>
+                      <span className="text-alkota-black">{spec}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-[#222]">
+              <div className="pt-4 border-t border-alkota-iron/20">
                 <div className="flex items-center gap-2 mb-1.5">
-                  <Activity className="h-3.5 w-3.5 text-blue-400 shrink-0" />
-                  <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-blue-400">
-                    Hydraulic & Effluent Interface
+                  <Activity className="h-3.5 w-3.5 text-blue-600 shrink-0" />
+                  <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-blue-600 font-semibold">
+                    Hydraulic &amp; Effluent Interface
                   </span>
                 </div>
-                <p className="text-xs text-[#888] leading-relaxed">
+                <p className="text-xs text-alkota-silver leading-relaxed">
                   {activeNode.effluentOrHydraulicNote}
                 </p>
               </div>
@@ -396,35 +391,35 @@ export default function WashPlantAnatomyDiagram() {
       </AnimatePresence>
 
       {/* Plant Room Auxiliary Equipment Strip */}
-      <div className="mt-10 pt-8 border-t border-[#222]">
-        <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.3em] text-[#888] block mb-4">
-          INTEGRATED POWERHOUSE & AUXILIARY EQUIPMENT
+      <div className="mt-10 pt-8 border-t border-alkota-iron/30">
+        <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.3em] text-alkota-silver block mb-4">
+          INTEGRATED POWERHOUSE &amp; AUXILIARY EQUIPMENT
         </span>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 font-ibm-plex-mono text-xs text-white">
-          <div className="p-3 bg-[#121212] border border-[#222]">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 font-ibm-plex-mono text-xs text-alkota-black">
+          <div className="p-3 bg-[#FAF9F5] border border-alkota-iron/30">
             <Cpu className="h-4 w-4 text-alkota-orange mb-1" />
             <span className="block font-medium">PLC Master Panel</span>
-            <span className="text-[10px] text-[#777]">Industrial PLC — type to specification</span>
+            <span className="text-[10px] text-alkota-silver">Industrial PLC to spec</span>
           </div>
-          <div className="p-3 bg-[#121212] border border-[#222]">
+          <div className="p-3 bg-[#FAF9F5] border border-alkota-iron/30">
             <Flame className="h-4 w-4 text-alkota-orange mb-1" />
             <span className="block font-medium">Heating Coils</span>
-            <span className="text-[10px] text-[#777]">Spec to project application</span>
+            <span className="text-[10px] text-alkota-silver">Schedule 80 ASTM A53</span>
           </div>
-          <div className="p-3 bg-[#121212] border border-[#222]">
+          <div className="p-3 bg-[#FAF9F5] border border-alkota-iron/30">
             <Zap className="h-4 w-4 text-alkota-orange mb-1" />
-            <span className="block font-medium">High-Pressure Pump Skids</span>
-            <span className="text-[10px] text-[#777]">Redundancy where duty justifies</span>
+            <span className="block font-medium">High-Pressure Pumps</span>
+            <span className="text-[10px] text-alkota-silver">Triplex ceramic plungers</span>
           </div>
-          <div className="p-3 bg-[#121212] border border-[#222]">
+          <div className="p-3 bg-[#FAF9F5] border border-alkota-iron/30">
             <Settings className="h-4 w-4 text-alkota-orange mb-1" />
             <span className="block font-medium">Chemical Dosing</span>
-            <span className="text-[10px] text-[#777]">Pneumatic Metering</span>
+            <span className="text-[10px] text-alkota-silver">Pneumatic metering</span>
           </div>
-          <div className="p-3 bg-[#121212] border border-[#222]">
+          <div className="p-3 bg-[#FAF9F5] border border-alkota-iron/30">
             <ShieldCheck className="h-4 w-4 text-alkota-orange mb-1" />
             <span className="block font-medium">Safety Interlocks</span>
-            <span className="text-[10px] text-[#777]">Safety interlocks to risk assessment</span>
+            <span className="text-[10px] text-alkota-silver">Category 4 E-stops</span>
           </div>
         </div>
       </div>

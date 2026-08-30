@@ -20,6 +20,9 @@ export const metadata: Metadata = {
   },
 };
 
+import { PartsRequestProvider } from "@/components/parts/PartsRequestListContext";
+import PartsRequestDrawer from "@/components/parts/PartsRequestDrawer";
+
 export default function RootLayout({
   children,
 }: {
@@ -38,9 +41,12 @@ export default function RootLayout({
       <body className="bg-alkota-bg text-alkota-black min-h-screen flex flex-col font-normal antialiased">
         <SessionProvider>
           <CartProvider>
-            <div className="flex-1 flex flex-col">
-              {children}
-            </div>
+            <PartsRequestProvider>
+              <div className="flex-1 flex flex-col">
+                {children}
+              </div>
+              <PartsRequestDrawer />
+            </PartsRequestProvider>
           </CartProvider>
         </SessionProvider>
       </body>

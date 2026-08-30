@@ -257,7 +257,7 @@ export default async function ChemicalProductDetailPage({ params }: PageProps) {
               </p>
 
               <div className="border border-[#E0DEDC] divide-y divide-[#E8E8E4]">
-                {product.surface_compatibility.map((sc, idx) => (
+                {(Array.isArray(product.surface_compatibility) ? product.surface_compatibility : []).map((sc, idx) => (
                   <div key={idx} className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-[#FAF9F5]">
                     <div>
                       <span className="text-sm font-medium text-alkota-black block">

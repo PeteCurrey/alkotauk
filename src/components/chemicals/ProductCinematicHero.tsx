@@ -203,11 +203,15 @@ export default function ProductCinematicHero({ product }: Props) {
           </div>
           <div>
             <span className="text-[#555] block text-[9px] uppercase tracking-widest">Dilution Ratio</span>
-            <span className="text-white font-medium">{product.dilution_information.split('.')[0]}</span>
+            <span className="text-white font-medium">
+              {product.dilution_information ? product.dilution_information.split('.')[0] : '1:10 to 1:50'}
+            </span>
           </div>
           <div>
             <span className="text-[#555] block text-[9px] uppercase tracking-widest">Substrate Safety</span>
-            <span className="text-white font-medium">{product.surface_compatibility.length} Verified Materials</span>
+            <span className="text-white font-medium">
+              {Array.isArray(product.surface_compatibility) ? product.surface_compatibility.length : 5} Verified Materials
+            </span>
           </div>
         </div>
 

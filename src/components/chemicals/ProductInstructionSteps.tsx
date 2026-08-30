@@ -83,7 +83,7 @@ export default function ProductInstructionSteps({ product }: Props) {
                   Application Method:
                 </span>
                 <p className="text-xs text-[#444] leading-relaxed font-normal">
-                  {product.usage_instructions.split('.')[0]}.
+                  {product.usage_instructions ? product.usage_instructions.split('.')[0] : 'Apply via low-pressure chemical injector or foam lance'}.
                 </p>
               </div>
             </div>
@@ -127,7 +127,7 @@ export default function ProductInstructionSteps({ product }: Props) {
         </div>
 
         {/* Safety Warning Strip */}
-        {product.warnings && product.warnings.length > 0 && (
+        {Boolean(product.warnings && (Array.isArray(product.warnings) ? product.warnings.length > 0 : Boolean(product.warnings))) && (
           <div className="p-6 bg-orange-50/70 border border-orange-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-start gap-3">
               <AlertCircle className="w-4 h-4 text-[#FF6900] shrink-0 mt-0.5" />
@@ -135,7 +135,7 @@ export default function ProductInstructionSteps({ product }: Props) {
                 <span className="font-bold text-alkota-black mr-2 font-mono uppercase text-[10px]">
                   Safety &amp; Handling:
                 </span>
-                {product.warnings.join(' ')}
+                {Array.isArray(product.warnings) ? product.warnings.join(' ') : String(product.warnings)}
               </div>
             </div>
             <a

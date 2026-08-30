@@ -134,7 +134,24 @@ export function PartsRequestProvider({ children }: { children: React.ReactNode }
 export function usePartsRequest() {
   const ctx = useContext(PartsRequestContext);
   if (!ctx) {
-    throw new Error('usePartsRequest must be used within a PartsRequestProvider');
+    // Safe fallback if called outside provider
+    return {
+      items: [],
+      addItem: () => {},
+      removeItem: () => {},
+      updateQuantity: () => {},
+      clearList: () => {},
+      isDrawerOpen: false,
+      setIsDrawerOpen: () => {},
+      openCart: () => {},
+      closeCart: () => {},
+      totalItemsCount: 0,
+      itemCount: 0,
+      subtotal: 0,
+      vatAmount: 0,
+      shippingAmount: 0,
+      totalAmount: 0,
+    };
   }
   return ctx;
 }

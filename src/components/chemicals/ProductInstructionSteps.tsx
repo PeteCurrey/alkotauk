@@ -28,61 +28,55 @@ export default function ProductInstructionSteps({ product }: Props) {
           </p>
         </div>
 
-        {/* 3 Step Horizontal Sequence (Clean & Editorial) */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* 3 Step Horizontal Sequence (Clean & Unboxed Editorial) */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16">
           
           {/* STEP 01: DILUTE */}
-          <div className="bg-white p-8 border border-[#E8E8E4] flex flex-col justify-between space-y-6">
-            <div className="space-y-4">
-              <span className="font-ibm-plex-mono text-2xl font-extralight text-alkota-orange block">
-                01
-              </span>
-              <h3 className="text-xl font-light text-[#0A0A0A] uppercase tracking-tight">
-                Dilute &amp; Meter
-              </h3>
-              <p className="font-ibm-plex-mono text-xs text-alkota-black font-medium">
-                {product.dilution_information || 'Standard 1:20 to 1:50 with water'}
-              </p>
-              <p className="text-xs text-[#666] font-normal leading-relaxed">
-                Set downstream injector or foam lance metering valve to match water hardness and soil density.
-              </p>
-            </div>
+          <div className="pt-6 border-t border-[#E8E8E4] space-y-4">
+            <span className="font-ibm-plex-mono text-xs text-[#888] font-light block">
+              STEP 01
+            </span>
+            <h3 className="text-2xl font-light text-[#0A0A0A] uppercase tracking-tight">
+              Dilute &amp; Meter
+            </h3>
+            <p className="font-ibm-plex-mono text-xs text-alkota-orange font-medium">
+              {product.dilution_information || 'Standard 1:20 to 1:50 with water'}
+            </p>
+            <p className="text-sm text-[#555] font-normal leading-relaxed">
+              Set downstream injector or foam lance metering valve to match water hardness and soil density.
+            </p>
           </div>
 
           {/* STEP 02: APPLY */}
-          <div className="bg-white p-8 border border-[#E8E8E4] flex flex-col justify-between space-y-6">
-            <div className="space-y-4">
-              <span className="font-ibm-plex-mono text-2xl font-extralight text-alkota-orange block">
-                02
-              </span>
-              <h3 className="text-xl font-light text-[#0A0A0A] uppercase tracking-tight">
-                Apply &amp; Dwell
-              </h3>
-              <p className="text-xs text-alkota-black font-medium">
-                {product.usage_instructions ? product.usage_instructions.split('.')[0] : 'Apply via chemical injector or foam cannon'}
-              </p>
-              <p className="text-xs text-[#666] font-normal leading-relaxed">
-                Apply evenly from bottom to top to prevent run lines. Allow 2–3 minutes contact dwell without letting it dry.
-              </p>
-            </div>
+          <div className="pt-6 border-t border-[#E8E8E4] space-y-4">
+            <span className="font-ibm-plex-mono text-xs text-[#888] font-light block">
+              STEP 02
+            </span>
+            <h3 className="text-2xl font-light text-[#0A0A0A] uppercase tracking-tight">
+              Apply &amp; Dwell
+            </h3>
+            <p className="text-xs text-alkota-black font-medium">
+              {product.usage_instructions ? product.usage_instructions.split('.')[0] : 'Apply via chemical injector or foam cannon'}
+            </p>
+            <p className="text-sm text-[#555] font-normal leading-relaxed">
+              Apply evenly from bottom to top to prevent run lines. Allow 2–3 minutes contact dwell without letting it dry.
+            </p>
           </div>
 
           {/* STEP 03: RINSE */}
-          <div className="bg-white p-8 border border-[#E8E8E4] flex flex-col justify-between space-y-6">
-            <div className="space-y-4">
-              <span className="font-ibm-plex-mono text-2xl font-extralight text-alkota-orange block">
-                03
-              </span>
-              <h3 className="text-xl font-light text-[#0A0A0A] uppercase tracking-tight">
-                High-Pressure Rinse
-              </h3>
-              <p className="text-xs text-alkota-black font-medium">
-                150–200 Bar pressure rinse with 50°C–65°C hot water
-              </p>
-              <p className="text-xs text-[#666] font-normal leading-relaxed">
-                Rinse thoroughly from top to bottom. Surfaces will sheet freely with zero chalky detergent residue.
-              </p>
-            </div>
+          <div className="pt-6 border-t border-[#E8E8E4] space-y-4">
+            <span className="font-ibm-plex-mono text-xs text-[#888] font-light block">
+              STEP 03
+            </span>
+            <h3 className="text-2xl font-light text-[#0A0A0A] uppercase tracking-tight">
+              High-Pressure Rinse
+            </h3>
+            <p className="text-xs text-alkota-black font-medium">
+              150–200 Bar pressure rinse with 50°C–65°C hot water
+            </p>
+            <p className="text-sm text-[#555] font-normal leading-relaxed">
+              Rinse thoroughly from top to bottom. Surfaces will sheet freely with zero chalky detergent residue.
+            </p>
           </div>
 
         </div>

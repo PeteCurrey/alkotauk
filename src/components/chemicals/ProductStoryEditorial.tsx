@@ -57,24 +57,24 @@ export default function ProductStoryEditorial({ product }: Props) {
             </div>
           </div>
 
-          {/* Right Column: How It Cleans */}
-          <div className="lg:col-span-5 bg-[#FAF9F5] border border-[#E8E8E4] p-8 space-y-6">
+          {/* Right Column: How It Cleans (Unboxed Minimalist Editorial) */}
+          <div className="lg:col-span-5 space-y-6 pt-2">
             <h3 className="text-xl font-light text-[#0A0A0A] uppercase tracking-tight">
               Surface Action
             </h3>
 
-            <div className="space-y-4 text-xs font-normal text-[#666] leading-relaxed divide-y divide-[#E8E8E4]">
-              <div className="pt-3 first:pt-0 space-y-1">
-                <strong className="text-alkota-black font-medium block">1. Penetrates the Film</strong>
-                <p>Lowers water surface tension to get beneath road dirt and traffic grime.</p>
+            <div className="space-y-6 text-xs font-normal text-[#666] leading-relaxed divide-y divide-[#E8E8E4]">
+              <div className="pt-4 first:pt-0 space-y-1">
+                <strong className="text-alkota-black font-medium block text-sm">1. Penetrates the Film</strong>
+                <p className="text-sm text-[#555]">Lowers water surface tension to get beneath road dirt and traffic grime.</p>
               </div>
-              <div className="pt-3 space-y-1">
-                <strong className="text-alkota-black font-medium block">2. Breaks Down Oils</strong>
-                <p>Turns heavy petroleum oils and diesel exhaust soot into water-soluble emulsion.</p>
+              <div className="pt-4 space-y-1">
+                <strong className="text-alkota-black font-medium block text-sm">2. Breaks Down Oils</strong>
+                <p className="text-sm text-[#555]">Turns heavy petroleum oils and diesel exhaust soot into water-soluble emulsion.</p>
               </div>
-              <div className="pt-3 space-y-1">
-                <strong className="text-alkota-black font-medium block">3. Clean Rinse</strong>
-                <p>Holds dirt suspended so it washes away completely without streaking.</p>
+              <div className="pt-4 space-y-1">
+                <strong className="text-alkota-black font-medium block text-sm">3. Clean Rinse</strong>
+                <p className="text-sm text-[#555]">Holds dirt suspended so it washes away completely without streaking.</p>
               </div>
             </div>
           </div>

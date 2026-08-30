@@ -37,16 +37,16 @@ export default function ProductProblemVisualiser({ product }: Props) {
         </div>
 
         {/* Clean Unboxed Problem List */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {problems.map((prob, idx) => (
             <div
               key={idx}
-              className="p-6 bg-white border border-[#E8E8E4] flex flex-col justify-between min-h-[140px]"
+              className="pt-6 border-t border-[#E8E8E4] flex flex-col justify-between space-y-3"
             >
               <span className="font-ibm-plex-mono text-xs text-[#888] font-light">
                 0{idx + 1}
               </span>
-              <h3 className="text-lg font-light text-[#0A0A0A] tracking-tight leading-snug">
+              <h3 className="text-xl font-light text-[#0A0A0A] tracking-tight leading-snug">
                 {prob}
               </h3>
             </div>

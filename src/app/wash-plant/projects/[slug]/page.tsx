@@ -17,9 +17,30 @@ export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
+  let project: any = null;
+  try {
+    const { data } = await supabaseAdmin
+      .from('wash_plant_projects')
+      .select('project_name, case_study_sector, case_study_challenge')
+      .eq('case_study_slug', slug)
+      .single();
+    if (data) project = data;
+  } catch {
+    // fallback
+  }
+
+  const title = project?.project_name || slug.replace(/-/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase());
+  const sector = project?.case_study_sector ? ` — ${project.case_study_sector}` : '';
+  const desc = project?.case_study_challenge || `Turnkey industrial wash plant engineering and installation case study by Alkota UK.`;
+
   return {
-    title: `Wash Plant Case Study | Alkota UK`,
-    description: `Industrial wash plant installation case study by Alkota UK.`,
+    title: `${title}${sector} | Wash Plant Case Study | Alkota UK`,
+    description: desc,
+    openGraph: {
+      title: `${title} | Alkota UK Wash Plant Case Study`,
+      description: desc,
+      url: `https://alkota.co.uk/wash-plant/projects/${slug}`,
+    },
   };
 }
 

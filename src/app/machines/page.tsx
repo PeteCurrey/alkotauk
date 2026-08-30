@@ -7,8 +7,13 @@ import { ArrowRight, ArrowDown, Sliders } from 'lucide-react';
 import Footer from '@/components/Footer';
 
 export const metadata = {
-  title: 'Industrial Pressure Washing Fleet & Catalogue | Alkota UK',
-  description: 'Explore the complete 127-machine Alkota fleet. Hot water, cold water, industrial steam, mobile trailers, and bespoke wash systems.',
+  title: 'Industrial Pressure Washers, Steam Cleaners & Wash Systems | Alkota UK',
+  description: 'Explore the complete Alkota industrial pressure washing fleet. Heavy-duty hot water pressure washers, cold water units, industrial steam cleaners, mobile trailer rigs, and bespoke wash plant systems.',
+  openGraph: {
+    title: 'Industrial Pressure Washing Fleet & Machinery | Alkota UK',
+    description: 'American industrial pressure washers engineered with cold-rolled steel, triplex ceramic plunger pumps, and Schedule 80 heating coils with a 7-year warranty.',
+    url: 'https://alkota.co.uk/machines',
+  },
 };
 
 export default async function MachinesPage() {

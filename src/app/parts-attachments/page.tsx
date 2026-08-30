@@ -5,7 +5,19 @@ import { supabaseAdmin } from '@/lib/supabase/server';
 import ProductCard from '@/components/parts/ProductCard';
 import { MASTER_TAXONOMY } from '@/lib/parts/taxonomy';
 
+import { Metadata } from 'next';
+
 export const dynamic = 'force-dynamic';
+
+export const metadata: Metadata = {
+  title: 'Genuine OEM Parts, Spares & Tooling Attachments | Alkota UK',
+  description: 'Genuine Alkota OEM pressure washer spares, General Pump & CAT pump seals, Mosmatic rotary surface cleaners, Cox Reels hose reels, and high-pressure accessories despatched across the UK.',
+  openGraph: {
+    title: 'Genuine OEM Parts & Attachments Store | Alkota UK',
+    description: 'High-pressure pumps, heating coils, burner electrodes, rotary tooling, and heavy-duty hose reels.',
+    url: 'https://alkota.co.uk/parts-attachments',
+  },
+};
 
 const FEATURED_CATEGORY_SLUGS = [
   'pumps',

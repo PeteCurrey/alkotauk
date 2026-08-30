@@ -5,10 +5,31 @@ import { ChevronRight, ArrowRight, ExternalLink } from 'lucide-react';
 import { supabaseAdmin } from '@/lib/supabase/server';
 import ProductCard from '@/components/parts/ProductCard';
 
+import { Metadata } from 'next';
+
 export const dynamic = 'force-dynamic';
 
-interface PageProps {
-  params: Promise<{ brand: string }>;
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { brand: brandSlug } = await params;
+  const { data: brand } = await supabaseAdmin
+    .from('brand_partners')
+    .select('name, tagline, description')
+    .eq('slug', brandSlug)
+    .single();
+
+  const brandName = brand?.name || brandSlug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+  const tagline = brand?.tagline ? ` — ${brand.tagline}` : '';
+  const desc = brand?.description || `Explore genuine ${brandName} parts, tooling, and attachments stocked and despatched by Alkota UK.`;
+
+  return {
+    title: `${brandName}${tagline} | Alkota UK Parts & Attachments`,
+    description: desc,
+    openGraph: {
+      title: `${brandName} Spares & Attachments | Alkota UK`,
+      description: desc,
+      url: `https://alkota.co.uk/parts-attachments/brands/${brandSlug}`,
+    },
+  };
 }
 
 export default async function BrandPartnerPage({ params }: PageProps) {

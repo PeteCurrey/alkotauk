@@ -27,8 +27,33 @@ export const metadata = {
 };
 
 export default function ServicePage() {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Industrial Pressure Washer Maintenance & Lifecycle Service',
+    provider: {
+      '@type': 'Organization',
+      name: 'Alkota UK',
+      url: 'https://alkota.co.uk',
+      logo: 'https://alkota.co.uk/logo.png',
+      telephone: '+44-7912-506738',
+      email: 'sales@alkota.co.uk',
+    },
+    areaServed: {
+      '@type': 'Country',
+      name: 'United Kingdom',
+    },
+    description: 'Planned preventive maintenance, mobile breakdown repair dispatch, General Pump and CAT Pump workshop rebuilds, and nationwide commissioning across the UK.',
+    serviceType: 'Industrial Cleaning Machinery Engineering Support',
+    url: 'https://alkota.co.uk/service',
+  };
+
   return (
     <main className="bg-[#FAF9F5] text-alkota-black">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
 
       {/* ── CHAPTER 01: FULL-SCREEN SERVICE HERO ── */}
       <section className="relative min-h-[90vh] flex flex-col justify-between bg-[#0A0A0A] text-white px-6 sm:px-12 lg:px-24 pt-32 pb-16 overflow-hidden border-b border-[#222]">

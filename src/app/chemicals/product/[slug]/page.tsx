@@ -70,8 +70,37 @@ export default async function ChemicalProductDetailPage({ params }: PageProps) {
     'HIGHWAY PLANT'
   ];
 
+  const minPrice = (product.skus && product.skus.length > 0) ? Math.min(...product.skus.map(s => s.price)) : 35;
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.retail_name,
+    description: product.short_description,
+    brand: {
+      '@type': 'Brand',
+      name: 'Alkota'
+    },
+    manufacturer: {
+      '@type': 'Organization',
+      name: 'Alkota UK'
+    },
+    category: 'Industrial Cleaning Chemicals',
+    offers: {
+      '@type': 'AggregateOffer',
+      priceCurrency: 'GBP',
+      lowPrice: minPrice,
+      offerCount: product.skus?.length || 4,
+      availability: 'https://schema.org/InStock',
+      url: `https://alkota.co.uk/chemicals/product/${product.slug}`
+    }
+  };
+
   return (
     <main className="min-h-screen bg-[#FAF9F5] text-alkota-black font-sans selection:bg-alkota-orange/30">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       
       {/* ── 01 STICKY PRODUCT NAV ── */}
       <ProductStickyNav product={product} />

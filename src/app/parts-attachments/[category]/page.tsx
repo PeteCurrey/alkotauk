@@ -6,17 +6,33 @@ import { supabaseAdmin } from '@/lib/supabase/server';
 import ProductCard from '@/components/parts/ProductCard';
 import { MASTER_TAXONOMY } from '@/lib/parts/taxonomy';
 
+import { Metadata } from 'next';
+
 export const dynamic = 'force-dynamic';
 
-interface PageProps {
-  params: Promise<{ category: string }>;
-  searchParams: Promise<{ 
-    brand?: string; 
-    available?: string; 
-    sort?: string; 
-    q?: string;
-    sub?: string;
-  }>;
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { category } = await params;
+  const taxonomyCat = MASTER_TAXONOMY.find(c => c.slug === category);
+  
+  if (category === 'all') {
+    return {
+      title: 'All Parts, Spares & Tooling Attachments | Alkota UK',
+      description: 'Explore the complete Alkota UK catalogue of pressure washing spares, pumps, hoses, nozzles, burner heads, and rotary surface cleaners.',
+    };
+  }
+
+  const name = taxonomyCat?.name || category.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+  const desc = taxonomyCat?.shortDesc || `Shop genuine OEM ${name.toLowerCase()} and accessories for industrial pressure washers and cleaning equipment.`;
+
+  return {
+    title: `${name} | Alkota UK Parts & Attachments`,
+    description: desc,
+    openGraph: {
+      title: `${name} — Genuine Spares & Attachments | Alkota UK`,
+      description: desc,
+      url: `https://alkota.co.uk/parts-attachments/${category}`,
+    },
+  };
 }
 
 export default async function CategoryBrowsePage({ params, searchParams }: PageProps) {

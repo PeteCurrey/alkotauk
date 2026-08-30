@@ -7,10 +7,30 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 import Footer from '@/components/Footer';
 import SeenInRealWorld from '@/components/mess-quest/SeenInRealWorld';
 
+import { Metadata } from 'next';
+
 interface IndustryDetailPageProps {
   params: Promise<{
     slug: string;
   }>;
+}
+
+export async function generateMetadata({ params }: IndustryDetailPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const industry = await client.fetch(`*[_type == "industry" && slug.current == $slug][0]`, { slug });
+  
+  const title = industry?.name || slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+  const desc = industry?.description || `Industrial pressure washing and cleaning equipment engineered for the ${title.toLowerCase()} sector.`;
+
+  return {
+    title: `Industrial Pressure Washers for ${title} | Alkota UK`,
+    description: desc,
+    openGraph: {
+      title: `${title} Industrial Cleaning Equipment | Alkota UK`,
+      description: desc,
+      url: `https://alkota.co.uk/industries/${slug}`,
+    },
+  };
 }
 
 export default async function IndustryDetailPage({ params }: IndustryDetailPageProps) {

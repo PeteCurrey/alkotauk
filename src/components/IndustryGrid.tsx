@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface IndustrySector {
@@ -74,7 +74,18 @@ const SECTORS: IndustrySector[] = [
 
 export default function IndustryGrid() {
   const [activeSlug, setActiveSlug] = useState<string>(SECTORS[0].slug);
+  const scrollRef = useRef<HTMLDivElement>(null);
   const activeSector = SECTORS.find((s) => s.slug === activeSlug) || SECTORS[0];
+
+  const handleScroll = (direction: 'left' | 'right') => {
+    if (scrollRef.current) {
+      const scrollAmount = 260;
+      scrollRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth',
+      });
+    }
+  };
 
   return (
     <section className="relative min-h-screen w-full bg-[#0F0F0D] text-white flex flex-col justify-start pt-28 sm:pt-36 pb-20 px-6 sm:px-12 font-normal overflow-hidden" aria-label="Real World Applications">
@@ -103,30 +114,56 @@ export default function IndustryGrid() {
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl w-full">
-        {/* Top Line: Eyebrow + Category Tabs */}
+        {/* Top Line: Eyebrow + Interactive Scrollable Category Tabs */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-4">
-          <span className="text-xs uppercase tracking-[0.25em] text-alkota-orange block font-light">
+          <span className="text-xs uppercase tracking-[0.25em] text-alkota-orange block font-light shrink-0">
             Real-World Applications
           </span>
 
-          {/* Understated Category Selector — Clean text tabs following Real-World Applications line */}
-          <div className="flex items-center gap-6 overflow-x-auto pb-1 scrollbar-none font-normal">
-            {SECTORS.map((sector) => {
-              const isActive = sector.slug === activeSlug;
-              return (
-                <button
-                  key={sector.slug}
-                  onClick={() => setActiveSlug(sector.slug)}
-                  className={`whitespace-nowrap pb-1 text-xs uppercase tracking-[0.16em] transition-all cursor-pointer border-b-2 font-normal ${
-                    isActive
-                      ? 'border-alkota-orange text-white'
-                      : 'border-transparent text-[#888] hover:text-white'
-                  }`}
-                >
-                  {sector.name}
-                </button>
-              );
-            })}
+          {/* Understated Category Selector with Scroll Arrows */}
+          <div className="flex items-center gap-1.5 min-w-0 max-w-full lg:max-w-[70%]">
+            {/* Scroll Left Button */}
+            <button
+              type="button"
+              onClick={() => handleScroll('left')}
+              className="p-1 text-white/50 hover:text-white hover:bg-white/10 transition-colors cursor-pointer bg-transparent border-none shrink-0 flex items-center justify-center rounded-sm"
+              aria-label="Scroll sectors left"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+
+            {/* Scrollable Container */}
+            <div
+              ref={scrollRef}
+              className="flex items-center gap-5 sm:gap-6 overflow-x-auto pb-1 scrollbar-none font-normal scroll-smooth"
+            >
+              {SECTORS.map((sector) => {
+                const isActive = sector.slug === activeSlug;
+                return (
+                  <button
+                    key={sector.slug}
+                    onClick={() => setActiveSlug(sector.slug)}
+                    className={`whitespace-nowrap pb-1 text-xs uppercase tracking-[0.16em] transition-all cursor-pointer border-b-2 font-normal shrink-0 ${
+                      isActive
+                        ? 'border-alkota-orange text-white'
+                        : 'border-transparent text-[#888] hover:text-white'
+                    }`}
+                  >
+                    {sector.name}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Scroll Right Button */}
+            <button
+              type="button"
+              onClick={() => handleScroll('right')}
+              className="p-1 text-white/50 hover:text-white hover:bg-white/10 transition-colors cursor-pointer bg-transparent border-none shrink-0 flex items-center justify-center rounded-sm"
+              aria-label="Scroll sectors right"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
           </div>
         </div>
 

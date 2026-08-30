@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { ArrowRight, ChevronRight, Layers, ShieldCheck, Flame, Wrench } from 'lucide-react';
+import { ArrowRight, ChevronRight } from 'lucide-react';
 import { MASTER_TAXONOMY, PartCategoryDefinition } from '@/lib/parts/taxonomy';
 
 interface Props {
@@ -10,179 +10,230 @@ interface Props {
 }
 
 export default function ShowroomCategoryModules({ categories = MASTER_TAXONOMY }: Props) {
-  const primaryCategories = [
-    {
-      slug: 'surface-cleaners',
-      name: 'Rotary Surface Cleaners',
-      number: '01',
-      tagline: 'Swiss-machined stainless steel flat surface cleaners & undercarriage wash tooling.',
-      highlight: 'Up to 24" Cleaning Path · 275 Bar',
-      link: '/parts-attachments/surface-cleaners',
-      image: '/assets/products/surface-cleaner.png',
-      backdrop: '/assets/parts/parts-hero-workshop.jpg',
-      subcategories: ['Flat Surface Cleaners', 'Undercarriage Washers', 'Rotary Swivels', 'Spray Arms']
-    },
-    {
-      slug: 'hoses',
-      name: 'Hoses & Industrial Reels',
-      number: '02',
-      tagline: 'Twin-wire steel braided hydraulic washdown hoses & Cox Reels spring rewind systems.',
-      highlight: '300–600 Bar Rating · 155°C Steam',
-      link: '/parts-attachments/hoses',
-      image: '/assets/products/hose-reel.png',
-      backdrop: '/assets/engineered-continuous-duty.jpg',
-      subcategories: ['Steel Braided 3/8" Hoses', 'Spring-Rewind Cox Reels', 'Non-Marking Hoses', 'Swivels']
-    },
-    {
-      slug: 'pumps',
-      name: 'Pumps & Ceramic Packing',
-      number: '03',
-      tagline: 'General Pump & CAT Pump triplex assemblies with solid ceramic plungers and brass manifolds.',
-      highlight: '100% Solid Alumina Ceramic',
-      link: '/parts-attachments/pumps',
-      image: '/assets/products/420x4.png',
-      backdrop: '/assets/hot-water-gauge-hero.jpg',
-      subcategories: ['General Pump TS2021', 'CAT Pumps 5CP', 'V-Packing Kits', 'Plunger Sleeves']
-    },
-    {
-      slug: 'lances-nozzles',
-      name: 'Lances & Turbo Nozzles',
-      number: '04',
-      tagline: 'Insulated stainless double lances, ceramic rotating dirt killers & tungsten spray tips.',
-      highlight: 'Vented Grips · Hardened Tips',
-      link: '/parts-attachments/lances-nozzles',
-      image: '/assets/products/lance-nozzle.png',
-      backdrop: '/assets/products/216bd2.png',
-      subcategories: ['Vented Lances', 'Ceramic Turbo Nozzles', 'Colour-Coded QC Tips', 'Dual Lances']
-    },
-    {
-      slug: 'burners',
-      name: 'Burners & Schedule 80 Coils',
-      number: '05',
-      tagline: 'Beckett and Riello oil burners, ignition transformers & continuous-duty heating coils.',
-      highlight: 'Schedule 80 Steel · 7-Yr Warranty',
-      link: '/parts-attachments/burners',
-      image: '/assets/products/coil-burner.png',
-      backdrop: '/assets/engineered-continuous-duty.jpg',
-      subcategories: ['Schedule 80 Coils', 'Beckett AFG Heads', 'Ignition Transformers', 'Fuel Pumps']
-    },
-    {
-      slug: 'trigger-guns',
-      name: 'Trigger Guns & Steam Dumps',
-      number: '06',
-      tagline: 'Suttner and Alkota Easy-Pull washdown guns with stainless steel valve seats.',
-      highlight: 'Fatigue-Reducing · 150°C Rated',
-      link: '/parts-attachments/trigger-guns',
-      image: '/assets/products/trigger-gun.png',
-      backdrop: '/assets/products/216x4.png',
-      subcategories: ['Alkota Easy-Pull', 'Suttner ST-1500', 'Steam Dump Guns', 'Swivel Inlets']
-    }
-  ];
-
   return (
-    <section className="py-28 px-6 sm:px-12 lg:px-24 bg-[#FAF9F5] border-b border-[#E0DEDC]">
+    <section className="py-28 px-6 sm:px-12 lg:px-24 bg-[#FAF9F5] border-b border-[#E8E8E4]">
       <div className="max-w-7xl mx-auto space-y-20">
         
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-[#E0DEDC] pb-10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-[#E8E8E4] pb-10">
           <div>
             <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.25em] text-alkota-orange block mb-2 font-medium">
-              // Precision Taxonomy
+              // Equipment Directory
             </span>
             <h2 
-              className="font-extralight text-alkota-black tracking-tight uppercase leading-[0.95]"
+              className="font-extralight text-[#0A0A0A] tracking-tight uppercase leading-[0.95]"
               style={{ fontSize: 'clamp(2.4rem, 4.5vw, 4rem)' }}
             >
-              Component Architecture.
+              Shop by component.
             </h2>
           </div>
           <div className="max-w-md space-y-2">
-            <p className="text-sm text-[#666] font-light leading-relaxed">
-              Every assembly organized with engineering precision. Direct-fit spares, Swiss rotary tooling, and industrial accessories categorized by operational task.
+            <p className="text-sm text-[#666] font-normal leading-relaxed">
+              Every part, assembly, and attachment organized by task. Direct-fit spares, Swiss rotary tooling, and heavy-duty hose management.
             </p>
             <Link
               href="/parts-attachments/categories"
-              className="inline-flex items-center gap-1.5 font-ibm-plex-mono text-xs text-alkota-orange hover:text-black uppercase tracking-wider transition-colors font-medium"
+              className="inline-flex items-center gap-1.5 font-ibm-plex-mono text-xs text-alkota-black hover:text-alkota-orange uppercase tracking-wider transition-colors font-medium"
             >
-              <span>View Complete 16-Category Directory</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <span>View all 16 categories index</span>
+              <ArrowRight className="w-3.5 h-3.5 text-alkota-orange" />
             </Link>
           </div>
         </div>
 
-        {/* ── ARCHITECTURAL RUNWAY MODULES (No Box Farm) ── */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {primaryCategories.map((cat) => (
-            <Link
-              key={cat.slug}
-              href={cat.link}
-              className="group flex flex-col justify-between bg-white border border-[#E8E8E4] hover:border-black transition-all duration-500 overflow-hidden shadow-sm hover:shadow-2xl no-underline"
-            >
-              {/* Category Visual Canvas */}
-              <div className="relative aspect-[16/11] bg-[#0E0E0C] p-8 overflow-hidden flex flex-col justify-between">
-                
-                {/* Background Photography with Depth */}
-                <img
-                  src={cat.backdrop}
-                  alt={cat.name}
-                  className="absolute inset-0 w-full h-full object-cover opacity-25 filter grayscale group-hover:scale-108 group-hover:opacity-40 transition-all duration-700 pointer-events-none select-none"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0E0E0C] via-transparent to-black/60 pointer-events-none" />
-
-                {/* Top Number & Tag */}
-                <div className="relative z-10 flex items-center justify-between">
-                  <span className="font-ibm-plex-mono text-xs font-light text-white/90 tracking-widest">
-                    SECTION {cat.number}
+        {/* ── ASYMMETRICAL RUNWAY ── */}
+        <div className="space-y-12">
+          
+          {/* 1. HERO WIDE BAND: HOSES & HOSE REELS */}
+          <div className="bg-white border border-[#E8E8E4] p-8 sm:p-14 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+            <div className="lg:col-span-6 space-y-6">
+              <span className="font-ibm-plex-mono text-xs uppercase tracking-widest text-[#888]">
+                01 / High-Pressure Hose Management
+              </span>
+              <h3 className="text-3xl sm:text-4xl font-extralight text-[#0A0A0A] tracking-tight uppercase leading-tight">
+                Hoses, Swivels &amp; Heavy-Duty Reels
+              </h3>
+              <p className="text-sm text-[#555] font-normal leading-relaxed max-w-md">
+                Twin-wire steel braided washdown hoses rated from 300 to 600 Bar, non-marking grey options, and Cox Reels all-steel manual and spring rewind assemblies.
+              </p>
+              
+              <div className="flex flex-wrap gap-2 pt-2">
+                {['3/8" 300 Bar Hoses', 'Spring-Rewind Cox Reels', 'Non-Marking Hoses', '360° Live Swivels'].map((sub) => (
+                  <span key={sub} className="font-ibm-plex-mono text-[10px] text-[#666] bg-[#F5F4EF] px-3 py-1">
+                    {sub}
                   </span>
-                  <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-alkota-orange bg-black/70 px-2.5 py-0.5 border border-alkota-orange/30">
-                    OEM Verified
-                  </span>
-                </div>
-
-                {/* Bottom Spec Callout */}
-                <div className="relative z-10">
-                  <span className="font-ibm-plex-mono text-[10px] text-white/90 uppercase tracking-widest block font-medium">
-                    {cat.highlight}
-                  </span>
-                </div>
+                ))}
               </div>
 
-              {/* Category Body with Negative Space */}
-              <div className="p-8 flex flex-col justify-between flex-1 space-y-6">
+              <div className="pt-4">
+                <Link
+                  href="/parts-attachments/hoses"
+                  className="inline-flex items-center gap-2 bg-alkota-black hover:bg-alkota-orange text-white px-6 py-3 font-ibm-plex-mono text-xs uppercase tracking-widest transition-colors font-medium"
+                >
+                  <span>Explore Hose Department</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            </div>
+
+            <div className="lg:col-span-6 relative flex items-center justify-center min-h-[280px]">
+              <img
+                src="/assets/products/high-pressure-hose.png"
+                alt="High Pressure Hoses and Cox Reels"
+                className="max-h-[300px] w-auto object-contain filter drop-shadow-md hover:scale-105 transition-transform duration-500"
+              />
+            </div>
+          </div>
+
+          {/* 2. DUAL EDITORIAL SPLIT: SURFACE CLEANERS & PUMPS */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+            
+            {/* Split 1: Surface Cleaners */}
+            <div className="bg-white border border-[#E8E8E4] p-8 sm:p-12 flex flex-col justify-between space-y-8">
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <span className="font-ibm-plex-mono text-xs uppercase tracking-widest text-[#888]">
+                    02 / Rotary Surface Cleaners
+                  </span>
+                  <span className="font-ibm-plex-mono text-[10px] text-alkota-orange font-medium">
+                    Mosmatic &amp; Steel Eagle
+                  </span>
+                </div>
+
+                <div className="relative aspect-[16/10] bg-[#FAF9F5] flex items-center justify-center p-6">
+                  <img
+                    src="/assets/products/whirl-away-surface-cleaner.png"
+                    alt="Rotary Flat Surface Cleaners"
+                    className="max-h-full max-w-full object-contain filter drop-shadow-md hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+
                 <div>
-                  <h3 className="text-2xl font-light text-alkota-black tracking-tight group-hover:text-alkota-orange transition-colors uppercase mb-2">
-                    {cat.name}
-                  </h3>
-                  <p className="text-xs text-[#666] leading-relaxed font-light">
-                    {cat.tagline}
+                  <h4 className="text-2xl font-light text-[#0A0A0A] tracking-tight uppercase mb-2">
+                    Flat Surface &amp; Undercarriage Cleaners
+                  </h4>
+                  <p className="text-xs text-[#666] font-normal leading-relaxed">
+                    12" to 30" stainless steel rotary tooling designed to blast parking lots, depot aprons, and vehicle chassis in a single pass.
                   </p>
-
-                  {/* Sub-Assembly Tag Pills */}
-                  <div className="flex flex-wrap gap-1.5 pt-4">
-                    {cat.subcategories.map((sub, idx) => (
-                      <span
-                        key={idx}
-                        className="font-ibm-plex-mono text-[9px] text-[#777] bg-[#F5F4F0] px-2 py-0.5 uppercase tracking-wider"
-                      >
-                        {sub}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Direct Action Link */}
-                <div className="pt-4 border-t border-[#F0EFEB] flex items-center justify-between text-xs font-ibm-plex-mono">
-                  <span className="text-[#888] uppercase tracking-wider group-hover:text-black transition-colors font-medium">
-                    Explore Component Range
-                  </span>
-                  <div className="h-8 w-8 rounded-full bg-[#0A0A0A] group-hover:bg-alkota-orange text-white flex items-center justify-center transition-colors">
-                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-                  </div>
                 </div>
               </div>
 
-            </Link>
-          ))}
+              <div className="pt-4 border-t border-[#E8E8E4] flex items-center justify-between">
+                <span className="font-ibm-plex-mono text-[10px] text-[#888] uppercase">From £185.00 ex VAT</span>
+                <Link
+                  href="/parts-attachments/surface-cleaners"
+                  className="font-ibm-plex-mono text-xs text-alkota-black hover:text-alkota-orange uppercase tracking-wider transition-colors font-medium inline-flex items-center gap-1"
+                >
+                  <span>Browse Range</span>
+                  <ChevronRight className="w-3.5 h-3.5 text-alkota-orange" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Split 2: Pumps & Packings */}
+            <div className="bg-white border border-[#E8E8E4] p-8 sm:p-12 flex flex-col justify-between space-y-8">
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <span className="font-ibm-plex-mono text-xs uppercase tracking-widest text-[#888]">
+                    03 / Triplex Pumps &amp; Seal Kits
+                  </span>
+                  <span className="font-ibm-plex-mono text-[10px] text-alkota-orange font-medium">
+                    General Pump &amp; CAT
+                  </span>
+                </div>
+
+                <div className="relative aspect-[16/10] bg-[#FAF9F5] flex items-center justify-center p-6">
+                  <img
+                    src="/assets/products/industrial-pump.png"
+                    alt="High-Pressure Triplex Pumps"
+                    className="max-h-full max-w-full object-contain filter drop-shadow-md hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+
+                <div>
+                  <h4 className="text-2xl font-light text-[#0A0A0A] tracking-tight uppercase mb-2">
+                    Pumps, Ceramic Plungers &amp; Valves
+                  </h4>
+                  <p className="text-xs text-[#666] font-normal leading-relaxed">
+                    Complete replacement pump assemblies, solid alumina ceramic plunger rods, V-packings, and check valve overhaul kits.
+                  </p>
+                </div>
+              </div>
+
+              <div className="pt-4 border-t border-[#E8E8E4] flex items-center justify-between">
+                <span className="font-ibm-plex-mono text-[10px] text-[#888] uppercase">Kits From £28.00 ex VAT</span>
+                <Link
+                  href="/parts-attachments/pumps"
+                  className="font-ibm-plex-mono text-xs text-alkota-black hover:text-alkota-orange uppercase tracking-wider transition-colors font-medium inline-flex items-center gap-1"
+                >
+                  <span>Browse Range</span>
+                  <ChevronRight className="w-3.5 h-3.5 text-alkota-orange" />
+                </Link>
+              </div>
+            </div>
+
+          </div>
+
+          {/* 3. FOUR-COLUMN TYPOGRAPHIC STRIP (Guns, Nozzles, Burners, Chemicals) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              {
+                number: '04',
+                title: 'Spray Guns & Lances',
+                desc: 'Alkota Easy-Pull handles, 1000mm insulated lances, and high-temp steam dump guns.',
+                href: '/parts-attachments/trigger-guns',
+                price: 'From £28.00'
+              },
+              {
+                number: '05',
+                title: 'Nozzles & Turbo Tips',
+                desc: 'Quick-release colour-coded fan tips, ceramic dirt-killers, and chemical foam cannons.',
+                href: '/parts-attachments/lances-nozzles',
+                price: 'From £5.50'
+              },
+              {
+                number: '06',
+                title: 'Burners & Heating Coils',
+                desc: 'Beckett AFG heads, ignition transformers, and Schedule 80 continuous coils.',
+                href: '/parts-attachments/burners',
+                price: 'Genuine OEM'
+              },
+              {
+                number: '07',
+                title: 'Cleaning Chemistry',
+                desc: 'RoadForce touchless TFR, heavy degreasers, aluminium deoxidisers, and descaling acid.',
+                href: '/parts-attachments/chemicals',
+                price: 'From £28.50'
+              }
+            ].map((col) => (
+              <Link
+                key={col.number}
+                href={col.href}
+                className="bg-white border border-[#E8E8E4] hover:border-black p-8 flex flex-col justify-between space-y-6 transition-colors group no-underline"
+              >
+                <div className="space-y-3">
+                  <span className="font-ibm-plex-mono text-xs text-[#888] block font-light">
+                    SECTION {col.number}
+                  </span>
+                  <h4 className="text-xl font-light text-[#0A0A0A] tracking-tight uppercase group-hover:text-alkota-orange transition-colors">
+                    {col.title}
+                  </h4>
+                  <p className="text-xs text-[#666] font-normal leading-relaxed">
+                    {col.desc}
+                  </p>
+                </div>
+
+                <div className="pt-4 border-t border-[#E8E8E4] flex items-center justify-between font-ibm-plex-mono text-xs">
+                  <span className="text-[#888] text-[10px]">{col.price}</span>
+                  <span className="text-alkota-black group-hover:text-alkota-orange uppercase tracking-wider font-medium flex items-center gap-1">
+                    <span>Shop</span>
+                    <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
+
         </div>
 
       </div>

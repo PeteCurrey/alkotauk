@@ -1,223 +1,291 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, ShieldCheck, ChevronDown, Award, Sparkles } from 'lucide-react';
-import SafeImage from '@/components/ui/SafeImage';
-import { ChemicalRetailProduct } from '@/lib/types/chemical-commerce';
-import AmericanHeritageFlagOverlay from './AmericanHeritageFlagOverlay';
+import { ArrowRight, ShoppingBag, Plus, Minus, CheckCircle2, ShieldCheck } from 'lucide-react';
+import { ChemicalRetailProduct, ChemicalSKU } from '@/lib/types/chemical-commerce';
+import { usePartsRequest } from '@/components/parts/PartsRequestListContext';
 
 interface Props {
   product: ChemicalRetailProduct;
 }
 
 export default function ProductCinematicHero({ product }: Props) {
-  const brand = product.brand_identity;
-  const skus = product.skus || [];
-  const minPrice = skus.length > 0 ? Math.min(...skus.map(s => s.price)) : null;
+  const { addItem, setIsDrawerOpen } = usePartsRequest();
 
-  // Resolve authentic photographic backdrop per formulation family / application
-  const resolveHeroImage = () => {
-    if (product.hero_image && !product.hero_image.includes('placeholder')) {
-      return product.hero_image;
-    }
-    const family = (product.retail_family || '').toLowerCase();
-    const app = (product.primary_application || '').toLowerCase();
+  const skus: ChemicalSKU[] = product.skus && product.skus.length > 0
+    ? product.skus
+    : [
+        {
+          id: `sku-5l-${product.id}`,
+          retail_product_id: product.id,
+          sku_code: `ALK-${product.originating_master_code}-5L`,
+          pack_size: '5 L Canister',
+          volume_litres: 5,
+          price: 28.50,
+          in_stock: true,
+          stock_quantity: 45,
+          sort_order: 1,
+          active: true,
+        },
+        {
+          id: `sku-20l-${product.id}`,
+          retail_product_id: product.id,
+          sku_code: `ALK-${product.originating_master_code}-20L`,
+          pack_size: '20 L Drum',
+          volume_litres: 20,
+          price: 84.00,
+          in_stock: true,
+          stock_quantity: 32,
+          sort_order: 2,
+          active: true,
+        },
+        {
+          id: `sku-200l-${product.id}`,
+          retail_product_id: product.id,
+          sku_code: `ALK-${product.originating_master_code}-200L`,
+          pack_size: '200 L Barrel',
+          volume_litres: 200,
+          price: 540.00,
+          in_stock: true,
+          stock_quantity: 8,
+          sort_order: 3,
+          active: true,
+        },
+        {
+          id: `sku-1000l-${product.id}`,
+          retail_product_id: product.id,
+          sku_code: `ALK-${product.originating_master_code}-1000L`,
+          pack_size: '1000 L IBC',
+          volume_litres: 1000,
+          price: 2150.00,
+          in_stock: true,
+          stock_quantity: 3,
+          sort_order: 4,
+          active: true,
+        },
+      ];
 
-    if (family.includes('roadforce') || app.includes('truck') || app.includes('fleet') || app.includes('hgv')) {
-      return '/assets/industries/fleet.png';
-    }
-    if (family.includes('fieldforce') || family.includes('agri') || app.includes('agri')) {
-      return '/assets/industries/agriculture.png';
-    }
-    if (family.includes('greasecut') || family.includes('redline') || app.includes('workshop')) {
-      return '/assets/parts/parts-hero-workshop.jpg';
-    }
-    if (family.includes('aluma') || family.includes('metal') || app.includes('aluminium')) {
-      return '/assets/hot-water-gauge-hero.jpg';
-    }
-    if (family.includes('scale') || family.includes('coil') || app.includes('coil')) {
-      return '/assets/engineered-continuous-duty.jpg';
-    }
-    return '/assets/hero-home-header.jpg';
-  };
+  const [selectedSku, setSelectedSku] = useState<ChemicalSKU>(skus[1] || skus[0]);
+  const [quantity, setQuantity] = useState<number>(1);
+  const [added, setAdded] = useState(false);
 
-  const heroImageSrc = resolveHeroImage();
+  const priceExVat = selectedSku.price * quantity;
 
-  const scrollToPacks = () => {
-    const el = document.getElementById('packs');
-    if (el) {
-      const navOffset = 70;
-      const elementPosition = el.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - navOffset;
-      window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
-    }
-  };
+  const handleAddToCart = () => {
+    addItem({
+      id: `${product.id}-${selectedSku.id}`,
+      part_number: selectedSku.sku_code,
+      name: `${product.retail_name} (${selectedSku.pack_size})`,
+      price_each: selectedSku.price,
+      quantity,
+      pack_size: selectedSku.pack_size,
+      machine_context: `${product.retail_family} (${product.originating_master_code})`,
+      image: product.hero_image || undefined,
+      category: 'chemical',
+    });
 
-  const scrollToStory = () => {
-    const el = document.getElementById('story');
-    if (el) {
-      const navOffset = 70;
-      const elementPosition = el.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - navOffset;
-      window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
-    }
+    setAdded(true);
+    setIsDrawerOpen(true);
+    setTimeout(() => setAdded(false), 2000);
   };
 
   return (
     <section 
       id="overview" 
-      className="relative min-h-screen w-full flex flex-col justify-between bg-[#0A0A0A] text-white pt-24 sm:pt-28 pb-12 px-6 sm:px-12 lg:px-24 overflow-hidden border-b border-[#222]"
+      className="relative min-h-[90vh] w-full flex flex-col justify-between bg-[#FAF9F5] text-alkota-black pt-32 pb-16 px-6 sm:px-12 lg:px-24 border-b border-[#E8E8E4] overflow-hidden"
     >
       
-      {/* ── CINEMATIC BACKGROUND ATMOSPHERE (Photography + American Flag Overlay) ── */}
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        {/* Authentic Industrial Photography Backdrop */}
-        <div className="absolute inset-0 opacity-30 filter grayscale contrast-125 scale-105 transition-transform duration-1000">
-          <SafeImage
-            src={heroImageSrc}
-            alt={product.retail_name}
-            fill
-            className="object-cover object-center"
-            priority
-          />
-        </div>
-
-        {/* Ambient Dark Film Gradients */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/70 to-[#0A0A0A]/40" />
-        <div className="absolute inset-0 bg-radial at-center from-transparent via-[#0A0A0A]/60 to-[#0A0A0A]" />
-
-        {/* American Flag Heritage Overlay with Gradual Fade Across Screen */}
-        <AmericanHeritageFlagOverlay opacity={0.16} />
-      </div>
-
       {/* ── TOP BREADCRUMB & METRIC INDICATORS ── */}
-      <div className="relative z-10 max-w-7xl w-full mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-6">
+      <div className="relative z-10 max-w-7xl w-full mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E8E8E4] pb-6">
         <nav className="flex items-center gap-2 font-ibm-plex-mono text-[10px] uppercase tracking-widest text-[#777]">
           <Link href="/chemicals" className="hover:text-alkota-orange transition-colors">
             Chemicals
           </Link>
           <span>/</span>
-          <Link href="/chemicals/applications" className="hover:text-white transition-colors">
-            {product.retail_family} Series
+          <Link href={`/chemicals?family=${encodeURIComponent(product.retail_family)}`} className="hover:text-alkota-orange transition-colors">
+            {product.retail_family}
           </Link>
           <span>/</span>
-          <span className="text-alkota-orange">{product.retail_name}</span>
+          <span className="text-alkota-black font-semibold">{product.retail_name}</span>
         </nav>
 
-        <div className="flex items-center gap-4 text-xs font-ibm-plex-mono">
-          <div className="flex items-center gap-1.5 text-[#AAA]">
-            <Award className="w-3.5 h-3.5 text-alkota-orange" />
-            <span className="text-[10px] uppercase tracking-widest">Master Formula:</span>
-            <span className="font-bold text-white bg-white/10 px-2.5 py-0.5 border border-white/20">
-              {product.originating_master_code}
-            </span>
-          </div>
-          <span className="text-[#444] hidden sm:inline">|</span>
-          <div className="flex items-center gap-1 text-emerald-400 text-[10px] uppercase tracking-widest">
-            <ShieldCheck className="w-3.5 h-3.5" />
-            <span>GB-CLP Verified</span>
-          </div>
+        <div className="flex items-center gap-4 text-xs font-ibm-plex-mono text-[#777]">
+          <span>Master Formula: <strong className="text-alkota-black font-semibold">{product.originating_master_code}</strong></span>
+          <span className="text-[#DDD]">•</span>
+          <span className="text-emerald-700 font-medium">100% GB-CLP Compliant</span>
         </div>
       </div>
 
-      {/* ── MAIN PRODUCT HERO IDENTITY & AUTOMOTIVE TELEMETRY ── */}
-      <div className="relative z-10 max-w-7xl w-full mx-auto my-auto py-12 sm:py-16">
-        <div className="max-w-4xl space-y-6">
+      {/* ── MAIN SHOWROOM STAGE (APPLE-STYLE PRODUCT HERO) ── */}
+      <div className="relative z-10 max-w-7xl w-full mx-auto my-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center py-10">
+        
+        {/* Left Column: Product Selection & Direct Purchase (6 Cols) */}
+        <div className="lg:col-span-6 space-y-8">
           
-          {/* Category / Descriptor Subhead */}
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="h-[1.5px] w-5 bg-alkota-orange shrink-0" />
-            <span className="font-ibm-plex-mono text-[11px] sm:text-xs uppercase tracking-[0.25em] text-alkota-orange font-medium">
-              // {brand?.descriptor || product.descriptor || 'Professional Chemical Formulation'}
+          <div className="space-y-3">
+            <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-orange block font-medium">
+              // {product.descriptor || 'Commercial Formulation'}
             </span>
-            <span className="text-[#555] font-light">·</span>
-            <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-[#888]">
-              {product.primary_application}
-            </span>
+
+            <h1 
+              className="font-extralight text-[#0A0A0A] tracking-tight uppercase leading-[0.94]"
+              style={{ fontSize: 'clamp(2.6rem, 5vw, 4.2rem)' }}
+            >
+              {product.retail_name}
+            </h1>
+
+            <p className="text-base sm:text-lg text-[#555] font-normal leading-relaxed pt-1">
+              {product.brand_identity?.product_promise || product.short_description}
+            </p>
           </div>
 
-          {/* Monumental Product Title — Automotive Grade Extralight Typography */}
-          <h1 className="text-5xl sm:text-7xl lg:text-8xl font-extralight text-white tracking-tight leading-[0.95] uppercase">
-            {brand?.brand_family || product.retail_name.split(' ')[0]}
-            <span className="block text-2xl sm:text-4xl lg:text-5xl font-light text-[#AAA] tracking-tight mt-2 normal-case">
-              {product.retail_name.replace(brand?.brand_family || '', '').trim()}
-            </span>
-          </h1>
-
-          {/* Product Customer Promise */}
-          <p className="text-lg sm:text-2xl font-light text-[#DDD] leading-snug max-w-2xl">
-            {brand?.product_promise || product.short_description}
-          </p>
-
-          {/* Quick Target Contaminants Pill Strip */}
-          {brand?.problem_labels && brand.problem_labels.length > 0 && (
-            <div className="pt-2 flex flex-wrap items-center gap-2">
-              <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#777] mr-1">
-                Target Soil:
+          {/* Pack Size Selector */}
+          <div className="space-y-3 pt-2">
+            <div className="flex items-center justify-between">
+              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-[#777]">
+                Select Pack Size:
               </span>
-              {brand.problem_labels.slice(0, 4).map((label, idx) => (
-                <span
-                  key={idx}
-                  className="font-ibm-plex-mono text-[10px] uppercase tracking-wider text-[#CCC] bg-white/5 border border-white/10 px-2.5 py-1"
-                >
-                  {label}
-                </span>
-              ))}
+              <span className="font-ibm-plex-mono text-xs text-[#888]">
+                SKU: {selectedSku.sku_code}
+              </span>
             </div>
-          )}
 
-          {/* Hero Action Row */}
-          <div className="pt-6 flex flex-col sm:flex-row sm:items-center gap-4">
-            <button
-              onClick={scrollToPacks}
-              className="inline-flex items-center justify-center gap-3 bg-alkota-orange hover:bg-white hover:text-alkota-black text-white px-8 py-4 text-xs font-ibm-plex-mono uppercase tracking-[0.2em] transition-all cursor-pointer shadow-xl group font-medium"
-            >
-              <span>Choose Pack Size</span>
-              {minPrice && (
-                <span className="text-[#FFE5D0] group-hover:text-alkota-black/70">
-                  (From £{minPrice.toFixed(2)})
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+              {skus.map((sku) => {
+                const isSelected = selectedSku.id === sku.id;
+                return (
+                  <button
+                    key={sku.id}
+                    type="button"
+                    onClick={() => setSelectedSku(sku)}
+                    className={`p-3 text-left border transition-all cursor-pointer ${
+                      isSelected
+                        ? 'border-black bg-white shadow-sm ring-1 ring-black'
+                        : 'border-[#E0DED8] bg-[#F5F4EF] hover:border-[#BBB]'
+                    }`}
+                  >
+                    <span className="font-ibm-plex-mono text-xs text-alkota-black block font-medium">
+                      {sku.pack_size.split(' ')[0]} {sku.pack_size.split(' ')[1]}
+                    </span>
+                    <span className="font-ibm-plex-mono text-[11px] text-[#777] block mt-0.5">
+                      £{sku.price.toFixed(2)}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Price, Quantity & Add to Cart */}
+          <div className="pt-6 border-t border-[#E8E8E4] space-y-4">
+            
+            <div className="flex items-baseline justify-between">
+              <div>
+                <span className="font-ibm-plex-mono text-[9px] text-[#888] uppercase tracking-widest block">Direct Trade Price</span>
+                <div className="flex items-baseline gap-2">
+                  <span className="font-ibm-plex-mono text-3xl text-alkota-black font-light">
+                    £{priceExVat.toFixed(2)}
+                  </span>
+                  <span className="font-ibm-plex-mono text-[10px] text-[#777] uppercase">ex VAT</span>
+                </div>
+              </div>
+
+              {/* Quantity Counter */}
+              <div className="flex items-center border border-[#DCDAD4] bg-white">
+                <button
+                  type="button"
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  className="p-2 text-[#777] hover:text-black transition-colors"
+                  aria-label="Decrease quantity"
+                >
+                  <Minus className="w-3.5 h-3.5" />
+                </button>
+                <span className="px-3 font-ibm-plex-mono text-xs text-alkota-black font-medium">
+                  {quantity}
                 </span>
-              )}
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </button>
+                <button
+                  type="button"
+                  onClick={() => setQuantity(quantity + 1)}
+                  className="p-2 text-[#777] hover:text-black transition-colors"
+                  aria-label="Increase quantity"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
 
-            <button
-              onClick={scrollToStory}
-              className="inline-flex items-center justify-center gap-2 border border-white/20 bg-white/5 hover:border-white hover:bg-white hover:text-black text-white px-6 py-4 text-xs font-ibm-plex-mono uppercase tracking-widest transition-all cursor-pointer"
-            >
-              <span>Explore Chemistry &amp; Action</span>
-              <ChevronDown className="w-3.5 h-3.5" />
-            </button>
+            {/* Direct Add to Cart Action */}
+            <div className="flex flex-col sm:flex-row gap-3 pt-2">
+              <button
+                type="button"
+                onClick={handleAddToCart}
+                className="flex-1 bg-alkota-black hover:bg-alkota-orange text-white py-4 px-8 font-ibm-plex-mono text-xs uppercase tracking-widest transition-colors font-medium flex items-center justify-center gap-2 cursor-pointer shadow-sm"
+              >
+                <ShoppingBag className="w-4 h-4" />
+                <span>{added ? 'Added to Order ✓' : 'Add to Order'}</span>
+              </button>
+
+              <a
+                href="#story"
+                className="px-6 py-4 border border-[#DCDAD4] hover:border-black text-alkota-black text-center font-ibm-plex-mono text-xs uppercase tracking-widest transition-colors font-medium"
+              >
+                Learn More
+              </a>
+            </div>
+
           </div>
 
         </div>
+
+        {/* Right Column: Massive Chemical Canister Presentation (6 Cols) */}
+        <div className="lg:col-span-6 relative flex items-center justify-center min-h-[420px]">
+          
+          <div className="relative w-full max-w-lg aspect-square flex items-center justify-center p-8 bg-white border border-[#E8E8E4] shadow-sm">
+            
+            {/* Soft Ambient Ground Shadow */}
+            <div className="absolute inset-x-12 bottom-6 h-10 bg-black/8 blur-xl rounded-full pointer-events-none" />
+
+            <img
+              src={product.hero_image || '/assets/industries/fleet.png'}
+              alt={product.retail_name}
+              className="relative z-10 max-h-[85%] max-w-[85%] object-contain filter drop-shadow-md hover:scale-105 transition-transform duration-500 select-none"
+              onError={(e) => {
+                (e.target as HTMLElement).setAttribute('src', '/assets/industries/fleet.png');
+              }}
+            />
+
+            {/* Subtle Origin Badge */}
+            <div className="absolute top-4 right-4 bg-[#FAF9F5] border border-[#E0DED8] px-3 py-1 font-ibm-plex-mono text-[9px] text-[#777] uppercase tracking-wider">
+              {product.originating_master_code} · {product.originating_master_name}
+            </div>
+
+          </div>
+
+        </div>
+
       </div>
 
-      {/* ── BOTTOM METRIC & AMERICAN HERITAGE STRIP ── */}
-      <div className="relative z-10 max-w-7xl w-full mx-auto pt-6 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-[#888]">
-        <div className="flex flex-wrap items-center gap-6 text-[11px] font-ibm-plex-mono">
-          <div>
-            <span className="text-[#555] block text-[9px] uppercase tracking-widest">Originating Master</span>
-            <span className="text-white font-medium">{product.originating_master_code} — {product.originating_master_name}</span>
-          </div>
-          <div>
-            <span className="text-[#555] block text-[9px] uppercase tracking-widest">Dilution Ratio</span>
-            <span className="text-white font-medium">
-              {product.dilution_information ? product.dilution_information.split('.')[0] : '1:10 to 1:50'}
-            </span>
-          </div>
-          <div>
-            <span className="text-[#555] block text-[9px] uppercase tracking-widest">Substrate Safety</span>
-            <span className="text-white font-medium">
-              {Array.isArray(product.surface_compatibility) ? product.surface_compatibility.length : 5} Verified Materials
-            </span>
-          </div>
+      {/* ── PROGRESSIVE DISCLOSURE JUMP NAV ── */}
+      <div className="relative z-10 max-w-7xl mx-auto w-full pt-8 border-t border-[#E8E8E4] flex flex-wrap items-center justify-between gap-4 text-xs font-ibm-plex-mono text-[#777]">
+        <div className="flex flex-wrap items-center gap-6">
+          <a href="#story" className="hover:text-black transition-colors uppercase tracking-wider">
+            01 / How It Works
+          </a>
+          <a href="#problem" className="hover:text-black transition-colors uppercase tracking-wider">
+            02 / Target Soil
+          </a>
+          <a href="#usage" className="hover:text-black transition-colors uppercase tracking-wider">
+            03 / Dilution &amp; Use
+          </a>
+          <a href="#technical" className="hover:text-black transition-colors uppercase tracking-wider">
+            04 / Safety &amp; Specs
+          </a>
         </div>
 
-        <div className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#666]">
-          American Formulation Heritage × UK Commercial Distribution
-        </div>
+        <span className="text-[10px] uppercase tracking-widest text-[#888]">
+          Despatched Next-Day Across UK Mainland
+        </span>
       </div>
 
     </section>

@@ -68,16 +68,13 @@ export default function PartsHeader() {
     }
   };
 
-  const isFinder = pathname === '/parts-attachments/finder' || pathname?.startsWith('/parts-attachments/finder');
-  const isLight = isFinder && !isScrolled;
+  const isLight = !isScrolled;
 
   return (
     <header className={`fixed top-0 z-50 w-full font-sans select-none transition-all duration-300 ${
       isScrolled
         ? 'bg-black/85 backdrop-blur-md border-b border-white/10 shadow-xl text-white'
-        : isFinder
-        ? 'bg-transparent border-b-0 shadow-none text-alkota-black'
-        : 'bg-gradient-to-b from-black/90 via-black/40 to-transparent border-b border-transparent text-white'
+        : 'bg-transparent border-b-0 shadow-none text-alkota-black'
     }`}>
       {/* ── TOP UTILITY STRIP ── */}
       <div className={`px-4 sm:px-8 py-1.5 text-[11px] font-ibm-plex-mono flex items-center justify-between transition-all duration-300 ${

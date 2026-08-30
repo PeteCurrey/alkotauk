@@ -1,110 +1,162 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Search, Sparkles, ShieldCheck } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { Search, ArrowRight, Sparkles, ShieldCheck, ChevronRight } from 'lucide-react';
 
 export default function ShowroomHero() {
-  return (
-    <section
-      className="relative min-h-screen w-full flex flex-col justify-center overflow-hidden bg-[#0F0F0D] text-white px-6 sm:px-12 lg:px-24 font-normal border-b border-[#1A1A1A]"
-      aria-label="Alkota UK Parts & Attachments Showroom"
-    >
-      {/* ── RESTORED AUTHENTIC WORKSHOP BACKGROUND WITH HIGH-CONTRAST GRADING ── */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none select-none">
-        <img
-          src="/assets/parts/parts-hero-workshop.jpg"
-          alt="Alkota engineering workshop"
-          className="h-full w-full object-cover object-center scale-105"
-          style={{ filter: 'brightness(0.62) contrast(1.15)' }}
-        />
-        {/* Cinematic Gradient Overlays for High-Contrast Text Legibility */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/55 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0F0F0D] via-transparent to-black/60" />
-        <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-alkota-orange/10 rounded-full blur-3xl pointer-events-none" />
-      </div>
+  const router = useRouter();
+  const [searchQuery, setSearchQuery] = useState('');
 
-      {/* ── MAIN HERO IDENTITY & MONUMENTAL TYPOGRAPHY (CLEAN, NO CLUMSING SIDE BOX) ── */}
-      <div className="relative z-10 max-w-7xl w-full mx-auto my-auto py-24 sm:py-32">
-        <div className="max-w-3xl space-y-8">
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/parts-attachments/search?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
+
+  return (
+    <section 
+      className="relative min-h-[88vh] w-full flex flex-col justify-between bg-[#FAF9F5] text-alkota-black pt-32 pb-12 px-6 sm:px-12 lg:px-24 border-b border-[#E8E8E4] overflow-hidden"
+      aria-label="Alkota UK Parts and Attachments Showroom"
+    >
+      {/* Background Subtle Warm Stone Gradient & Architecture Line */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#F5F4EF] via-[#FAF9F5] to-[#FAF9F5] pointer-events-none" />
+      <div className="absolute right-0 top-0 bottom-0 w-1/2 bg-gradient-to-l from-[#F2F0E8]/60 to-transparent pointer-events-none hidden lg:block" />
+
+      {/* Main Grid: Left Typography & Search / Right Dramatic Product Scale */}
+      <div className="relative z-10 max-w-7xl mx-auto w-full my-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center py-10">
+        
+        {/* Left Column: Human, Restrained, Confident Typography (7 Cols) */}
+        <div className="lg:col-span-6 space-y-8">
           
-          {/* Provenance Tag */}
-          <div className="inline-flex items-center gap-3 font-normal">
-            <span className="h-[1.5px] w-6 bg-alkota-orange shrink-0" />
-            <span className="font-ibm-plex-mono text-xs uppercase tracking-[0.25em] text-white/90 font-light">
-              Alkota UK · Genuine OEM Parts &amp; Precision Attachments
+          {/* Section Marker */}
+          <div className="inline-flex items-center gap-3">
+            <span className="h-2 w-2 rounded-full bg-alkota-orange" />
+            <span className="font-ibm-plex-mono text-xs uppercase tracking-[0.25em] text-[#777] font-medium">
+              Parts &amp; Attachments
             </span>
           </div>
 
-          {/* Monumental Headline */}
-          <h1
-            className="font-extralight uppercase tracking-tight text-white leading-[0.92]"
-            style={{ fontSize: 'clamp(3.2rem, 7.5vw, 6.8rem)' }}
+          {/* Monumental Headline (Human Language, No Buzzwords) */}
+          <h1 
+            className="font-extralight text-[#0A0A0A] tracking-tight uppercase leading-[0.92]"
+            style={{ fontSize: 'clamp(3rem, 6.5vw, 5.8rem)' }}
           >
-            Parts that keep<br />
-            <span className="text-alkota-orange">the pressure on.</span>
+            Make your Alkota <br />
+            <span className="text-[#555] font-light">do more.</span>
           </h1>
 
-          {/* Editorial Subtitle */}
-          <p className="text-[#E0E0DC] text-base sm:text-lg lg:text-xl leading-relaxed max-w-xl font-light">
-            Genuine Alkota pump components, Schedule 80 heating coils, Swiss Mosmatic rotary surface cleaners, and heavy-duty Cox Reels. Engineered to endure continuous industrial duty.
+          {/* Simple Supporting Copy */}
+          <p className="text-base sm:text-lg text-[#555] font-normal leading-relaxed max-w-lg">
+            Genuine factory spares, Swiss rotary surface cleaners, and heavy-duty hose reels. Sourced and stocked in the UK for next-day dispatch.
           </p>
 
-          {/* Fast Precision Part / Model Search Bar */}
-          <div className="max-w-xl bg-white/95 backdrop-blur-md p-1.5 shadow-2xl">
-            <form action="/parts-attachments/search" method="GET" className="flex items-center gap-2">
-              <Search className="h-4 w-4 text-[#888] ml-3 shrink-0" />
+          {/* Minimal Search Input */}
+          <form onSubmit={handleSearch} className="max-w-md">
+            <div className="relative flex items-center bg-white border border-[#DCDAD4] hover:border-black focus-within:border-black focus-within:ring-2 focus-within:ring-alkota-orange/20 shadow-sm transition-all">
+              <Search className="w-4 h-4 text-[#888] ml-4 shrink-0" />
               <input
                 type="text"
-                name="q"
-                placeholder="Search part number, pump model (e.g. TS2021), or brand..."
-                className="w-full bg-transparent text-alkota-black text-xs sm:text-sm px-2 py-3 focus:outline-none font-normal"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Part number, machine model, or attachment..."
+                className="w-full bg-transparent text-xs sm:text-sm text-alkota-black px-3 py-3.5 focus:outline-none placeholder:text-[#999] font-normal"
               />
               <button
                 type="submit"
-                className="bg-alkota-orange hover:bg-black text-white px-7 py-3 font-ibm-plex-mono text-[11px] uppercase tracking-widest transition-colors shrink-0 cursor-pointer font-medium"
+                className="bg-alkota-black hover:bg-alkota-orange text-white px-5 py-3.5 font-ibm-plex-mono text-[11px] uppercase tracking-widest transition-colors shrink-0 cursor-pointer font-medium"
               >
-                Search Store
+                Search
               </button>
-            </form>
-          </div>
+            </div>
+          </form>
 
-          {/* Action CTAs */}
-          <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+          {/* Clean Action Links */}
+          <div className="flex flex-wrap items-center gap-6 pt-2 text-xs font-ibm-plex-mono">
             <Link
               href="/parts-attachments/categories"
-              className="inline-flex items-center justify-center gap-3 bg-alkota-orange hover:bg-white hover:text-black text-white px-8 py-4 text-xs font-ibm-plex-mono uppercase tracking-[0.2em] transition-all shadow-xl group font-medium"
+              className="inline-flex items-center gap-2 text-alkota-black hover:text-alkota-orange uppercase tracking-wider font-medium transition-colors group"
             >
-              <span>Explore All Categories</span>
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              <span>Browse 16 Categories</span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform text-alkota-orange" />
             </Link>
+            <span className="text-[#DDD]">•</span>
             <Link
               href="/parts-attachments/finder"
-              className="inline-flex items-center justify-center gap-3 border border-white/30 bg-black/40 backdrop-blur-sm text-white px-7 py-4 text-xs font-ibm-plex-mono uppercase tracking-[0.2em] hover:border-white hover:bg-white hover:text-black transition-all"
+              className="inline-flex items-center gap-2 text-[#666] hover:text-black uppercase tracking-wider transition-colors"
             >
               <Sparkles className="w-3.5 h-3.5 text-alkota-orange" />
-              <span>Interactive Part Finder</span>
+              <span>Parts Finder Tool</span>
             </Link>
-          </div>
-
-          {/* Telemetry Strip */}
-          <div className="pt-6 flex flex-wrap items-center gap-8 font-ibm-plex-mono text-xs text-[#AAA] border-t border-white/10">
-            <div className="flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-alkota-orange" />
-              <span className="text-white font-medium">500+ OEM Spares In Stock</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-              <span>Next-Day UK Mainland Despatch</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              <span>100% Guaranteed Fitment</span>
-            </div>
           </div>
 
         </div>
+
+        {/* Right Column: Massive Hero Product Imagery (6 Cols, 60%+ Visual Area) */}
+        <div className="lg:col-span-6 relative flex items-center justify-center">
+          
+          {/* Subtle Stage Background */}
+          <div className="relative w-full max-w-xl aspect-square flex items-center justify-center p-6">
+            
+            {/* Soft Ambient Radial Shadow */}
+            <div className="absolute inset-x-8 bottom-6 h-12 bg-black/10 blur-2xl rounded-full pointer-events-none" />
+            
+            {/* High-Resolution Hero Attachment Cutout */}
+            <img
+              src="/assets/products/whirl-away-surface-cleaner.png"
+              alt="Mosmatic Stainless Steel Flat Surface Cleaner"
+              className="relative z-10 max-h-[90%] max-w-[90%] object-contain filter drop-shadow-[0_24px_36px_rgba(0,0,0,0.12)] hover:scale-105 transition-transform duration-700 select-none"
+              onError={(e) => {
+                (e.target as HTMLElement).setAttribute('src', '/assets/products/industrial-pump.png');
+              }}
+            />
+
+            {/* Minimalist Floating Product Tag */}
+            <div className="absolute bottom-4 right-4 bg-white/95 backdrop-blur-sm border border-[#E0DED8] px-4 py-2 shadow-lg z-20">
+              <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-alkota-orange block font-semibold">
+                Mosmatic DL-UHD
+              </span>
+              <span className="text-xs font-light text-alkota-black">
+                Dual-Arm Surface Cleaner
+              </span>
+            </div>
+
+          </div>
+
+        </div>
+
       </div>
+
+      {/* Bottom Telemetry & Trust Bar */}
+      <div className="relative z-10 max-w-7xl mx-auto w-full pt-8 border-t border-[#E8E8E4] flex flex-col sm:flex-row sm:items-center justify-between gap-6 text-xs font-ibm-plex-mono text-[#777]">
+        <div className="flex flex-wrap items-center gap-8">
+          <div>
+            <span className="text-[#AAA] block text-[9px] uppercase tracking-widest">Inventory</span>
+            <span className="text-alkota-black font-medium">500+ Spares Stocked in UK</span>
+          </div>
+          <div className="hidden sm:block h-6 w-px bg-[#E0DED8]" />
+          <div>
+            <span className="text-[#AAA] block text-[9px] uppercase tracking-widest">Dispatch</span>
+            <span className="text-alkota-black font-medium">Next-Day UK Mainland Delivery</span>
+          </div>
+          <div className="hidden sm:block h-6 w-px bg-[#E0DED8]" />
+          <div>
+            <span className="text-[#AAA] block text-[9px] uppercase tracking-widest">Compatibility</span>
+            <span className="text-emerald-700 font-medium">100% Guaranteed Fitment</span>
+          </div>
+        </div>
+
+        <Link
+          href="/parts-attachments/enquiry"
+          className="text-[#666] hover:text-black uppercase tracking-wider transition-colors inline-flex items-center gap-1 self-start sm:self-auto"
+        >
+          <span>Need help finding a part? Talk to an engineer</span>
+          <ChevronRight className="w-3.5 h-3.5 text-alkota-orange" />
+        </Link>
+      </div>
+
     </section>
   );
 }

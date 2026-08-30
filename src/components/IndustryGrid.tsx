@@ -103,26 +103,21 @@ export default function IndustryGrid() {
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl w-full">
-        {/* Section Header — Top/Upper-Third Origin */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-10 sm:pb-14">
-          <div>
-            <span className="text-xs uppercase tracking-[0.25em] text-alkota-orange block mb-3 font-light">
-              Real-World Applications
-            </span>
-            <h2 className="font-extralight text-4xl sm:text-5xl lg:text-6xl uppercase tracking-tight text-white leading-none">
-              Built for Your Industry.
-            </h2>
-          </div>
+        {/* Top Line: Eyebrow + Category Tabs */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-4">
+          <span className="text-xs uppercase tracking-[0.25em] text-alkota-orange block font-light">
+            Real-World Applications
+          </span>
 
-          {/* Understated Category Selector — Clean text tabs without boxes */}
-          <div className="flex items-center gap-6 overflow-x-auto pb-2 scrollbar-none font-normal">
+          {/* Understated Category Selector — Clean text tabs following Real-World Applications line */}
+          <div className="flex items-center gap-6 overflow-x-auto pb-1 scrollbar-none font-normal">
             {SECTORS.map((sector) => {
               const isActive = sector.slug === activeSlug;
               return (
                 <button
                   key={sector.slug}
                   onClick={() => setActiveSlug(sector.slug)}
-                  className={`whitespace-nowrap pb-1.5 text-xs uppercase tracking-[0.16em] transition-all cursor-pointer border-b-2 font-normal ${
+                  className={`whitespace-nowrap pb-1 text-xs uppercase tracking-[0.16em] transition-all cursor-pointer border-b-2 font-normal ${
                     isActive
                       ? 'border-alkota-orange text-white'
                       : 'border-transparent text-[#888] hover:text-white'
@@ -133,6 +128,13 @@ export default function IndustryGrid() {
               );
             })}
           </div>
+        </div>
+
+        {/* Section Headline */}
+        <div className="pb-6 sm:pb-10">
+          <h2 className="font-extralight text-4xl sm:text-5xl lg:text-6xl uppercase tracking-tight text-white leading-none">
+            Built for Your Industry.
+          </h2>
         </div>
 
         {/* Sector Information Canvas */}

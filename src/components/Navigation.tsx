@@ -123,7 +123,6 @@ export default function Navigation() {
     { name: 'Bespoke', href: '/bespoke', hasMega: true },
     { name: 'Chemicals', href: '/chemicals', hasMega: true },
     { name: 'Resources', href: '/resources', hasMega: true },
-    { name: 'The Lobby', href: '/lobby', hasMega: true },
     { name: 'Contact', href: '/contact', hasMega: false },
   ];
 
@@ -897,117 +896,6 @@ export default function Navigation() {
                           className="flex items-center justify-between w-full bg-alkota-orange text-white px-4 py-3 font-mono text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-colors no-underline shadow-md font-medium"
                         >
                           <span>Enter The Lobby</span>
-                          <ArrowRight className="h-3.5 w-3.5" />
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* 7. THE LOBBY MEGA MENU */}
-                {activeMenu === 'The Lobby' && (
-                  <div className="grid grid-cols-12 gap-10 items-stretch">
-                    {/* Zone 1: Unboxed Links */}
-                    <div className="col-span-4 border-r border-[#E0DFD8] pr-8">
-                      <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-alkota-orange block mb-4 font-medium">
-                        Seven Knowledge Pillars
-                      </span>
-                      <div className="divide-y divide-[#EAE9E2] border-t border-[#1A1A18]">
-                        {[
-                          { title: 'Good Clean News', desc: 'Industry editorial & commentary', href: '/lobby/good-clean-news' },
-                          { title: 'Knowledge', desc: 'Engineering science & thermodynamics', href: '/lobby/knowledge' },
-                          { title: 'Workshop', desc: 'Maintenance & diagnostics', href: '/lobby/workshop' },
-                          { title: 'Field Notes', desc: 'Site reports & real deployments', href: '/lobby/field-notes' },
-                          { title: 'Industries', desc: 'Sector-specific compliance guides', href: '/lobby/industries' },
-                          { title: 'Trade Desk', desc: 'Calculators & specification tools', href: '/lobby/trade-desk' },
-                          { title: 'Inside Alkota', desc: 'Heritage & engineering philosophy', href: '/lobby/inside-alkota' },
-                        ].map((item) => (
-                          <Link
-                            key={item.href}
-                            href={item.href}
-                            onClick={() => setActiveMenu(null)}
-                            className="group flex items-center justify-between py-2.5 transition-colors no-underline"
-                          >
-                            <div>
-                              <h4 className="text-xs font-normal uppercase tracking-wider text-[#1A1A18] group-hover:text-alkota-orange">
-                                {item.title}
-                              </h4>
-                              <p className="text-[11px] text-[#777] font-normal mt-0.5">
-                                {item.desc}
-                              </p>
-                            </div>
-                            <ArrowRight className="h-3.5 w-3.5 text-alkota-orange opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Zone 2: Featured Visual Showcase */}
-                    <div className="col-span-5 bg-white border border-[#E8E7E0] p-7 flex flex-col justify-between">
-                      <div>
-                        <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-alkota-orange block mb-2 font-medium">
-                          Engineering Platform
-                        </span>
-                        <h4 className="text-2xl font-light tracking-tight text-[#1A1A18] mb-3">
-                          Engineering Teardowns &amp; UK Standards.
-                        </h4>
-                        <p className="text-xs sm:text-sm text-[#666] leading-relaxed font-normal mb-6">
-                          Peer-reviewed technical journalism covering coil metallurgy, Barlow's formula, Environment Agency wash bay drainage laws, and thermodynamic steam comparisons.
-                        </p>
-                      </div>
-
-                      <div className="relative aspect-[16/9] bg-[#FAF9F5] mb-4 border border-[#E8E7E0] overflow-hidden">
-                        <SafeImage
-                          src="/assets/heritage/heritage-factory-craft.png"
-                          alt="The Lobby Engineering Journal"
-                          fill
-                          className="object-cover opacity-80"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                        <span className="absolute bottom-2 left-3 text-[10px] font-mono text-white tracking-wider">
-                          // Issue 01 // Autumn 2026 Edition
-                        </span>
-                      </div>
-
-                      <Link
-                        href="/lobby"
-                        onClick={() => setActiveMenu(null)}
-                        className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-[#1A1A18] hover:text-alkota-orange transition-colors font-medium no-underline"
-                      >
-                        <span>Enter The Lobby Journal</span>
-                        <ArrowRight className="h-3.5 w-3.5 text-alkota-orange" />
-                      </Link>
-                    </div>
-
-                    {/* Zone 3: Interactive Ask The Lobby */}
-                    <div className="col-span-3 bg-[#141412] text-white p-6 border border-[#222] flex flex-col justify-between">
-                      <div>
-                        <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-alkota-orange block mb-2 font-medium">
-                          AI Technical Assistant
-                        </span>
-                        <h3 className="text-xl font-light uppercase tracking-tight text-white mb-2">
-                          Ask The Lobby.
-                        </h3>
-                        <p className="text-xs text-[#AAA] leading-relaxed font-normal mb-6">
-                          Instant, AI-grounded technical answers drawing directly on 60 years of Alkota engineering archives.
-                        </p>
-                      </div>
-
-                      <div className="space-y-2.5">
-                        <Link
-                          href="/lobby#ask-the-lobby"
-                          onClick={() => setActiveMenu(null)}
-                          className="flex items-center justify-between w-full bg-alkota-orange text-white px-4 py-3 font-mono text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-colors no-underline shadow-md font-medium"
-                        >
-                          <span>Ask a Question</span>
-                          <ArrowRight className="h-3.5 w-3.5" />
-                        </Link>
-                        <Link
-                          href="/lobby/trade-desk"
-                          onClick={() => setActiveMenu(null)}
-                          className="flex items-center justify-between w-full border border-white/20 bg-white/5 text-white px-4 py-2.5 font-mono text-xs uppercase tracking-widest hover:border-white hover:bg-white hover:text-black transition-all no-underline font-normal"
-                        >
-                          <span>Trade Desk Calculators</span>
                           <ArrowRight className="h-3.5 w-3.5" />
                         </Link>
                       </div>

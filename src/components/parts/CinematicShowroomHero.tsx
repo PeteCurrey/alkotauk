@@ -2,29 +2,32 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { ArrowRight, ChevronRight, Play } from 'lucide-react';
+import { ArrowRight, ChevronRight } from 'lucide-react';
 import VideoBackground from '@/components/ui/VideoBackground';
 
 export default function CinematicShowroomHero() {
   return (
-    <section 
-      className="relative min-h-screen w-full flex flex-col justify-between text-white overflow-hidden"
+    <section
+      className="relative min-h-screen w-full flex flex-col justify-between text-white overflow-hidden bg-[#0A0A0A]"
       aria-label="Alkota UK Parts & Attachments Cinematic Showroom"
     >
-      <VideoBackground
-        src="/assets/video/alkota-action.mp4"
-        poster="/assets/industrial-steam-washers.jpg"
-        className="absolute inset-0 w-full h-full"
-        overlayClassName="bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/60 to-[#0A0A0A]/25"
-      />
+      {/* Full-bleed looping video — absolute inside this section which is the stacking context */}
+      <div className="absolute inset-0 w-full h-full">
+        <VideoBackground
+          src="/assets/video/alkota-action.mp4"
+          poster="/assets/industrial-steam-washers.jpg"
+          className="w-full h-full"
+          overlayClassName="bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/60 to-[#0A0A0A]/25"
+        />
+      </div>
 
-      {/* Top Spacer for Global Fixed Navigation */}
+      {/* Top spacer — clears fixed global navigation */}
       <div className="pt-32" />
 
-      {/* Main Campaign Narrative: Monumental Typography Anchored to Viewport */}
+      {/* Main Campaign Narrative */}
       <div className="relative z-10 max-w-7xl mx-auto w-full px-6 sm:px-12 lg:px-24 my-auto py-12">
         <div className="max-w-4xl space-y-8">
-          
+
           <div className="space-y-4">
             <div className="inline-flex items-center gap-3">
               <span className="h-2 w-2 rounded-full bg-alkota-orange animate-pulse" />
@@ -33,7 +36,7 @@ export default function CinematicShowroomHero() {
               </span>
             </div>
 
-            <h1 
+            <h1
               className="font-extralight text-white tracking-tight uppercase leading-[0.88] select-none"
               style={{ fontSize: 'clamp(3.5rem, 8.5vw, 7.5rem)' }}
             >
@@ -47,7 +50,6 @@ export default function CinematicShowroomHero() {
             Swiss rotary surface cleaners, heavy-duty hose management, and genuine factory spares. Stocked in the UK for next-day delivery.
           </p>
 
-          {/* Restrained Actions */}
           <div className="pt-4 flex flex-col sm:flex-row sm:items-center gap-5">
             <a
               href="#surface-cleaners"
@@ -69,7 +71,7 @@ export default function CinematicShowroomHero() {
         </div>
       </div>
 
-      {/* Discreet Cinematic Film Strip Footer */}
+      {/* Film-strip footer — brand partners & scroll cue */}
       <div className="relative z-10 border-t border-white/10 px-6 sm:px-12 lg:px-24 py-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs font-ibm-plex-mono text-white/50">
         <div className="flex flex-wrap items-center gap-6">
           <span>OEM Factory Stock</span>

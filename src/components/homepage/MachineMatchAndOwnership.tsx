@@ -70,13 +70,13 @@ export default function MachineMatchAndOwnership() {
             className="h-full w-full object-cover"
             style={{
               objectPosition: '30% 40%',
-              filter: 'brightness(0.42) contrast(1.08) sepia(0.08)'
+              filter: 'brightness(0.62) contrast(1.05) sepia(0.06)'
             }}
           />
           {/* Gentle dark overlay — preserves photographic texture while ensuring readability */}
-          <div className="absolute inset-0 bg-black/35" />
+          <div className="absolute inset-0 bg-black/20" />
           {/* Directional gradient — darker in centre for text legibility, lighter to edges */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0C0C0A]/80 via-transparent to-[#0C0C0A]/60" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0C0C0A]/60 via-transparent to-[#0C0C0A]/40" />
         </div>
 
         <div className="relative z-10 mx-auto max-w-5xl text-center font-normal my-auto">

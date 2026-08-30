@@ -36,6 +36,7 @@ const PILLARS = [
     accent: '#FF6900',
     bg: '#1A1A18',
     text: '#FFFFFF',
+    image: '/assets/hero-home-header.jpg',
   },
   {
     slug: 'knowledge',
@@ -45,6 +46,7 @@ const PILLARS = [
     accent: '#FF6900',
     bg: '#FAFAF8',
     text: '#1A1A18',
+    image: '/assets/hot-water-gauge-hero.jpg',
   },
   {
     slug: 'workshop',
@@ -54,6 +56,7 @@ const PILLARS = [
     accent: '#FF6900',
     bg: '#FAFAF8',
     text: '#1A1A18',
+    image: '/assets/cold-water-control-hero.jpg',
   },
   {
     slug: 'field-notes',
@@ -63,6 +66,7 @@ const PILLARS = [
     accent: '#FF6900',
     bg: '#FAFAF8',
     text: '#1A1A18',
+    image: '/assets/wash-plant/hero-plant-spray.jpg',
   },
   {
     slug: 'industries',
@@ -72,6 +76,7 @@ const PILLARS = [
     accent: '#FF6900',
     bg: '#FAFAF8',
     text: '#1A1A18',
+    image: '/assets/wash-plant/hero-plant-wide.jpg',
   },
   {
     slug: 'trade-desk',
@@ -81,6 +86,7 @@ const PILLARS = [
     accent: '#FF6900',
     bg: '#FAFAF8',
     text: '#1A1A18',
+    image: '/assets/engineered-continuous-duty.jpg',
   },
   {
     slug: 'inside-alkota',
@@ -90,6 +96,7 @@ const PILLARS = [
     accent: '#FF6900',
     bg: '#FAFAF8',
     text: '#1A1A18',
+    image: '/assets/alkota-60-heritage-vintage.jpg',
   },
 ] as const;
 
@@ -352,10 +359,22 @@ export default async function LobbyHubPage() {
             {/* Row 1: Good Clean News spans full width */}
             <Link
               href={`/lobby/${PILLARS[0].slug}`}
-              className="group flex flex-col sm:flex-row sm:items-center justify-between gap-6 bg-[#1A1A18] hover:bg-[#FF6900]/10 transition-colors px-8 py-8 no-underline border border-transparent hover:border-[#FF6900]/30"
+              className="group relative flex flex-col sm:flex-row sm:items-center justify-between gap-6 bg-[#141416] hover:bg-[#1A1A1E] transition-all px-8 py-8 no-underline border border-transparent hover:border-[#FF6900]/40 overflow-hidden"
             >
-              <div className="flex items-center gap-6">
-                <div className="h-14 w-14 bg-[#FF6900] flex items-center justify-center shrink-0">
+              {/* Background image + dark overlay with reveal on hover */}
+              <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+                <Image
+                  src={PILLARS[0].image}
+                  alt={PILLARS[0].name}
+                  fill
+                  className="object-cover object-center transition-all duration-700 ease-out group-hover:scale-105 opacity-20 group-hover:opacity-45"
+                  sizes="100vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#141416] via-[#141416]/90 to-[#141416]/70 group-hover:via-[#141416]/75 transition-colors duration-500" />
+              </div>
+
+              <div className="relative z-10 flex items-center gap-6">
+                <div className="h-14 w-14 bg-[#FF6900] flex items-center justify-center shrink-0 shadow-lg">
                   <BookOpen className="h-7 w-7 text-white" />
                 </div>
                 <div>
@@ -365,12 +384,12 @@ export default async function LobbyHubPage() {
                   <h3 className="font-extralight text-2xl sm:text-3xl uppercase tracking-tight text-white leading-none mb-2">
                     Good Clean News
                   </h3>
-                  <p className="text-sm text-white/60 font-normal max-w-md">
+                  <p className="text-sm text-white/70 font-normal max-w-md drop-shadow-sm">
                     Industry insight, professional news, and Alkota editorial comment. The pulse of professional cleaning.
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-[#FF6900] shrink-0 group-hover:gap-3 transition-all">
+              <div className="relative z-10 flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-[#FF6900] shrink-0 group-hover:gap-3 transition-all">
                 <span>Enter</span>
                 <ArrowRight className="h-4 w-4" />
               </div>
@@ -384,25 +403,44 @@ export default async function LobbyHubPage() {
                   <Link
                     key={pillar.slug}
                     href={`/lobby/${pillar.slug}`}
-                    className="group flex flex-col bg-[#1A1A18] hover:bg-[#222] transition-colors px-6 py-7 no-underline"
+                    className="group relative flex flex-col justify-between overflow-hidden bg-[#141416] hover:bg-[#1A1A1E] transition-all px-6 py-7 no-underline min-h-[220px] sm:min-h-[250px] border border-transparent hover:border-[#FF6900]/40"
                   >
-                    <div className="flex items-start justify-between mb-5">
-                      <div className="h-10 w-10 border border-white/20 group-hover:border-[#FF6900]/50 flex items-center justify-center transition-colors">
-                        <Icon className="h-5 w-5 text-white/60 group-hover:text-[#FF6900] transition-colors" />
+                    {/* Background image + dark overlay with reveal on hover */}
+                    <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+                      <Image
+                        src={pillar.image}
+                        alt={pillar.name}
+                        fill
+                        className="object-cover object-center transition-all duration-700 ease-out group-hover:scale-110 opacity-20 group-hover:opacity-55"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#141416] via-[#141416]/85 to-[#141416]/60 group-hover:via-[#141416]/70 group-hover:to-[#141416]/35 transition-colors duration-500" />
+                    </div>
+
+                    {/* Top Row: Icon + Number */}
+                    <div className="relative z-10 flex items-start justify-between mb-4">
+                      <div className="h-10 w-10 border border-white/20 bg-black/40 backdrop-blur-xs group-hover:border-[#FF6900]/60 group-hover:bg-[#FF6900]/15 flex items-center justify-center transition-all">
+                        <Icon className="h-5 w-5 text-white/70 group-hover:text-[#FF6900] transition-colors" />
                       </div>
-                      <span className="text-[10px] font-mono text-white/30 group-hover:text-[#FF6900] transition-colors">
+                      <span className="text-[10px] font-mono text-white/40 group-hover:text-[#FF6900] transition-colors bg-black/40 px-2 py-0.5 backdrop-blur-xs">
                         0{idx + 2}
                       </span>
                     </div>
-                    <h3 className="font-light text-base sm:text-lg uppercase tracking-tight text-white group-hover:text-[#FF6900] transition-colors leading-none mb-2">
-                      {pillar.name}
-                    </h3>
-                    <p className="text-[12px] text-white/50 font-normal leading-relaxed flex-1">
-                      {pillar.strapline}
-                    </p>
-                    <div className="mt-5 flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-widest text-white/30 group-hover:text-[#FF6900] transition-colors">
-                      <span>Browse</span>
-                      <ChevronRight className="h-3 w-3 group-hover:translate-x-0.5 transition-transform" />
+
+                    {/* Middle Content */}
+                    <div className="relative z-10 flex-1 flex flex-col justify-center my-2">
+                      <h3 className="font-light text-base sm:text-lg uppercase tracking-tight text-white group-hover:text-[#FF6900] transition-colors leading-none mb-2">
+                        {pillar.name}
+                      </h3>
+                      <p className="text-[12px] text-white/60 group-hover:text-white/85 font-normal leading-relaxed drop-shadow-sm">
+                        {pillar.strapline}
+                      </p>
+                    </div>
+
+                    {/* Bottom CTA */}
+                    <div className="relative z-10 mt-4 flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-widest text-white/40 group-hover:text-[#FF6900] transition-colors">
+                      <span>Browse Pillar</span>
+                      <ChevronRight className="h-3 w-3 group-hover:translate-x-1 transition-transform" />
                     </div>
                   </Link>
                 );

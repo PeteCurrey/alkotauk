@@ -159,7 +159,7 @@ export default function AskTheLobbyHero() {
       <div className="relative z-10 w-full px-4 sm:px-8 pb-10 sm:pb-14 pt-4">
         <div className="mx-auto max-w-3xl">
           {/* WHITE PANEL */}
-          <div className="bg-white text-[#1A1A18] shadow-2xl border border-black/10 p-5 sm:p-7 transition-all">
+          <div className="bg-white text-[#1A1A18] shadow-2xl border border-black/10 rounded-xl p-5 sm:p-7 transition-all overflow-hidden">
             {/* Input Form Row */}
             <form onSubmit={e => handleSubmit(e)}>
               <div className="flex items-center gap-3.5 mb-4">
@@ -212,7 +212,7 @@ export default function AskTheLobbyHero() {
                   <button
                     type="submit"
                     disabled={loading || !question.trim()}
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 bg-neutral-100 hover:bg-[#FF6900] hover:text-white text-neutral-800 px-4 py-2 text-[11px] sm:text-xs uppercase tracking-wider font-medium transition-all cursor-pointer border border-neutral-200 hover:border-[#FF6900] disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 bg-neutral-100 hover:bg-[#FF6900] hover:text-white text-neutral-800 px-4 py-2 text-[11px] sm:text-xs uppercase tracking-wider font-medium rounded-md transition-all cursor-pointer border border-neutral-200 hover:border-[#FF6900] disabled:opacity-40 disabled:cursor-not-allowed"
                   >
                     {loading ? (
                       <span className="inline-block h-3.5 w-3.5 border-2 border-current border-t-transparent rounded-full animate-spin" />
@@ -229,7 +229,7 @@ export default function AskTheLobbyHero() {
 
             {/* Loading State */}
             {loading && (
-              <div className="mt-5 py-6 text-center border-t border-neutral-100 bg-neutral-50 p-4">
+              <div className="mt-5 py-6 text-center border-t border-neutral-100 bg-neutral-50 rounded-lg p-4">
                 <div className="inline-flex items-center gap-3 text-xs text-neutral-600 font-mono">
                   <span className="h-2 w-2 rounded-full bg-[#FF6900] animate-ping" />
                   <span>Searching Lobby intelligence, British Standards &amp; Alkota technical archives...</span>
@@ -239,7 +239,7 @@ export default function AskTheLobbyHero() {
 
             {/* Error Message */}
             {error && (
-              <div className="mt-5 p-3.5 bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2.5">
+              <div className="mt-5 p-3.5 bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2.5 rounded-lg">
                 <AlertCircle className="h-4 w-4 text-red-500 shrink-0" />
                 <span>{error}</span>
               </div>
@@ -254,7 +254,7 @@ export default function AskTheLobbyHero() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 8 }}
                   transition={{ duration: 0.25 }}
-                  className="mt-5 pt-5 border-t border-neutral-200 bg-neutral-50/70 p-5"
+                  className="mt-5 pt-5 border-t border-neutral-200 bg-neutral-50/70 rounded-lg p-5"
                 >
                   {/* Answer Toolbar */}
                   <div className="flex items-center justify-between gap-4 mb-3 pb-2 border-b border-neutral-200/80">
@@ -345,7 +345,7 @@ export default function AskTheLobbyHero() {
                   key={idx}
                   type="button"
                   onClick={() => handleChipClick(chip.query)}
-                  className="text-xs bg-black/50 hover:bg-black/80 text-white/80 hover:text-white px-3 py-1.5 border border-white/20 hover:border-white/50 transition-all cursor-pointer font-normal backdrop-blur-sm"
+                  className="text-xs bg-black/50 hover:bg-black/80 text-white/80 hover:text-white px-3 py-1.5 border border-white/20 hover:border-white/50 rounded-full transition-all cursor-pointer font-normal backdrop-blur-sm"
                 >
                   {chip.label}
                 </button>

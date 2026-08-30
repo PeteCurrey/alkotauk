@@ -415,130 +415,128 @@ export default function WashPlantPage() {
         </div>
       </section>
 
-      {/* ── CHAPTER 2: CHOOSE THE ARCHITECTURE AROUND THE PROCESS (LIGHT) ──── */}
-      <section id="architectures" className="py-24 px-6 sm:px-12 bg-alkota-bg border-b border-alkota-iron">
+      <section id="architectures" className="py-28 px-6 sm:px-12 bg-[#F8F7F4] border-b border-alkota-iron/40">
         <div className="mx-auto max-w-7xl">
-          <div className="mb-12 max-w-3xl">
-            <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.35em] text-alkota-orange block mb-2">
+          <div className="mb-16 max-w-3xl">
+            <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.35em] text-alkota-orange block mb-4">
               WASH SYSTEM ARCHITECTURES
             </span>
-            <h2 className="font-extralight text-4xl sm:text-6xl uppercase tracking-tight text-alkota-black">
+            <h2 className="font-extralight text-4xl sm:text-6xl uppercase tracking-tight text-alkota-black leading-none">
               One cleaning problem does not have one wash plant solution.
             </h2>
-            <p className="text-xs sm:text-sm text-alkota-silver uppercase tracking-widest mt-2">
-              Select an architecture family to inspect operational principles, mechanical scope, and verified capability ratings.
-            </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            {/* Left Selector List */}
-            <div className="lg:col-span-5 space-y-1.5">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+            {/* Left: Numbered Architecture List — clean typographic selector */}
+            <div className="lg:col-span-5 space-y-0 divide-y divide-alkota-iron/30">
               {ARCHITECTURES.map((arch, idx) => {
                 const isSelected = idx === selectedArchIdx;
                 return (
                   <button
                     key={arch.id}
                     onClick={() => setSelectedArchIdx(idx)}
-                    className={`w-full text-left p-4 transition-all flex items-center justify-between border ${
-                      isSelected
-                        ? 'bg-alkota-black text-white border-alkota-black shadow-md'
-                        : 'bg-white text-alkota-black border-alkota-iron hover:border-alkota-orange'
+                    className={`w-full text-left py-5 flex items-start gap-5 group transition-all ${
+                      isSelected ? '' : 'opacity-50 hover:opacity-80'
                     }`}
                   >
-                    <div>
-                      <div className="flex items-center gap-2 mb-1">
-                        <WashPlantCapabilityBadge label={arch.badge} />
-                      </div>
-                      <h4 className="text-sm uppercase tracking-tight font-medium">
+                    <span className={`font-extralight text-3xl leading-none tabular-nums shrink-0 transition-colors ${
+                      isSelected ? 'text-alkota-orange' : 'text-alkota-iron'
+                    }`}>
+                      {String(idx + 1).padStart(2, '0')}
+                    </span>
+                    <div className="pt-1">
+                      <h4 className={`text-sm uppercase tracking-tight font-normal leading-snug transition-colors ${
+                        isSelected ? 'text-alkota-black' : 'text-alkota-silver group-hover:text-alkota-black'
+                      }`}>
                         {arch.name}
                       </h4>
+                      <span className={`text-[10px] font-ibm-plex-mono uppercase tracking-widest mt-1 block transition-colors ${
+                        isSelected ? 'text-alkota-orange' : 'text-alkota-iron'
+                      }`}>
+                        {arch.badge}
+                      </span>
                     </div>
-                    <ChevronRight className={`h-4 w-4 transition-transform ${
-                      isSelected ? 'text-alkota-orange translate-x-1' : 'text-alkota-silver'
-                    }`} />
                   </button>
                 );
               })}
             </div>
 
-            {/* Right Architecture Detail Panel */}
-            <div className="lg:col-span-7 bg-white border border-alkota-iron p-8 sm:p-10 shadow-sm flex flex-col justify-between min-h-[580px]">
-              <div>
-                <div className="flex items-center justify-between pb-4 border-b border-alkota-iron/60 mb-6">
-                  <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-orange">
-                    SPECIFICATION PROFILE
-                  </span>
-                  <WashPlantCapabilityBadge label={selectedArch.badge} />
-                </div>
+            {/* Right: Open Architecture Detail — no card, just structured editorial prose */}
+            <div className="lg:col-span-7">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={selectedArch.id}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <div className="mb-8 pb-8 border-b border-alkota-iron/30">
+                    <h3 className="font-extralight text-3xl sm:text-4xl uppercase tracking-tight text-alkota-black mb-3 leading-tight">
+                      {selectedArch.name}
+                    </h3>
+                    <p className="text-base text-alkota-black font-normal leading-relaxed">
+                      {selectedArch.headline}
+                    </p>
+                  </div>
 
-                <h3 className="font-extralight text-2xl sm:text-3xl uppercase tracking-tight text-alkota-black mb-2">
-                  {selectedArch.name}
-                </h3>
-                <p className="text-sm text-alkota-black font-normal leading-snug mb-6">
-                  {selectedArch.headline}
-                </p>
+                  {/* Structured detail rows — no boxes, just spaced type */}
+                  <div className="space-y-6 mb-10">
+                    {[
+                      { label: 'Best Suited To', value: selectedArch.bestSuitedTo },
+                      { label: 'Cleaning Challenge', value: selectedArch.cleaningChallenge },
+                      { label: 'Operating Principle', value: selectedArch.operatingPrinciple },
+                      { label: 'Potential Integration', value: selectedArch.potentialIntegration },
+                    ].map(({ label, value }) => (
+                      <div key={label} className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-6">
+                        <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.3em] text-alkota-orange sm:pt-0.5 shrink-0">
+                          {label}
+                        </span>
+                        <p className="sm:col-span-2 text-sm text-alkota-silver leading-relaxed">
+                          {value}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
 
-                {/* Structured Engineering Scope Matrix */}
-                <div className="space-y-4 mb-8 bg-alkota-bg p-5 border border-alkota-iron/60 text-xs">
-                  <div>
-                    <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-alkota-silver block mb-1">
-                      Best Suited To:
+                  {/* Core mechanical elements — clean list, no icons */}
+                  <div className="mb-10">
+                    <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.3em] text-alkota-orange block mb-4">
+                      Core Mechanical &amp; Hydraulic Elements
                     </span>
-                    <p className="text-alkota-black font-medium">{selectedArch.bestSuitedTo}</p>
-                  </div>
-                  <div>
-                    <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-alkota-silver block mb-1">
-                      Cleaning Challenge:
-                    </span>
-                    <p className="text-alkota-silver">{selectedArch.cleaningChallenge}</p>
-                  </div>
-                  <div>
-                    <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-alkota-silver block mb-1">
-                      Operating Principle:
-                    </span>
-                    <p className="text-alkota-silver">{selectedArch.operatingPrinciple}</p>
-                  </div>
-                  <div>
-                    <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-alkota-silver block mb-1">
-                      Potential Integration:
-                    </span>
-                    <p className="text-alkota-silver">{selectedArch.potentialIntegration}</p>
-                  </div>
-                </div>
-
-                {/* Core Mechanical Specs */}
-                <div className="space-y-2 mb-8">
-                  <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-alkota-orange block mb-2">
-                    Core Mechanical & Hydraulic Elements:
-                  </span>
-                  {selectedArch.keySpecs.map((spec, sIdx) => (
-                    <div key={sIdx} className="flex items-center gap-2.5 text-xs text-alkota-black uppercase tracking-wide">
-                      <CheckCircle2 className="h-3.5 w-3.5 text-alkota-orange shrink-0" />
-                      <span>{spec}</span>
+                    <div className="space-y-3">
+                      {selectedArch.keySpecs.map((spec, sIdx) => (
+                        <div key={sIdx} className="flex items-start gap-4 text-sm text-alkota-black">
+                          <span className="text-alkota-orange font-light shrink-0 tabular-nums">{String(sIdx + 1).padStart(2, '0')}</span>
+                          <span className="leading-snug">{spec}</span>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
-              </div>
+                  </div>
 
-              <div className="pt-6 border-t border-alkota-iron/60 flex flex-wrap items-center justify-between gap-4">
-                <Link
-                  href={`/contact?enquiry=wash-plant-architecture&type=${selectedArch.id}`}
-                  className="inline-flex items-center gap-2 text-xs font-ibm-plex-mono uppercase tracking-widest text-alkota-black hover:text-alkota-orange transition-colors"
-                >
-                  <span>Discuss This Application →</span>
-                </Link>
-                <Link
-                  href="/wash-plant/architect"
-                  className="inline-flex items-center gap-2 bg-alkota-orange text-white px-6 py-3 text-xs uppercase tracking-widest hover:bg-alkota-black transition-colors"
-                >
-                  <span>Scope in Architect</span>
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </Link>
-              </div>
+                  {/* CTAs — clean text links */}
+                  <div className="flex flex-wrap items-center gap-6 pt-8 border-t border-alkota-iron/30">
+                    <Link
+                      href="/wash-plant/architect"
+                      className="inline-flex items-center gap-3 bg-alkota-black text-white px-8 py-4 text-xs uppercase tracking-[0.2em] hover:bg-alkota-orange transition-colors"
+                    >
+                      <span>Scope in Architect</span>
+                      <ArrowRight className="h-3.5 w-3.5" />
+                    </Link>
+                    <Link
+                      href={`/contact?enquiry=wash-plant-architecture&type=${selectedArch.id}`}
+                      className="text-xs font-ibm-plex-mono uppercase tracking-widest text-alkota-silver hover:text-alkota-orange transition-colors"
+                    >
+                      Discuss This Application →
+                    </Link>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
             </div>
           </div>
         </div>
       </section>
+
 
       {/* ── CHAPTER 3: ANATOMY OF AN INDUSTRIAL WASH PLANT (SIGNATURE DARK) ── */}
       <section className="py-24 px-6 sm:px-12 bg-[#0A0A0A] border-b border-[#222]">
@@ -548,26 +546,26 @@ export default function WashPlantPage() {
       </section>
 
       {/* ── CHAPTER 4: START WITH THE PROCESS (WASH PLANT ARCHITECT INTRO) ─── */}
-      <section className="py-20 px-6 sm:px-12 bg-white border-b border-alkota-iron">
+      <section className="py-28 px-6 sm:px-12 bg-[#0D0D0D] text-white border-b border-[#1A1A1A]">
         <div className="mx-auto max-w-7xl">
-          <div className="grid grid-cols-1 lg:grid-cols-12 bg-[#121212] text-white overflow-hidden shadow-2xl">
-            <div className="lg:col-span-7 p-8 sm:p-14 flex flex-col justify-between">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+            <div className="lg:col-span-6 space-y-8">
               <div>
-                <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.35em] text-alkota-orange block mb-3">
+                <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.35em] text-alkota-orange block mb-5">
                   WASH PLANT ARCHITECT
                 </span>
-                <h2 className="font-extralight text-4xl sm:text-5xl uppercase tracking-tight text-white mb-4 leading-tight">
+                <h2 className="font-extralight text-4xl sm:text-5xl lg:text-6xl uppercase tracking-tight text-white mb-6 leading-none">
                   Start with the process.
                 </h2>
-                <p className="text-sm text-alkota-steel leading-relaxed mb-6">
+                <p className="text-sm text-[#aaa] leading-relaxed mb-4">
                   Industrial wash plants are engineered capital projects. The Wash Plant Architect captures the primary engineering inputs needed to understand your application before a site survey or concept design.
                 </p>
-                <p className="text-xs text-[#888] leading-relaxed mb-8">
+                <p className="text-xs text-[#666] leading-relaxed">
                   Structure your asset dimensions, throughput rates, contamination profile, site constraints, and water strategy into an actionable project brief. No premature sales pressure; only structured engineering definition.
                 </p>
               </div>
 
-              <div className="space-y-4 pt-6 border-t border-white/10">
+              <div className="pt-4 space-y-4 border-t border-white/10">
                 <div className="flex flex-wrap items-center gap-4">
                   <Link
                     href="/wash-plant/architect"
@@ -578,58 +576,40 @@ export default function WashPlantPage() {
                   </Link>
                   <Link
                     href="/contact?enquiry=wash-plant-site-survey"
-                    className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-alkota-silver hover:text-white transition-colors px-4 py-4 border border-white/20 hover:border-white"
+                    className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-[#888] hover:text-white transition-colors"
                   >
-                    <span>Request a Site Survey</span>
+                    <span>Request a Site Survey →</span>
                   </Link>
                 </div>
-                <span className="block font-ibm-plex-mono text-[9px] text-[#666] uppercase tracking-widest">
-                  Generates downloadable project brief & routes directly to Alkota engineering
+                <span className="block font-ibm-plex-mono text-[9px] text-[#555] uppercase tracking-widest">
+                  Generates downloadable project brief &amp; routes directly to Alkota engineering
                 </span>
               </div>
             </div>
 
-            <div className="lg:col-span-5 bg-[#181818] p-8 sm:p-12 border-t lg:border-t-0 lg:border-l border-white/10 flex flex-col justify-center">
-              <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.25em] text-alkota-orange block mb-6">
-                9-STEP SCOPING FRAMEWORK
+            {/* 9-Step Framework — open numbered editorial grid, no row boxes */}
+            <div className="lg:col-span-6">
+              <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.3em] text-alkota-orange block mb-8">
+                9-Step Scoping Framework
               </span>
-              <div className="space-y-2 font-ibm-plex-mono text-xs text-[#aaa]">
-                <div className="flex items-center justify-between p-2.5 bg-[#101010] border border-[#222]">
-                  <span>01. ASSET PROFILE</span>
-                  <span className="text-alkota-orange">Vehicles, Plant, Mats</span>
-                </div>
-                <div className="flex items-center justify-between p-2.5 bg-[#101010] border border-[#222]">
-                  <span>02. ENVELOPE & CLEARANCES</span>
-                  <span className="text-[#666]">Dimensions, No-Spray</span>
-                </div>
-                <div className="flex items-center justify-between p-2.5 bg-[#101010] border border-[#222]">
-                  <span>03. THROUGHPUT DEMAND</span>
-                  <span className="text-alkota-orange">Units/hr, Shift Windows</span>
-                </div>
-                <div className="flex items-center justify-between p-2.5 bg-[#101010] border border-[#222]">
-                  <span>04. CONTAMINATION</span>
-                  <span className="text-[#666]">Mud, Bitumen, Slurry</span>
-                </div>
-                <div className="flex items-center justify-between p-2.5 bg-[#101010] border border-[#222]">
-                  <span>05. AUTOMATION STRATEGY</span>
-                  <span className="text-alkota-orange">Manual vs Automated</span>
-                </div>
-                <div className="flex items-center justify-between p-2.5 bg-[#101010] border border-[#222]">
-                  <span>06. WATER & EFFLUENT</span>
-                  <span className="text-[#666]">Mains, Closed-Loop</span>
-                </div>
-                <div className="flex items-center justify-between p-2.5 bg-[#101010] border border-[#222]">
-                  <span>07. SITE & CIVILS</span>
-                  <span className="text-[#666]">Footprint, Power, Trenches</span>
-                </div>
-                <div className="flex items-center justify-between p-2.5 bg-[#101010] border border-[#222]">
-                  <span>08. PROJECT STAGE</span>
-                  <span className="text-alkota-orange">Budget, Feasibility, Tender</span>
-                </div>
-                <div className="flex items-center justify-between p-2.5 bg-[#101010] border border-[#222]">
-                  <span>09. LIFECYCLE PPM</span>
-                  <span className="text-[#666]">Spares, SLA, Maintenance</span>
-                </div>
+              <div className="grid grid-cols-3 gap-x-8 gap-y-7">
+                {[
+                  { n: '01', title: 'Asset Profile', sub: 'Vehicles, Plant, Mats' },
+                  { n: '02', title: 'Envelope', sub: 'Dimensions, No-Spray' },
+                  { n: '03', title: 'Throughput', sub: 'Units/hr, Shift Windows' },
+                  { n: '04', title: 'Contamination', sub: 'Mud, Bitumen, Slurry' },
+                  { n: '05', title: 'Automation', sub: 'Manual vs Automated' },
+                  { n: '06', title: 'Water & Effluent', sub: 'Mains, Closed-Loop' },
+                  { n: '07', title: 'Site & Civils', sub: 'Footprint, Power' },
+                  { n: '08', title: 'Project Stage', sub: 'Budget, Feasibility' },
+                  { n: '09', title: 'Lifecycle PPM', sub: 'Spares, SLA' },
+                ].map(({ n, title, sub }) => (
+                  <div key={n}>
+                    <span className="font-extralight text-2xl text-alkota-orange leading-none block mb-1">{n}</span>
+                    <span className="font-ibm-plex-mono text-[10px] uppercase tracking-wide text-white block leading-snug">{title}</span>
+                    <span className="font-ibm-plex-mono text-[9px] text-[#666] block mt-0.5">{sub}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -637,92 +617,80 @@ export default function WashPlantPage() {
       </section>
 
       {/* ── CHAPTER 5: CONTROLS & AUTOMATION (DARK / INDUSTRIAL CONTROLS) ──── */}
-      <section className="py-24 px-6 sm:px-12 bg-[#101010] text-white border-b border-[#222]">
+      <section className="py-28 px-6 sm:px-12 bg-white border-b border-alkota-iron/40">
         <div className="mx-auto max-w-7xl">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start mb-16">
-            <div className="lg:col-span-6 space-y-6">
-              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.35em] text-alkota-orange block">
-                CONTROLS & AUTOMATION PHILOSOPHY
-              </span>
-              <h2 className="font-extralight text-4xl sm:text-5xl uppercase tracking-tight text-white leading-tight">
-                Automate what creates value.
-              </h2>
-              <p className="text-sm text-alkota-steel leading-relaxed">
-                Modern industrial wash plants operate as integrated process control systems. We design electrical and automation architectures utilizing industrial PLCs, variable speed drives, optical profiling sensors, and safety interlocks.
-              </p>
-              <p className="text-sm text-alkota-steel leading-relaxed">
-                Where specified, wash systems are delivered <strong className="text-white font-normal">remote monitoring capable</strong> and <strong className="text-white font-normal">data-ready</strong> — structured to accommodate telemetry for operating hours, cycle counters, filter differential pressures, and predictive maintenance alerts.
-              </p>
-
-              {/* Automation Spectrum */}
-              <div className="pt-4 space-y-2">
-                <span className="font-ibm-plex-mono text-[10px] text-[#777] uppercase tracking-widest block">
-                  The Automation Spectrum:
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+            <div className="lg:col-span-5 space-y-8">
+              <div>
+                <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.35em] text-alkota-orange block mb-5">
+                  CONTROLS &amp; AUTOMATION PHILOSOPHY
                 </span>
-                <div className="grid grid-cols-5 gap-1 font-ibm-plex-mono text-[9px] uppercase tracking-wider text-center">
-                  <div className="p-2 bg-[#181818] border border-[#252525] text-white">Manual</div>
-                  <div className="p-2 bg-[#181818] border border-[#252525] text-white">Assisted</div>
-                  <div className="p-2 bg-[#181818] border border-[#252525] text-alkota-orange font-medium">Semi-Auto</div>
-                  <div className="p-2 bg-[#181818] border border-[#252525] text-alkota-orange font-medium">Automatic</div>
-                  <div className="p-2 bg-[#181818] border border-[#252525] text-white">Integrated</div>
+                <h2 className="font-extralight text-4xl sm:text-5xl lg:text-6xl uppercase tracking-tight text-alkota-black leading-none mb-6">
+                  Automate what creates value.
+                </h2>
+                <p className="text-sm text-alkota-silver leading-relaxed mb-4">
+                  Modern industrial wash plants operate as integrated process control systems. We design electrical and automation architectures utilizing industrial PLCs, variable speed drives, optical profiling sensors, and safety interlocks.
+                </p>
+                <p className="text-sm text-alkota-silver leading-relaxed">
+                  Where specified, wash systems are delivered <strong className="text-alkota-black font-normal">remote monitoring capable</strong> and <strong className="text-alkota-black font-normal">data-ready</strong> — structured to accommodate telemetry for operating hours, cycle counters, filter differential pressures, and predictive maintenance alerts.
+                </p>
+              </div>
+
+              {/* Automation Spectrum — gradient bar, no boxes */}
+              <div className="pt-4 border-t border-alkota-iron/30">
+                <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.3em] text-alkota-orange block mb-3">
+                  The Automation Spectrum
+                </span>
+                <div className="relative h-1.5 rounded-full bg-gradient-to-r from-alkota-iron/40 via-alkota-orange to-alkota-orange mb-3" />
+                <div className="flex justify-between font-ibm-plex-mono text-[9px] uppercase tracking-wide text-alkota-silver">
+                  {['Manual', 'Assisted', 'Semi-Auto', 'Automatic', 'Integrated'].map((label) => (
+                    <span key={label}>{label}</span>
+                  ))}
                 </div>
               </div>
             </div>
 
-            <div className="lg:col-span-6 space-y-6">
-              {/* Illustrative Control Interface Preview */}
-              <div className="bg-[#161616] border border-[#2A2A2A] p-6 shadow-xl">
-                <div className="flex items-center justify-between pb-3 border-b border-[#2A2A2A] mb-4">
-                  <span className="font-ibm-plex-mono text-[10px] text-alkota-orange uppercase tracking-widest">
-                    ILLUSTRATIVE CONTROL INTERFACE
-                  </span>
-                  <span className="font-ibm-plex-mono text-[9px] bg-[#222] text-[#888] px-2 py-0.5 uppercase">
-                    DATA-READY
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 font-ibm-plex-mono text-xs text-white mb-4">
-                  <div className="p-3 bg-[#101010] border border-[#222]">
-                    <span className="text-[9px] text-[#777] block">PUMP STATUS</span>
-                    <span className="text-alkota-orange font-medium">RUNNING / 160 BAR</span>
-                  </div>
-                  <div className="p-3 bg-[#101010] border border-[#222]">
-                    <span className="text-[9px] text-[#777] block">WATER TEMP</span>
-                    <span className="text-white font-medium">85°C (THERMAL)</span>
-                  </div>
-                  <div className="p-3 bg-[#101010] border border-[#222]">
-                    <span className="text-[9px] text-[#777] block">SAND FILTER</span>
-                    <span className="text-green-400 font-medium">ΔP NORMAL (0.4 BAR)</span>
-                  </div>
-                  <div className="p-3 bg-[#101010] border border-[#222]">
-                    <span className="text-[9px] text-[#777] block">RECLAIM LEVEL</span>
-                    <span className="text-blue-400 font-medium">82% (16,400 L)</span>
-                  </div>
-                  <div className="p-3 bg-[#101010] border border-[#222]">
-                    <span className="text-[9px] text-[#777] block">ACTIVE RECIPE</span>
-                    <span className="text-white font-medium">CHASSIS & ARCH DE-MUCK</span>
-                  </div>
-                  <div className="p-3 bg-[#101010] border border-[#222]">
-                    <span className="text-[9px] text-[#777] block">CYCLE COUNT</span>
-                    <span className="text-white font-medium">42 UNITS (SHIFT 1)</span>
-                  </div>
-                </div>
-
-                <span className="block text-[10px] font-ibm-plex-mono text-[#666] italic text-center">
-                  * Interface parameters configured strictly per project specification. We do not publish fabricated live telemetry.
+            {/* Right: Open editorial live-data display — no nested card boxes */}
+            <div className="lg:col-span-7">
+              <div className="mb-6 pb-4 border-b border-alkota-iron/30 flex items-center justify-between">
+                <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.3em] text-alkota-orange">
+                  Illustrative System Parameters
+                </span>
+                <span className="font-ibm-plex-mono text-[9px] text-alkota-silver uppercase tracking-widest">
+                  Data-Ready
                 </span>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 font-ibm-plex-mono text-xs uppercase tracking-wider text-white">
-                <div className="p-3.5 bg-[#141414] border border-[#222]">
-                  <Cpu className="h-4 w-4 text-alkota-orange mb-1.5" />
-                  <span className="block font-medium">Industrial PLC</span>
-                  <span className="text-[10px] text-[#777]">IP-rated enclosure — spec to application</span>
+              {/* Data grid — clean type rows, no card borders */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-7 mb-6">
+                {[
+                  { label: 'Pump Status', value: 'Running / 160 Bar', accent: true },
+                  { label: 'Water Temp', value: '85°C (Thermal)', accent: false },
+                  { label: 'Sand Filter', value: 'ΔP Normal (0.4 Bar)', accent: false },
+                  { label: 'Reclaim Level', value: '82% (16,400 L)', accent: false },
+                  { label: 'Active Recipe', value: 'Chassis De-Muck', accent: false },
+                  { label: 'Cycle Count', value: '42 Units (Shift 1)', accent: false },
+                ].map(({ label, value, accent }) => (
+                  <div key={label}>
+                    <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-alkota-silver block mb-0.5">{label}</span>
+                    <span className={`font-ibm-plex-mono text-xs font-medium ${accent ? 'text-alkota-orange' : 'text-alkota-black'}`}>{value}</span>
+                  </div>
+                ))}
+              </div>
+
+              <span className="block text-[10px] font-ibm-plex-mono text-alkota-silver/60 italic border-t border-alkota-iron/30 pt-4">
+                * Interface parameters configured strictly per project specification.
+              </span>
+
+              {/* Two capability callouts — open, no box */}
+              <div className="grid grid-cols-2 gap-8 mt-8 pt-6 border-t border-alkota-iron/30">
+                <div>
+                  <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.3em] text-alkota-orange block mb-1">Industrial PLC</span>
+                  <span className="text-xs text-alkota-silver">IP-rated enclosure — specification to application</span>
                 </div>
-                <div className="p-3.5 bg-[#141414] border border-[#222]">
-                  <Sliders className="h-4 w-4 text-alkota-orange mb-1.5" />
-                  <span className="block font-medium">Variable Speed Drives</span>
-                  <span className="text-[10px] text-[#777]">Soft-start & power staging</span>
+                <div>
+                  <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.3em] text-alkota-orange block mb-1">Variable Speed Drives</span>
+                  <span className="text-xs text-alkota-silver">Soft-start &amp; power staging</span>
                 </div>
               </div>
             </div>
@@ -757,35 +725,25 @@ export default function WashPlantPage() {
               </div>
             </div>
 
-            <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4 font-ibm-plex-mono text-xs text-alkota-black">
-              <div className="p-5 bg-alkota-bg border border-alkota-iron space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-alkota-orange font-bold">01. COLLECTION & SUMPS</span>
-                  <span className="text-[9px] text-alkota-silver">CONTAINMENT</span>
+            {/* Right: Numbered editorial water stage list */}
+            <div className="lg:col-span-7 space-y-0 divide-y divide-alkota-iron/30">
+              {[
+                { n: '01', title: 'Collection & Sumps', sub: 'Containment', body: 'Impermeable graded concrete aprons and heavy galvanized sumps with silt catchbaskets prevent uncontrolled runoff.' },
+                { n: '02', title: 'Solids Settlement', sub: 'Slurry Extraction', body: 'Gravity settlement weir chambers and optional automated screw augers drop out heavy gravel, aggregate, and clay.' },
+                { n: '03', title: 'Coalescing Separation', sub: 'Consent Standard', body: 'Class 1 oleophilic coalescing plate packs separate free hydrocarbons and fuels to meet UK trade effluent standards.' },
+                { n: '04', title: 'Closed-Loop Polishing', sub: 'Recirculation', body: 'Pressurized multi-media filter vessels remove suspended solids to the clarity required for closed-loop pump protection and recirculation.' },
+              ].map(({ n, title, sub, body }) => (
+                <div key={n} className="py-6 grid grid-cols-12 gap-6">
+                  <span className="col-span-1 font-extralight text-2xl text-alkota-orange leading-none mt-0.5">{n}</span>
+                  <div className="col-span-11">
+                    <div className="flex items-baseline gap-3 mb-2">
+                      <span className="font-ibm-plex-mono text-[10px] uppercase tracking-tight text-alkota-black font-medium">{title}</span>
+                      <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-alkota-silver">{sub}</span>
+                    </div>
+                    <p className="text-sm text-alkota-silver leading-relaxed">{body}</p>
+                  </div>
                 </div>
-                <p className="text-alkota-silver leading-relaxed">Impermeable graded concrete aprons and heavy galvanized sumps with silt catchbaskets prevent uncontrolled runoff.</p>
-              </div>
-              <div className="p-5 bg-alkota-bg border border-alkota-iron space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-alkota-orange font-bold">02. SOLIDS SETTLEMENT</span>
-                  <span className="text-[9px] text-alkota-silver">SLURRY EXTRACTION</span>
-                </div>
-                <p className="text-alkota-silver leading-relaxed">Gravity settlement weir chambers and optional automated screw augers drop out heavy gravel, aggregate, and clay.</p>
-              </div>
-              <div className="p-5 bg-alkota-bg border border-alkota-iron space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-alkota-orange font-bold">03. COALESCING SEPARATION</span>
-                  <span className="text-[9px] text-alkota-silver">CONSENT STANDARD</span>
-                </div>
-                <p className="text-alkota-silver leading-relaxed">Class 1 oleophilic coalescing plate packs separate free hydrocarbons and fuels to meet UK trade effluent standards.</p>
-              </div>
-              <div className="p-5 bg-alkota-bg border border-alkota-iron space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-alkota-orange font-bold">04. CLOSED-LOOP POLISHING</span>
-                  <span className="text-[9px] text-alkota-silver">RECIRCULATION</span>
-                </div>
-                <p className="text-alkota-silver leading-relaxed">Pressurized multi-media filter vessels remove suspended solids to the clarity required for closed-loop pump protection and recirculation.</p>
-              </div>
+              ))}
             </div>
           </div>
         </div>
@@ -866,14 +824,14 @@ export default function WashPlantPage() {
                 </div>
               </div>
 
-              <div className="lg:col-span-6 space-y-3 bg-[#111] p-6 border border-[#222]">
-                <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-white block mb-2">
-                  Engineering Activities & Quality Gates:
+              <div className="lg:col-span-6">
+                <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.3em] text-alkota-orange block mb-6">
+                  Engineering Activities &amp; Quality Gates
                 </span>
-                <div className="space-y-2.5 font-ibm-plex-mono text-xs text-[#ccc]">
+                <div className="space-y-0 divide-y divide-white/10">
                   {MACRO_PHASES[activePhaseIdx].milestones.map((m, mIdx) => (
-                    <div key={mIdx} className="flex items-start gap-2.5">
-                      <CheckCircle2 className="h-4 w-4 text-alkota-orange shrink-0 mt-0.5" />
+                    <div key={mIdx} className="py-3 flex items-start gap-4 font-ibm-plex-mono text-xs text-[#bbb]">
+                      <span className="text-alkota-orange shrink-0 font-light">{String(mIdx + 1).padStart(2, '0')}</span>
                       <span>{m}</span>
                     </div>
                   ))}
@@ -905,8 +863,8 @@ export default function WashPlantPage() {
           </div>
 
           {/* Case Studies — awaiting verified project authorisation */}
-          <div className="bg-white border border-alkota-iron p-8 sm:p-12 shadow-sm">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+          <div>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
               <div className="lg:col-span-7 space-y-5">
                 <div>
                   <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-orange block mb-2">
@@ -934,8 +892,9 @@ export default function WashPlantPage() {
                 </div>
               </div>
 
-              <div className="lg:col-span-5 bg-alkota-bg border border-alkota-iron p-6 space-y-4 font-ibm-plex-mono text-xs">
+              <div className="lg:col-span-5 space-y-4">
                 <span className="text-[9px] uppercase tracking-[0.3em] text-alkota-orange block">SECTORS WE HAVE WORKED ACROSS</span>
+                <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.3em] text-alkota-orange block mb-5">Sectors We Have Worked Across</span>
                 {[
                   'Commercial Fleet & HGV Depots',
                   'Heavy Plant & Earthmoving Sites',
@@ -945,10 +904,10 @@ export default function WashPlantPage() {
                   'Rail & Passenger Transport',
                   'Agriculture & Forestry',
                   'Industrial Components & Process Equipment'
-                ].map((sector) => (
-                  <div key={sector} className="flex items-center gap-2 text-alkota-black">
-                    <CheckCircle2 className="h-3.5 w-3.5 text-alkota-orange shrink-0" />
-                    <span>{sector}</span>
+                ].map((sector, i) => (
+                  <div key={sector} className="py-2.5 border-b border-alkota-iron/30 flex items-baseline gap-3">
+                    <span className="font-extralight text-sm text-alkota-orange shrink-0 tabular-nums">{String(i + 1).padStart(2, '0')}</span>
+                    <span className="font-ibm-plex-mono text-[10px] uppercase tracking-wide text-alkota-black">{sector}</span>
                   </div>
                 ))}
               </div>
@@ -972,85 +931,77 @@ export default function WashPlantPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-            {/* Service 1: Service & Maintenance */}
-            <div className="bg-white border border-alkota-iron p-8 flex flex-col justify-between shadow-sm">
+          {/* Three service lines — open editorial columns, no card boxes */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-0 divide-y md:divide-y-0 md:divide-x divide-alkota-iron/30 mb-16">
+            {/* Service 1 */}
+            <div className="md:pr-10 pb-10 md:pb-0 flex flex-col justify-between">
               <div>
-                <span className="font-ibm-plex-mono text-[9px] bg-alkota-black text-white px-2.5 py-1 uppercase tracking-widest inline-block mb-4">
-                  OPERATIONAL AVAILABILITY
-                </span>
-                <h3 className="font-extralight text-2xl uppercase tracking-tight text-alkota-black mb-3">
+                <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.3em] text-alkota-orange block mb-4">Operational Availability</span>
+                <h3 className="font-extralight text-3xl sm:text-4xl uppercase tracking-tight text-alkota-black mb-4 leading-tight">
                   Service & Maintenance
                 </h3>
-                <p className="text-xs text-alkota-silver leading-relaxed mb-6">
+                <p className="text-sm text-alkota-silver leading-relaxed mb-6">
                   Planned preventative maintenance, rapid emergency response, pump overhauls, combustion tuning, and multi-manufacturer support for all third-party industrial wash plants.
                 </p>
-                <div className="space-y-1.5 font-ibm-plex-mono text-xs text-alkota-black border-t border-alkota-iron/60 pt-4 mb-6">
-                  <p>• 4 Tiered PPM & SLA Contracts</p>
-                  <p>• Multi-Brand Third-Party Support</p>
-                  <p>• Critical Spares Inventory Holding</p>
+                <div className="space-y-2.5 mb-8">
+                  {['4 Tiered PPM & SLA Contracts', 'Multi-Brand Third-Party Support', 'Critical Spares Inventory Holding'].map((f) => (
+                    <div key={f} className="text-sm text-alkota-black flex items-baseline gap-3">
+                      <span className="text-alkota-orange shrink-0">—</span>
+                      <span>{f}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
-              <Link
-                href="/wash-plant/service-maintenance"
-                className="inline-flex items-center gap-2 bg-alkota-black text-white px-6 py-3 text-xs uppercase tracking-widest hover:bg-alkota-orange transition-colors"
-              >
-                <span>Explore Service Line</span>
-                <ArrowRight className="h-3.5 w-3.5" />
+              <Link href="/wash-plant/service-maintenance" className="inline-flex items-center gap-2 text-xs font-ibm-plex-mono uppercase tracking-widest text-alkota-black hover:text-alkota-orange transition-colors">
+                Explore Service Line <ArrowRight className="h-3 w-3" />
               </Link>
             </div>
 
-            {/* Service 2: Asset Management */}
-            <div className="bg-white border border-alkota-iron p-8 flex flex-col justify-between shadow-sm">
+            {/* Service 2 */}
+            <div className="md:px-10 py-10 md:py-0 flex flex-col justify-between">
               <div>
-                <span className="font-ibm-plex-mono text-[9px] bg-alkota-black text-white px-2.5 py-1 uppercase tracking-widest inline-block mb-4">
-                  DIGITAL ASSET GOVERNANCE
-                </span>
-                <h3 className="font-extralight text-2xl uppercase tracking-tight text-alkota-black mb-3">
+                <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.3em] text-alkota-orange block mb-4">Digital Asset Governance</span>
+                <h3 className="font-extralight text-3xl sm:text-4xl uppercase tracking-tight text-alkota-black mb-4 leading-tight">
                   Asset Management
                 </h3>
-                <p className="text-xs text-alkota-silver leading-relaxed mb-6">
+                <p className="text-sm text-alkota-silver leading-relaxed mb-6">
                   Digital 5-level component registers, 45-point maintenance inspection scopes, condition grading, replacement forecasting, and data-ready telemetry integration.
                 </p>
-                <div className="space-y-1.5 font-ibm-plex-mono text-xs text-alkota-black border-t border-alkota-iron/60 pt-4 mb-6">
-                  <p>• 5-Level Asset Hierarchy Register</p>
-                  <p>• Obsolescence Risk Mapping</p>
-                  <p>• Lifecycle Replacement Forecasting</p>
+                <div className="space-y-2.5 mb-8">
+                  {['5-Level Asset Hierarchy Register', 'Obsolescence Risk Mapping', 'Lifecycle Replacement Forecasting'].map((f) => (
+                    <div key={f} className="text-sm text-alkota-black flex items-baseline gap-3">
+                      <span className="text-alkota-orange shrink-0">—</span>
+                      <span>{f}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
-              <Link
-                href="/wash-plant/asset-management"
-                className="inline-flex items-center gap-2 bg-alkota-black text-white px-6 py-3 text-xs uppercase tracking-widest hover:bg-alkota-orange transition-colors"
-              >
-                <span>Explore Asset Governance</span>
-                <ArrowRight className="h-3.5 w-3.5" />
+              <Link href="/wash-plant/asset-management" className="inline-flex items-center gap-2 text-xs font-ibm-plex-mono uppercase tracking-widest text-alkota-black hover:text-alkota-orange transition-colors">
+                Explore Asset Governance <ArrowRight className="h-3 w-3" />
               </Link>
             </div>
 
-            {/* Service 3: Refurbishment & Upgrades */}
-            <div className="bg-white border border-alkota-iron p-8 flex flex-col justify-between shadow-sm">
+            {/* Service 3 */}
+            <div className="md:pl-10 pt-10 md:pt-0 flex flex-col justify-between">
               <div>
-                <span className="font-ibm-plex-mono text-[9px] bg-alkota-black text-white px-2.5 py-1 uppercase tracking-widest inline-block mb-4">
-                  BROWNFIELD LIFE EXTENSION
-                </span>
-                <h3 className="font-extralight text-2xl uppercase tracking-tight text-alkota-black mb-3">
+                <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.3em] text-alkota-orange block mb-4">Brownfield Life Extension</span>
+                <h3 className="font-extralight text-3xl sm:text-4xl uppercase tracking-tight text-alkota-black mb-4 leading-tight">
                   Refurbishment & Upgrades
                 </h3>
-                <p className="text-xs text-alkota-silver leading-relaxed mb-6">
+                <p className="text-sm text-alkota-silver leading-relaxed mb-6">
                   Targeted engineering overhauls on existing live wash sites: pump swaps, PLC migrations, water recycling retrofits, and automation upgrades without plant replacement.
                 </p>
-                <div className="space-y-1.5 font-ibm-plex-mono text-xs text-alkota-black border-t border-alkota-iron/60 pt-4 mb-6">
-                  <p>• Brownfield Live-Site Delivery</p>
-                  <p>• PLC Modernization & VSD Retrofit</p>
-                  <p>• Water Treatment Plant Upgrades</p>
+                <div className="space-y-2.5 mb-8">
+                  {['Brownfield Live-Site Delivery', 'PLC Modernization & VSD Retrofit', 'Water Treatment Plant Upgrades'].map((f) => (
+                    <div key={f} className="text-sm text-alkota-black flex items-baseline gap-3">
+                      <span className="text-alkota-orange shrink-0">—</span>
+                      <span>{f}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
-              <Link
-                href="/wash-plant/refurbishment-upgrades"
-                className="inline-flex items-center gap-2 bg-alkota-black text-white px-6 py-3 text-xs uppercase tracking-widest hover:bg-alkota-orange transition-colors"
-              >
-                <span>Explore Upgrades</span>
-                <ArrowRight className="h-3.5 w-3.5" />
+              <Link href="/wash-plant/refurbishment-upgrades" className="inline-flex items-center gap-2 text-xs font-ibm-plex-mono uppercase tracking-widest text-alkota-black hover:text-alkota-orange transition-colors">
+                Explore Upgrades <ArrowRight className="h-3 w-3" />
               </Link>
             </div>
           </div>

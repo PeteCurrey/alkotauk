@@ -6,6 +6,7 @@ import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { 
   Search, 
   ShoppingBag, 
+  ShoppingCart,
   Menu, 
   X, 
   ArrowLeft, 
@@ -183,18 +184,19 @@ export default function PartsHeader() {
           </form>
         </div>
 
-        {/* Right: Enquiry Bag & Mobile Hamburger */}
+        {/* Right: Cart & Mobile Hamburger */}
         <div className="flex items-center gap-3">
-          {/* Parts Request Drawer Trigger */}
+          {/* Shopping Cart Drawer Trigger */}
           <button
             type="button"
             onClick={() => setIsDrawerOpen(true)}
-            className="flex items-center gap-2 bg-white/10 hover:bg-alkota-orange text-white px-3.5 py-2 transition-all cursor-pointer border border-white/15"
-            title="Open Parts Enquiry Bag"
+            className="flex items-center gap-2 bg-white/10 hover:bg-alkota-orange text-white px-3.5 py-2 transition-all cursor-pointer border border-white/15 group"
+            title="Open Shopping Cart"
+            aria-label="Open Shopping Cart"
           >
-            <ShoppingBag className="w-4 h-4 text-alkota-orange group-hover:text-white" />
+            <ShoppingCart className="w-4 h-4 text-alkota-orange group-hover:text-white" />
             <span className="font-ibm-plex-mono text-xs uppercase tracking-wider hidden sm:inline">
-              Enquiry Bag
+              Cart
             </span>
             {totalItemsCount > 0 && (
               <span className="bg-alkota-orange text-white text-[10px] font-ibm-plex-mono font-normal h-4 w-4 rounded-full flex items-center justify-center">

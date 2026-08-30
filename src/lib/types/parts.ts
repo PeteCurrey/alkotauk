@@ -474,11 +474,16 @@ export interface MachinePartsProfile {
 }
 
 export interface PartRequestItem {
+  id?: string;
   part_number: string;
   name: string;
   quantity: number;
   machine_context?: string;
   price_each?: number | null;
+  image?: string | null;
+  sku?: string | null;
+  category?: string;
+  pack_size?: string;
 }
 
 export interface PartRequestSubmission {

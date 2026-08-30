@@ -2,17 +2,17 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { FlaskConical, Plus, Check, ArrowRight, ShieldCheck } from 'lucide-react';
+import { FlaskConical, Plus, Check, ArrowRight, ShieldCheck, ShoppingCart } from 'lucide-react';
 import SafeImage from '@/components/ui/SafeImage';
 import { ChemicalRetailProduct } from '@/lib/types/chemical-commerce';
-import { useCart } from '@/context/CartContext';
+import { usePartsRequest } from '@/components/parts/PartsRequestListContext';
 
 interface ChemicalCardProps {
   product: ChemicalRetailProduct;
 }
 
 export default function ChemicalCard({ product }: ChemicalCardProps) {
-  const { addItem } = useCart();
+  const { addItem, setIsDrawerOpen } = usePartsRequest();
   const [added, setAdded] = React.useState(false);
 
   const baseSku = product.skus && product.skus.length > 0 ? product.skus[0] : null;
@@ -26,17 +26,18 @@ export default function ChemicalCard({ product }: ChemicalCardProps) {
 
     addItem({
       id: baseSku.id,
-      productId: product.id,
-      productSlug: product.slug,
+      part_number: baseSku.sku || product.originating_master_code,
       name: `${product.retail_name} (${baseSku.pack_size})`,
-      category: 'chemical',
-      price: baseSku.price,
+      price_each: baseSku.price,
       quantity: 1,
-      variantName: baseSku.pack_size,
-      maxQuantity: baseSku.stock_quantity || 20,
+      pack_size: baseSku.pack_size,
+      machine_context: `${product.retail_family} Series (${product.originating_master_code})`,
+      image: product.hero_image || undefined,
+      category: 'chemical',
     });
 
     setAdded(true);
+    setIsDrawerOpen(true);
     setTimeout(() => setAdded(false), 2000);
   };
 
@@ -95,7 +96,7 @@ export default function ChemicalCard({ product }: ChemicalCardProps) {
 
         {/* Originating Master Formula Reference */}
         <span className="font-ibm-plex-mono text-[10px] text-[#888] mb-3">
-          Formula: <span className="text-[#333] font-normal">{product.originating_master_code} ({product.originating_master_name})</span>
+          Alkota formula: <span className="text-[#333] font-normal">{product.originating_master_code} ({product.originating_master_name})</span>
         </span>
 
         {/* Price & Add to Cart */}
@@ -117,8 +118,8 @@ export default function ChemicalCard({ product }: ChemicalCardProps) {
                 ? 'bg-emerald-600 text-white'
                 : 'border border-[#E0DEDC] bg-white text-alkota-black hover:bg-alkota-orange hover:border-alkota-orange hover:text-white'
             }`}
-            title="Add 5L to Basket"
-            aria-label="Add to Basket"
+            title="Add to Cart"
+            aria-label="Add to Cart"
           >
             {added ? (
               <Check className="h-3.5 w-3.5" />

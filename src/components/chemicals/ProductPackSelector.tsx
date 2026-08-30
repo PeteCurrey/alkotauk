@@ -3,14 +3,14 @@
 import React, { useState } from 'react';
 import { ShoppingBag, Check, Plus, Minus, ShieldCheck, Truck, Sparkles, Box, CheckCircle2 } from 'lucide-react';
 import { ChemicalRetailProduct, ChemicalSKU } from '@/lib/types/chemical-commerce';
-import { useCart } from '@/context/CartContext';
+import { usePartsRequest } from '@/components/parts/PartsRequestListContext';
 
 interface Props {
   product: ChemicalRetailProduct;
 }
 
 export default function ProductPackSelector({ product }: Props) {
-  const { addItem } = useCart();
+  const { addItem, setIsDrawerOpen } = usePartsRequest();
   const skus: ChemicalSKU[] = product.skus && product.skus.length > 0
     ? product.skus
     : [
@@ -75,15 +75,18 @@ export default function ProductPackSelector({ product }: Props) {
   const handleAddToCart = () => {
     addItem({
       id: `${product.id}-${selectedSku.id}`,
+      part_number: selectedSku.sku_code,
       name: `${product.retail_name} (${selectedSku.pack_size})`,
-      price: selectedSku.price,
+      price_each: selectedSku.price,
       quantity,
+      pack_size: selectedSku.pack_size,
+      machine_context: `${product.retail_family} (${product.originating_master_code})`,
       image: product.hero_image || undefined,
       category: 'chemical',
-      partNumber: selectedSku.sku_code,
     });
 
     setAdded(true);
+    setIsDrawerOpen(true);
     setTimeout(() => setAdded(false), 2500);
   };
 

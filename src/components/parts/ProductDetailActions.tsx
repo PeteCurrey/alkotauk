@@ -2,8 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Plus, Check, ShoppingBag, ArrowRight, PhoneCall, FileText } from 'lucide-react';
-import { useCart } from '@/context/CartContext';
+import { Plus, Check, ShoppingCart, ArrowRight, PhoneCall, FileText } from 'lucide-react';
 import { usePartsRequest } from './PartsRequestListContext';
 
 interface ProductDetailActionsProps {
@@ -22,42 +21,30 @@ interface ProductDetailActionsProps {
 }
 
 export default function ProductDetailActions({ part }: ProductDetailActionsProps) {
-  const { addItem: addCartItem, items: cartItems, openCart } = useCart();
-  const { addItem: addEnquiryItem, items: enquiryItems } = usePartsRequest();
+  const { addItem, setIsDrawerOpen } = usePartsRequest();
   
   const [quantity, setQuantity] = useState(1);
   const [cartAdded, setCartAdded] = useState(false);
-  const [enquiryAdded, setEnquiryAdded] = useState(false);
 
   const hasPrice = typeof part.price === 'number' && part.price > 0;
 
   const handleAddToCart = () => {
     if (!hasPrice) return;
-    // Add once — CartContext auto-increments quantity on subsequent calls with same id
-    for (let i = 0; i < quantity; i++) {
-      addCartItem({
-        id: part.id,
-        name: `${part.name} (${part.part_number})`,
-        price: part.price as number,
-        image: part.image_url || undefined,
-        sku: part.sku || part.part_number,
-      });
-    }
-    setCartAdded(true);
-    openCart();
-    setTimeout(() => setCartAdded(false), 3000);
-  };
-
-  const handleAddToEnquiry = () => {
-    addEnquiryItem({
+    
+    addItem({
+      id: part.id,
       part_number: part.part_number,
       name: part.name,
-      price_each: part.price || null,
+      price_each: part.price as number,
       machine_context: part.brand || part.manufacturer || 'OEM Component',
+      image: part.image_url || undefined,
+      sku: part.sku || part.part_number,
       quantity,
     });
-    setEnquiryAdded(true);
-    setTimeout(() => setEnquiryAdded(false), 3000);
+
+    setCartAdded(true);
+    setIsDrawerOpen(true);
+    setTimeout(() => setCartAdded(false), 3000);
   };
 
   return (
@@ -93,25 +80,25 @@ export default function ProductDetailActions({ part }: ProductDetailActionsProps
             className={`flex-1 flex items-center justify-center gap-2.5 py-3.5 px-6 font-ibm-plex-mono text-xs uppercase tracking-widest transition-all cursor-pointer shadow-md ${
               cartAdded
                 ? 'bg-green-700 hover:bg-green-800 text-white'
-                : 'bg-alkota-orange hover:bg-[#E55D00] text-white'
+                : 'bg-alkota-orange hover:bg-black text-white'
             }`}
           >
             {cartAdded ? (
               <>
                 <Check className="h-4 w-4" />
-                <span>Added to Basket ({quantity})</span>
+                <span>Added to Cart ({quantity})</span>
               </>
             ) : (
               <>
-                <ShoppingBag className="h-4 w-4" />
-                <span>Add to Basket · £{((part.price as number) * quantity).toFixed(2)}</span>
+                <ShoppingCart className="h-4 w-4" />
+                <span>Add to Cart · £{((part.price as number) * quantity).toFixed(2)}</span>
               </>
             )}
           </button>
         ) : (
           <Link
             href={`/parts-attachments/enquiry?part=${encodeURIComponent(part.part_number)}`}
-            className="flex-1 flex items-center justify-center gap-2.5 py-3.5 px-6 font-ibm-plex-mono text-xs uppercase tracking-widest bg-alkota-orange hover:bg-[#E55D00] text-white transition-all text-center"
+            className="flex-1 flex items-center justify-center gap-2.5 py-3.5 px-6 font-ibm-plex-mono text-xs uppercase tracking-widest bg-alkota-orange hover:bg-black text-white transition-all text-center"
           >
             <FileText className="h-4 w-4" />
             <span>Request Price on Application</span>
@@ -119,18 +106,17 @@ export default function ProductDetailActions({ part }: ProductDetailActionsProps
         )}
       </div>
 
-      {/* Secondary Actions: Trade Enquiry & Phone */}
+      {/* Secondary Actions: Trade B2B Quote & Phone */}
       <div className="flex flex-wrap items-center gap-3 pt-1">
-        <button
-          type="button"
-          onClick={handleAddToEnquiry}
+        <Link
+          href={`/parts-attachments/enquiry?part=${encodeURIComponent(part.part_number)}`}
           className="flex-1 py-3 px-4 border border-[#333] bg-[#141414] hover:bg-white hover:text-black text-white font-ibm-plex-mono text-[10px] uppercase tracking-widest transition-colors text-center"
         >
-          {enquiryAdded ? '✓ Added to Quote Desk' : '+ Add to Trade Quote'}
-        </button>
+          Request Trade B2B Quote
+        </Link>
 
         <a
-          href="tel:+441234567890"
+          href="tel:+447912506738"
           className="flex items-center justify-center gap-2 py-3 px-4 border border-[#CCC] bg-white hover:border-alkota-orange text-[#555] hover:text-alkota-black font-ibm-plex-mono text-[10px] uppercase tracking-widest transition-colors"
         >
           <PhoneCall className="h-3.5 w-3.5 text-alkota-orange" />

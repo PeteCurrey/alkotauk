@@ -46,7 +46,7 @@ const SPARES_CATEGORIES = [
 
 export default function WashPlantAssetManagementPage() {
   return (
-    <main className="min-h-screen bg-alkota-bg text-alkota-black pt-20 pb-0">
+    <main className="min-h-screen bg-alkota-bg text-alkota-black pt-20 pb-0 px-6 sm:px-12">
       <WashPlantSchema
         pageTitle="Wash Plant PPM & Asset Management | Alkota UK"
         pageDescription="Data-ready asset management for industrial wash plants. 5-level plant hierarchy, configurable PPM schedules, critical spares consignment, digital service records, and condition lifecycle governance."
@@ -60,7 +60,7 @@ export default function WashPlantAssetManagementPage() {
       <Navigation />
       <WashPlantSubNav />
 
-      <div className="mx-auto max-w-7xl px-6 sm:px-12 pt-10">
+      <div className="mx-auto max-w-7xl pt-10">
         <Breadcrumbs items={[
           { label: 'Wash Plant Infrastructure', href: '/wash-plant' },
           { label: 'Asset Management & PPM' }

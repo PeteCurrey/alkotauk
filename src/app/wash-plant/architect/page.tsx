@@ -657,7 +657,7 @@ export default function WashPlantArchitectPage() {
         }
       `}</style>
 
-      <main className="min-h-screen bg-alkota-bg text-alkota-black pt-20 pb-24">
+      <main className="min-h-screen bg-alkota-bg text-alkota-black pt-20 pb-24 px-6 sm:px-12">
         <WashPlantSchema
           pageTitle="Wash Plant Architect | Pre-Engineering Project Scoping | Alkota UK"
           pageDescription="Define the process before we design the plant. Alkota UK's Wash Plant Architect is a structured pre-engineering scoping tool — capturing asset, contamination, throughput, water, site, and commercial parameters to compile a Preliminary Project Brief."
@@ -667,7 +667,7 @@ export default function WashPlantArchitectPage() {
         <Navigation />
         <WashPlantSubNav />
 
-        <div className="mx-auto max-w-4xl px-6 pt-10">
+        <div className="mx-auto max-w-4xl pt-10">
           {/* ── PAGE HEADER ─────────────────────────────────────────────── */}
           <div className="mt-8 mb-10 no-print">
             <div className="flex items-center gap-3 mb-3">

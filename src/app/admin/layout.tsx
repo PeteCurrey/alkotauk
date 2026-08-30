@@ -20,8 +20,10 @@ const NAV = [
     ],
   },
   {
-    section: 'CATALOGUE',
+    section: 'STORE CATALOGUE',
     items: [
+      { icon: Package, label: 'All Products', href: '/admin/products' },
+      { icon: LayoutDashboard, label: 'Store Categories', href: '/admin/categories' },
       { icon: Flame, label: 'Hot Water Machines', href: '/admin/products?category=hot-water' },
       { icon: Waves, label: 'Cold Water Machines', href: '/admin/products?category=cold-water' },
       { icon: Wind, label: 'Steam Cleaners', href: '/admin/products?category=steam' },
@@ -32,21 +34,21 @@ const NAV = [
     ],
   },
   {
+    section: 'COMMERCIAL & INBOX',
+    items: [
+      { icon: FileText, label: 'Quote Requests', href: '/admin/quotes', badge: 'quotes' },
+      { icon: Inbox, label: 'Leads & Enquiries', href: '/admin/leads', badge: 'leads' },
+      { icon: Truck, label: 'Trailer Builds Pipeline', href: '/admin/trailer-builds' },
+      { icon: Building2, label: 'Dealer Network', href: '/admin/dealers' },
+      { icon: Globe, label: 'Industry Pages', href: '/admin/industries' },
+    ],
+  },
+  {
     section: 'WASH PLANT',
     items: [
       { icon: Factory, label: 'WP Projects Pipeline', href: '/admin/wash-plant' },
       { icon: Zap, label: 'Installed Assets', href: '/admin/wash-plant/assets' },
       { icon: FileText, label: 'Project Media', href: '/admin/wash-plant/media' },
-    ],
-  },
-  {
-    section: 'COMMERCIAL',
-    items: [
-      { icon: Inbox, label: 'Enquiries & Leads', href: '/admin/leads', badge: true },
-      { icon: Truck, label: 'Trailer Builds Pipeline', href: '/admin/trailer-builds' },
-      { icon: Package, label: 'Active Build Projects', href: '/admin/trailer-builds/bp-001' },
-      { icon: Building2, label: 'Dealer Network', href: '/admin/dealers' },
-      { icon: Globe, label: 'Industry Pages', href: '/admin/industries' },
     ],
   },
   {
@@ -72,9 +74,9 @@ const NAV = [
 ];
 
 function NavItem({
-  href, icon: Icon, label, badge, newCount,
+  href, icon: Icon, label, badgeCount,
 }: {
-  href: string; icon: React.ElementType; label: string; badge?: boolean; newCount?: number;
+  href: string; icon: React.ElementType; label: string; badgeCount?: number;
 }) {
   const pathname = usePathname();
   const basePath = href.split('?')[0];
@@ -83,7 +85,7 @@ function NavItem({
   return (
     <Link
       href={href}
-      className="flex items-center gap-3 px-4 py-2.5 text-[13px] font-medium transition-all relative"
+      className="flex items-center gap-3 px-4 py-2 text-[13px] font-medium transition-all relative"
       style={{
         color: isActive ? '#fff' : '#888',
         background: isActive ? 'rgba(255,105,0,0.08)' : 'transparent',
@@ -92,9 +94,9 @@ function NavItem({
     >
       <Icon className="h-4 w-4 shrink-0" style={{ color: isActive ? '#FF6900' : '#555' }} />
       <span className="flex-1">{label}</span>
-      {badge && newCount && newCount > 0 ? (
+      {badgeCount !== undefined && badgeCount > 0 ? (
         <span className="h-5 min-w-5 px-1.5 rounded-full bg-[#FF6900] text-white text-[10px] font-black flex items-center justify-center">
-          {newCount > 99 ? '99+' : newCount}
+          {badgeCount > 99 ? '99+' : badgeCount}
         </span>
       ) : null}
       {isActive && <ChevronRight className="h-3 w-3 text-[#FF6900]" />}
@@ -104,13 +106,19 @@ function NavItem({
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const [newEnquiryCount, setNewEnquiryCount] = useState(0);
+  const [newQuoteCount, setNewQuoteCount] = useState(0);
+  const [newLeadCount, setNewLeadCount] = useState(0);
 
-  // Fetch new enquiry count for badge
+  // Fetch counts for badges
   useEffect(() => {
+    fetch('/api/admin/enquiries?status=new&type=quote&countOnly=true')
+      .then(r => r.json())
+      .then(d => { if (typeof d.count === 'number') setNewQuoteCount(d.count); })
+      .catch(() => {});
+
     fetch('/api/admin/enquiries?status=new&countOnly=true')
       .then(r => r.json())
-      .then(d => { if (typeof d.count === 'number') setNewEnquiryCount(d.count); })
+      .then(d => { if (typeof d.count === 'number') setNewLeadCount(d.count); })
       .catch(() => {});
   }, [pathname]);
 
@@ -145,7 +153,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 <NavItem
                   key={item.href}
                   {...item}
-                  newCount={item.badge ? newEnquiryCount : 0}
+                  badgeCount={item.badge === 'quotes' ? newQuoteCount : item.badge === 'leads' ? newLeadCount : undefined}
                 />
               ))}
             </div>
@@ -188,11 +196,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
           {/* Right: Bell + Avatar */}
           <div className="flex items-center gap-4">
-            {newEnquiryCount > 0 && (
-              <Link href="/admin/enquiries?status=new" className="relative text-[#555] hover:text-white transition-colors">
-                <Bell className="h-4 w-4" />
-                <span className="absolute -top-1.5 -right-1.5 h-4 w-4 rounded-full bg-[#FF6900] text-white text-[8px] font-black flex items-center justify-center">
-                  {newEnquiryCount > 9 ? '9+' : newEnquiryCount}
+            {(newQuoteCount > 0 || newLeadCount > 0) && (
+              <Link href="/admin/quotes" className="relative text-[#888] hover:text-white transition-colors flex items-center gap-2">
+                <Bell className="h-4 w-4 text-[#FF6900]" />
+                <span className="font-ibm-plex-mono text-[10px] text-white">
+                  {newQuoteCount + newLeadCount} new
                 </span>
               </Link>
             )}

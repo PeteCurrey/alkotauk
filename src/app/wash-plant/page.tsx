@@ -289,7 +289,7 @@ export default function WashPlantPage() {
 
       {/* ── CHAPTER 0: FULL-SCREEN INDUSTRIAL HERO ────────────────── */}
       <section
-        className="relative flex flex-col justify-between text-white overflow-hidden border-b border-[#222] min-h-[100svh]"
+        className="relative flex flex-col justify-between text-white overflow-hidden border-b border-[#222] min-h-[100svh] px-6 sm:px-12 font-normal"
       >
         {/* Photography — the primary communication device */}
         {/* Source: rigmatwasher.com / hotandmighty.com — conveyorised industrial mat wash plant */}
@@ -314,12 +314,12 @@ export default function WashPlantPage() {
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
 
         {/* Top spacer and SubNav overlay */}
-        <div className="w-full pt-24">
+        <div className="w-full pt-24 -mx-6 sm:-mx-12">
           <WashPlantSubNav heroOverlay />
         </div>
 
         {/* Hero content — vertically centered with my-auto, horizontally aligned with logo */}
-        <div className="relative z-10 mx-auto max-w-7xl w-full px-6 sm:px-12 my-auto py-12">
+        <div className="relative z-10 mx-auto max-w-7xl w-full my-auto py-12">
           <div className="max-w-3xl">
             <motion.div
               initial={{ opacity: 0, x: -10 }}
@@ -377,7 +377,7 @@ export default function WashPlantPage() {
         </div>
 
         {/* Hero Restrained Capability Footer */}
-        <div className="relative z-10 mx-auto max-w-7xl w-full pt-8 border-t border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-4 text-xs font-ibm-plex-mono text-alkota-silver uppercase tracking-widest px-6 sm:px-12 pb-8">
+        <div className="relative z-10 mx-auto max-w-7xl w-full pt-8 border-t border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-4 text-xs font-ibm-plex-mono text-alkota-silver uppercase tracking-widest pb-8">
           <div className="flex items-center gap-4 sm:gap-6 flex-wrap">
             <span>DESIGN</span>
             <span>·</span>

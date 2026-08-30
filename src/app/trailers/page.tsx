@@ -205,7 +205,7 @@ export default function TrailersPage() {
       <Navigation />
 
       {/* ─── 01. HERO ───────────────────────────────────────────────────────── */}
-      <section className="relative min-h-screen flex flex-col justify-end overflow-hidden">
+      <section className="relative min-h-screen flex flex-col justify-between overflow-hidden px-6 sm:px-12 font-normal">
         {/* Background — full-bleed industrial image */}
         <div className="absolute inset-0 z-0">
           <div
@@ -227,7 +227,7 @@ export default function TrailersPage() {
         </div>
 
         {/* Hero content */}
-        <div className="relative z-10 max-w-7xl mx-auto px-6 pb-20 pt-48 w-full">
+        <div className="relative z-10 max-w-7xl mx-auto my-auto py-24 w-full">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}

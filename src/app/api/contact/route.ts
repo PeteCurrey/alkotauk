@@ -82,27 +82,29 @@ async function saveEnquiry(payload: Record<string, unknown>): Promise<{ ok: bool
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { name, email, company, phone, message, enquiry, subject, source } = body;
+    const { 
+      name, email, company, phone, message, enquiry, subject, source,
+      productId, product_id, productName, product_name, model, category, quantity,
+      timeline, budgetRange
+    } = body;
 
     if (!name || !email) {
       return NextResponse.json({ error: 'Name and email are required' }, { status: 400 });
     }
 
     const apiKey = process.env.RESEND_API_KEY;
-    if (!apiKey) {
-      console.error('RESEND_API_KEY is not set');
-      return NextResponse.json({ error: 'Email service not configured' }, { status: 500 });
-    }
+    const isQuote = enquiry === 'quote' || source === 'product_quote' || source === 'request_pricing' || !!(productName || product_name || model);
+    const itemReference = productName || product_name || model || enquiry || '';
 
     const subjectLine =
-      subject || (enquiry ? `New Enquiry — ${enquiry}` : 'New Contact Form Enquiry');
-    const origin = source === 'maintenance_splash' ? 'Maintenance Screen' : 'Contact Page';
+      subject || (isQuote ? `Quotation Request — ${itemReference || 'Alkota Industrial Machine'}` : (enquiry ? `New Enquiry — ${enquiry}` : 'New Website Enquiry'));
+    const origin = source === 'request_pricing' ? 'Product Detail (Request Pricing)' : (source === 'maintenance_splash' ? 'Maintenance Screen' : 'Website Form');
 
     const htmlBody = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #f8f9fa; padding: 20px;">
         <div style="background: #1a1a1a; padding: 24px; margin-bottom: 24px;">
-          <h1 style="color: #ffffff; margin: 0; font-size: 22px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px;">
-            ALKOTA UK — NEW ENQUIRY
+          <h1 style="color: #ffffff; margin: 0; font-size: 20px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px;">
+            ALKOTA UK — ${isQuote ? 'MACHINE QUOTATION REQUEST' : 'NEW ENQUIRY'}
           </h1>
           <p style="color: #f97316; margin: 4px 0 0 0; font-size: 12px; text-transform: uppercase; letter-spacing: 1px;">
             Received via ${origin}
@@ -110,55 +112,55 @@ export async function POST(req: Request) {
         </div>
 
         <div style="background: #ffffff; padding: 24px; margin-bottom: 16px; border-left: 4px solid #f97316;">
-          <h2 style="margin: 0 0 16px 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #666;">Contact Details</h2>
+          <h2 style="margin: 0 0 16px 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #666;">Customer Contact</h2>
           <table style="width: 100%; border-collapse: collapse;">
-            <tr><td style="padding: 8px 0; color: #999; font-size: 12px; width: 120px;">Name</td><td style="padding: 8px 0; font-weight: bold; color: #1a1a1a;">${name}</td></tr>
+            <tr><td style="padding: 8px 0; color: #999; font-size: 12px; width: 130px;">Name</td><td style="padding: 8px 0; font-weight: bold; color: #1a1a1a;">${name}</td></tr>
             <tr><td style="padding: 8px 0; color: #999; font-size: 12px;">Email</td><td style="padding: 8px 0; font-weight: bold;"><a href="mailto:${email}" style="color: #f97316;">${email}</a></td></tr>
             ${company ? `<tr><td style="padding: 8px 0; color: #999; font-size: 12px;">Company</td><td style="padding: 8px 0; font-weight: bold; color: #1a1a1a;">${company}</td></tr>` : ''}
             ${phone ? `<tr><td style="padding: 8px 0; color: #999; font-size: 12px;">Phone</td><td style="padding: 8px 0; font-weight: bold; color: #1a1a1a;"><a href="tel:${phone}" style="color: #f97316;">${phone}</a></td></tr>` : ''}
-            ${enquiry ? `<tr><td style="padding: 8px 0; color: #999; font-size: 12px;">Enquiry Type</td><td style="padding: 8px 0; font-weight: bold; color: #1a1a1a;">${enquiry}</td></tr>` : ''}
-            <tr><td style="padding: 8px 0; color: #999; font-size: 12px;">Source</td><td style="padding: 8px 0; font-weight: bold; color: #1a1a1a;">${origin}</td></tr>
+            ${itemReference ? `<tr><td style="padding: 8px 0; color: #999; font-size: 12px;">Equipment Requested</td><td style="padding: 8px 0; font-weight: bold; color: #f97316;">${itemReference}</td></tr>` : ''}
+            ${quantity ? `<tr><td style="padding: 8px 0; color: #999; font-size: 12px;">Quantity</td><td style="padding: 8px 0; font-weight: bold; color: #1a1a1a;">${quantity}</td></tr>` : ''}
           </table>
         </div>
 
         ${message ? `
         <div style="background: #ffffff; padding: 24px; margin-bottom: 16px;">
-          <h2 style="margin: 0 0 12px 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #666;">Message</h2>
+          <h2 style="margin: 0 0 12px 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #666;">Application Scope / Notes</h2>
           <p style="margin: 0; color: #1a1a1a; line-height: 1.6; white-space: pre-wrap;">${message}</p>
         </div>
         ` : ''}
 
         <div style="text-align: center; padding: 16px; color: #999; font-size: 11px;">
-          <p style="margin: 0;">alkota.co.uk — Enquiry Management System</p>
+          <p style="margin: 0;">alkota.co.uk — Enquiry & Quotation Management</p>
         </div>
       </div>
     `;
 
-    // ── 1. Send email (must succeed) ─────────────────────────────────────────
-    const resendRes = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        from: 'Alkota UK Enquiries <enquiries@alkota.co.uk>',
-        to: ['sales@alkota.co.uk'],
-        reply_to: email,
-        subject: subjectLine,
-        html: htmlBody,
-      }),
-    });
-
-    if (!resendRes.ok) {
-      const resendError = await resendRes.text();
-      console.error('Resend error:', resendError);
-      return NextResponse.json({ error: 'Failed to send email' }, { status: 500 });
+    // ── 1. Send email if API key configured ─────────────────────────────────
+    if (apiKey) {
+      try {
+        await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            from: 'Alkota UK <enquiries@alkota.co.uk>',
+            to: ['sales@alkota.co.uk'],
+            reply_to: email,
+            subject: subjectLine,
+            html: htmlBody,
+          }),
+        });
+      } catch (e) {
+        console.error('Email notification failed:', e);
+      }
     }
 
     // ── 2. Save to database (schema-adaptive) ────────────────────────────────
     const dbResult = await saveEnquiry({
-      type: source || enquiry || 'contact',
+      type: isQuote ? 'quote' : (source || enquiry || 'contact'),
       name,
       email,
       company: company || '',
@@ -166,18 +168,20 @@ export async function POST(req: Request) {
       subject: subjectLine,
       message: message || '',
       status: 'new',
-      metadata: { source: source || 'contact_page', enquiry_type: enquiry || null },
+      metadata: { 
+        source: source || 'contact_page', 
+        enquiry_type: enquiry || null,
+        product_id: productId || product_id || null,
+        product_name: productName || product_name || model || null,
+        category: category || null,
+        quantity: quantity || 1,
+        timeline: timeline || null,
+        budget_range: budgetRange || null,
+      },
     });
 
-    if (!dbResult.ok) {
-      // Email was sent — log the DB error but still return success to the user
-      console.error('Enquiry DB save failed (email was sent):', dbResult.error);
-    } else {
-      console.log('Enquiry saved to database successfully');
-    }
-
     return NextResponse.json(
-      { success: true, message: 'Enquiry sent successfully', dbSaved: dbResult.ok },
+      { success: true, message: 'Submission received successfully', dbSaved: dbResult.ok },
       { status: 200 }
     );
   } catch (error) {

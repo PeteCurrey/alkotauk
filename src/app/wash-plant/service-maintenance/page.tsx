@@ -154,7 +154,7 @@ export default function WashPlantServicePage() {
   };
 
   return (
-    <main className="min-h-screen bg-alkota-bg text-alkota-black pt-20 pb-0">
+    <main className="min-h-screen bg-alkota-bg text-alkota-black pt-20 pb-0 px-6 sm:px-12">
       <WashPlantSchema
         pageTitle="Wash Plant Service & Maintenance | PPM & Reactive Repairs | Alkota UK"
         pageDescription="Planned preventative maintenance, emergency reactive repairs, pump overhauls, burner servicing, PLC diagnostics, and third-party wash plant support across the UK."
@@ -168,7 +168,7 @@ export default function WashPlantServicePage() {
       <Navigation />
       <WashPlantSubNav />
 
-      <div className="mx-auto max-w-7xl px-6 sm:px-12 pt-10">
+      <div className="mx-auto max-w-7xl pt-10">
         <Breadcrumbs items={[
           { label: 'Wash Plant Infrastructure', href: '/wash-plant' },
           { label: 'Service & Maintenance' }

@@ -19,16 +19,29 @@ export type ProductCategory =
   | 'water-heater'
   | 'wash-plant';
 
+export type ProductPricingType = 'request_quote' | 'fixed_price';
+export type ProductAvailability = 'in_stock' | 'built_to_order' | 'quote_only' | 'lead_time_2_weeks';
+
 export type Product = {
   id: string;
   slug: string;
   name: string;
   series: string | null;
   category: ProductCategory;
+  subcategory?: string | null;
   tagline: string | null;
   description: string | null;
+  uk_description?: string | null;
+  engineering_story?: string | null;
   featured: boolean;
   active: boolean;
+  is_elite_series?: boolean;
+
+  // Commercial & Pricing
+  price?: number | null;
+  pricing_type?: ProductPricingType;
+  availability?: ProductAvailability;
+  stock_status?: string | null;
 
   // Specifications
   flow_rate_gpm: number | null;
@@ -43,7 +56,12 @@ export type Product = {
   dimensions_mm: string | null;
   max_temp_c: number | null;
   warranty_years: number | null;
+  pump_type?: string | null;
+  coil_type?: string | null;
   certifications: string[] | null;
+  features?: string[] | null;
+  options?: string[] | null;
+  applications?: string[] | null;
   extra_specs: Record<string, string>[] | null;
 
   // Industries
@@ -51,13 +69,18 @@ export type Product = {
 
   // Media
   primary_image_url: string | null;
+  cutout_image_url?: string | null;
   gallery_images: string[] | null;
   pdf_spec_url: string | null;
   pdf_manual_url: string | null;
+  pdf_brochure_url?: string | null;
+  video_url?: string | null;
 
   // SEO
   meta_title: string | null;
   meta_description: string | null;
+  canonical_url?: string | null;
+  no_index?: boolean;
 
   sort_order: number;
   created_at: string;

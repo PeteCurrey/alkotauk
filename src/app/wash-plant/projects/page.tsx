@@ -34,7 +34,7 @@ export default async function WashPlantProjectsPage() {
   const projectsToDisplay = dbProjects;
 
   return (
-    <main className="min-h-screen bg-alkota-bg text-alkota-black pt-20 pb-0">
+    <main className="min-h-screen bg-alkota-bg text-alkota-black pt-20 pb-0 px-6 sm:px-12">
       <WashPlantSchema
         pageTitle="Wash Plant Projects & Case Studies | Alkota UK"
         pageDescription="Explore Alkota UK industrial wash plant installations across fleet depots, access matting, heavy mining de-mucking, and manufacturing facilities."
@@ -43,7 +43,7 @@ export default async function WashPlantProjectsPage() {
       <Navigation />
       <WashPlantSubNav />
 
-      <div className="mx-auto max-w-7xl px-6 sm:px-12 pt-10">
+      <div className="mx-auto max-w-7xl pt-10">
         <Breadcrumbs items={[
           { label: 'Wash Plant Infrastructure', href: '/wash-plant' },
           { label: 'Project Case Studies' }

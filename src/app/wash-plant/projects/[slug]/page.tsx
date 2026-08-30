@@ -55,7 +55,7 @@ export default async function WashPlantProjectPage({ params }: Props) {
   const testimonial = project.client_testimonial_approved ? project.client_testimonial : null;
 
   return (
-    <main className="min-h-screen bg-alkota-bg text-alkota-black pt-20 pb-0">
+    <main className="min-h-screen bg-alkota-bg text-alkota-black pt-20 pb-0 px-6 sm:px-12">
       <WashPlantSchema
         pageTitle={`${title} | Wash Plant Case Study | Alkota UK`}
         pageDescription={scope ? scope.substring(0, 160) : 'Industrial wash plant project case study.'}
@@ -70,7 +70,7 @@ export default async function WashPlantProjectPage({ params }: Props) {
       <Navigation />
       <WashPlantSubNav />
 
-      <div className="mx-auto max-w-5xl px-6 sm:px-12 pt-10">
+      <div className="mx-auto max-w-5xl pt-10">
         <Breadcrumbs items={[
           { label: 'Wash Plant Infrastructure', href: '/wash-plant' },
           { label: 'Case Studies', href: '/wash-plant/projects' },

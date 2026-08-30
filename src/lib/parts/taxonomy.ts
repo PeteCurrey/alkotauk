@@ -272,6 +272,22 @@ export const MASTER_TAXONOMY: MasterCategory[] = [
       { slug: 'replacement-consumables', name: 'Replacement Consumables', shortDesc: 'Burst discs, shear pins, and quick-wearing consumables.' },
     ],
   },
+  {
+    slug: 'chemicals',
+    name: 'Chemicals & Detergents',
+    shortDesc: 'Commercial vehicle traffic film removers, heavy degreasers, aluminium acid brighteners, and coil descalers.',
+    iconName: 'Droplets',
+    isFeatured: true,
+    subcategories: [
+      { slug: 'traffic-film-removers', name: 'Traffic Film Removers (TFR)', shortDesc: 'High-potency vehicle and fleet wash detergents.' },
+      { slug: 'degreasers', name: 'Industrial Degreasers', shortDesc: 'Heavy oil, grease, and carbon breakdown chemistry.' },
+      { slug: 'acid-brighteners', name: 'Aluminium Acid Brighteners', shortDesc: 'Hydrofluoric-safe aluminium restoration detergents.' },
+      { slug: 'agricultural-cleaners', name: 'Agricultural & Plant Cleaners', shortDesc: 'Mud, slurry, and organic contamination removers.' },
+      { slug: 'machine-coil-care', name: 'Coil Descalers & Machine Care', shortDesc: 'Schedule 80 coil protectors and lime scale descaling solutions.' },
+      { slug: 'waxes-sealants', name: 'Waxes & Sheeting Sealants', shortDesc: 'Hot-wax rinse additives and hydrophobic gloss coatings.' },
+      { slug: 'specialist-cleaners', name: 'Specialist Chemistry', shortDesc: 'Graffiti removers, salt neutralisers, and masonry detergents.' },
+    ],
+  },
 ];
 
 export function getCategoryBySlug(slug: string): MasterCategory | undefined {

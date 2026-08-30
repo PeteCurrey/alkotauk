@@ -42,6 +42,28 @@ const SYNONYMS: Record<string, string[]> = {
   'reel': ['hose reel', 'manual reel', 'retractable reel', 'cox'],
   'nozzle': ['spray tip', 'turbo nozzle', 'rotary nozzle', 'meg'],
   'pump': ['triplex pump', 'plunger pump', 'pressure pump'],
+  // ── Chemical Cross-Referencing Synonyms (Master Code <-> Retail Identity) ──
+  'tr-407': ['power blast', 'roadforce', 'traffic film remover', 'tfr', 'truck cleaner', 'fleet wash'],
+  'tr407': ['tr-407', 'power blast', 'roadforce', 'traffic film remover', 'tfr'],
+  'power blast': ['tr-407', 'roadforce', 'traffic film remover', 'tfr'],
+  'roadforce': ['tr-407', 'power blast', 'traffic film remover', 'tfr', 'fleet wash'],
+  'tr-404': ['klean-all', 'roadforce general', 'vehicle cleaner'],
+  'klean-all': ['tr-404', 'roadforce general'],
+  'ts-602': ['aluma restore', 'alumarestore', 'acid brightener', 'aluminium cleaner'],
+  'aluma restore': ['ts-602', 'alumarestore', 'acid brightener', 'aluminium cleaner'],
+  'alumarestore': ['ts-602', 'aluma restore', 'acid brightener'],
+  'acid brightener': ['ts-602', 'alumarestore', 'aluma restore', 'aluminium acid'],
+  'de-703': ['grease cutter', 'greasecut', 'workshop degreaser', 'floor degreaser'],
+  'greasecut': ['de-703', 'grease cutter', 'workshop degreaser', 'floor degreaser'],
+  'grease cutter': ['de-703', 'greasecut', 'heavy degreaser'],
+  'sd-927': ['scale-stop', 'scaleguard', 'coil descaler', 'coil protector'],
+  'scaleguard': ['sd-927', 'scale-stop', 'coil protector', 'descaler'],
+  'scale-stop': ['sd-927', 'scaleguard', 'coil descaler'],
+  'tfr': ['traffic film remover', 'roadforce', 'tr-407', 'fleet wash', 'truck wash'],
+  'traffic film remover': ['tfr', 'roadforce', 'tr-407', 'fleet wash'],
+  'truck wash': ['roadforce', 'tr-407', 'tfr', 'traffic film remover', 'fleet cleaner'],
+  'chemical': ['detergent', 'tfr', 'degreaser', 'acid brightener', 'descaler'],
+  'detergent': ['chemical', 'tfr', 'roadforce', 'greasecut', 'wash'],
 };
 
 export async function searchParts(options: SearchOptions): Promise<SearchResult> {

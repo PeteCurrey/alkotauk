@@ -19,6 +19,7 @@ import { usePartsRequest } from './PartsRequestListContext';
 import { MASTER_TAXONOMY } from '@/lib/parts/taxonomy';
 
 const EXPLORE_LINKS = [
+  { name: 'Chemicals & Detergents', href: '/parts-attachments/chemicals', desc: 'RoadForce TFR, degreasers & acid brighteners' },
   { name: 'Shop by Brand', href: '/parts-attachments/brands', desc: 'Giant, Interpump, Mosmatic, CoxREELS & more' },
   { name: 'Shop by Machine', href: '/parts-attachments/machines', desc: 'Guaranteed OEM-compatible components by model' },
   { name: 'Shop by Application', href: '/parts-attachments/applications', desc: 'Fleet wash, hard surfaces, drain jetting' },
@@ -142,6 +143,12 @@ export default function PartsHeader() {
           </button>
 
           {/* Quick Direct Nav Links */}
+          <Link
+            href="/parts-attachments/chemicals"
+            className="text-xs uppercase tracking-widest font-ibm-plex-mono text-alkota-orange hover:text-white transition-colors flex items-center gap-1"
+          >
+            <span>Chemicals</span>
+          </Link>
           <Link
             href="/parts-attachments/brands"
             className="text-xs uppercase tracking-widest font-ibm-plex-mono text-[#BBB] hover:text-white transition-colors"
@@ -352,6 +359,14 @@ export default function PartsHeader() {
               >
                 <span>Parts Finder Wizard</span>
                 <Sparkles className="w-3.5 h-3.5 text-alkota-orange" />
+              </Link>
+              <Link
+                href="/parts-attachments/chemicals"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-between text-base font-light text-alkota-orange hover:text-white py-1.5"
+              >
+                <span>Chemicals &amp; Detergents</span>
+                <ArrowRight className="w-3.5 h-3.5 text-alkota-orange" />
               </Link>
               <Link
                 href="/parts-attachments/brands"

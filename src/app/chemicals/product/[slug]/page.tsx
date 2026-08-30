@@ -3,19 +3,26 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import { 
-  ChevronRight, 
   ShieldCheck, 
   FlaskConical, 
-  CheckCircle2, 
-  AlertCircle, 
   FileText, 
   ArrowRight,
-  Droplets,
-  Sparkles
+  Sparkles,
+  CheckCircle2,
+  AlertCircle,
+  Truck,
+  Car,
+  Tractor,
+  HardHat,
+  Award
 } from 'lucide-react';
-import SafeImage from '@/components/ui/SafeImage';
-import ChemicalProductInteractive from '@/components/chemicals/ChemicalProductInteractive';
-import ChemicalCard from '@/components/chemicals/ChemicalCard';
+import ProductStickyNav from '@/components/chemicals/ProductStickyNav';
+import ProductCinematicHero from '@/components/chemicals/ProductCinematicHero';
+import ProductStoryEditorial from '@/components/chemicals/ProductStoryEditorial';
+import ProductProblemVisualiser from '@/components/chemicals/ProductProblemVisualiser';
+import ProductInstructionSteps from '@/components/chemicals/ProductInstructionSteps';
+import ProductPackSelector from '@/components/chemicals/ProductPackSelector';
+import ProductSystemCrossSell from '@/components/chemicals/ProductSystemCrossSell';
 import { getRetailProductBySlug, getRetailProducts } from '@/lib/chemicals/service';
 
 export const dynamic = 'force-dynamic';
@@ -27,11 +34,17 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const product = await getRetailProductBySlug(slug);
-  if (!product) return { title: 'Chemical Product | Alkota UK' };
+  if (!product) return { title: 'Chemical Formulation | Alkota UK' };
 
+  const descriptor = product.brand_identity?.descriptor || product.descriptor || 'Professional Chemical';
   return {
-    title: product.seo_title || `${product.retail_name} | Alkota UK Chemicals`,
-    description: product.seo_description || product.short_description,
+    title: `${product.retail_name} | ${descriptor} (${product.originating_master_code}) | Alkota UK`,
+    description: product.brand_identity?.product_promise || product.short_description,
+    openGraph: {
+      title: `${product.retail_name} — ${descriptor}`,
+      description: product.short_description,
+      images: product.hero_image ? [{ url: product.hero_image }] : [],
+    },
   };
 }
 
@@ -43,245 +56,290 @@ export default async function ChemicalProductDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  // Related products from same family or application
   const allProducts = await getRetailProducts();
   const relatedProducts = allProducts
     .filter(p => p.id !== product.id && (p.retail_family === product.retail_family || p.primary_application === product.primary_application))
     .slice(0, 4);
 
+  const brand = product.brand_identity;
+  const appLabels = brand?.application_labels || [
+    'COMMERCIAL HGV & TRUCKS',
+    'FLEET HAULAGE VANS',
+    'AGRICULTURAL MACHINERY',
+    'WORKSHOP WASH BAYS',
+    'HIGHWAY PLANT'
+  ];
+
   return (
-    <main className="min-h-screen bg-[#FAF9F5] text-alkota-black font-sans pb-28">
+    <main className="min-h-screen bg-[#FAF9F5] text-alkota-black font-sans selection:bg-alkota-orange/30">
+      
+      {/* ── 01 STICKY PRODUCT NAV ── */}
+      <ProductStickyNav product={product} />
 
-      {/* ── BREADCRUMB STRIP ── */}
-      <div className="bg-[#0A0A0A] text-white pt-28 pb-6 px-6 sm:px-12 lg:px-24 border-b border-[#222]">
-        <div className="max-w-7xl mx-auto">
-          <nav className="flex items-center gap-2 font-ibm-plex-mono text-[10px] uppercase tracking-widest text-[#777]">
-            <Link href="/chemicals" className="hover:text-alkota-orange transition-colors">
-              Chemicals
-            </Link>
-            <ChevronRight className="h-3 w-3 text-[#444]" />
-            <Link href="/chemicals/applications" className="hover:text-white transition-colors">
-              {product.retail_family} Series
-            </Link>
-            <ChevronRight className="h-3 w-3 text-[#444]" />
-            <span className="text-alkota-orange truncate max-w-xs">{product.retail_name}</span>
-          </nav>
-        </div>
-      </div>
+      {/* ── 02 CINEMATIC FULL-VIEWPORT HERO ── */}
+      <ProductCinematicHero product={product} />
 
-      {/* ── PRODUCT HERO & PURCHASE INTERFACE ── */}
-      <section className="py-12 px-6 sm:px-12 lg:px-24 border-b border-[#E0DEDC]">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+      {/* ── 03 PRODUCT STORY: "THIS ISN'T JUST SOAP." ── */}
+      <ProductStoryEditorial product={product} />
 
-            {/* Left: Product Imagery (Col 6) */}
-            <div className="lg:col-span-6 space-y-4">
-              <div className="relative aspect-[4/3] sm:aspect-square bg-white border border-[#E0DEDC] flex items-center justify-center p-8 overflow-hidden shadow-xs">
-                {product.hero_image ? (
-                  <SafeImage
-                    src={product.hero_image}
-                    alt={product.retail_name}
-                    fill
-                    className="object-contain p-8"
-                  />
-                ) : (
-                  <div className="flex flex-col items-center justify-center text-[#CCC] gap-3 text-center">
-                    <FlaskConical className="h-16 w-16 text-[#DDD]" />
-                    <span className="font-ibm-plex-mono text-xs uppercase tracking-widest text-[#AAA]">
-                      {product.originating_master_code}
-                    </span>
-                  </div>
-                )}
+      {/* ── 04 THE PROBLEM: TARGET CONTAMINATION SPECTRUM ── */}
+      <ProductProblemVisualiser product={product} />
 
-                {/* Master Formulation Subtle Pill */}
-                <div className="absolute top-4 left-4 bg-[#0A0A0A] text-white px-3 py-1 font-ibm-plex-mono text-[9px] uppercase tracking-widest">
-                  Formula: {product.originating_master_code}
-                </div>
-              </div>
+      {/* ── 05 HOW TO USE: 3-STEP PROTOCOL ── */}
+      <ProductInstructionSteps product={product} />
 
-              {/* Master Chemistry Integrity Notice */}
-              <div className="p-4 bg-[#F5F4F0] border border-[#E8E6E0] flex items-center justify-between text-xs">
-                <div>
-                  <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#777] block">
-                    Originating Master Chemistry
-                  </span>
-                  <span className="font-bold text-alkota-black font-mono">
-                    {product.originating_master_code} — {product.originating_master_name}
-                  </span>
-                </div>
-                <span className="font-ibm-plex-mono text-[10px] text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded font-bold">
-                  CLP Verified
-                </span>
-              </div>
+      {/* ── 06 BUILT FOR WORK: INDUSTRY APPLICATION SPECTRUM ── */}
+      <section id="applications" className="py-24 sm:py-32 px-6 sm:px-12 lg:px-24 bg-[#0A0A0A] text-white border-b border-[#222]">
+        <div className="max-w-7xl mx-auto space-y-16">
+          
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 border-b border-[#222] pb-8">
+            <div>
+              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.25em] text-alkota-orange block mb-2">
+                // Operational Environments
+              </span>
+              <h2 className="text-4xl sm:text-5xl font-extralight text-white tracking-tight uppercase">
+                Built for Work.
+              </h2>
             </div>
-
-            {/* Right: Merchandising & Purchasing (Col 6) */}
-            <div className="lg:col-span-6 space-y-6">
-              <div>
-                <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.2em] text-alkota-orange block mb-2">
-                  {product.primary_application}
-                </span>
-                <h1 className="text-3xl sm:text-4xl font-extralight text-alkota-black tracking-tight leading-tight">
-                  {product.retail_name}
-                </h1>
-                <p className="text-sm sm:text-base text-[#555] font-normal leading-relaxed mt-3">
-                  {product.short_description}
-                </p>
-              </div>
-
-              {/* Interactive Pack Selector & Cart Button */}
-              <ChemicalProductInteractive product={product} />
-            </div>
-
+            <p className="max-w-md text-sm text-[#888] font-light leading-relaxed">
+              Tested and deployed in the UK’s most demanding transport yards, farming operations, and industrial facilities.
+            </p>
           </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-px bg-[#222]">
+            {appLabels.map((label, idx) => (
+              <div
+                key={idx}
+                className="p-8 bg-[#0E0E0E] hover:bg-[#161616] transition-colors flex flex-col justify-between min-h-[180px] group"
+              >
+                <span className="font-ibm-plex-mono text-[9px] text-[#555]">
+                  APPLICATION 0{idx + 1}
+                </span>
+                <div>
+                  <h3 className="text-lg sm:text-xl font-light text-white tracking-tight group-hover:text-alkota-orange transition-colors">
+                    {label}
+                  </h3>
+                </div>
+                <div className="text-[10px] font-ibm-plex-mono text-[#666] uppercase">
+                  Verified Field Safe
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="pt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs font-ibm-plex-mono text-[#888]">
+            <span>Need advice for a bespoke fleet or industrial wash plant configuration?</span>
+            <Link
+              href="/chemicals/applications"
+              className="text-alkota-orange hover:text-white uppercase tracking-widest transition-colors flex items-center gap-1.5"
+            >
+              <span>Explore All Application Sectors</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
         </div>
       </section>
 
-      {/* ── TECHNICAL PROFILE, SUBSTRATES & HOW TO USE ── */}
-      <section className="py-16 px-6 sm:px-12 lg:px-24 border-b border-[#E0DEDC] bg-white">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+      {/* ── 07 WHY ALKOTA: AUTHORITY & ENGINEERING PRINCIPLES ── */}
+      <section className="py-24 sm:py-32 px-6 sm:px-12 lg:px-24 bg-[#FAF9F5] text-alkota-black border-b border-[#E0DEDC]">
+        <div className="max-w-7xl mx-auto space-y-16">
+          
+          <div className="border-b border-[#E0DEDC] pb-8">
+            <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.25em] text-alkota-orange block mb-2">
+              // Engineering Authority
+            </span>
+            <h2 className="text-4xl sm:text-5xl font-extralight text-alkota-black tracking-tight uppercase">
+              Why Alkota Chemistry.
+            </h2>
+          </div>
 
-            {/* Left: Detailed Overview & How To Use (7 Cols) */}
-            <div className="lg:col-span-7 space-y-10">
-              <div>
-                <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.2em] text-alkota-orange block mb-2">
-                  // Formulation Chemistry
-                </span>
-                <h2 className="text-2xl font-light text-alkota-black tracking-tight mb-4">
-                  What it does
-                </h2>
-                <p className="text-sm sm:text-base text-[#555] leading-relaxed font-normal">
-                  {product.long_description}
-                </p>
-              </div>
-
-              {/* Dilution & Usage Protocols */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-light text-alkota-black tracking-tight">
-                  How to use &amp; Dilution Guidelines
-                </h3>
-                <div className="p-5 bg-[#FAF9F5] border border-[#E8E8E4] space-y-3">
-                  <div className="font-ibm-plex-mono text-xs text-[#333] leading-relaxed">
-                    <span className="text-alkota-orange font-bold uppercase tracking-wider text-[10px] block mb-1">
-                      Recommended Dilution:
-                    </span>
-                    {product.dilution_information}
-                  </div>
-                  <div className="text-xs text-[#666] leading-relaxed border-t border-[#E8E8E4] pt-3">
-                    <span className="font-bold text-[#0F172A] block mb-0.5">Application Method:</span>
-                    {product.usage_instructions}
-                  </div>
-                </div>
-              </div>
-
-              {/* Safety & Precautionary Notes */}
-              {product.warnings && product.warnings.length > 0 && (
-                <div className="space-y-3">
-                  <h3 className="text-sm font-bold uppercase tracking-wider text-[#666]">
-                    Safety &amp; Precautionary Guidance
-                  </h3>
-                  <ul className="space-y-1.5 text-xs text-[#666]">
-                    {product.warnings.map((w, idx) => (
-                      <li key={idx} className="flex items-start gap-2">
-                        <AlertCircle className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" />
-                        <span>{w}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="space-y-4">
+              <span className="font-ibm-plex-mono text-3xl font-extralight text-alkota-orange">
+                50+
+              </span>
+              <h3 className="text-2xl font-light text-alkota-black">
+                Years of Pressure Washing Chemistry
+              </h3>
+              <p className="text-sm text-[#666] font-normal leading-relaxed">
+                Alkota does not buy white-label commodity detergents. Every master formulation was developed alongside our industrial hot water pressure washer engineers.
+              </p>
             </div>
 
-            {/* Right: Substrate Compatibility Matrix & Tech Docs (5 Cols) */}
-            <div className="lg:col-span-5 space-y-8">
-              <div className="bg-[#FAF9F5] border border-[#E0DEDC] p-6 space-y-4">
-                <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.2em] text-alkota-orange block">
-                  // Substrate Compatibility
-                </span>
-                <h3 className="text-lg font-light text-alkota-black">
-                  Suitable Surfaces
-                </h3>
+            <div className="space-y-4">
+              <span className="font-ibm-plex-mono text-3xl font-extralight text-alkota-orange">
+                100%
+              </span>
+              <h3 className="text-2xl font-light text-alkota-black">
+                Machine &amp; Thermal Synergy
+              </h3>
+              <p className="text-sm text-[#666] font-normal leading-relaxed">
+                Formulated with low-foaming, non-crystallising surfactant packages that protect Schedule 80 heating coils, ceramic plungers, and brass unloader valves.
+              </p>
+            </div>
 
-                <div className="divide-y divide-[#E8E6E0]">
-                  {product.surface_compatibility.map((sc, idx) => (
-                    <div key={idx} className="py-2.5 flex items-center justify-between text-xs">
-                      <span className="font-normal text-[#333]">{sc.surface}</span>
-                      <span className={`px-2 py-0.5 font-ibm-plex-mono text-[9px] uppercase tracking-wider rounded font-bold ${
-                        sc.suitability === 'recommended'
-                          ? 'bg-emerald-100 text-emerald-800'
-                          : sc.suitability === 'safe'
-                          ? 'bg-blue-100 text-blue-800'
-                          : sc.suitability === 'test_first'
-                          ? 'bg-amber-100 text-amber-800'
-                          : 'bg-red-100 text-red-800'
-                      }`}>
-                        {sc.suitability.replace(/_/g, ' ')}
+            <div className="space-y-4">
+              <span className="font-ibm-plex-mono text-3xl font-extralight text-alkota-orange">
+                GB-CLP
+              </span>
+              <h3 className="text-2xl font-light text-alkota-black">
+                Full UK Safety Compliance
+              </h3>
+              <p className="text-sm text-[#666] font-normal leading-relaxed">
+                All formulations comply strictly with UK HSE Chemical Classification, Labelling and Packaging (GB-CLP) guidelines with comprehensive Safety Data Sheets.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* ── 08 PACK SIZE SELECTION & LIVE ORDERING ── */}
+      <ProductPackSelector product={product} />
+
+      {/* ── 09 TECHNICAL DOSSIER & SUBSTRATE MATRIX ── */}
+      <section id="technical" className="py-24 sm:py-32 px-6 sm:px-12 lg:px-24 bg-white text-alkota-black border-b border-[#E0DEDC]">
+        <div className="max-w-7xl mx-auto space-y-16">
+          
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 border-b border-[#E0DEDC] pb-8">
+            <div>
+              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.25em] text-alkota-orange block mb-2">
+                // Technical Profile &amp; Substrates
+              </span>
+              <h2 className="text-4xl sm:text-5xl font-extralight text-alkota-black tracking-tight uppercase">
+                Technical Specification.
+              </h2>
+            </div>
+            <p className="max-w-md text-sm text-[#666] font-light leading-relaxed">
+              Full verified chemical specifications, substrate suitability matrices, and downloadable GB-CLP documentation.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            
+            {/* Left: Substrate Matrix (7 Cols) */}
+            <div className="lg:col-span-7 space-y-6">
+              <h3 className="text-2xl font-light text-alkota-black">
+                Substrate Compatibility Matrix
+              </h3>
+              <p className="text-sm text-[#666] font-light">
+                Verified surface interactions under standard operating dilution. Always test unlisted delicate substrates on an inconspicuous area.
+              </p>
+
+              <div className="border border-[#E0DEDC] divide-y divide-[#E8E8E4]">
+                {product.surface_compatibility.map((sc, idx) => (
+                  <div key={idx} className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-[#FAF9F5]">
+                    <div>
+                      <span className="text-sm font-medium text-alkota-black block">
+                        {sc.surface}
                       </span>
+                      {sc.notes && (
+                        <span className="text-xs text-[#777] font-light mt-0.5 block">
+                          {sc.notes}
+                        </span>
+                      )}
                     </div>
-                  ))}
+                    <span className={`px-3 py-1 font-ibm-plex-mono text-[10px] uppercase tracking-wider rounded font-bold self-start sm:self-auto ${
+                      sc.suitability === 'recommended'
+                        ? 'bg-emerald-100 text-emerald-800'
+                        : sc.suitability === 'safe'
+                        ? 'bg-blue-100 text-blue-800'
+                        : sc.suitability === 'test_first'
+                        ? 'bg-amber-100 text-amber-800'
+                        : 'bg-red-100 text-red-800'
+                    }`}>
+                      {sc.suitability.replace(/_/g, ' ')}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right: Technical Specs & SDS Download (5 Cols) */}
+            <div className="lg:col-span-5 space-y-8">
+              
+              {/* Specification Table */}
+              <div className="p-6 bg-[#FAF9F5] border border-[#E0DEDC] space-y-4">
+                <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-orange block">
+                  Chemistry Reference
+                </span>
+                <div className="divide-y divide-[#E0DEDC] text-xs font-ibm-plex-mono">
+                  <div className="py-2.5 flex justify-between">
+                    <span className="text-[#777]">Master Code:</span>
+                    <span className="font-bold text-alkota-black">{product.originating_master_code}</span>
+                  </div>
+                  <div className="py-2.5 flex justify-between">
+                    <span className="text-[#777]">Original Name:</span>
+                    <span className="font-medium text-alkota-black">{product.originating_master_name}</span>
+                  </div>
+                  <div className="py-2.5 flex justify-between">
+                    <span className="text-[#777]">Formulation Family:</span>
+                    <span className="text-alkota-black">{product.retail_family}</span>
+                  </div>
+                  <div className="py-2.5 flex justify-between">
+                    <span className="text-[#777]">Classification:</span>
+                    <span className="text-emerald-700 font-bold">GB-CLP Verified</span>
+                  </div>
+                  <div className="py-2.5 flex justify-between">
+                    <span className="text-[#777]">Primary Induction:</span>
+                    <span className="text-alkota-black">High/Low Pressure Injector</span>
+                  </div>
                 </div>
               </div>
 
-              {/* Technical Documents Download */}
-              <div className="bg-[#111] text-white p-6 rounded-none space-y-3">
-                <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-alkota-orange block">
-                  Safety Documentation
+              {/* Safety Data Sheet Portal Card */}
+              <div className="bg-[#0A0A0A] text-white p-8 space-y-4 shadow-xl">
+                <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-orange block">
+                  Compliance Dossier
                 </span>
-                <h4 className="text-base font-light">
+                <h4 className="text-xl font-light text-white">
                   Safety Data Sheet (SDS)
                 </h4>
-                <p className="text-xs text-[#888] leading-relaxed">
-                  Verified GB-CLP chemical composition data sheet for {product.originating_master_code} ({product.originating_master_name}).
+                <p className="text-xs text-[#AAA] leading-relaxed">
+                  Official UK CLP safety documentation for {product.originating_master_code} ({product.originating_master_name}) covering composition, PPE requirements, first aid, and ecological storage.
                 </p>
                 <div className="pt-2">
                   <a
                     href={`/api/chemicals/sds?code=${product.originating_master_code}`}
                     target="_blank"
-                    className="inline-flex items-center gap-2 bg-white/10 hover:bg-white hover:text-black text-white px-4 py-2 text-[10px] font-ibm-plex-mono uppercase tracking-widest transition-colors"
+                    className="inline-flex items-center gap-2 bg-white text-black hover:bg-alkota-orange hover:text-white px-6 py-3 text-xs font-ibm-plex-mono uppercase tracking-widest transition-all font-medium"
                   >
-                    <FileText className="w-3.5 h-3.5 text-alkota-orange" />
-                    <span>Download SDS Document</span>
+                    <FileText className="w-3.5 h-3.5" />
+                    <span>Download SDS PDF</span>
                   </a>
                 </div>
               </div>
+
             </div>
 
           </div>
+
         </div>
       </section>
 
-      {/* ── RELATED FORMULATIONS ── */}
-      {relatedProducts.length > 0 && (
-        <section className="py-20 px-6 sm:px-12 lg:px-24">
-          <div className="max-w-7xl mx-auto">
-            <div className="flex items-end justify-between mb-10">
-              <div>
-                <span className="font-ibm-plex-mono text-[9px] uppercase tracking-[0.2em] text-alkota-orange block mb-2">
-                  // Complementary Chemistry
-                </span>
-                <h2 className="text-2xl sm:text-3xl font-light text-alkota-black tracking-tight">
-                  Related Formulations
-                </h2>
-              </div>
-              <Link
-                href="/chemicals"
-                className="font-ibm-plex-mono text-xs uppercase tracking-widest text-alkota-orange hover:text-black transition-colors"
-              >
-                All Chemicals →
-              </Link>
-            </div>
+      {/* ── 10 SYSTEM CROSS-SELL & CLEANING REGIMEN ── */}
+      <ProductSystemCrossSell product={product} relatedProducts={relatedProducts} />
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-[#E0DEDC]">
-              {relatedProducts.map((p) => (
-                <div key={p.id} className="bg-[#FAF9F5]">
-                  <ChemicalCard product={p} />
-                </div>
-              ))}
+      {/* ── 11 MASTER INTEGRITY FOOTER BANNER ── */}
+      <section className="bg-[#0A0A0A] text-white py-12 px-6 sm:px-12 lg:px-24 border-t border-[#222]">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+          <div className="flex items-center gap-4">
+            <Award className="w-6 h-6 text-alkota-orange shrink-0" />
+            <div>
+              <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#777] block">
+                Authentic Alkota Heritage Formulation
+              </span>
+              <span className="font-mono text-sm sm:text-base font-bold text-white">
+                {product.originating_master_code} — {product.originating_master_name}
+              </span>
             </div>
           </div>
-        </section>
-      )}
+          <div className="font-ibm-plex-mono text-xs text-[#888]">
+            Alkota UK · Sourced, Stocked &amp; Despatched from the United Kingdom
+          </div>
+        </div>
+      </section>
 
     </main>
   );

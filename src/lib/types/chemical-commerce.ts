@@ -61,7 +61,34 @@ export interface ChemicalMasterFormulation {
   skus_count?: number;
 }
 
-// 2. Retail Chemical Product (Customer-Facing Ecommerce Entity)
+// 2. Retail Brand Identity & Creative Merchandising Model
+export interface ChemicalWorkflowStep {
+  label: string; // e.g. 'PRE-CLEAN', 'DEGREASE', 'WASH', 'ALUMINIUM', 'RINSE', 'PROTECT'
+  product_name?: string;
+  product_slug?: string;
+  is_current_product?: boolean;
+  notes?: string;
+}
+
+export interface ChemicalBrandIdentity {
+  descriptor: string; // e.g. 'Professional Vehicle Cleaner', 'Industrial Hydrocarbon Degreaser'
+  brand_family: string; // e.g. 'RoadForce', 'GreaseCut', 'AlumaRestore'
+  product_promise: string; // e.g. 'Built for the dirt ordinary detergents leave behind.'
+  product_story_headline: string; // e.g. "THIS ISN'T JUST SOAP."
+  product_story_body: string; // Editorial paragraph explaining the cleaning battle
+  problem_labels: string[]; // e.g. ['ROAD FILM', 'DIESEL SOOT', 'HEAVY OIL', 'WINTER SALT']
+  application_labels: string[]; // e.g. ['HGV & TRUCKS', 'VANS', 'FLEET HAULAGE', 'LIGHT COMMERCIAL']
+  hero_image?: string;
+  lifestyle_images?: string[];
+  product_image?: string;
+  label_concept_notes?: string;
+  brand_colour_accent?: string; // e.g. '#FF6900' for Alkota Orange
+  related_product_ids?: string[]; // Recommended complementary system formulations
+  workflow_steps?: ChemicalWorkflowStep[];
+  ai_content_status?: 'human_verified' | 'ai_suggested' | 'placeholder';
+}
+
+// 3. Retail Chemical Product (Customer-Facing Ecommerce Entity)
 export interface ChemicalRetailProduct {
   id: string;
   master_formulation_id: string;
@@ -70,6 +97,7 @@ export interface ChemicalRetailProduct {
   originating_master_name: string; // e.g. 'Power Blast'
   retail_name: string; // e.g. 'RoadForce Fleet'
   retail_family: string; // e.g. 'RoadForce'
+  descriptor?: string; // e.g. 'Professional Vehicle Cleaner'
   slug: string; // e.g. 'roadforce-fleet'
   short_description: string;
   long_description: string;
@@ -84,6 +112,7 @@ export interface ChemicalRetailProduct {
   warnings: string[];
   compliance_status: ComplianceStatus;
   merchandising_status: MerchandisingStatus;
+  brand_identity?: ChemicalBrandIdentity;
   seo_title: string;
   seo_description: string;
   canonical_url?: string;

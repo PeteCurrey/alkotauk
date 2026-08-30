@@ -396,9 +396,7 @@ export default function Navigation() {
                                   Store
                                 </span>
                               </div>
-                              <p className="text-[11px] text-[#AAA] font-normal mt-0.5">
-                                400+ OEM spares, Mosmatic & tooling
-                              </p>
+
                             </div>
                           </div>
                           <ArrowRight className="h-3.5 w-3.5 text-alkota-orange group-hover:translate-x-1 transition-transform shrink-0" />
@@ -724,19 +722,20 @@ export default function Navigation() {
                 {/* 5. CHEMICALS MEGA MENU */}
                 {activeMenu === 'Chemicals' && (
                   <div className="grid grid-cols-12 gap-10 items-stretch">
-                    {/* Zone 1: Unboxed Links */}
+                    {/* Zone 1: Technical Chemistry & Master Formulations */}
                     <div className="col-span-4 border-r border-[#E0DFD8] pr-8">
                       <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-alkota-orange block mb-4 font-medium">
-                        Industrial Formulations
+                        Professional Chemistry &amp; Applications
                       </span>
                       <div className="divide-y divide-[#EAE9E2] border-t border-[#1A1A18]">
                         {[
-                          { title: 'Trucks & Commercial HGV', desc: 'RoadForce Fleet TR-407 & heavy road film', href: '/chemicals/applications/trucks-hgv' },
-                          { title: 'Agricultural Machinery', desc: 'FieldForce TR-428 & slurry/mud removal', href: '/chemicals/applications/agriculture' },
-                          { title: 'Plant & Heavy Equipment', desc: 'Forge TS-608 & heavy carbon/oil strippers', href: '/chemicals/applications/plant-machinery' },
-                          { title: 'Aluminium & Metal Care', desc: 'AlumaRestore TS-602 acid brighteners', href: '/chemicals/applications/aluminium-metal' },
-                          { title: 'Machine & Coil Care', desc: 'ScaleGuard SD-927 coil scale protection', href: '/chemicals/applications/machine-care' },
-                          { title: 'All Chemical Applications', desc: 'Explore all 8 commercial industry sectors', href: '/chemicals/applications' },
+                          { title: 'Alkota Chemical Overview', desc: 'Master formulations & engineering', href: '/chemicals' },
+                          { title: 'Commercial Fleet & Haulage', desc: 'TR-407 & heavy traffic film removers', href: '/chemicals/applications/trucks-hgv' },
+                          { title: 'Agricultural Machinery', desc: 'TR-428 slurry & heavy mud strippers', href: '/chemicals/applications/agriculture' },
+                          { title: 'Heavy Plant & Industrial', desc: 'TS-608 high-temperature degreasers', href: '/chemicals/applications/plant-machinery' },
+                          { title: 'Aluminium Acid Brighteners', desc: 'TS-602 hydrofluoric-safe chemistry', href: '/chemicals/applications/aluminium-metal' },
+                          { title: 'Schedule 80 Coil Protection', desc: 'SD-927 scale descalers & inhibitors', href: '/chemicals/applications/machine-care' },
+                          { title: 'Chemical Match & Selector', desc: 'Guided metallurgy & surface tool', href: '/chemicals/finder' },
                         ].map((item) => (
                           <Link
                             key={item.href}
@@ -758,7 +757,7 @@ export default function Navigation() {
                       </div>
                     </div>
 
-                    {/* Zone 2: Large Visual Showcase */}
+                    {/* Zone 2: Technical & Compliance Authority */}
                     <div className="col-span-5 bg-white border border-[#E8E7E0] p-7 flex flex-col justify-between">
                       <div>
                         <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-alkota-orange block mb-2 font-medium">
@@ -768,7 +767,7 @@ export default function Navigation() {
                           Formulated for Hot Water Synergy.
                         </h4>
                         <p className="text-xs sm:text-sm text-[#666] leading-relaxed font-normal mb-6">
-                          Alkota chemistry features heat-stable surfactants that accelerate grease emulsification under high temperatures while preserving pump valves and heating coils.
+                          Alkota master chemistry is engineered with heat-stable wetting agents and water-softening sequestrants that accelerate grease breakdown without damaging heating coils or pump packings.
                         </p>
                       </div>
 
@@ -781,50 +780,59 @@ export default function Navigation() {
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                         <span className="absolute bottom-2 left-3 text-[10px] font-mono text-white tracking-wider">
-                          // High-Concentration Concentrates
+                          // Master Formulations: TR-407 · TR-404 · TS-602
                         </span>
                       </div>
 
-                      <Link
-                        href="/chemicals"
-                        onClick={() => setActiveMenu(null)}
-                        className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-[#1A1A18] hover:text-alkota-orange transition-colors font-medium no-underline"
-                      >
-                        <span>View Complete Chemical Roster</span>
-                        <ArrowRight className="h-3.5 w-3.5 text-alkota-orange" />
-                      </Link>
+                      <div className="flex items-center justify-between pt-2 border-t border-[#EAE9E2]">
+                        <Link
+                          href="/chemicals"
+                          onClick={() => setActiveMenu(null)}
+                          className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-[#1A1A18] hover:text-alkota-orange transition-colors font-medium no-underline"
+                        >
+                          <span>Chemical Hub &amp; Specifications</span>
+                          <ArrowRight className="h-3.5 w-3.5 text-alkota-orange" />
+                        </Link>
+                        <Link
+                          href="/chemicals/safety-data"
+                          onClick={() => setActiveMenu(null)}
+                          className="text-xs font-mono uppercase tracking-widest text-[#888] hover:text-alkota-orange transition-colors font-normal no-underline"
+                        >
+                          SDS Library →
+                        </Link>
+                      </div>
                     </div>
 
-                    {/* Zone 3: Diagnostic Engine */}
+                    {/* Zone 3: Buy Online & Bulk Commercial Bridge */}
                     <div className="col-span-3 bg-[#141412] text-white p-6 border border-[#222] flex flex-col justify-between">
                       <div>
                         <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-alkota-orange block mb-2 font-medium">
-                          Diagnostic Tool
+                          Purchasing &amp; Supply
                         </span>
                         <h3 className="text-xl font-light uppercase tracking-tight text-white mb-2">
-                          Chemical Match.
+                          Buy Chemicals Online.
                         </h3>
                         <p className="text-xs text-[#AAA] leading-relaxed font-normal mb-6">
-                          Match your exact contamination and surface metallurgy against safe dilution and dosing parameters.
+                          Purchase 5L, 20L, 200L drums and 1000L IBCs directly from the Parts &amp; Attachments store.
                         </p>
                       </div>
 
                       <div className="space-y-2.5">
                         <Link
-                          href="/chemicals/match"
+                          href="/parts-attachments/chemicals"
                           onClick={() => setActiveMenu(null)}
                           className="flex items-center justify-between w-full bg-alkota-orange text-white px-4 py-3 font-mono text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-colors no-underline shadow-md font-medium"
                         >
-                          <span>Run Chemical Match</span>
+                          <span>Buy Chemicals Online</span>
                           <ArrowRight className="h-3.5 w-3.5" />
                         </Link>
                         <Link
-                          href="/chemicals/safety-data"
+                          href="/contact?type=chemical-bulk"
                           onClick={() => setActiveMenu(null)}
                           className="flex items-center justify-between w-full border border-white/20 bg-white/5 text-white px-4 py-2.5 font-mono text-xs uppercase tracking-widest hover:border-white hover:bg-white hover:text-black transition-all no-underline font-normal"
                         >
-                          <span>SDS Download Portal</span>
-                          <FileText className="h-3.5 w-3.5" />
+                          <span>Dealer &amp; Bulk Purchasing</span>
+                          <ArrowUpRight className="h-3.5 w-3.5 text-[#BBB]" />
                         </Link>
                       </div>
                     </div>
@@ -1038,9 +1046,21 @@ export default function Navigation() {
                           )}
                           {link.name === 'Chemicals' && (
                             <>
-                              <Link href="/chemicals/fleet-vehicle" onClick={() => setMobileMenuOpen(false)} className="text-sm text-[#CCC] hover:text-alkota-orange no-underline py-0.5">Fleet & Transport</Link>
-                              <Link href="/chemicals/degreasers" onClick={() => setMobileMenuOpen(false)} className="text-sm text-[#CCC] hover:text-alkota-orange no-underline py-0.5">Industrial Degreasers</Link>
-                              <Link href="/chemicals" onClick={() => setMobileMenuOpen(false)} className="text-sm text-[#CCC] hover:text-alkota-orange no-underline py-0.5">All Chemicals</Link>
+                              <Link
+                                href="/parts-attachments/chemicals"
+                                onClick={() => setMobileMenuOpen(false)}
+                                className="flex items-center justify-between p-2.5 bg-[#141412] text-white border border-alkota-orange/40 hover:border-alkota-orange no-underline my-1"
+                              >
+                                <div className="flex items-center gap-2">
+                                  <span className="h-2 w-2 rounded-full bg-alkota-orange" />
+                                  <span className="text-xs font-bold uppercase tracking-wider text-white">Buy Chemicals Online</span>
+                                </div>
+                                <ArrowRight className="h-3 w-3 text-alkota-orange" />
+                              </Link>
+                              <Link href="/chemicals" onClick={() => setMobileMenuOpen(false)} className="text-sm text-[#CCC] hover:text-alkota-orange no-underline py-0.5">Chemical Overview &amp; Master Specs</Link>
+                              <Link href="/chemicals/applications" onClick={() => setMobileMenuOpen(false)} className="text-sm text-[#CCC] hover:text-alkota-orange no-underline py-0.5">Industry Applications</Link>
+                              <Link href="/chemicals/safety-data" onClick={() => setMobileMenuOpen(false)} className="text-sm text-[#CCC] hover:text-alkota-orange no-underline py-0.5">SDS Compliance Portal</Link>
+                              <Link href="/contact?type=chemical-bulk" onClick={() => setMobileMenuOpen(false)} className="text-sm text-alkota-orange font-medium no-underline py-0.5">Dealer &amp; Bulk Purchasing →</Link>
                             </>
                           )}
                           {link.name === 'Resources' && (

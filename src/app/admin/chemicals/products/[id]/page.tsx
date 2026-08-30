@@ -9,7 +9,10 @@ import {
   ExternalLink, 
   Save, 
   Sparkles,
-  Info
+  Info,
+  Palette,
+  Package,
+  Award
 } from 'lucide-react';
 import { getRetailProducts, getMasterFormulations } from '@/lib/chemicals/service';
 
@@ -28,10 +31,10 @@ export default async function AdminRetailProductEditorPage({ params }: PageProps
     notFound();
   }
 
-  const formulations = await getMasterFormulations();
+  const brand = product.brand_identity;
 
   return (
-    <div className="space-y-6 max-w-5xl mx-auto font-sans pb-16">
+    <div className="space-y-6 max-w-5xl mx-auto font-sans pb-24">
       {/* ── BREADCRUMB ── */}
       <div className="flex items-center justify-between">
         <Link href="/admin/chemicals/products" className="text-xs font-bold text-[#64748B] hover:text-[#0F172A] flex items-center gap-1">
@@ -42,7 +45,7 @@ export default async function AdminRetailProductEditorPage({ params }: PageProps
           target="_blank"
           className="inline-flex items-center gap-1.5 text-xs font-bold text-[#FF6900] hover:underline"
         >
-          <span>View Public Storefront</span>
+          <span>View Public Digital Product Page</span>
           <ExternalLink className="h-3.5 w-3.5" />
         </Link>
       </div>
@@ -78,11 +81,122 @@ export default async function AdminRetailProductEditorPage({ params }: PageProps
         </div>
       </div>
 
-      {/* ── MAIN EDIT FORM ── */}
+      {/* ── CHEMICAL BRAND STUDIO: DIGITAL-FIRST CREATIVE MASTER ── */}
+      <div className="bg-[#0A0A0A] text-white p-8 rounded-2xl border border-[#333] shadow-lg space-y-6">
+        <div className="flex items-center justify-between border-b border-white/10 pb-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <Palette className="w-4 h-4 text-[#FF6900]" />
+              <h2 className="text-base font-bold text-white uppercase tracking-wider font-mono">
+                Chemical Brand Studio
+              </h2>
+            </div>
+            <p className="text-xs text-[#888]">
+              Define consumer-facing identity, bottle art direction, label hierarchy, and editorial storytelling.
+            </p>
+          </div>
+
+          <span className="font-mono text-[10px] text-emerald-400 bg-emerald-950/60 border border-emerald-800/50 px-2.5 py-1 rounded">
+            Status: {brand?.ai_content_status || 'human_verified'}
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div>
+            <label className="block text-xs font-mono text-[#AAA] uppercase tracking-wider mb-1.5">
+              Product Descriptor (Brand Layer)
+            </label>
+            <input
+              type="text"
+              defaultValue={brand?.descriptor || product.descriptor || 'Professional Vehicle Cleaner'}
+              placeholder="e.g. Professional Vehicle Cleaner"
+              className="w-full bg-[#181818] border border-[#333] rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-[#FF6900]"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-mono text-[#AAA] uppercase tracking-wider mb-1.5">
+              Brand Accent Color (Hex)
+            </label>
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                defaultValue={brand?.brand_colour_accent || '#FF6900'}
+                className="w-full bg-[#181818] border border-[#333] rounded-xl px-4 py-2.5 text-xs font-mono text-white focus:outline-none focus:border-[#FF6900]"
+              />
+              <div 
+                className="w-9 h-9 rounded-xl border border-white/20 shrink-0" 
+                style={{ backgroundColor: brand?.brand_colour_accent || '#FF6900' }}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-xs font-mono text-[#AAA] uppercase tracking-wider mb-1.5">
+            Customer Promise (Hero Headline Hook)
+          </label>
+          <input
+            type="text"
+            defaultValue={brand?.product_promise || 'Built for the dirt ordinary detergents leave behind.'}
+            className="w-full bg-[#181818] border border-[#333] rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-[#FF6900]"
+          />
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div>
+            <label className="block text-xs font-mono text-[#AAA] uppercase tracking-wider mb-1.5">
+              Editorial Story Headline
+            </label>
+            <input
+              type="text"
+              defaultValue={brand?.product_story_headline || "THIS ISN'T JUST SOAP."}
+              className="w-full bg-[#181818] border border-[#333] rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-[#FF6900]"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-mono text-[#AAA] uppercase tracking-wider mb-1.5">
+              Target Soil Labels (Comma Separated)
+            </label>
+            <input
+              type="text"
+              defaultValue={brand?.problem_labels?.join(', ') || 'ROAD FILM, DIESEL RESIDUE, OIL & GREASE, WINTER SALT'}
+              className="w-full bg-[#181818] border border-[#333] rounded-xl px-4 py-2.5 text-xs font-mono text-white focus:outline-none focus:border-[#FF6900]"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-xs font-mono text-[#AAA] uppercase tracking-wider mb-1.5">
+            Editorial Story Narrative Body
+          </label>
+          <textarea
+            rows={3}
+            defaultValue={brand?.product_story_body || product.long_description}
+            className="w-full bg-[#181818] border border-[#333] rounded-xl p-3.5 text-xs text-white focus:outline-none focus:border-[#FF6900]"
+          />
+        </div>
+
+        <div className="p-4 bg-[#141414] border border-[#282828] rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-2.5 text-xs text-[#AAA]">
+            <Sparkles className="w-4 h-4 text-[#FF6900]" />
+            <span>AI Brand Studio Assistant: Generate fresh positioning, copy alternatives, and tags without touching technical chemistry.</span>
+          </div>
+          <button
+            type="button"
+            className="px-4 py-2 bg-white/10 hover:bg-[#FF6900] hover:text-white text-xs font-mono uppercase tracking-wider text-white transition-all shrink-0 rounded-lg"
+          >
+            Generate AI Brand Copy
+          </button>
+        </div>
+      </div>
+
+      {/* ── TECHNICAL & OPERATIONAL ATTRIBUTES ── */}
       <div className="bg-white p-8 rounded-2xl border border-[#E2E4E8] shadow-sm space-y-6">
         <div className="border-b border-[#F0F2F5] pb-4">
-          <h2 className="text-lg font-bold text-[#0F172A]">Retail Merchandising Information</h2>
-          <p className="text-xs text-[#64748B]">Configure customer-facing names, applications, and SEO descriptions.</p>
+          <h2 className="text-lg font-bold text-[#0F172A]">Technical Merchandising &amp; Dilution Guidance</h2>
+          <p className="text-xs text-[#64748B]">Verified dilution and substrate compatibility parameters.</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -96,15 +210,6 @@ export default async function AdminRetailProductEditorPage({ params }: PageProps
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-[#0F172A] mb-1.5">Retail Family</label>
-            <input
-              type="text"
-              defaultValue={product.retail_family}
-              className="w-full bg-[#F8F9FB] border border-[#CBD5E1] rounded-xl px-4 py-2.5 text-xs text-[#0F172A] font-semibold focus:outline-none focus:border-[#FF6900]"
-            />
-          </div>
-
-          <div>
             <label className="block text-xs font-bold text-[#0F172A] mb-1.5">URL Slug</label>
             <input
               type="text"
@@ -112,33 +217,6 @@ export default async function AdminRetailProductEditorPage({ params }: PageProps
               className="w-full bg-[#F8F9FB] border border-[#CBD5E1] rounded-xl px-4 py-2.5 text-xs font-mono text-[#0F172A] focus:outline-none focus:border-[#FF6900]"
             />
           </div>
-
-          <div>
-            <label className="block text-xs font-bold text-[#0F172A] mb-1.5">Primary Application</label>
-            <input
-              type="text"
-              defaultValue={product.primary_application}
-              className="w-full bg-[#F8F9FB] border border-[#CBD5E1] rounded-xl px-4 py-2.5 text-xs text-[#0F172A] focus:outline-none focus:border-[#FF6900]"
-            />
-          </div>
-        </div>
-
-        <div>
-          <label className="block text-xs font-bold text-[#0F172A] mb-1.5">Short Description</label>
-          <textarea
-            rows={2}
-            defaultValue={product.short_description}
-            className="w-full bg-[#F8F9FB] border border-[#CBD5E1] rounded-xl p-3.5 text-xs text-[#0F172A] focus:outline-none focus:border-[#FF6900]"
-          />
-        </div>
-
-        <div>
-          <label className="block text-xs font-bold text-[#0F172A] mb-1.5">Long Description &amp; Technical Scope</label>
-          <textarea
-            rows={4}
-            defaultValue={product.long_description}
-            className="w-full bg-[#F8F9FB] border border-[#CBD5E1] rounded-xl p-3.5 text-xs text-[#0F172A] focus:outline-none focus:border-[#FF6900]"
-          />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-[#F0F2F5]">
@@ -218,7 +296,7 @@ export default async function AdminRetailProductEditorPage({ params }: PageProps
           </Link>
           <button
             type="button"
-            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold bg-[#FF6900] hover:bg-[#E55D00] text-white shadow-md transition-all"
+            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold bg-[#FF6900] hover:bg-[#E55D00] text-white shadow-md transition-all cursor-pointer"
           >
             <Save className="h-4 w-4" />
             <span>Save Product Changes</span>

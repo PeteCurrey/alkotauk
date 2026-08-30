@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Metadata } from 'next';
-import { Layers, ArrowRight, ShieldCheck, CheckCircle2, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 import { supabaseAdmin } from '@/lib/supabase/server';
 import { COMPREHENSIVE_APPLICATIONS } from '@/lib/parts/seed-comprehensive';
 
@@ -59,57 +59,57 @@ export default async function ApplicationsDirectoryPage() {
         </div>
       </section>
 
-      {/* ── 10 INDUSTRIAL APPLICATIONS GRID ── */}
-      <section className="py-16 px-6 sm:px-12 lg:px-24">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {apps.map((app: any, idx: number) => (
-              <Link
-                key={app.slug}
-                href={`/parts-attachments/applications/${app.slug}`}
-                className="group bg-white border border-[#E8E8E4] hover:border-alkota-orange p-8 sm:p-10 transition-all flex flex-col justify-between"
-              >
+      {/* ── EDITORIAL APPLICATIONS STRIP (No Box Farm) ── */}
+      <section className="py-16 px-6 sm:px-12 lg:px-24 bg-[#FAF9F5]">
+        <div className="max-w-7xl mx-auto divide-y divide-[#E0DEDC]">
+          {apps.map((app: any, idx: number) => (
+            <Link
+              key={app.slug}
+              href={`/parts-attachments/applications/${app.slug}`}
+              className="flex flex-col lg:flex-row lg:items-baseline justify-between gap-6 py-10 group hover:bg-[#F2F1EC] -mx-4 px-4 transition-colors no-underline"
+            >
+              {/* Index & Title */}
+              <div className="flex items-baseline gap-6 lg:w-5/12 min-w-0">
+                <span className="font-ibm-plex-mono text-[10px] text-[#BBB] shrink-0">
+                  {String(idx + 1).padStart(2, '0')}
+                </span>
                 <div>
-                  <div className="flex items-center justify-between gap-4 mb-4">
-                    <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-orange">
-                      // APP {String(idx + 1).padStart(2, '0')}
-                    </span>
-                    <span className="text-xs font-ibm-plex-mono text-[#888] uppercase tracking-wider">
-                      Specialist Tooling
-                    </span>
-                  </div>
-
-                  <h2 className="text-2xl sm:text-3xl font-light text-alkota-black tracking-tight group-hover:text-alkota-orange transition-colors mb-3">
+                  <h2 className="text-2xl sm:text-3xl font-light text-alkota-black group-hover:text-alkota-orange transition-colors">
                     {app.name}
                   </h2>
+                  {app.tagline && (
+                    <p className="text-sm text-[#555] font-normal mt-1 leading-relaxed">
+                      {app.tagline}
+                    </p>
+                  )}
+                  {app.editorial_intro && (
+                    <p className="text-xs text-[#777] font-light mt-2 leading-relaxed line-clamp-2 max-w-xl">
+                      {app.editorial_intro}
+                    </p>
+                  )}
+                </div>
+              </div>
 
-                  <p className="text-sm font-normal text-[#444] mb-4 leading-relaxed">
-                    {app.tagline}
-                  </p>
-
-                  <p className="text-xs font-light text-[#666] leading-relaxed line-clamp-3 mb-6">
-                    {app.editorial_intro}
-                  </p>
-
-                  <div className="p-3.5 bg-[#FAF9F5] border border-[#E8E8E4] font-ibm-plex-mono text-[11px] text-[#555]">
-                    <span className="text-alkota-orange font-medium block mb-1 uppercase tracking-wider text-[9px]">
-                      Recommended Setup:
+              {/* Recommended Spec & Action */}
+              <div className="lg:w-6/12 flex flex-col sm:flex-row sm:items-center justify-between gap-4 lg:pl-8">
+                {app.recommended_specs ? (
+                  <div className="font-ibm-plex-mono text-[11px] text-[#777]">
+                    <span className="text-[9px] uppercase tracking-widest text-[#999] block mb-0.5">
+                      Recommended Spec:
                     </span>
                     <span>{app.recommended_specs}</span>
                   </div>
-                </div>
+                ) : (
+                  <div />
+                )}
 
-                <div className="pt-6 mt-6 border-t border-[#F0EFEB] flex items-center justify-between">
-                  <span className="font-ibm-plex-mono text-[10px] text-[#888] uppercase tracking-wider">
-                    Equipment & Attachments
-                  </span>
-                  <span className="text-xs font-ibm-plex-mono uppercase tracking-widest text-alkota-orange flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-                    Explore Application <ArrowRight className="w-3.5 h-3.5" />
-                  </span>
+                <div className="flex items-center gap-2 text-xs font-ibm-plex-mono uppercase tracking-widest text-alkota-orange group-hover:translate-x-1 transition-transform shrink-0">
+                  <span>Explore Tooling</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
                 </div>
-              </Link>
-            ))}
-          </div>
+              </div>
+            </Link>
+          ))}
         </div>
       </section>
     </main>

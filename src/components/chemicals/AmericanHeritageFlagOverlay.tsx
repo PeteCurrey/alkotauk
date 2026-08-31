@@ -1,158 +1,192 @@
 'use client';
 
 import React, { useRef } from 'react';
-import { motion, useScroll, useVelocity, useSpring, useTransform, useReducedMotion } from 'framer-motion';
+import {
+  motion,
+  useScroll,
+  useVelocity,
+  useSpring,
+  useTransform,
+  useReducedMotion,
+} from 'framer-motion';
 
 interface AmericanHeritageFlagOverlayProps {
   className?: string;
   opacity?: number;
 }
 
-export default function AmericanHeritageFlagOverlay({ 
-  className = '', 
-  opacity = 0.20 
+export default function AmericanHeritageFlagOverlay({
+  className = '',
+  opacity = 0.20,
 }: AmericanHeritageFlagOverlayProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const shouldReduceMotion = useReducedMotion();
 
-  // Track scroll position through the parent section
+  // Track scroll progress and velocity through the section
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start end', 'end start'],
   });
 
-  // Calculate scroll velocity
   const scrollVelocity = useVelocity(scrollYProgress);
 
-  // Smooth the scroll velocity with physics spring to simulate natural air resistance
+  // Damped spring — gives the scroll-coupled ripple physical inertia and smooth decay
   const smoothVelocity = useSpring(scrollVelocity, {
-    stiffness: 85,
-    damping: 24,
-    mass: 0.8,
+    stiffness: 55,
+    damping: 18,
+    mass: 0.5,
   });
 
-  // Smooth scroll progression
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 70,
-    damping: 28,
-  });
+  // Scroll progress drives a gentle vertical parallax drift across the section
+  const scrollDriftY = useTransform(scrollYProgress, [0, 1], [-20, 20]);
 
-  // Dynamic wind billow transforms mapped to spring-smoothed velocity
-  const windSkewX = useTransform(smoothVelocity, [-1.2, 0, 1.2], [-2.5, 0, 2.5]);
-  const windSkewY = useTransform(smoothVelocity, [-1.2, 0, 1.2], [1.2, 0, -1.2]);
-  const windTranslateX = useTransform(smoothVelocity, [-1.2, 0, 1.2], [12, 0, -12]);
-  const windTranslateY = useTransform(smoothProgress, [0, 1], [-16, 16]);
-  const windScale = useTransform(smoothVelocity, [-1.2, 0, 1.2], [1.02, 1.0, 1.02]);
+  // Scroll velocity adds ripple amplitude — satin cloth light sheen shifts as the flag billows
+  const sheenX = useTransform(scrollYProgress, [0, 1], ['-10%', '50%']);
+  const sheenOpacity = useTransform(smoothVelocity, [-1.5, 0, 1.5], [0.40, 0.10, 0.40]);
 
-  // Satin cloth light sheen shift across the flag surface
-  const sheenShiftX = useTransform(smoothProgress, [0, 1], ['-20%', '40%']);
-  const sheenOpacity = useTransform(smoothVelocity, [-1.2, 0, 1.2], [0.30, 0.12, 0.30]);
+  // Extra rotateY boost from scroll velocity — simulates gusts of wind
+  const scrollRotateBoost = useTransform(smoothVelocity, [-1.5, 0, 1.5], [-4, 0, 4]);
 
   return (
-    <div 
+    <div
       ref={containerRef}
       className={`absolute inset-0 pointer-events-none overflow-hidden select-none z-0 ${className}`}
       aria-hidden="true"
     >
-      {/* ── FULL SECTION AMERICAN FLAG WITH SCROLL-COUPLED WIND WAVE ── */}
-      <motion.div 
-        className="absolute inset-0 w-full h-full origin-center"
+      {/* ── AMBIENT WIND WAVE + SCROLL RIPPLE WRAPPER ── */}
+      <motion.div
+        className="absolute inset-0 w-full h-full"
         style={{
           opacity,
-          skewX: shouldReduceMotion ? 0 : windSkewX,
-          skewY: shouldReduceMotion ? 0 : windSkewY,
-          x: shouldReduceMotion ? 0 : windTranslateX,
-          y: shouldReduceMotion ? 0 : windTranslateY,
-          scale: shouldReduceMotion ? 1 : windScale,
+          y: shouldReduceMotion ? 0 : scrollDriftY,
+          perspective: '1400px',
         }}
       >
-        <svg 
-          viewBox="0 0 1200 630" 
-          fill="none" 
-          xmlns="http://www.w3.org/2000/svg"
-          preserveAspectRatio="xMidYMid slice"
-          className="w-full h-full object-cover filter contrast-[1.10]"
+        {/* ── FLAG BODY: rotateY around left edge (pole) to simulate cloth wave ── */}
+        <motion.div
+          className="absolute inset-0 w-full h-full"
+          style={{
+            transformOrigin: 'left center',
+            transformStyle: 'preserve-3d',
+            rotateY: shouldReduceMotion ? 0 : scrollRotateBoost,
+          }}
+          animate={shouldReduceMotion ? {} : {
+            // Multi-keyframe irregular wave: avoids mechanical loop feel
+            // Inspired by cloth billowing: slow build, peak, settle, repeat asymmetrically
+            rotateY: [0, 2.8, 1.2, -1.8, 3.4, 1.0, -0.6, 2.2, 0],
+            rotateZ: [0, 0.35, -0.15, 0.45, -0.25, 0.30, -0.10, 0.20, 0],
+            scaleX: [1.00, 1.012, 1.005, 0.996, 1.018, 1.004, 0.998, 1.010, 1.00],
+            y: [0, -5, -2, 3, -7, -1, 4, -3, 0],
+          }}
+          transition={{
+            duration: 9.0,
+            repeat: Infinity,
+            ease: 'easeInOut',
+            // Irregular timing creates organic, non-mechanical wave feel
+            times: [0, 0.12, 0.25, 0.40, 0.55, 0.66, 0.78, 0.90, 1.0],
+          }}
         >
-          <defs>
-            {/* Ambient wind wave gradient lighting sheen */}
-            <linearGradient id="flagWindLightSheenFull" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.14" />
-              <stop offset="25%" stopColor="#000000" stopOpacity="0.20" />
-              <stop offset="50%" stopColor="#FFFFFF" stopOpacity="0.22" />
-              <stop offset="75%" stopColor="#000000" stopOpacity="0.24" />
-              <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0.10" />
-            </linearGradient>
-          </defs>
+          <svg
+            viewBox="0 0 1200 630"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            preserveAspectRatio="xMidYMid slice"
+            className="w-full h-full filter contrast-[1.10]"
+          >
+            <defs>
+              <linearGradient id="flagLightWave" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.0" />
+                <stop offset="30%" stopColor="#FFFFFF" stopOpacity="0.12" />
+                <stop offset="55%" stopColor="#000000" stopOpacity="0.15" />
+                <stop offset="80%" stopColor="#FFFFFF" stopOpacity="0.18" />
+                <stop offset="100%" stopColor="#000000" stopOpacity="0.10" />
+              </linearGradient>
+            </defs>
 
-          {/* 13 Alternate Red & White Stripes spanning full 1200 width */}
-          <rect y="0" width="1200" height="48.46" fill="#B22234" fillOpacity="0.75" />
-          <rect y="48.46" width="1200" height="48.46" fill="#F4F1EA" fillOpacity="0.85" />
-          <rect y="96.92" width="1200" height="48.46" fill="#B22234" fillOpacity="0.75" />
-          <rect y="145.38" width="1200" height="48.46" fill="#F4F1EA" fillOpacity="0.85" />
-          <rect y="193.84" width="1200" height="48.46" fill="#B22234" fillOpacity="0.75" />
-          <rect y="242.30" width="1200" height="48.46" fill="#F4F1EA" fillOpacity="0.85" />
-          <rect y="290.76" width="1200" height="48.46" fill="#B22234" fillOpacity="0.75" />
-          <rect y="339.22" width="1200" height="48.46" fill="#F4F1EA" fillOpacity="0.85" />
-          <rect y="387.68" width="1200" height="48.46" fill="#B22234" fillOpacity="0.75" />
-          <rect y="436.14" width="1200" height="48.46" fill="#F4F1EA" fillOpacity="0.85" />
-          <rect y="484.60" width="1200" height="48.46" fill="#B22234" fillOpacity="0.75" />
-          <rect y="533.06" width="1200" height="48.46" fill="#F4F1EA" fillOpacity="0.85" />
-          <rect y="581.52" width="1200" height="48.46" fill="#B22234" fillOpacity="0.75" />
+            {/* 13 Alternate Red & White Stripes — full 1200px width */}
+            <rect y="0"      width="1200" height="48.46" fill="#B22234" fillOpacity="0.75" />
+            <rect y="48.46"  width="1200" height="48.46" fill="#F4F1EA" fillOpacity="0.85" />
+            <rect y="96.92"  width="1200" height="48.46" fill="#B22234" fillOpacity="0.75" />
+            <rect y="145.38" width="1200" height="48.46" fill="#F4F1EA" fillOpacity="0.85" />
+            <rect y="193.84" width="1200" height="48.46" fill="#B22234" fillOpacity="0.75" />
+            <rect y="242.30" width="1200" height="48.46" fill="#F4F1EA" fillOpacity="0.85" />
+            <rect y="290.76" width="1200" height="48.46" fill="#B22234" fillOpacity="0.75" />
+            <rect y="339.22" width="1200" height="48.46" fill="#F4F1EA" fillOpacity="0.85" />
+            <rect y="387.68" width="1200" height="48.46" fill="#B22234" fillOpacity="0.75" />
+            <rect y="436.14" width="1200" height="48.46" fill="#F4F1EA" fillOpacity="0.85" />
+            <rect y="484.60" width="1200" height="48.46" fill="#B22234" fillOpacity="0.75" />
+            <rect y="533.06" width="1200" height="48.46" fill="#F4F1EA" fillOpacity="0.85" />
+            <rect y="581.52" width="1200" height="48.46" fill="#B22234" fillOpacity="0.75" />
 
-          {/* Blue Union Canton Field (scaled proportionally) */}
-          <rect width="480" height="339.22" fill="#1E3A8A" fillOpacity="0.92" />
+            {/* Blue Union Canton */}
+            <rect width="480" height="339.22" fill="#1E3A8A" fillOpacity="0.92" />
 
-          {/* 50 Precision Stars Pattern */}
-          <g fill="#FFFFFF" fillOpacity="0.95">
-            {Array.from({ length: 9 }).map((_, rowIndex) => {
-              const isEvenRow = rowIndex % 2 === 0;
-              const starCount = isEvenRow ? 6 : 5;
-              const y = 22 + rowIndex * 34;
-              const xStart = isEvenRow ? 30 : 68;
-              const xSpacing = 76;
+            {/* 50 Stars */}
+            <g fill="#FFFFFF" fillOpacity="0.95">
+              {Array.from({ length: 9 }).map((_, rowIndex) => {
+                const isEvenRow = rowIndex % 2 === 0;
+                const starCount = isEvenRow ? 6 : 5;
+                const y = 22 + rowIndex * 34;
+                const xStart = isEvenRow ? 30 : 68;
+                const xSpacing = 76;
+                return Array.from({ length: starCount }).map((__, colIndex) => {
+                  const cx = xStart + colIndex * xSpacing;
+                  const cy = y;
+                  return (
+                    <path
+                      key={`s-${rowIndex}-${colIndex}`}
+                      d={`M ${cx} ${cy-8.5} L ${cx+2.5} ${cy-2.6} L ${cx+8.5} ${cy-2.6} L ${cx+3.7} ${cy+1.2} L ${cx+5.5} ${cy+7.4} L ${cx} ${cy+3.5} L ${cx-5.5} ${cy+7.4} L ${cx-3.7} ${cy+1.2} L ${cx-8.5} ${cy-2.6} L ${cx-2.5} ${cy-2.6} Z`}
+                    />
+                  );
+                });
+              })}
+            </g>
 
-              return Array.from({ length: starCount }).map((__, colIndex) => {
-                const cx = xStart + colIndex * xSpacing;
-                const cy = y;
-                return (
-                  <path
-                    key={`star-${rowIndex}-${colIndex}`}
-                    d={`M ${cx} ${cy - 8.5} 
-                        L ${cx + 2.5} ${cy - 2.6} 
-                        L ${cx + 8.5} ${cy - 2.6} 
-                        L ${cx + 3.7} ${cy + 1.2} 
-                        L ${cx + 5.5} ${cy + 7.4} 
-                        L ${cx} ${cy + 3.5} 
-                        L ${cx - 5.5} ${cy + 7.4} 
-                        L ${cx - 3.7} ${cy + 1.2} 
-                        L ${cx - 8.5} ${cy - 2.6} 
-                        L ${cx - 2.5} ${cy - 2.6} Z`}
-                  />
-                );
-              });
-            })}
-          </g>
+            {/* Cloth light-wave shading — shifts with the wind */}
+            <rect width="1200" height="630" fill="url(#flagLightWave)" />
+          </svg>
+        </motion.div>
 
-          {/* Wind Ripple Lighting Sheen across full width */}
-          <rect width="1200" height="630" fill="url(#flagWindLightSheenFull)" />
-        </svg>
+        {/* ── SECONDARY CLOTH RIPPLE LIGHT LAYER ──
+            Animates independently at a different period (5.7s vs 9s)
+            to create the illusion of multiple wave crests crossing the cloth */}
+        {!shouldReduceMotion && (
+          <motion.div
+            className="absolute inset-0 pointer-events-none"
+            animate={{
+              background: [
+                'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.05) 20%, transparent 42%, rgba(255,255,255,0.07) 68%, transparent 88%, rgba(255,255,255,0.04) 100%)',
+                'linear-gradient(90deg, rgba(255,255,255,0.06) 0%, transparent 22%, rgba(255,255,255,0.05) 48%, transparent 72%, rgba(255,255,255,0.07) 92%, transparent 100%)',
+                'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.04) 15%, rgba(255,255,255,0.08) 40%, transparent 65%, rgba(255,255,255,0.05) 85%, transparent 100%)',
+                'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.05) 20%, transparent 42%, rgba(255,255,255,0.07) 68%, transparent 88%, rgba(255,255,255,0.04) 100%)',
+              ],
+            }}
+            transition={{
+              duration: 5.7,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }}
+            style={{ mixBlendMode: 'screen' }}
+          />
+        )}
       </motion.div>
 
-      {/* Dynamic Scroll-Coupled Satin Sheen Layer across Full Section */}
+      {/* ── SCROLL-DRIVEN SATIN SHEEN — billows across the full flag as you scroll ── */}
       {!shouldReduceMotion && (
         <motion.div
           className="absolute inset-0 pointer-events-none"
           style={{
-            x: sheenShiftX,
+            x: sheenX,
             opacity: sheenOpacity,
-            background: 'radial-gradient(ellipse 75% 60% at 40% 40%, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0) 70%)',
+            background: 'radial-gradient(ellipse 60% 80% at 30% 50%, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 65%)',
+            mixBlendMode: 'screen',
           }}
         />
       )}
 
-      {/* Atmospheric Ambient Gradients Fading Across Full Section */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#1A1917]/75 via-[#1A1917]/80 to-[#1A1917]/90" />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#1A1917] via-transparent to-[#1A1917]/70" />
+      {/* ── ATMOSPHERIC EDGE INTEGRATION into dark #1A1917 canvas ── */}
+      <div className="absolute inset-0 bg-gradient-to-r from-[#1A1917]/65 via-[#1A1917]/75 to-[#1A1917]/88" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#1A1917] via-transparent to-[#1A1917]/65" />
     </div>
   );
 }

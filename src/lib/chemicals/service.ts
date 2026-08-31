@@ -153,8 +153,11 @@ export async function getRetailProducts(options?: {
 
 export async function getRetailProductBySlug(slug: string): Promise<ChemicalRetailProduct | null> {
   const norm = slug.trim().toLowerCase();
+  
+  // 1. Direct match in local seed definitions
   let prod = RETAIL_PRODUCTS.find(p => p.slug.toLowerCase() === norm) || null;
 
+  // 2. Direct match in Supabase
   try {
     const { data } = await supabaseAdmin
       .from('chemical_retail_products')
@@ -164,6 +167,48 @@ export async function getRetailProductBySlug(slug: string): Promise<ChemicalReta
 
     if (data) prod = data;
   } catch {}
+
+  // 3. Fallback: Check known aliases and shorthands
+  if (!prod) {
+    const SLUG_ALIASES: Record<string, string> = {
+      'greasecut-workshop-degreaser': 'greasecut-multi-surface-workshop-degreaser',
+      'greasecut-super-duty-degreaser': 'greasecut-multi-surface-workshop-degreaser',
+      'greasecut-degreaser': 'greasecut-multi-surface-workshop-degreaser',
+      'greasecut': 'greasecut-multi-surface-workshop-degreaser',
+      'scaleguard-coil-protector': 'scaleguard-water-softener-coil-protector',
+      'scaleguard': 'scaleguard-water-softener-coil-protector',
+      'roadforce-fleet-tfr': 'roadforce-fleet-heavy-tfr',
+      'roadforce-tfr': 'roadforce-fleet-heavy-tfr',
+      'roadforce': 'roadforce-fleet-heavy-tfr',
+      'alumarestore-acid-brightener': 'alumarestore-aluminium-acid-brightener',
+      'alumarestore': 'alumarestore-aluminium-acid-brightener',
+      'citrusforce-degreaser': 'citrusforce-natural-solvent-degreaser',
+      'coilrestore-descaler': 'coilrestore-schedule-80-coil-descaler',
+    };
+
+    const targetSlug = SLUG_ALIASES[norm];
+    if (targetSlug) {
+      prod = RETAIL_PRODUCTS.find(p => p.slug.toLowerCase() === targetSlug) || null;
+      if (!prod) {
+        try {
+          const { data } = await supabaseAdmin
+            .from('chemical_retail_products')
+            .select('*')
+            .eq('slug', targetSlug)
+            .single();
+          if (data) prod = data;
+        } catch {}
+      }
+    }
+  }
+
+  // 4. Fuzzy fallback: prefix or partial match
+  if (!prod) {
+    const firstWord = norm.split('-')[0];
+    if (firstWord && firstWord.length > 3) {
+      prod = RETAIL_PRODUCTS.find(p => p.slug.toLowerCase().startsWith(firstWord)) || null;
+    }
+  }
 
   if (!prod) return null;
 

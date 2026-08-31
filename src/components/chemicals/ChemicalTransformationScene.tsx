@@ -110,7 +110,7 @@ export default function ChemicalTransformationScene() {
               </span>
             </div>
             <Link
-              href="/chemicals/product/greasecut-workshop-degreaser"
+              href="/chemicals/product/greasecut-multi-surface-workshop-degreaser"
               className="inline-flex items-center gap-2 bg-white hover:bg-alkota-orange text-alkota-black hover:text-white px-8 py-4 font-ibm-plex-mono text-xs uppercase tracking-widest transition-colors font-medium shadow-md"
             >
               <span>View Product</span>
@@ -237,7 +237,7 @@ export default function ChemicalTransformationScene() {
                   </span>
                 </div>
                 <Link
-                  href="/chemicals/product/scaleguard-coil-protector"
+                  href="/chemicals/product/scaleguard-water-softener-coil-protector"
                   className="inline-flex items-center gap-2 bg-alkota-black hover:bg-alkota-orange text-white px-8 py-4 font-ibm-plex-mono text-xs uppercase tracking-widest transition-colors font-medium shadow-sm"
                 >
                   <span>View Product</span>

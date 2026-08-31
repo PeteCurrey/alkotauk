@@ -28,11 +28,9 @@ const CATEGORIES = [
 
 const BRANDS = [
   { slug: 'all', label: 'All Brands' },
-  { slug: 'alkota', label: 'Alkota OEM' },
-  { slug: 'mosmatic', label: 'Mosmatic' },
-  { slug: 'cox-reels', label: 'Cox Reels' },
-  { slug: 'steel-eagle', label: 'Steel Eagle' },
-  { slug: 'dual-pumps', label: 'Dual Pumps' },
+  { slug: 'alkota', label: 'Alkota OEM Genuine' },
+  { slug: 'mosmatic', label: 'Mosmatic Switzerland' },
+  { slug: 'cox-reels', label: 'Cox Reels USA' },
 ];
 
 export default function FilterablePartsCatalogue({ initialParts }: Props) {
@@ -134,7 +132,7 @@ export default function FilterablePartsCatalogue({ initialParts }: Props) {
           <div className="flex items-center gap-4 text-xs font-ibm-plex-mono text-[#666]">
             <span>Next-Day UK Mainland Delivery</span>
             <span>•</span>
-            <span>OEM Direct Pricing</span>
+            <span>Official Factory Warranties</span>
           </div>
         </div>
 
@@ -252,13 +250,36 @@ export default function FilterablePartsCatalogue({ initialParts }: Props) {
         </div>
 
         {/* ── PARTS RESULTS GRID / TABLE ── */}
-        {filteredParts.length === 0 ? (
+        {initialParts.length === 0 ? (
+          <div className="bg-[#DFDDD6] p-12 text-center border border-[#D0CEC5] space-y-4">
+            <span className="font-ibm-plex-mono text-xs text-[#111110] font-semibold uppercase tracking-widest block">
+              // Live Catalogue Database Synchronising
+            </span>
+            <p className="text-sm text-[#555] max-w-lg mx-auto font-normal leading-relaxed">
+              The 500+ OEM parts catalogue is currently synchronising with the UK warehouse inventory. To order specific part numbers, pumps, coils, or seals immediately, contact the UK parts desk directly.
+            </p>
+            <div className="pt-2 flex flex-wrap items-center justify-center gap-4">
+              <Link
+                href="/parts-attachments/enquiry"
+                className="px-6 py-3 bg-[#111110] hover:bg-[#FF6900] text-white font-ibm-plex-mono text-xs uppercase tracking-widest transition-colors font-medium"
+              >
+                Submit Parts Request →
+              </Link>
+              <Link
+                href="/parts-attachments/finder"
+                className="px-6 py-3 border border-[#C8C6BD] hover:border-black text-[#111110] font-ibm-plex-mono text-xs uppercase tracking-widest transition-colors"
+              >
+                Launch Parts Finder
+              </Link>
+            </div>
+          </div>
+        ) : filteredParts.length === 0 ? (
           <div className="bg-[#DFDDD6] p-12 text-center border border-[#D0CEC5] space-y-4">
             <span className="font-ibm-plex-mono text-xs text-[#777] uppercase tracking-widest block">
               No Parts Found Matching Your Criteria
             </span>
             <p className="text-sm text-[#555] max-w-md mx-auto font-normal">
-              Try broadening your search term or resetting the filters. Our UK parts desk can source any component for any Alkota machine.
+              Try broadening your search term or resetting the filters.
             </p>
             <button
               type="button"

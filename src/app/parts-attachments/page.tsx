@@ -5,7 +5,6 @@ import CinematicExhibitHero, { ExhibitItem } from '@/components/parts/CinematicE
 import ShopByDoors from '@/components/parts/ShopByDoors';
 import FilterablePartsCatalogue from '@/components/parts/FilterablePartsCatalogue';
 import PartsDeskConcierge from '@/components/parts/PartsDeskConcierge';
-import { PARTS_CATALOGUE_V2 } from '@/lib/parts/catalogue-seed-v2';
 
 export const dynamic = 'force-dynamic';
 
@@ -107,7 +106,7 @@ const TOOLING_EXHIBITS: ExhibitItem[] = [
 ];
 
 export default async function PartsHomePage() {
-  // Fetch real parts from Supabase with fallback to catalogue seed
+  // Fetch real live parts strictly from Supabase database
   let partsData = [];
   try {
     const { data } = await supabaseAdmin
@@ -118,10 +117,8 @@ export default async function PartsHomePage() {
     if (data && data.length > 0) {
       partsData = data;
     }
-  } catch {}
-
-  if (partsData.length === 0) {
-    partsData = PARTS_CATALOGUE_V2.map((p, idx) => ({ ...p, id: `seed-${idx}` }));
+  } catch (err) {
+    console.error('Error fetching parts from database:', err);
   }
 
   // Fetch brands for concierge

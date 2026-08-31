@@ -6,11 +6,11 @@ import { ArrowRight, Wrench, Shield, Layers, Building2, Flame } from 'lucide-rea
 
 export default function ShopByDoors() {
   const CATEGORY_TILES = [
-    { name: 'Pumps & Plungers', slug: 'pumps', count: '45+ SKUs', desc: 'General Pump, Interpump & CAT triplex pumps & seals' },
-    { name: 'Hoses & Hose Reels', slug: 'hoses', count: '60+ SKUs', desc: 'Cox Reels, 300 Bar wire-braid & non-marking hoses' },
-    { name: 'Surface Cleaners', slug: 'surface-cleaners', count: '25+ SKUs', desc: 'Mosmatic DL-UHD & Steel Eagle rotary flat surface tools' },
-    { name: 'Guns & Lances', slug: 'trigger-guns', count: '40+ SKUs', desc: 'Suttner, Easy-Pull guns & insulated stainless lances' },
-    { name: 'Heating Coils & Burners', slug: 'coils', count: '30+ SKUs', desc: 'Schedule 80 hydro-insulated coils & Riello burners' },
+    { name: 'Pumps & Plungers', slug: 'pumps', count: '45+ SKUs', desc: 'Alkota OEM, General Pump & triplex pumps & seals' },
+    { name: 'Hoses & Hose Reels', slug: 'hoses', count: '60+ SKUs', desc: 'Cox Reels USA, 300 Bar wire-braid & non-marking hoses' },
+    { name: 'Surface Cleaners', slug: 'surface-cleaners', count: '25+ SKUs', desc: 'Mosmatic DL-UHD & rotary flat surface tools' },
+    { name: 'Guns & Lances', slug: 'trigger-guns', count: '40+ SKUs', desc: 'Easy-Pull fatigue-reducing guns & insulated stainless lances' },
+    { name: 'Heating Coils & Burners', slug: 'coils', count: '30+ SKUs', desc: 'Schedule 80 hydro-insulated coils & burner assemblies' },
     { name: 'Valves & Unloaders', slug: 'valves-unloaders', count: '35+ SKUs', desc: 'VRT3 unloaders, thermal relief & brass safety valves' },
   ];
 
@@ -29,7 +29,7 @@ export default function ShopByDoors() {
             </h2>
           </div>
           <p className="text-xs font-ibm-plex-mono text-[#666] max-w-sm">
-            Navigate 500+ genuine OEM parts and attachments through three dedicated, curated channels.
+            Navigate genuine OEM parts and attachments through three dedicated, curated channels.
           </p>
         </div>
 
@@ -77,7 +77,7 @@ export default function ShopByDoors() {
             </div>
 
             <div className="pt-8 flex items-center justify-between font-ibm-plex-mono text-xs uppercase tracking-wider text-[#111110] group-hover:text-[#FF6900] transition-colors">
-              <span className="font-semibold">Explore 5 Brand Shelves →</span>
+              <span className="font-semibold">Explore Brand Shelves →</span>
               <span className="text-[10px] text-[#777]">Authorised UK Reseller</span>
             </div>
           </Link>

@@ -325,11 +325,9 @@ export default function CinematicExhibitHero({ exhibits, mode = 'parts', subtitl
 
         {/* High-Weight Trust Signals */}
         <div className="flex flex-wrap items-center justify-center gap-5 text-[#666] text-[10px] uppercase tracking-wider">
-          <span>Next-Day UK Mainland Despatch</span>
+          <span>Next-Day UK Mainland Delivery</span>
           <span className="text-[#C8C6BD]">•</span>
           <span>Official Factory Warranties</span>
-          <span className="text-[#C8C6BD]">•</span>
-          <span>Direct Engineer Support Desk</span>
           <span className="text-[#C8C6BD]">•</span>
           <a href="#catalogue" className="text-[#111110] hover:text-[#FF6900] transition-colors font-semibold">
             {mode === 'chemicals' ? 'Browse 20+ Formulations ↓' : 'Browse 500+ Spares ↓'}

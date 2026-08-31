@@ -1,7 +1,7 @@
 import React from 'react';
 import { Metadata } from 'next';
 import { supabaseAdmin } from '@/lib/supabase/server';
-import ContinuousToolingExperience from '@/components/parts/ContinuousToolingExperience';
+import ScrollCameraShowroom from '@/components/parts/ScrollCameraShowroom';
 import CoxReelsDarkScene from '@/components/parts/CoxReelsDarkScene';
 import GeneralPumpSculpturalScene from '@/components/parts/GeneralPumpSculpturalScene';
 import CinematicComponentRunway from '@/components/parts/CinematicComponentRunway';
@@ -31,8 +31,8 @@ export default async function PartsHomePage() {
 
   return (
     <main className="min-h-screen bg-[#FAF9F5] text-alkota-black font-sans selection:bg-alkota-orange selection:text-white">
-      {/* ── STAGES 01, 02, 03: ONE CONTINUOUS FLUID CAMERA COMPOSITION ── */}
-      <ContinuousToolingExperience />
+      {/* ── STAGES 01, 02, 03: INTERACTIVE SCROLL CAMERA JOURNEY ── */}
+      <ScrollCameraShowroom />
 
       {/* ── SCENE 04: DRAMATIC CONTRAST MOMENT (COX REELS 100VH DARK SPLIT) ── */}
       <CoxReelsDarkScene />

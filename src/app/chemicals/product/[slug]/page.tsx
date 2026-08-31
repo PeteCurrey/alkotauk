@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import { FileText, ArrowRight, ShieldCheck, Award } from 'lucide-react';
 import ProductStickyNav from '@/components/chemicals/ProductStickyNav';
-import ProductCinematicHero from '@/components/chemicals/ProductCinematicHero';
+import ProductLaunchHero from '@/components/chemicals/ProductLaunchHero';
 import ProductStoryEditorial from '@/components/chemicals/ProductStoryEditorial';
 import ProductProblemVisualiser from '@/components/chemicals/ProductProblemVisualiser';
 import ProductInstructionSteps from '@/components/chemicals/ProductInstructionSteps';
@@ -79,9 +79,9 @@ export default async function ChemicalProductDetailPage({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       
-      {/* ── CHAPTER 01: DESIRE & INSTANT SELECTION (APPLE HERO) ── */}
+      {/* ── CHAPTER 01: DESIRE & PHYSICAL PRODUCT DOMINANCE ── */}
       <ProductStickyNav product={product} />
-      <ProductCinematicHero product={product} />
+      <ProductLaunchHero product={product} />
 
       {/* ── CHAPTER 02: UNDERSTANDING & THE MOLECULAR ACTION ── */}
       <ProductStoryEditorial product={product} />

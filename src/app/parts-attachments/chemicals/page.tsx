@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Metadata } from 'next';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import ChemicalCard from '@/components/chemicals/ChemicalCard';
-import ChemicalCampaignHero from '@/components/chemicals/ChemicalCampaignHero';
+import ScrollChemicalCampaign from '@/components/chemicals/ScrollChemicalCampaign';
 import ChemicalTransformationScene from '@/components/chemicals/ChemicalTransformationScene';
 import { getRetailProducts } from '@/lib/chemicals/service';
 
@@ -49,11 +49,8 @@ export default async function ChemicalsStorefrontPage({ searchParams }: Chemical
 
   return (
     <main className="min-h-screen bg-[#FAF9F5] text-alkota-black font-sans selection:bg-alkota-orange selection:text-white">
-      {/* ── SCENE 01: THE LAUNCH STAGE (100VH VIEWPORT) ── */}
-      <ChemicalCampaignHero productCount={allProducts.length} />
-
-      {/* ── SCENES 02–05: FORMULATION TRANSFORMATION SCENES ── */}
-      <ChemicalTransformationScene />
+      {/* ── CHAPTERS 01 & 02: PINNED INTERACTIVE CHEMICAL CAMPAIGN ── */}
+      <ScrollChemicalCampaign productCount={allProducts.length} />
 
       {/* ── SCENE 06: COMPLETE CATALOGUE DIRECTORY ── */}
       <section id="catalogue" className="py-28 px-6 sm:px-12 lg:px-24 bg-white">

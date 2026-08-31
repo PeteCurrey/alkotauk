@@ -108,7 +108,7 @@ export default function ProductLaunchHero({ product }: Props) {
 
           <div className="flex items-center gap-4">
             <span className="text-[#FF6900] font-semibold">{product.originating_master_code} Master Code</span>
-            <span className="text-emerald-800 bg-emerald-50 px-2 py-0.5 border border-emerald-200 font-medium">
+            <span className="text-emerald-800 bg-emerald-50 px-2 py-0.5 border border-emerald-200 font-medium rounded-[3px]">
               100% GB-CLP Verified
             </span>
           </div>
@@ -118,9 +118,9 @@ export default function ProductLaunchHero({ product }: Props) {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
           
           {/* Left: Large Product Visual (7 Cols) */}
-          <div className="lg:col-span-7 bg-white border border-[#E2DDD3] p-8 sm:p-12 flex flex-col justify-between min-h-[480px] lg:min-h-[560px] relative overflow-hidden shadow-sm">
+          <div className="lg:col-span-7 bg-white border border-[#DDD8CE] p-8 sm:p-12 flex flex-col justify-between min-h-[480px] lg:min-h-[560px] relative overflow-hidden rounded-[6px] shadow-tactile">
             <div className="flex items-center justify-between z-10">
-              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest bg-[#1A1917] text-white px-3 py-1 font-medium">
+              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest bg-[#1A1917] text-white px-3 py-1 font-medium rounded-[3px] shadow-tactile-sm">
                 {product.originating_master_code}
               </span>
               <span className="font-ibm-plex-mono text-xs text-emerald-700 flex items-center gap-1.5 font-medium">
@@ -129,15 +129,16 @@ export default function ProductLaunchHero({ product }: Props) {
               </span>
             </div>
 
-            {/* Main Product Hero Image */}
-            <div className="relative w-full h-80 sm:h-96 my-4">
+            {/* Main Product Hero Image with Contact Shadow */}
+            <div className="relative w-full h-80 sm:h-96 my-4 flex items-center justify-center">
+              <div className="absolute bottom-4 w-1/2 h-4 bg-[radial-gradient(ellipse_at_center,rgba(26,25,23,0.2)_0%,rgba(26,25,23,0)_70%)] blur-[4px] pointer-events-none" />
               <Image
                 src={product.hero_image || '/assets/industries/fleet.png'}
                 alt={product.retail_name}
                 fill
                 priority
                 sizes="(max-width: 1024px) 100vw, 55vw"
-                className="object-contain object-center"
+                className="object-contain object-center shadow-contact-subtle"
               />
             </div>
 
@@ -167,7 +168,7 @@ export default function ProductLaunchHero({ product }: Props) {
                 {product.descriptor || 'Commercial Formulation'}
               </span>
 
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#1A1917] leading-tight">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#1A1917] leading-tight drop-shadow-sm">
                 {product.retail_name}
               </h1>
 
@@ -195,9 +196,9 @@ export default function ProductLaunchHero({ product }: Props) {
                       key={sku.id}
                       type="button"
                       onClick={() => setSelectedSku(sku)}
-                      className={`p-3.5 text-left font-ibm-plex-mono transition-all cursor-pointer border ${
+                      className={`p-3.5 text-left font-ibm-plex-mono transition-all cursor-pointer border rounded-[4px] btn-tactile ${
                         isSelected
-                          ? 'bg-[#1A1917] text-white border-[#1A1917] shadow-sm'
+                          ? 'bg-[#1A1917] text-white border-[#1A1917] shadow-button'
                           : 'bg-white text-[#555] hover:border-black border-[#DDD8CE]'
                       }`}
                     >
@@ -213,7 +214,7 @@ export default function ProductLaunchHero({ product }: Props) {
             </div>
 
             {/* Pricing & Add to Order */}
-            <div className="bg-white border border-[#E2DDD3] p-6 space-y-6 shadow-sm">
+            <div className="bg-white border border-[#DDD8CE] p-6 space-y-6 rounded-[6px] shadow-tactile">
               <div className="flex items-baseline justify-between">
                 <div>
                   <span className="font-ibm-plex-mono text-[10px] text-[#888] uppercase block">Trade Price</span>
@@ -226,7 +227,7 @@ export default function ProductLaunchHero({ product }: Props) {
                 </div>
 
                 {/* Quantity picker */}
-                <div className="flex items-center border border-[#DDD8CE]">
+                <div className="flex items-center border border-[#DDD8CE] rounded-[4px] overflow-hidden">
                   <button
                     type="button"
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
@@ -251,7 +252,7 @@ export default function ProductLaunchHero({ product }: Props) {
               <button
                 type="button"
                 onClick={handleAddToCart}
-                className={`w-full py-4 font-ibm-plex-mono text-xs uppercase tracking-widest transition-all font-semibold flex items-center justify-center gap-3 cursor-pointer shadow-md ${
+                className={`w-full py-4 font-ibm-plex-mono text-xs uppercase tracking-widest font-semibold flex items-center justify-center gap-3 cursor-pointer rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile ${
                   added
                     ? 'bg-emerald-700 text-white'
                     : 'bg-[#FF6900] hover:bg-[#1A1917] text-white shadow-[#FF6900]/20'

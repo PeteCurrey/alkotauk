@@ -96,7 +96,7 @@ export default function FacetedChemicalDirectory({ products }: Props) {
         </div>
 
         {/* ── 8-SECTOR APPLICATION FACET BAR ── */}
-        <div className="bg-white p-6 border border-[#E2DDD3] space-y-6 shadow-sm">
+        <div className="bg-white p-6 border border-[#DDD8CE] rounded-[6px] shadow-tactile space-y-6">
           
           {/* Search bar */}
           <div className="relative">
@@ -106,13 +106,13 @@ export default function FacetedChemicalDirectory({ products }: Props) {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search formulation name, master code (e.g. TR-407, DE-703, TS-602), application..."
-              className="w-full pl-11 pr-4 py-3.5 bg-[#FAF9F6] border border-[#DDD8CE] text-xs font-ibm-plex-mono text-[#1A1917] placeholder-[#888] focus:outline-none focus:border-[#FF6900] focus:bg-white transition-colors"
+              className="w-full pl-11 pr-4 py-3.5 bg-[#FAF9F6] border border-[#DDD8CE] text-xs font-ibm-plex-mono text-[#1A1917] placeholder-[#888] focus:outline-none focus:border-[#FF6900] focus:bg-white transition-all rounded-[5px] focus:shadow-tactile-sm"
             />
             {search && (
               <button
                 type="button"
                 onClick={() => setSearch('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#888] hover:text-black"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#888] hover:text-black p-1"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -140,9 +140,9 @@ export default function FacetedChemicalDirectory({ products }: Props) {
               <button
                 type="button"
                 onClick={() => setSelectedSector('all')}
-                className={`px-3 py-1.5 font-ibm-plex-mono text-[11px] uppercase tracking-wider transition-all cursor-pointer ${
+                className={`px-3 py-1.5 font-ibm-plex-mono text-[11px] uppercase tracking-wider transition-all cursor-pointer rounded-[4px] btn-tactile ${
                   selectedSector === 'all'
-                    ? 'bg-[#1A1917] text-white font-semibold shadow-sm'
+                    ? 'bg-[#1A1917] text-white font-semibold shadow-button'
                     : 'bg-[#FAF9F6] text-[#555] hover:bg-[#1A1917] hover:text-white border border-[#DDD8CE]'
                 }`}
               >
@@ -156,9 +156,9 @@ export default function FacetedChemicalDirectory({ products }: Props) {
                     key={app.slug}
                     type="button"
                     onClick={() => setSelectedSector(app.slug)}
-                    className={`px-3 py-1.5 font-ibm-plex-mono text-[11px] uppercase tracking-wider transition-all cursor-pointer ${
+                    className={`px-3 py-1.5 font-ibm-plex-mono text-[11px] uppercase tracking-wider transition-all cursor-pointer rounded-[4px] btn-tactile ${
                       active
-                        ? 'bg-[#FF6900] text-white font-semibold shadow-sm'
+                        ? 'bg-[#FF6900] text-white font-semibold shadow-button'
                         : 'bg-[#FAF9F6] text-[#555] hover:bg-[#FF6900] hover:text-white border border-[#DDD8CE]'
                     }`}
                   >
@@ -173,7 +173,7 @@ export default function FacetedChemicalDirectory({ products }: Props) {
 
         {/* ── PRODUCTS DIRECTORY GRID ── */}
         {filteredProducts.length === 0 ? (
-          <div className="bg-white p-12 text-center border border-[#E2DDD3] space-y-4">
+          <div className="bg-white p-12 text-center border border-[#DDD8CE] rounded-[6px] shadow-tactile space-y-4">
             <span className="font-ibm-plex-mono text-xs text-[#777] uppercase tracking-widest block">
               No Chemical Formulations Found
             </span>
@@ -183,7 +183,7 @@ export default function FacetedChemicalDirectory({ products }: Props) {
             <button
               type="button"
               onClick={() => { setSelectedSector('all'); setSearch(''); }}
-              className="px-6 py-2.5 bg-[#1A1917] text-white font-ibm-plex-mono text-xs uppercase tracking-widest hover:bg-[#FF6900] transition-colors"
+              className="px-6 py-2.5 bg-[#1A1917] text-white font-ibm-plex-mono text-xs uppercase tracking-widest hover:bg-[#FF6900] transition-colors rounded-[4px] shadow-button btn-tactile"
             >
               Reset Filters
             </button>
@@ -197,7 +197,7 @@ export default function FacetedChemicalDirectory({ products }: Props) {
               return (
                 <div
                   key={prod.id}
-                  className="bg-white border border-[#E2DDD3] hover:border-[#FF6900] transition-all duration-300 p-6 sm:p-7 flex flex-col justify-between group shadow-sm hover:shadow-md"
+                  className="bg-white border border-[#DDD8CE] hover:border-[#FF6900] rounded-[6px] shadow-tactile hover:shadow-tactile-hover transition-all duration-300 hover:-translate-y-[2px] p-6 sm:p-7 flex flex-col justify-between group"
                 >
                   <div className="space-y-4">
                     {/* Header line: Master Code & Retail Family */}
@@ -226,7 +226,7 @@ export default function FacetedChemicalDirectory({ products }: Props) {
                         <Droplet className="w-3.5 h-3.5 text-[#FF6900]" />
                         <span>Dilution: {prod.dilution_standard || '1:50'}</span>
                       </div>
-                      <span className="text-[10px] text-emerald-800 bg-emerald-50 px-2 py-0.5 border border-emerald-200">
+                      <span className="text-[10px] text-emerald-800 bg-emerald-50 px-2 py-0.5 border border-emerald-200 rounded-[3px]">
                         GB-CLP Verified
                       </span>
                     </div>
@@ -250,7 +250,7 @@ export default function FacetedChemicalDirectory({ products }: Props) {
                       <button
                         type="button"
                         onClick={() => handleAddToCart(prod)}
-                        className="w-full bg-[#FF6900] hover:bg-[#1A1917] text-white py-3 px-3 font-ibm-plex-mono text-xs uppercase tracking-wider transition-colors font-semibold flex items-center justify-center gap-1.5 cursor-pointer shadow-sm"
+                        className="w-full bg-[#FF6900] hover:bg-[#1A1917] text-white py-3 px-3 font-ibm-plex-mono text-xs uppercase tracking-wider transition-colors font-semibold flex items-center justify-center gap-1.5 cursor-pointer rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
                       >
                         <Plus className="w-3.5 h-3.5" />
                         <span>{isAdded ? 'Added ✓' : 'Add to Order'}</span>
@@ -258,7 +258,7 @@ export default function FacetedChemicalDirectory({ products }: Props) {
 
                       <Link
                         href={`/chemicals/product/${prod.slug}`}
-                        className="w-full py-3 border border-[#DDD8CE] hover:border-black text-[#1A1917] text-center font-ibm-plex-mono text-xs uppercase tracking-wider transition-colors bg-[#FAF9F6] font-medium flex items-center justify-center"
+                        className="w-full py-3 border border-[#DDD8CE] hover:border-black text-[#1A1917] text-center font-ibm-plex-mono text-xs uppercase tracking-wider transition-colors bg-[#FAF9F6] font-medium flex items-center justify-center rounded-[4px] btn-tactile"
                       >
                         Specs &amp; SDS →
                       </Link>

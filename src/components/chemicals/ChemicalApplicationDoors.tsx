@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight, Truck, Tractor, Construction, Sparkles, Car, Shield, Building } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 const APPLICATION_SECTORS = [
   {
@@ -70,45 +70,47 @@ export default function ChemicalApplicationDoors() {
 
           <a
             href="#directory"
-            className="inline-flex items-center gap-2 font-ibm-plex-mono text-xs uppercase tracking-widest text-[#1A1917] hover:text-[#FF6900] transition-colors font-medium self-start md:self-auto"
+            className="inline-flex items-center gap-2 font-ibm-plex-mono text-xs uppercase tracking-widest text-[#1A1917] hover:text-[#FF6900] transition-colors font-medium self-start md:self-auto py-1"
           >
             <span>View All 20 Formulations</span>
             <ArrowRight className="w-4 h-4 text-[#FF6900]" />
           </a>
         </div>
 
-        {/* ── 6-SECTOR APPLICATION TILES (GRID WITH PHOTOGRAPHY) ── */}
+        {/* ── 6-SECTOR APPLICATION TILES (GRID WITH PHOTOGRAPHY & TACTILE DEPTH) ── */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {APPLICATION_SECTORS.map((sector) => (
             <a
               key={sector.slug}
-              href={`#sector-${sector.slug}`}
-              className="group relative min-h-[300px] bg-[#1A1917] border border-[#E2DDD3] hover:border-[#FF6900] transition-all duration-300 flex flex-col justify-between p-7 overflow-hidden shadow-sm hover:shadow-md"
+              href={`#directory`}
+              className="group relative min-h-[300px] bg-[#1A1917] border border-[#DDD8CE] hover:border-[#FF6900] rounded-[6px] shadow-tactile hover:shadow-tactile-hover transition-all duration-500 hover:-translate-y-[2px] flex flex-col justify-between p-7 overflow-hidden"
             >
-              {/* Background Image & Scrim */}
-              <div className="absolute inset-0 z-0">
-                <Image
-                  src={sector.image}
-                  alt={sector.name}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                  className="object-cover object-center brightness-[0.35] group-hover:scale-105 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#1A1917] via-[#1A1917]/70 to-transparent" />
+              {/* Background Image with Ambient Zoom */}
+              <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+                <div className="relative w-full h-full animate-ambient-zoom origin-center">
+                  <Image
+                    src={sector.image}
+                    alt={sector.name}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    className="object-cover object-center brightness-[0.35] group-hover:scale-105 transition-transform duration-700"
+                  />
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-[#1A1917] via-[#1A1917]/75 to-black/30" />
               </div>
 
               <div className="relative z-10 flex items-center justify-between">
-                <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-[#FF6900] bg-black/60 px-2.5 py-1 border border-white/10">
+                <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-[#FF6900] bg-black/60 backdrop-blur-sm px-2.5 py-1 border border-white/15 rounded-[3px] shadow-tactile-sm">
                   {sector.badge}
                 </span>
                 <ArrowRight className="w-4 h-4 text-white group-hover:text-[#FF6900] group-hover:translate-x-1 transition-all" />
               </div>
 
               <div className="relative z-10 space-y-2">
-                <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-white leading-tight">
+                <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-white leading-tight drop-shadow-sm">
                   {sector.name}
                 </h3>
-                <p className="text-xs sm:text-sm text-[#CCC] font-normal leading-relaxed">
+                <p className="text-xs sm:text-sm text-[#DDD] font-normal leading-relaxed">
                   {sector.descriptor}
                 </p>
               </div>

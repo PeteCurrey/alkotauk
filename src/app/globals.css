@@ -109,6 +109,28 @@
   }
 }
 
+@keyframes flag-wind-wave {
+  0% {
+    transform: translate3d(0, 0, 0) skewX(0deg) skewY(0deg) scale(1.00);
+  }
+  25% {
+    transform: translate3d(6px, -3px, 0) skewX(-1.2deg) skewY(0.6deg) scale(1.01);
+  }
+  50% {
+    transform: translate3d(-4px, 4px, 0) skewX(1deg) skewY(-0.8deg) scale(1.005);
+  }
+  75% {
+    transform: translate3d(5px, 2px, 0) skewX(-0.8deg) skewY(0.4deg) scale(1.012);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) skewX(0deg) skewY(0deg) scale(1.00);
+  }
+}
+
+.animate-flag-wave {
+  animation: flag-wind-wave 14s ease-in-out infinite;
+}
+
 .animate-ambient-zoom {
   animation: ambient-zoom 20s ease-in-out infinite alternate;
 }

@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 
 interface AmericanHeritageFlagOverlayProps {
@@ -7,61 +9,59 @@ interface AmericanHeritageFlagOverlayProps {
 
 export default function AmericanHeritageFlagOverlay({ 
   className = '', 
-  opacity = 0.14 
+  opacity = 0.22 
 }: AmericanHeritageFlagOverlayProps) {
   return (
     <div 
       className={`absolute inset-0 pointer-events-none overflow-hidden select-none z-0 ${className}`}
       aria-hidden="true"
     >
-      {/* Precision Distressed American Flag Art with Gradual Fade Across Screen */}
+      {/* Precision American Flag Art with Subtle Wind Wave Animation and Gradient Fade */}
       <div 
-        className="absolute -top-12 -left-12 w-[1000px] max-w-none h-[650px] transition-opacity duration-1000"
+        className="absolute -top-10 -left-10 w-[1100px] lg:w-[1350px] max-w-none h-[750px] animate-flag-wave origin-top-left transition-opacity duration-1000"
         style={{
           opacity: opacity,
-          maskImage: 'linear-gradient(135deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.65) 30%, rgba(0,0,0,0.18) 60%, rgba(0,0,0,0) 85%)',
-          WebkitMaskImage: 'linear-gradient(135deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.65) 30%, rgba(0,0,0,0.18) 60%, rgba(0,0,0,0) 85%)',
+          maskImage: 'linear-gradient(135deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 35%, rgba(0,0,0,0.25) 65%, rgba(0,0,0,0) 85%)',
+          WebkitMaskImage: 'linear-gradient(135deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 35%, rgba(0,0,0,0.25) 65%, rgba(0,0,0,0) 85%)',
         }}
       >
         <svg 
           viewBox="0 0 760 400" 
           fill="none" 
           xmlns="http://www.w3.org/2000/svg"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover filter contrast-[1.15]"
         >
-          {/* 13 Alternate Stripes */}
-          <rect y="0" width="760" height="30.77" fill="#E5E5E0" fillOpacity="0.45" />
-          <rect y="30.77" width="760" height="30.77" fill="#141414" fillOpacity="0.8" />
-          <rect y="61.54" width="760" height="30.77" fill="#E5E5E0" fillOpacity="0.45" />
-          <rect y="92.31" width="760" height="30.77" fill="#141414" fillOpacity="0.8" />
-          <rect y="123.08" width="760" height="30.77" fill="#E5E5E0" fillOpacity="0.45" />
-          <rect y="153.85" width="760" height="30.77" fill="#141414" fillOpacity="0.8" />
-          <rect y="184.62" width="760" height="30.77" fill="#E5E5E0" fillOpacity="0.45" />
-          <rect y="215.38" width="760" height="30.77" fill="#141414" fillOpacity="0.8" />
-          <rect y="246.15" width="760" height="30.77" fill="#E5E5E0" fillOpacity="0.45" />
-          <rect y="276.92" width="760" height="30.77" fill="#141414" fillOpacity="0.8" />
-          <rect y="307.69" width="760" height="30.77" fill="#E5E5E0" fillOpacity="0.45" />
-          <rect y="338.46" width="760" height="30.77" fill="#141414" fillOpacity="0.8" />
-          <rect y="369.23" width="760" height="30.77" fill="#E5E5E0" fillOpacity="0.45" />
+          <defs>
+            {/* Wind wave displacement lighting filter */}
+            <linearGradient id="flagWindLight" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.15" />
+              <stop offset="25%" stopColor="#000000" stopOpacity="0.18" />
+              <stop offset="50%" stopColor="#FFFFFF" stopOpacity="0.22" />
+              <stop offset="75%" stopColor="#000000" stopOpacity="0.25" />
+              <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0.10" />
+            </linearGradient>
+          </defs>
 
-          {/* Red Heritage Undertone for 7 Red Stripes */}
-          {[0, 61.54, 123.08, 184.62, 246.15, 307.69, 369.23].map((y, i) => (
-            <rect 
-              key={i} 
-              y={y} 
-              width="760" 
-              height="30.77" 
-              fill="#FF6900" 
-              fillOpacity="0.3" 
-            />
-          ))}
+          {/* 13 Alternate Red & White Stripes */}
+          <rect y="0" width="760" height="30.77" fill="#B22234" fillOpacity="0.75" />
+          <rect y="30.77" width="760" height="30.77" fill="#F4F1EA" fillOpacity="0.85" />
+          <rect y="61.54" width="760" height="30.77" fill="#B22234" fillOpacity="0.75" />
+          <rect y="92.31" width="760" height="30.77" fill="#F4F1EA" fillOpacity="0.85" />
+          <rect y="123.08" width="760" height="30.77" fill="#B22234" fillOpacity="0.75" />
+          <rect y="153.85" width="760" height="30.77" fill="#F4F1EA" fillOpacity="0.85" />
+          <rect y="184.62" width="760" height="30.77" fill="#B22234" fillOpacity="0.75" />
+          <rect y="215.38" width="760" height="30.77" fill="#F4F1EA" fillOpacity="0.85" />
+          <rect y="246.15" width="760" height="30.77" fill="#B22234" fillOpacity="0.75" />
+          <rect y="276.92" width="760" height="30.77" fill="#F4F1EA" fillOpacity="0.85" />
+          <rect y="307.69" width="760" height="30.77" fill="#B22234" fillOpacity="0.75" />
+          <rect y="338.46" width="760" height="30.77" fill="#F4F1EA" fillOpacity="0.85" />
+          <rect y="369.23" width="760" height="30.77" fill="#B22234" fillOpacity="0.75" />
 
           {/* Blue Union Canton Field */}
-          <rect width="304" height="215.38" fill="#0A1828" fillOpacity="0.88" />
-          <rect width="304" height="215.38" fill="#1E3A8A" fillOpacity="0.32" />
+          <rect width="304" height="215.38" fill="#1E3A8A" fillOpacity="0.92" />
 
           {/* 50 Precision Stars Pattern */}
-          <g fill="#FFFFFF" fillOpacity="0.75">
+          <g fill="#FFFFFF" fillOpacity="0.95">
             {Array.from({ length: 9 }).map((_, rowIndex) => {
               const isEvenRow = rowIndex % 2 === 0;
               const starCount = isEvenRow ? 6 : 5;
@@ -90,12 +90,15 @@ export default function AmericanHeritageFlagOverlay({
               });
             })}
           </g>
+
+          {/* Wind Ripple Overlay Layer */}
+          <rect width="760" height="400" fill="url(#flagWindLight)" />
         </svg>
       </div>
 
-      {/* Atmospheric Ambient Gradients */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/55 to-black/85" />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-transparent to-black/70" />
+      {/* Atmospheric Ambient Gradients Fading Across Page */}
+      <div className="absolute inset-0 bg-gradient-to-r from-[#1A1917]/70 via-[#1A1917]/85 to-[#1A1917]" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#1A1917] via-transparent to-[#1A1917]/60" />
     </div>
   );
 }

@@ -1,8 +1,7 @@
 import React from 'react';
 import { Metadata } from 'next';
 import { supabaseAdmin } from '@/lib/supabase/server';
-import CinematicShowroomHero from '@/components/parts/CinematicShowroomHero';
-import MosmaticRevealScene from '@/components/parts/MosmaticRevealScene';
+import ContinuousToolingExperience from '@/components/parts/ContinuousToolingExperience';
 import CoxReelsDarkScene from '@/components/parts/CoxReelsDarkScene';
 import GeneralPumpSculpturalScene from '@/components/parts/GeneralPumpSculpturalScene';
 import CinematicComponentRunway from '@/components/parts/CinematicComponentRunway';
@@ -32,11 +31,8 @@ export default async function PartsHomePage() {
 
   return (
     <main className="min-h-screen bg-[#FAF9F5] text-alkota-black font-sans selection:bg-alkota-orange selection:text-white">
-      {/* ── SCENE 01: ARRIVAL (100VH CINEMATIC ACTION OPENER) ── */}
-      <CinematicShowroomHero />
-
-      {/* ── SCENE 02 & 03: PRODUCT REVEAL & IN-USE TRANSFORMATION (MOSMATIC) ── */}
-      <MosmaticRevealScene />
+      {/* ── STAGES 01, 02, 03: ONE CONTINUOUS FLUID CAMERA COMPOSITION ── */}
+      <ContinuousToolingExperience />
 
       {/* ── SCENE 04: DRAMATIC CONTRAST MOMENT (COX REELS 100VH DARK SPLIT) ── */}
       <CoxReelsDarkScene />

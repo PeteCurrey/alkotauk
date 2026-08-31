@@ -2,7 +2,8 @@
 
 import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { Search, Plus, Check, Filter, X, ArrowRight, ShieldCheck } from 'lucide-react';
+import Image from 'next/image';
+import { Search, Plus, Check, Filter, X, ArrowRight, ShoppingCart, Wrench } from 'lucide-react';
 import { Part } from '@/lib/types/parts';
 import { usePartsRequest } from './PartsRequestListContext';
 
@@ -12,16 +13,15 @@ interface Props {
 
 const CATEGORIES = [
   { slug: 'all', label: 'All Categories' },
-  { slug: 'pumps', label: 'Pumps & Plungers' },
-  { slug: 'hoses', label: 'Hoses & Reels' },
   { slug: 'surface-cleaners', label: 'Surface Cleaners' },
+  { slug: 'hoses', label: 'Hoses & Reels' },
+  { slug: 'pumps', label: 'Pumps & Plungers' },
   { slug: 'trigger-guns', label: 'Guns & Wands' },
   { slug: 'lances-nozzles', label: 'Nozzles & Lances' },
   { slug: 'coils', label: 'Heating Coils' },
   { slug: 'burners', label: 'Burner Heads' },
   { slug: 'valves-unloaders', label: 'Valves & Unloaders' },
   { slug: 'filters', label: 'Filters' },
-  { slug: 'electrical-switches', label: 'Electrical & Switches' },
   { slug: 'service-kits', label: 'Service Kits' },
   { slug: 'fittings-couplers', label: 'Fittings & Couplers' },
 ];
@@ -43,7 +43,7 @@ export default function FilterablePartsCatalogue({ initialParts }: Props) {
   const [addedIds, setAddedIds] = useState<Record<string, boolean>>({});
 
   const filteredParts = useMemo(() => {
-    return initialParts.filter((part) => {
+    return (initialParts || []).filter((part) => {
       // Search
       if (search.trim()) {
         const q = search.toLowerCase().trim();
@@ -115,17 +115,17 @@ export default function FilterablePartsCatalogue({ initialParts }: Props) {
   const hasActiveFilters = search || selectedCategory !== 'all' || selectedBrand !== 'all' || inStockOnly || sortOrder !== 'default';
 
   return (
-    <section id="catalogue" className="w-full py-24 px-6 sm:px-12 lg:px-16 bg-[#EBEAE5] border-t border-[#D8D6CE]">
-      <div className="max-w-7xl mx-auto space-y-10">
+    <section id="catalogue-search" className="w-full py-20 lg:py-28 px-6 sm:px-10 lg:px-16 bg-[#F4F1EA] text-[#1A1917] border-t border-[#E2DDD3]">
+      <div className="max-w-7xl mx-auto space-y-8">
         
-        {/* Section Heading & Trust Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-[#D8D6CE]">
-          <div className="space-y-1">
-            <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.3em] text-[#FF6900] font-semibold block">
-              FULL SPECIFICATION DIRECTORY
+        {/* Section Heading */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-[#E2DDD3]">
+          <div className="space-y-2">
+            <span className="font-ibm-plex-mono text-[11px] uppercase tracking-[0.25em] text-[#FF6900] font-semibold block">
+              // Full Inventory Directory
             </span>
-            <h2 className="text-3xl sm:text-4xl font-extralight text-[#111110] tracking-tight uppercase">
-              Browse Full Catalogue ({filteredParts.length} Parts)
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-[#1A1917]">
+              Browse Parts Catalogue ({filteredParts.length} Parts)
             </h2>
           </div>
 
@@ -137,18 +137,18 @@ export default function FilterablePartsCatalogue({ initialParts }: Props) {
         </div>
 
         {/* ── SEARCH & FILTER CONTROLS ── */}
-        <div className="bg-[#DFDDD6] p-6 border border-[#D0CEC5] space-y-6">
+        <div className="bg-white p-6 border border-[#E2DDD3] space-y-6 shadow-sm">
           
           {/* Top Search Bar & Sort Row */}
           <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
             <div className="md:col-span-8 relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#777]" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#888]" />
               <input
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search part number, description, machine model (e.g. TS2021, 4305, DL-UHD)..."
-                className="w-full pl-11 pr-4 py-3.5 bg-white border border-[#C8C6BD] text-xs font-ibm-plex-mono text-[#111110] placeholder-[#888] focus:outline-none focus:border-[#FF6900]"
+                placeholder="Search part number, description, model (e.g. TS2021, 4305, DL-UHD)..."
+                className="w-full pl-11 pr-4 py-3.5 bg-[#FAF9F6] border border-[#DDD8CE] text-xs font-ibm-plex-mono text-[#1A1917] placeholder-[#888] focus:outline-none focus:border-[#FF6900] focus:bg-white transition-colors"
               />
               {search && (
                 <button
@@ -165,9 +165,9 @@ export default function FilterablePartsCatalogue({ initialParts }: Props) {
               <select
                 value={sortOrder}
                 onChange={(e) => setSortOrder(e.target.value as any)}
-                className="w-full py-3.5 px-3 bg-white border border-[#C8C6BD] text-xs font-ibm-plex-mono text-[#111110] focus:outline-none focus:border-[#FF6900]"
+                className="w-full py-3.5 px-3 bg-[#FAF9F6] border border-[#DDD8CE] text-xs font-ibm-plex-mono text-[#1A1917] focus:outline-none focus:border-[#FF6900]"
               >
-                <option value="default">Sort: Default Order</option>
+                <option value="default">Sort: Recommended</option>
                 <option value="price_asc">Price: Low to High</option>
                 <option value="price_desc">Price: High to Low</option>
               </select>
@@ -179,15 +179,15 @@ export default function FilterablePartsCatalogue({ initialParts }: Props) {
                   onChange={(e) => setInStockOnly(e.target.checked)}
                   className="accent-[#FF6900]"
                 />
-                <span>In Stock Only</span>
+                <span>In Stock</span>
               </label>
             </div>
           </div>
 
-          {/* Category Filter Pills */}
+          {/* Category Filter Tabs */}
           <div className="space-y-2">
-            <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#777] block">
-              Filter by Category:
+            <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-[#777] block font-medium">
+              Category:
             </span>
             <div className="flex flex-wrap gap-1.5">
               {CATEGORIES.map((cat) => {
@@ -197,10 +197,10 @@ export default function FilterablePartsCatalogue({ initialParts }: Props) {
                     key={cat.slug}
                     type="button"
                     onClick={() => setSelectedCategory(cat.slug)}
-                    className={`px-3 py-1.5 font-ibm-plex-mono text-[10px] uppercase tracking-wider transition-all cursor-pointer ${
+                    className={`px-3 py-1.5 font-ibm-plex-mono text-[11px] uppercase tracking-wider transition-all cursor-pointer ${
                       active
-                        ? 'bg-[#111110] text-white font-semibold shadow-sm'
-                        : 'bg-[#ECEAE3] text-[#555] hover:bg-white hover:text-black border border-[#D5D3CA]'
+                        ? 'bg-[#1A1917] text-white font-semibold shadow-sm'
+                        : 'bg-[#FAF9F6] text-[#555] hover:bg-[#1A1917] hover:text-white border border-[#DDD8CE]'
                     }`}
                   >
                     {cat.label}
@@ -212,8 +212,8 @@ export default function FilterablePartsCatalogue({ initialParts }: Props) {
 
           {/* Brand Filter Pills */}
           <div className="space-y-2">
-            <span className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#777] block">
-              Filter by Brand Partner:
+            <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-[#777] block font-medium">
+              Brand Partner:
             </span>
             <div className="flex flex-wrap items-center gap-1.5">
               {BRANDS.map((b) => {
@@ -223,10 +223,10 @@ export default function FilterablePartsCatalogue({ initialParts }: Props) {
                     key={b.slug}
                     type="button"
                     onClick={() => setSelectedBrand(b.slug)}
-                    className={`px-3 py-1.5 font-ibm-plex-mono text-[10px] uppercase tracking-wider transition-all cursor-pointer ${
+                    className={`px-3 py-1.5 font-ibm-plex-mono text-[11px] uppercase tracking-wider transition-all cursor-pointer ${
                       active
                         ? 'bg-[#FF6900] text-white font-semibold shadow-sm'
-                        : 'bg-[#ECEAE3] text-[#555] hover:bg-white hover:text-black border border-[#D5D3CA]'
+                        : 'bg-[#FAF9F6] text-[#555] hover:bg-[#FF6900] hover:text-white border border-[#DDD8CE]'
                     }`}
                   >
                     {b.label}
@@ -249,58 +249,58 @@ export default function FilterablePartsCatalogue({ initialParts }: Props) {
 
         </div>
 
-        {/* ── PARTS RESULTS GRID / TABLE ── */}
+        {/* ── RESULTS GRID ── */}
         {initialParts.length === 0 ? (
-          <div className="bg-[#DFDDD6] p-12 text-center border border-[#D0CEC5] space-y-4">
-            <span className="font-ibm-plex-mono text-xs text-[#111110] font-semibold uppercase tracking-widest block">
-              // Live Catalogue Database Synchronising
+          <div className="bg-white p-12 text-center border border-[#E2DDD3] space-y-4">
+            <span className="font-ibm-plex-mono text-xs text-[#1A1917] font-semibold uppercase tracking-widest block">
+              // Parts Finder &amp; Direct Despatch Desk
             </span>
-            <p className="text-sm text-[#555] max-w-lg mx-auto font-normal leading-relaxed">
-              The 500+ OEM parts catalogue is currently synchronising with the UK warehouse inventory. To order specific part numbers, pumps, coils, or seals immediately, contact the UK parts desk directly.
+            <p className="text-sm text-[#666] max-w-lg mx-auto font-normal leading-relaxed">
+              For immediate part matching across the 500+ component catalogue, specify your machine model in the Parts Finder or contact the UK parts desk directly.
             </p>
             <div className="pt-2 flex flex-wrap items-center justify-center gap-4">
               <Link
                 href="/parts-attachments/enquiry"
-                className="px-6 py-3 bg-[#111110] hover:bg-[#FF6900] text-white font-ibm-plex-mono text-xs uppercase tracking-widest transition-colors font-medium"
+                className="px-6 py-3 bg-[#FF6900] hover:bg-[#1A1917] text-white font-ibm-plex-mono text-xs uppercase tracking-widest transition-colors font-medium"
               >
                 Submit Parts Request →
               </Link>
               <Link
                 href="/parts-attachments/finder"
-                className="px-6 py-3 border border-[#C8C6BD] hover:border-black text-[#111110] font-ibm-plex-mono text-xs uppercase tracking-widest transition-colors"
+                className="px-6 py-3 border border-[#DDD8CE] hover:border-black text-[#1A1917] font-ibm-plex-mono text-xs uppercase tracking-widest transition-colors"
               >
                 Launch Parts Finder
               </Link>
             </div>
           </div>
         ) : filteredParts.length === 0 ? (
-          <div className="bg-[#DFDDD6] p-12 text-center border border-[#D0CEC5] space-y-4">
+          <div className="bg-white p-12 text-center border border-[#E2DDD3] space-y-4">
             <span className="font-ibm-plex-mono text-xs text-[#777] uppercase tracking-widest block">
               No Parts Found Matching Your Criteria
             </span>
-            <p className="text-sm text-[#555] max-w-md mx-auto font-normal">
+            <p className="text-sm text-[#666] max-w-md mx-auto font-normal">
               Try broadening your search term or resetting the filters.
             </p>
             <button
               type="button"
               onClick={clearFilters}
-              className="px-6 py-2.5 bg-[#111110] text-white font-ibm-plex-mono text-xs uppercase tracking-widest hover:bg-[#FF6900] transition-colors"
+              className="px-6 py-2.5 bg-[#1A1917] text-white font-ibm-plex-mono text-xs uppercase tracking-widest hover:bg-[#FF6900] transition-colors"
             >
               Clear Filters
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredParts.map((part) => {
               const isAdded = addedIds[part.id!] ?? false;
               return (
                 <div
                   key={part.id || part.slug}
-                  className="bg-[#ECEAE3] border border-[#D5D3CA] hover:border-[#111110] transition-all p-5 flex flex-col justify-between group"
+                  className="bg-white border border-[#E2DDD3] hover:border-[#FF6900] transition-all duration-300 p-6 flex flex-col justify-between group shadow-sm hover:shadow-md"
                 >
-                  <div className="space-y-3">
+                  <div className="space-y-4">
                     {/* Header line: Part Number & Stock Status */}
-                    <div className="flex items-center justify-between font-ibm-plex-mono text-[10px]">
+                    <div className="flex items-center justify-between font-ibm-plex-mono text-[11px]">
                       <span className="text-[#FF6900] font-semibold uppercase">
                         {part.part_number}
                       </span>
@@ -310,8 +310,25 @@ export default function FilterablePartsCatalogue({ initialParts }: Props) {
                       </span>
                     </div>
 
+                    {/* Image Area if available */}
+                    {part.image_url ? (
+                      <div className="relative w-full h-36 bg-[#FAF9F6] border border-[#F0EBE1] flex items-center justify-center p-3 overflow-hidden">
+                        <Image
+                          src={part.image_url}
+                          alt={part.name || 'Part'}
+                          fill
+                          sizes="200px"
+                          className="object-contain p-2 group-hover:scale-105 transition-transform"
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-full h-24 bg-[#FAF9F6] border border-[#F0EBE1] flex items-center justify-center text-[#999]">
+                        <Wrench className="w-6 h-6 stroke-[1.5]" />
+                      </div>
+                    )}
+
                     {/* Product Name */}
-                    <h3 className="font-light text-base text-[#111110] group-hover:text-black leading-snug line-clamp-2 min-h-[44px]">
+                    <h3 className="font-bold text-base text-[#1A1917] group-hover:text-[#FF6900] leading-snug line-clamp-2 min-h-[44px] transition-colors">
                       {part.name}
                     </h3>
 
@@ -319,7 +336,7 @@ export default function FilterablePartsCatalogue({ initialParts }: Props) {
                     <div className="flex items-center gap-2 text-[10px] font-ibm-plex-mono text-[#777]">
                       <span className="uppercase">{part.manufacturer || part.brand || 'Alkota OEM'}</span>
                       {part.oem_genuine && (
-                        <span className="bg-[#DFDDD6] text-emerald-800 px-1.5 py-0.5 font-semibold text-[9px]">
+                        <span className="bg-emerald-50 text-emerald-800 px-1.5 py-0.5 font-semibold text-[9px] border border-emerald-200">
                           OEM GENUINE
                         </span>
                       )}
@@ -334,11 +351,11 @@ export default function FilterablePartsCatalogue({ initialParts }: Props) {
                   </div>
 
                   {/* Price & Add to Cart Footer */}
-                  <div className="pt-5 border-t border-[#DCDAD2] mt-4 space-y-3">
+                  <div className="pt-5 border-t border-[#F0EBE1] mt-4 space-y-3">
                     <div className="flex items-baseline justify-between">
                       <div>
-                        <span className="font-ibm-plex-mono text-[9px] text-[#888] uppercase block">Trade Price</span>
-                        <span className="font-ibm-plex-mono text-lg font-light text-[#111110]">
+                        <span className="font-ibm-plex-mono text-[10px] text-[#888] uppercase block">Trade Price</span>
+                        <span className="font-ibm-plex-mono text-xl font-bold text-[#1A1917]">
                           {part.price ? `£${part.price.toFixed(2)}` : 'POA'}
                         </span>
                       </div>
@@ -349,7 +366,7 @@ export default function FilterablePartsCatalogue({ initialParts }: Props) {
                       <button
                         type="button"
                         onClick={() => handleAddToCart(part)}
-                        className="w-full bg-[#111110] hover:bg-[#FF6900] text-white py-2.5 px-3 font-ibm-plex-mono text-[10px] uppercase tracking-wider transition-colors font-medium flex items-center justify-center gap-1.5 cursor-pointer"
+                        className="w-full bg-[#FF6900] hover:bg-[#1A1917] text-white py-2.5 px-3 font-ibm-plex-mono text-[10px] uppercase tracking-wider transition-colors font-semibold flex items-center justify-center gap-1.5 cursor-pointer shadow-sm"
                       >
                         <Plus className="w-3 h-3" />
                         <span>{isAdded ? 'Added ✓' : 'Add to Order'}</span>
@@ -357,7 +374,7 @@ export default function FilterablePartsCatalogue({ initialParts }: Props) {
 
                       <Link
                         href={`/parts-attachments/product/${part.slug || part.part_number?.toLowerCase()}`}
-                        className="w-full py-2.5 border border-[#C5C3BB] hover:border-black text-[#111110] text-center font-ibm-plex-mono text-[10px] uppercase tracking-wider transition-colors bg-white/40"
+                        className="w-full py-2.5 border border-[#DDD8CE] hover:border-black text-[#1A1917] text-center font-ibm-plex-mono text-[10px] uppercase tracking-wider transition-colors bg-[#FAF9F6] font-medium flex items-center justify-center"
                       >
                         Details →
                       </Link>

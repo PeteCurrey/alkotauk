@@ -24,7 +24,7 @@ export default function PartsLookupPage() {
            <div className="border border-alkota-iron bg-alkota-steel/30 p-8">
               <h3 className="font-black italic uppercase text-2xl mb-4">Shop Direct</h3>
               <p className="text-alkota-silver mb-8 text-sm">Browse our full catalogue of high-pressure hoses, nozzles, trigger guns, and maintenance oils.</p>
-              <Link href="/shop/parts" className="flex items-center justify-between w-full border border-alkota-orange bg-alkota-orange/10 px-6 py-4 text-xs font-bold uppercase tracking-widest text-white hover:bg-alkota-orange transition-colors">
+              <Link href="/parts-attachments" className="flex items-center justify-between w-full border border-alkota-orange bg-alkota-orange/10 px-6 py-4 text-xs font-bold uppercase tracking-widest text-white hover:bg-alkota-orange transition-colors">
                 Browse Parts Shop <ArrowRight className="h-4 w-4" />
               </Link>
            </div>

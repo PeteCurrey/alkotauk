@@ -136,8 +136,8 @@ export default function FilterablePartsCatalogue({ initialParts }: Props) {
           </div>
         </div>
 
-        {/* ── SEARCH & FILTER CONTROLS ── */}
-        <div className="bg-white p-6 border border-[#E2DDD3] space-y-6 shadow-sm">
+        {/* ── SEARCH & FILTER CONTROLS WITH TACTILE DEPTH ── */}
+        <div className="bg-white p-6 border border-[#DDD8CE] rounded-[6px] shadow-tactile space-y-6">
           
           {/* Top Search Bar & Sort Row */}
           <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
@@ -148,13 +148,13 @@ export default function FilterablePartsCatalogue({ initialParts }: Props) {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search part number, description, model (e.g. TS2021, 4305, DL-UHD)..."
-                className="w-full pl-11 pr-4 py-3.5 bg-[#FAF9F6] border border-[#DDD8CE] text-xs font-ibm-plex-mono text-[#1A1917] placeholder-[#888] focus:outline-none focus:border-[#FF6900] focus:bg-white transition-colors"
+                className="w-full pl-11 pr-4 py-3.5 bg-[#FAF9F6] border border-[#DDD8CE] focus:border-[#FF6900] focus:bg-white text-xs font-ibm-plex-mono text-[#1A1917] placeholder-[#888] focus:outline-none transition-all rounded-[5px] focus:shadow-tactile-sm"
               />
               {search && (
                 <button
                   type="button"
                   onClick={() => setSearch('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#888] hover:text-black"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#888] hover:text-black p-1"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -165,19 +165,19 @@ export default function FilterablePartsCatalogue({ initialParts }: Props) {
               <select
                 value={sortOrder}
                 onChange={(e) => setSortOrder(e.target.value as any)}
-                className="w-full py-3.5 px-3 bg-[#FAF9F6] border border-[#DDD8CE] text-xs font-ibm-plex-mono text-[#1A1917] focus:outline-none focus:border-[#FF6900]"
+                className="w-full py-3.5 px-3 bg-[#FAF9F6] border border-[#DDD8CE] text-xs font-ibm-plex-mono text-[#1A1917] focus:outline-none focus:border-[#FF6900] rounded-[5px]"
               >
                 <option value="default">Sort: Recommended</option>
                 <option value="price_asc">Price: Low to High</option>
                 <option value="price_desc">Price: High to Low</option>
               </select>
 
-              <label className="flex items-center gap-2 text-xs font-ibm-plex-mono text-[#444] cursor-pointer whitespace-nowrap px-2">
+              <label className="flex items-center gap-2 text-xs font-ibm-plex-mono text-[#444] cursor-pointer whitespace-nowrap px-2 select-none">
                 <input
                   type="checkbox"
                   checked={inStockOnly}
                   onChange={(e) => setInStockOnly(e.target.checked)}
-                  className="accent-[#FF6900]"
+                  className="accent-[#FF6900] rounded-[2px]"
                 />
                 <span>In Stock</span>
               </label>
@@ -197,9 +197,9 @@ export default function FilterablePartsCatalogue({ initialParts }: Props) {
                     key={cat.slug}
                     type="button"
                     onClick={() => setSelectedCategory(cat.slug)}
-                    className={`px-3 py-1.5 font-ibm-plex-mono text-[11px] uppercase tracking-wider transition-all cursor-pointer ${
+                    className={`px-3 py-1.5 font-ibm-plex-mono text-[11px] uppercase tracking-wider transition-all cursor-pointer rounded-[4px] btn-tactile ${
                       active
-                        ? 'bg-[#1A1917] text-white font-semibold shadow-sm'
+                        ? 'bg-[#1A1917] text-white font-semibold shadow-button'
                         : 'bg-[#FAF9F6] text-[#555] hover:bg-[#1A1917] hover:text-white border border-[#DDD8CE]'
                     }`}
                   >
@@ -223,9 +223,9 @@ export default function FilterablePartsCatalogue({ initialParts }: Props) {
                     key={b.slug}
                     type="button"
                     onClick={() => setSelectedBrand(b.slug)}
-                    className={`px-3 py-1.5 font-ibm-plex-mono text-[11px] uppercase tracking-wider transition-all cursor-pointer ${
+                    className={`px-3 py-1.5 font-ibm-plex-mono text-[11px] uppercase tracking-wider transition-all cursor-pointer rounded-[4px] btn-tactile ${
                       active
-                        ? 'bg-[#FF6900] text-white font-semibold shadow-sm'
+                        ? 'bg-[#FF6900] text-white font-semibold shadow-button'
                         : 'bg-[#FAF9F6] text-[#555] hover:bg-[#FF6900] hover:text-white border border-[#DDD8CE]'
                     }`}
                   >
@@ -238,7 +238,7 @@ export default function FilterablePartsCatalogue({ initialParts }: Props) {
                 <button
                   type="button"
                   onClick={clearFilters}
-                  className="px-3 py-1.5 font-ibm-plex-mono text-[10px] uppercase tracking-wider text-rose-700 hover:underline ml-auto flex items-center gap-1"
+                  className="px-3 py-1.5 font-ibm-plex-mono text-[10px] uppercase tracking-wider text-rose-700 hover:underline ml-auto flex items-center gap-1 rounded-[3px]"
                 >
                   <X className="w-3 h-3" />
                   <span>Reset All Filters</span>
@@ -251,7 +251,7 @@ export default function FilterablePartsCatalogue({ initialParts }: Props) {
 
         {/* ── RESULTS GRID ── */}
         {initialParts.length === 0 ? (
-          <div className="bg-white p-12 text-center border border-[#E2DDD3] space-y-4">
+          <div className="bg-white p-12 text-center border border-[#DDD8CE] rounded-[6px] shadow-tactile space-y-4">
             <span className="font-ibm-plex-mono text-xs text-[#1A1917] font-semibold uppercase tracking-widest block">
               // Parts Finder &amp; Direct Despatch Desk
             </span>
@@ -261,20 +261,20 @@ export default function FilterablePartsCatalogue({ initialParts }: Props) {
             <div className="pt-2 flex flex-wrap items-center justify-center gap-4">
               <Link
                 href="/parts-attachments/enquiry"
-                className="px-6 py-3 bg-[#FF6900] hover:bg-[#1A1917] text-white font-ibm-plex-mono text-xs uppercase tracking-widest transition-colors font-medium"
+                className="px-6 py-3 bg-[#FF6900] hover:bg-[#1A1917] text-white font-ibm-plex-mono text-xs uppercase tracking-widest font-medium rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
               >
                 Submit Parts Request →
               </Link>
               <Link
                 href="/parts-attachments/finder"
-                className="px-6 py-3 border border-[#DDD8CE] hover:border-black text-[#1A1917] font-ibm-plex-mono text-xs uppercase tracking-widest transition-colors"
+                className="px-6 py-3 border border-[#DDD8CE] hover:border-black text-[#1A1917] font-ibm-plex-mono text-xs uppercase tracking-widest rounded-[4px] bg-[#FAF9F6] btn-tactile"
               >
                 Launch Parts Finder
               </Link>
             </div>
           </div>
         ) : filteredParts.length === 0 ? (
-          <div className="bg-white p-12 text-center border border-[#E2DDD3] space-y-4">
+          <div className="bg-white p-12 text-center border border-[#DDD8CE] rounded-[6px] shadow-tactile space-y-4">
             <span className="font-ibm-plex-mono text-xs text-[#777] uppercase tracking-widest block">
               No Parts Found Matching Your Criteria
             </span>
@@ -284,7 +284,7 @@ export default function FilterablePartsCatalogue({ initialParts }: Props) {
             <button
               type="button"
               onClick={clearFilters}
-              className="px-6 py-2.5 bg-[#1A1917] text-white font-ibm-plex-mono text-xs uppercase tracking-widest hover:bg-[#FF6900] transition-colors"
+              className="px-6 py-2.5 bg-[#1A1917] text-white font-ibm-plex-mono text-xs uppercase tracking-widest hover:bg-[#FF6900] transition-colors rounded-[4px] shadow-button btn-tactile"
             >
               Clear Filters
             </button>
@@ -296,7 +296,7 @@ export default function FilterablePartsCatalogue({ initialParts }: Props) {
               return (
                 <div
                   key={part.id || part.slug}
-                  className="bg-white border border-[#E2DDD3] hover:border-[#FF6900] transition-all duration-300 p-6 flex flex-col justify-between group shadow-sm hover:shadow-md"
+                  className="bg-white border border-[#DDD8CE] hover:border-[#FF6900] rounded-[6px] shadow-tactile hover:shadow-tactile-hover transition-all duration-300 hover:-translate-y-[2px] p-6 flex flex-col justify-between group"
                 >
                   <div className="space-y-4">
                     {/* Header line: Part Number & Stock Status */}
@@ -310,19 +310,20 @@ export default function FilterablePartsCatalogue({ initialParts }: Props) {
                       </span>
                     </div>
 
-                    {/* Image Area if available */}
+                    {/* Image Area with Contact Shadow */}
                     {part.image_url ? (
-                      <div className="relative w-full h-36 bg-[#FAF9F6] border border-[#F0EBE1] flex items-center justify-center p-3 overflow-hidden">
+                      <div className="relative w-full h-36 bg-[#FAF9F6] border border-[#F0EBE1] rounded-[5px] flex items-center justify-center p-3 overflow-hidden">
+                        <div className="absolute bottom-2 w-1/2 h-2 bg-[radial-gradient(ellipse_at_center,rgba(26,25,23,0.15)_0%,rgba(26,25,23,0)_70%)] blur-[2px] pointer-events-none" />
                         <Image
                           src={part.image_url}
                           alt={part.name || 'Part'}
                           fill
                           sizes="200px"
-                          className="object-contain p-2 group-hover:scale-105 transition-transform"
+                          className="object-contain p-2 group-hover:scale-[1.03] transition-transform duration-500 shadow-contact-subtle"
                         />
                       </div>
                     ) : (
-                      <div className="w-full h-24 bg-[#FAF9F6] border border-[#F0EBE1] flex items-center justify-center text-[#999]">
+                      <div className="w-full h-24 bg-[#FAF9F6] border border-[#F0EBE1] rounded-[5px] flex items-center justify-center text-[#999]">
                         <Wrench className="w-6 h-6 stroke-[1.5]" />
                       </div>
                     )}
@@ -336,7 +337,7 @@ export default function FilterablePartsCatalogue({ initialParts }: Props) {
                     <div className="flex items-center gap-2 text-[10px] font-ibm-plex-mono text-[#777]">
                       <span className="uppercase">{part.manufacturer || part.brand || 'Alkota OEM'}</span>
                       {part.oem_genuine && (
-                        <span className="bg-emerald-50 text-emerald-800 px-1.5 py-0.5 font-semibold text-[9px] border border-emerald-200">
+                        <span className="bg-emerald-50 text-emerald-800 px-1.5 py-0.5 font-semibold text-[9px] border border-emerald-200 rounded-[3px]">
                           OEM GENUINE
                         </span>
                       )}
@@ -366,7 +367,7 @@ export default function FilterablePartsCatalogue({ initialParts }: Props) {
                       <button
                         type="button"
                         onClick={() => handleAddToCart(part)}
-                        className="w-full bg-[#FF6900] hover:bg-[#1A1917] text-white py-2.5 px-3 font-ibm-plex-mono text-[10px] uppercase tracking-wider transition-colors font-semibold flex items-center justify-center gap-1.5 cursor-pointer shadow-sm"
+                        className="w-full bg-[#FF6900] hover:bg-[#1A1917] text-white py-2.5 px-3 font-ibm-plex-mono text-[10px] uppercase tracking-wider transition-colors font-semibold flex items-center justify-center gap-1.5 cursor-pointer rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
                       >
                         <Plus className="w-3 h-3" />
                         <span>{isAdded ? 'Added ✓' : 'Add to Order'}</span>
@@ -374,7 +375,7 @@ export default function FilterablePartsCatalogue({ initialParts }: Props) {
 
                       <Link
                         href={`/parts-attachments/product/${part.slug || part.part_number?.toLowerCase()}`}
-                        className="w-full py-2.5 border border-[#DDD8CE] hover:border-black text-[#1A1917] text-center font-ibm-plex-mono text-[10px] uppercase tracking-wider transition-colors bg-[#FAF9F6] font-medium flex items-center justify-center"
+                        className="w-full py-2.5 border border-[#DDD8CE] hover:border-black text-[#1A1917] text-center font-ibm-plex-mono text-[10px] uppercase tracking-wider transition-colors bg-[#FAF9F6] font-medium flex items-center justify-center rounded-[4px] btn-tactile"
                       >
                         Details →
                       </Link>

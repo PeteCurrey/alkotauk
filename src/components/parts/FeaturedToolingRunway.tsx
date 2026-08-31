@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight, ShoppingCart, Check, ChevronRight, Sparkles } from 'lucide-react';
+import { ArrowRight, ShoppingCart, Check } from 'lucide-react';
 import { usePartsRequest } from './PartsRequestListContext';
 
 interface FeaturedItem {
@@ -124,46 +124,50 @@ export default function FeaturedToolingRunway() {
 
           <Link
             href="#catalogue-search"
-            className="inline-flex items-center gap-2 font-ibm-plex-mono text-xs uppercase tracking-widest text-[#1A1917] hover:text-[#FF6900] transition-colors font-medium self-start md:self-auto"
+            className="inline-flex items-center gap-2 font-ibm-plex-mono text-xs uppercase tracking-widest text-[#1A1917] hover:text-[#FF6900] transition-colors font-medium self-start md:self-auto py-1"
           >
             <span>Browse Full Catalogue</span>
             <ArrowRight className="w-4 h-4 text-[#FF6900]" />
           </Link>
         </div>
 
-        {/* ── PRODUCT SHOWCASE RUNWAY (GRID WITH VISUAL RHYTHM) ── */}
+        {/* ── PRODUCT SHOWCASE RUNWAY (PHYSICAL DEPTH & CONTACT SHADOWS) ── */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {FEATURED_ITEMS.map((item, idx) => {
             const isLarge = idx === 0;
             return (
               <div
                 key={item.id}
-                className={`group bg-white border border-[#E2DDD3] hover:border-[#FF6900] transition-all duration-300 flex flex-col justify-between overflow-hidden ${
+                className={`group bg-white border border-[#DDD8CE] hover:border-[#FF6900] rounded-[6px] shadow-tactile hover:shadow-tactile-hover transition-all duration-300 hover:-translate-y-[2px] flex flex-col justify-between overflow-hidden ${
                   isLarge ? 'md:col-span-2 lg:col-span-2' : 'col-span-1'
                 }`}
               >
-                {/* Product Image Area */}
-                <div className={`relative w-full bg-[#FAF9F6] p-6 flex items-center justify-center border-b border-[#E2DDD3] overflow-hidden ${
+                {/* Product Image Area with Contact Shadow */}
+                <div className={`relative w-full bg-[#FAF9F6] p-6 flex items-center justify-center border-b border-[#EAE6DE] overflow-hidden rounded-t-[5px] ${
                   isLarge ? 'h-72 sm:h-80' : 'h-64'
                 }`}>
                   <div className="absolute top-4 left-4 z-10 flex flex-wrap gap-2">
-                    <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest bg-[#1A1917] text-white px-2.5 py-1">
+                    <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest bg-[#1A1917] text-white px-2.5 py-1 rounded-[3px] shadow-tactile-sm">
                       {item.brand}
                     </span>
                     {item.inStock && (
-                      <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest bg-emerald-100 text-emerald-800 px-2.5 py-1 font-medium">
+                      <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest bg-emerald-50 text-emerald-800 border border-emerald-200 px-2.5 py-1 font-medium rounded-[3px]">
                         In Stock
                       </span>
                     )}
                   </div>
 
-                  <div className="relative w-full h-full max-h-56 transition-transform duration-500 group-hover:scale-105">
+                  {/* Soft Physical Contact Shadow Element */}
+                  <div className="absolute bottom-5 w-3/5 h-3 bg-[radial-gradient(ellipse_at_center,rgba(26,25,23,0.18)_0%,rgba(26,25,23,0)_70%)] blur-[3px] pointer-events-none" />
+
+                  {/* Product Image with Subtle Scale on Hover */}
+                  <div className="relative w-full h-full max-h-56 transition-transform duration-500 ease-out group-hover:scale-[1.025] animate-breathe-subtle">
                     <Image
                       src={item.image}
                       alt={item.name}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      className="object-contain object-center"
+                      className="object-contain object-center shadow-contact-subtle"
                     />
                   </div>
                 </div>
@@ -192,7 +196,7 @@ export default function FeaturedToolingRunway() {
                     <div className="pt-3 border-t border-[#F0EBE1] grid grid-cols-2 gap-2 text-xs font-ibm-plex-mono text-[#555]">
                       {item.specs.map((spec, sIdx) => (
                         <div key={sIdx} className="flex items-center gap-1.5 truncate">
-                          <span className="h-1 w-1 rounded-full bg-[#FF6900] shrink-0" />
+                          <span className="h-1.5 w-1.5 rounded-full bg-[#FF6900] shrink-0" />
                           <span className="truncate">{spec}</span>
                         </div>
                       ))}
@@ -200,7 +204,7 @@ export default function FeaturedToolingRunway() {
                   </div>
 
                   {/* Commerce Action Bar */}
-                  <div className="pt-4 border-t border-[#E2DDD3] flex items-center justify-between gap-4">
+                  <div className="pt-4 border-t border-[#EAE6DE] flex items-center justify-between gap-4">
                     <div>
                       <span className="text-xs text-[#777] block font-ibm-plex-mono">Trade Price</span>
                       <span className="text-2xl font-bold text-[#1A1917] tracking-tight">
@@ -211,7 +215,7 @@ export default function FeaturedToolingRunway() {
                     <button
                       type="button"
                       onClick={() => handleQuickAdd(item)}
-                      className={`inline-flex items-center gap-2 px-5 py-3 font-ibm-plex-mono text-xs uppercase tracking-widest transition-all font-semibold cursor-pointer ${
+                      className={`inline-flex items-center gap-2 px-5 py-3 font-ibm-plex-mono text-xs uppercase tracking-widest font-semibold cursor-pointer rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile ${
                         addedIds[item.id]
                           ? 'bg-emerald-700 text-white'
                           : 'bg-[#FF6900] hover:bg-[#1A1917] text-white'

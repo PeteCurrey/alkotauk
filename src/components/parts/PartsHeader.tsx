@@ -147,9 +147,9 @@ export default function PartsHeader() {
           <button
             type="button"
             onClick={() => setMegaMenuOpen(!megaMenuOpen)}
-            className={`flex items-center gap-2 px-3.5 py-2 font-ibm-plex-mono text-xs uppercase tracking-widest transition-all cursor-pointer ${
+            className={`flex items-center gap-2 px-3.5 py-2 font-ibm-plex-mono text-xs uppercase tracking-widest transition-all cursor-pointer rounded-[4px] btn-tactile ${
               megaMenuOpen 
-                ? (isLight ? 'bg-black text-white' : 'bg-white text-alkota-black') 
+                ? (isLight ? 'bg-black text-white shadow-tactile-sm' : 'bg-white text-alkota-black shadow-tactile-sm') 
                 : isLight
                 ? 'text-alkota-black hover:bg-black/5'
                 : 'text-[#DDD] hover:text-white hover:bg-white/10'
@@ -164,7 +164,7 @@ export default function PartsHeader() {
           {/* Quick Direct Nav Links */}
           <Link
             href="/parts-attachments/chemicals"
-            className={`text-xs uppercase tracking-widest font-ibm-plex-mono text-alkota-orange transition-colors flex items-center gap-1 font-medium ${
+            className={`text-xs uppercase tracking-widest font-ibm-plex-mono text-alkota-orange transition-colors flex items-center gap-1 font-medium hover:-translate-y-[1px] duration-200 ${
               isLight ? 'hover:text-black' : 'hover:text-white'
             }`}
           >
@@ -172,7 +172,7 @@ export default function PartsHeader() {
           </Link>
           <Link
             href="/parts-attachments/brands"
-            className={`text-xs uppercase tracking-widest font-ibm-plex-mono transition-colors ${
+            className={`text-xs uppercase tracking-widest font-ibm-plex-mono transition-colors hover:-translate-y-[1px] duration-200 ${
               isLight ? 'text-[#222] hover:text-black font-medium' : 'text-[#BBB] hover:text-white'
             }`}
           >
@@ -180,7 +180,7 @@ export default function PartsHeader() {
           </Link>
           <Link
             href="/parts-attachments/machines"
-            className={`text-xs uppercase tracking-widest font-ibm-plex-mono transition-colors ${
+            className={`text-xs uppercase tracking-widest font-ibm-plex-mono transition-colors hover:-translate-y-[1px] duration-200 ${
               isLight ? 'text-[#222] hover:text-black font-medium' : 'text-[#BBB] hover:text-white'
             }`}
           >
@@ -188,7 +188,7 @@ export default function PartsHeader() {
           </Link>
           <Link
             href="/parts-attachments/applications"
-            className={`text-xs uppercase tracking-widest font-ibm-plex-mono transition-colors ${
+            className={`text-xs uppercase tracking-widest font-ibm-plex-mono transition-colors hover:-translate-y-[1px] duration-200 ${
               isLight ? 'text-[#222] hover:text-black font-medium' : 'text-[#BBB] hover:text-white'
             }`}
           >
@@ -202,10 +202,10 @@ export default function PartsHeader() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by part number, brand, machine..."
-              className={`w-full text-xs px-3.5 py-2 pr-9 focus:outline-none focus:border-alkota-orange transition-all font-normal ${
+              className={`w-full text-xs px-3.5 py-2 pr-9 focus:outline-none focus:border-alkota-orange transition-all font-normal rounded-[5px] ${
                 isLight
-                  ? 'bg-black/5 border border-black/15 text-alkota-black placeholder:text-black/40 focus:bg-white'
-                  : 'bg-white/10 border border-white/15 text-white placeholder:text-white/40 focus:bg-black/60'
+                  ? 'bg-black/5 border border-black/15 text-alkota-black placeholder:text-black/40 focus:bg-white focus:shadow-tactile-sm'
+                  : 'bg-white/10 border border-white/15 text-white placeholder:text-white/40 focus:bg-black/60 focus:shadow-tactile-sm'
               }`}
             />
             <button
@@ -225,7 +225,7 @@ export default function PartsHeader() {
           <button
             type="button"
             onClick={() => setIsDrawerOpen(true)}
-            className={`flex items-center gap-2 px-3.5 py-2 transition-all cursor-pointer border group ${
+            className={`flex items-center gap-2 px-3.5 py-2 transition-all cursor-pointer border group rounded-[4px] btn-tactile shadow-button hover:shadow-button-hover ${
               isLight
                 ? 'bg-black/5 hover:bg-alkota-orange text-alkota-black hover:text-white border-black/15'
                 : 'bg-white/10 hover:bg-alkota-orange text-white border-white/15'

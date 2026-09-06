@@ -52,7 +52,7 @@ export default function TechnicalLibrary({ resources }: Props) {
               <button
                 key={f}
                 onClick={() => setActiveFilter(f)}
-                className={'px-3.5 py-1.5 text-xs font-mono uppercase tracking-wider transition-colors border cursor-pointer ' + (
+                className={'px-3.5 py-1.5 text-xs font-mono uppercase tracking-wider transition-colors border cursor-pointer rounded-[4px] ' + (
                   activeFilter === f
                     ? 'bg-[#1A1A18] text-white border-[#1A1A18]'
                     : 'bg-white text-[#666] border-[#E5E5E0] hover:border-[#1A1A18]'
@@ -69,7 +69,7 @@ export default function TechnicalLibrary({ resources }: Props) {
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               placeholder="Search downloads..."
-              className="w-full bg-white border border-[#E5E5E0] text-xs px-3.5 py-2 pl-9 focus:outline-none focus:border-[#FF6900] font-normal"
+              className="w-full bg-white border border-[#E5E5E0] text-xs px-3.5 py-2 pl-9 focus:outline-none focus:border-[#FF6900] font-normal rounded-[5px]"
             />
             <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-[#999]" />
           </div>
@@ -80,11 +80,11 @@ export default function TechnicalLibrary({ resources }: Props) {
           {filtered.map(res => (
             <div
               key={res.id}
-              className="bg-white border border-[#E5E5E0] p-6 flex flex-col justify-between hover:border-[#FF6900]/50 transition-all shadow-xs"
+              className="bg-white border border-[#E5E5E0] p-6 flex flex-col justify-between hover:border-[#FF6900]/50 transition-all rounded-[6px] shadow-tactile hover:shadow-tactile-hover transition-shadow"
             >
               <div>
                 <div className="flex items-center justify-between text-[10px] font-mono text-[#888] mb-3">
-                  <span className="bg-[#FAFAF8] border border-[#E5E5E0] px-2 py-0.5 uppercase text-[#FF6900]">
+                  <span className="bg-[#FAFAF8] border border-[#E5E5E0] px-2 py-0.5 uppercase text-[#FF6900] rounded-[3px]">
                     {res.resource_type}
                   </span>
                   <span>{res.file_format} · {res.file_size_bytes ? (res.file_size_bytes / 1000000).toFixed(1) + ' MB' : 'PDF'}</span>
@@ -103,7 +103,7 @@ export default function TechnicalLibrary({ resources }: Props) {
                 <a
                   href={res.file_url}
                   download
-                  className="inline-flex items-center gap-2 bg-[#1A1A18] hover:bg-[#FF6900] text-white px-4 py-2 text-xs uppercase tracking-widest transition-colors font-normal no-underline"
+                  className="inline-flex items-center gap-2 bg-[#1A1A18] hover:bg-[#FF6900] text-white px-4 py-2 text-xs uppercase tracking-widest transition-colors font-normal no-underline rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
                 >
                   <Download className="h-3.5 w-3.5" />
                   <span>Download Document</span>

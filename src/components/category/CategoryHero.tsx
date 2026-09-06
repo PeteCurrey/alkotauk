@@ -84,7 +84,7 @@ export default function CategoryHero({
       <div className="relative z-10 mx-auto max-w-7xl w-full my-auto py-10">
         <div className="max-w-4xl">
           <div className="flex items-center gap-2 mb-6">
-            <span className="flex items-center gap-1.5 px-3 py-1 bg-white/5 border border-white/10 text-[10px] font-mono font-medium uppercase tracking-widest text-[#CCC]">
+            <span className="flex items-center gap-1.5 px-3 py-1 bg-white/5 border border-white/10 text-[10px] font-mono font-medium uppercase tracking-widest text-[#CCC] rounded-[3px]">
               {getIcon()}
               <span>{getAccentTag()}</span>
             </span>
@@ -104,7 +104,7 @@ export default function CategoryHero({
           <div className="flex flex-wrap items-center gap-4">
             <a
               href="#architectures"
-              className="inline-flex items-center gap-2 bg-[#FF6900] hover:bg-[#E05800] text-white px-6 py-3.5 text-xs font-medium uppercase tracking-widest transition-all no-underline shadow-lg"
+              className="inline-flex items-center gap-2 bg-[#FF6900] hover:bg-[#E05800] text-white px-6 py-3.5 text-xs font-medium uppercase tracking-widest transition-all no-underline shadow-lg rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
             >
               <span>Explore Architectures</span>
               <ArrowRight className="h-4 w-4" />
@@ -112,7 +112,7 @@ export default function CategoryHero({
 
             <Link
               href={`/tools/machine-match?category=${categorySlug}`}
-              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white px-6 py-3.5 text-xs font-medium uppercase tracking-widest transition-all no-underline backdrop-blur-sm"
+              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white px-6 py-3.5 text-xs font-medium uppercase tracking-widest transition-all no-underline backdrop-blur-sm rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
             >
               <Sliders className="h-4 w-4 text-[#FF6900]" />
               <span>Launch Category Matcher</span>

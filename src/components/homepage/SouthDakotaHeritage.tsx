@@ -68,7 +68,7 @@ export default function SouthDakotaHeritage() {
           <div>
             <Link
               href="/about"
-              className="inline-flex items-center gap-3 bg-white text-black px-8 py-4 text-xs uppercase tracking-[0.2em] hover:bg-alkota-orange hover:text-white transition-all no-underline group shadow-xl font-normal"
+              className="inline-flex items-center gap-3 bg-white text-black px-8 py-4 text-xs uppercase tracking-[0.2em] hover:bg-alkota-orange hover:text-white transition-all no-underline group shadow-xl font-normal rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
             >
               <span>The Alkota Story (1964 — Present)</span>
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />

@@ -67,12 +67,12 @@ export default function RequestPricingModal({ isOpen, onClose, product }: Reques
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
           transition={{ duration: 0.2 }}
-          className="relative w-full max-w-2xl bg-[#121212] border border-[#2A2A2A] p-8 md:p-10 shadow-2xl text-white my-8"
+          className="relative w-full max-w-2xl bg-[#121212] border border-[#2A2A2A] p-8 md:p-10 shadow-2xl text-white my-8 rounded-[6px] shadow-tactile"
         >
           {/* Close button */}
           <button
             onClick={onClose}
-            className="absolute top-6 right-6 p-2 text-[#777] hover:text-white hover:bg-[#222] transition-colors"
+            className="absolute top-6 right-6 p-2 text-[#777] hover:text-white hover:bg-[#222] transition-colors rounded-[3px]"
           >
             <X className="h-5 w-5" />
           </button>
@@ -94,7 +94,7 @@ export default function RequestPricingModal({ isOpen, onClose, product }: Reques
           </p>
 
           {status === 'success' ? (
-            <div className="py-12 text-center bg-emerald-950/30 border border-emerald-500/30 p-8">
+            <div className="py-12 text-center bg-emerald-950/30 border border-emerald-500/30 p-8 rounded-[4px]">
               <CheckCircle2 className="h-16 w-16 text-emerald-400 mx-auto mb-4" />
               <h4 className="font-barlow-condensed text-3xl font-black uppercase italic text-white mb-2">
                 Quotation Request Dispatched
@@ -104,7 +104,7 @@ export default function RequestPricingModal({ isOpen, onClose, product }: Reques
               </p>
               <button
                 onClick={onClose}
-                className="px-6 py-3 bg-white text-black font-ibm-plex-mono text-xs font-bold uppercase tracking-widest hover:bg-neutral-200 transition-colors"
+                className="px-6 py-3 bg-white text-black font-ibm-plex-mono text-xs font-bold uppercase tracking-widest hover:bg-neutral-200 transition-colors rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
               >
                 Close Window
               </button>
@@ -120,7 +120,7 @@ export default function RequestPricingModal({ isOpen, onClose, product }: Reques
                     value={formData.name}
                     onChange={e => setFormData({ ...formData, name: e.target.value })}
                     placeholder="e.g. James Wilson"
-                    className="w-full bg-[#090909] border border-[#2A2A2A] p-3 text-white focus:border-alkota-orange focus:outline-none text-sm placeholder:text-[#555]"
+                    className="w-full bg-[#090909] border border-[#2A2A2A] p-3 text-white focus:border-alkota-orange focus:outline-none text-sm placeholder:text-[#555] rounded-[5px]"
                   />
                 </div>
                 <div>
@@ -131,7 +131,7 @@ export default function RequestPricingModal({ isOpen, onClose, product }: Reques
                     value={formData.email}
                     onChange={e => setFormData({ ...formData, email: e.target.value })}
                     placeholder="e.g. james@contractors.co.uk"
-                    className="w-full bg-[#090909] border border-[#2A2A2A] p-3 text-white focus:border-alkota-orange focus:outline-none text-sm placeholder:text-[#555]"
+                    className="w-full bg-[#090909] border border-[#2A2A2A] p-3 text-white focus:border-alkota-orange focus:outline-none text-sm placeholder:text-[#555] rounded-[5px]"
                   />
                 </div>
               </div>
@@ -144,7 +144,7 @@ export default function RequestPricingModal({ isOpen, onClose, product }: Reques
                     value={formData.company}
                     onChange={e => setFormData({ ...formData, company: e.target.value })}
                     placeholder="e.g. Wilson Fleet Services Ltd"
-                    className="w-full bg-[#090909] border border-[#2A2A2A] p-3 text-white focus:border-alkota-orange focus:outline-none text-sm placeholder:text-[#555]"
+                    className="w-full bg-[#090909] border border-[#2A2A2A] p-3 text-white focus:border-alkota-orange focus:outline-none text-sm placeholder:text-[#555] rounded-[5px]"
                   />
                 </div>
                 <div>
@@ -155,7 +155,7 @@ export default function RequestPricingModal({ isOpen, onClose, product }: Reques
                     value={formData.phone}
                     onChange={e => setFormData({ ...formData, phone: e.target.value })}
                     placeholder="e.g. +44 (0) 7912 345678"
-                    className="w-full bg-[#090909] border border-[#2A2A2A] p-3 text-white focus:border-alkota-orange focus:outline-none text-sm placeholder:text-[#555]"
+                    className="w-full bg-[#090909] border border-[#2A2A2A] p-3 text-white focus:border-alkota-orange focus:outline-none text-sm placeholder:text-[#555] rounded-[5px]"
                   />
                 </div>
               </div>
@@ -166,7 +166,7 @@ export default function RequestPricingModal({ isOpen, onClose, product }: Reques
                   <select
                     value={formData.quantity}
                     onChange={e => setFormData({ ...formData, quantity: e.target.value })}
-                    className="w-full bg-[#090909] border border-[#2A2A2A] p-3 text-white focus:border-alkota-orange focus:outline-none text-sm"
+                    className="w-full bg-[#090909] border border-[#2A2A2A] p-3 text-white focus:border-alkota-orange focus:outline-none text-sm rounded-[5px]"
                   >
                     <option value="1">1 Unit</option>
                     <option value="2-3">2–3 Units (Multi-Unit Fleet)</option>
@@ -178,7 +178,7 @@ export default function RequestPricingModal({ isOpen, onClose, product }: Reques
                   <select
                     value={formData.timeline}
                     onChange={e => setFormData({ ...formData, timeline: e.target.value })}
-                    className="w-full bg-[#090909] border border-[#2A2A2A] p-3 text-white focus:border-alkota-orange focus:outline-none text-sm"
+                    className="w-full bg-[#090909] border border-[#2A2A2A] p-3 text-white focus:border-alkota-orange focus:outline-none text-sm rounded-[5px]"
                   >
                     <option value="immediate">Immediate (Ready to Buy)</option>
                     <option value="1_month">Within 30 Days</option>
@@ -194,12 +194,12 @@ export default function RequestPricingModal({ isOpen, onClose, product }: Reques
                   value={formData.message}
                   onChange={e => setFormData({ ...formData, message: e.target.value })}
                   placeholder="e.g. Hose length needed, generator mounting, wash bay setup, trade-in..."
-                  className="w-full bg-[#090909] border border-[#2A2A2A] p-3 text-white focus:border-alkota-orange focus:outline-none text-sm placeholder:text-[#555] resize-none"
+                  className="w-full bg-[#090909] border border-[#2A2A2A] p-3 text-white focus:border-alkota-orange focus:outline-none text-sm placeholder:text-[#555] resize-none rounded-[5px]"
                 />
               </div>
 
               {status === 'error' && (
-                <div className="p-3 bg-red-950/50 border border-red-500/40 text-red-400 text-xs font-ibm-plex-mono flex items-center gap-2">
+                <div className="p-3 bg-red-950/50 border border-red-500/40 text-red-400 text-xs font-ibm-plex-mono flex items-center gap-2 rounded-[3px]">
                   <AlertTriangle className="h-4 w-4 shrink-0" />
                   <span>Unable to dispatch quotation request. Please check your entries.</span>
                 </div>
@@ -208,7 +208,7 @@ export default function RequestPricingModal({ isOpen, onClose, product }: Reques
               <button
                 type="submit"
                 disabled={status === 'submitting'}
-                className="w-full mt-4 bg-alkota-orange text-white py-4 font-ibm-plex-mono text-xs font-black uppercase tracking-[0.25em] hover:bg-orange-600 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 shadow-xl"
+                className="w-full mt-4 bg-alkota-orange text-white py-4 font-ibm-plex-mono text-xs font-black uppercase tracking-[0.25em] hover:bg-orange-600 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 shadow-xl rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
               >
                 {status === 'submitting' ? (
                   <>

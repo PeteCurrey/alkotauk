@@ -19,7 +19,7 @@ export default function TroubleshootingAccordion() {
         return (
           <div
             key={item.id}
-            className="border border-[#E8E8E4] bg-white transition-all overflow-hidden"
+            className="border border-[#E8E8E4] bg-white transition-all overflow-hidden rounded-[6px] shadow-tactile-sm"
           >
             <button
               onClick={() => toggle(item.id)}
@@ -51,7 +51,7 @@ export default function TroubleshootingAccordion() {
                 </p>
 
                 {/* Safe Checks */}
-                <div className="mb-6 bg-white border border-[#E8E8E4] p-5">
+                <div className="mb-6 bg-white border border-[#E8E8E4] p-5 rounded-[5px]">
                   <div className="flex items-center gap-2 mb-3">
                     <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                     <h5 className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-black font-semibold">
@@ -69,7 +69,7 @@ export default function TroubleshootingAccordion() {
                 </div>
 
                 {/* Unsafe Warning Box */}
-                <div className="mb-6 bg-amber-50/60 border border-amber-300/80 p-5 text-xs text-amber-950">
+                <div className="mb-6 bg-amber-50/60 border border-amber-300/80 p-5 text-xs text-amber-950 rounded-[5px]">
                   <div className="flex items-center gap-2 mb-2 text-amber-800">
                     <ShieldAlert className="w-4 h-4 text-amber-700 shrink-0" />
                     <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest font-bold">
@@ -88,7 +88,7 @@ export default function TroubleshootingAccordion() {
                   </span>
                   <Link
                     href={`/service/request?type=${item.recommendedServiceType}&symptom=${item.id}`}
-                    className="inline-flex items-center gap-2 bg-alkota-black hover:bg-alkota-orange text-white px-5 py-2.5 font-ibm-plex-mono text-[11px] uppercase tracking-widest transition-colors"
+                    className="inline-flex items-center gap-2 bg-alkota-black hover:bg-alkota-orange text-white px-5 py-2.5 font-ibm-plex-mono text-[11px] uppercase tracking-widest transition-colors rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
                   >
                     Book Diagnostic Service
                     <ArrowRight className="w-3.5 h-3.5" />

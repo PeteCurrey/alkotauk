@@ -41,7 +41,7 @@ export default function LatestIntelligence({ articles }: Props) {
               href={'/lobby/' + leadArticle.category_slug + '/' + leadArticle.slug}
               className="block no-underline"
             >
-              <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#222] mb-6 shadow-sm border border-[#E0E0DE]">
+              <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#222] mb-6 shadow-sm border border-[#E0E0DE] rounded-[6px]">
                 {leadArticle.featured_image_url && (
                   <Image
                     src={leadArticle.featured_image_url}
@@ -51,7 +51,7 @@ export default function LatestIntelligence({ articles }: Props) {
                     sizes="(max-width: 1024px) 100vw, 60vw"
                   />
                 )}
-                <div className="absolute top-4 left-4 bg-black/85 text-white px-3 py-1 text-[10px] uppercase font-mono tracking-widest">
+                <div className="absolute top-4 left-4 bg-black/85 text-white px-3 py-1 text-[10px] uppercase font-mono tracking-widest rounded-[3px]">
                   {leadArticle.category?.name || 'Lead Investigation'}
                 </div>
               </div>

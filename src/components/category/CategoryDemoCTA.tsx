@@ -32,7 +32,7 @@ export default function CategoryDemoCTA({
           <div className="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col gap-4">
             <Link
               href={`/contact?enquiry=demo-${categorySlug}`}
-              className="inline-flex items-center justify-center gap-2 bg-[#FF6900] hover:bg-[#E05800] text-white px-6 py-4 text-xs font-medium uppercase tracking-widest transition-all no-underline shadow-lg"
+              className="inline-flex items-center justify-center gap-2 bg-[#FF6900] hover:bg-[#E05800] text-white px-6 py-4 text-xs font-medium uppercase tracking-widest transition-all no-underline shadow-lg rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
             >
               <span>Request a Demonstration</span>
               <ArrowRight className="h-4 w-4" />
@@ -40,7 +40,7 @@ export default function CategoryDemoCTA({
 
             <Link
               href={`/tools/machine-match?category=${categorySlug}`}
-              className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white px-6 py-4 text-xs font-medium uppercase tracking-widest transition-all no-underline"
+              className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white px-6 py-4 text-xs font-medium uppercase tracking-widest transition-all no-underline rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
             >
               <Sliders className="h-4 w-4 text-[#FF6900]" />
               <span>Launch Machine Matcher</span>

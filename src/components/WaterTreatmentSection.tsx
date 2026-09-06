@@ -77,7 +77,7 @@ export default function WaterTreatmentSection() {
         </div>
 
         {/* Feature Cards Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-px bg-alkota-iron border border-alkota-iron mb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-px bg-alkota-iron border border-alkota-iron mb-20 rounded-[6px] shadow-tactile overflow-hidden">
           {systems.map((sys, idx) => {
             const Icon = sys.icon;
             return (
@@ -100,7 +100,7 @@ export default function WaterTreatmentSection() {
                 {/* Upper Content */}
                 <div className="relative z-10">
                   <div className="flex justify-between items-start mb-12">
-                    <span className="font-ibm-plex-mono text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1.5 border border-cyan-400/30 text-cyan-400 bg-cyan-950/40 backdrop-blur-sm">
+                    <span className="font-ibm-plex-mono text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1.5 border border-cyan-400/30 text-cyan-400 bg-cyan-950/40 backdrop-blur-sm rounded-[3px]">
                       {sys.badge}
                     </span>
                     <Icon className="h-6 w-6 text-cyan-400 group-hover:scale-110 transition-transform duration-500" />
@@ -144,7 +144,7 @@ export default function WaterTreatmentSection() {
                 {/* Footer Button */}
                 <Link
                   href={sys.link}
-                  className="relative z-10 flex items-center justify-between w-full border border-white/10 bg-alkota-black/50 backdrop-blur-md p-4 text-xs font-bold uppercase tracking-widest text-white transition-all group-hover:border-cyan-400 group-hover:text-cyan-400 group-hover:bg-alkota-black"
+                  className="relative z-10 flex items-center justify-between w-full border border-white/10 bg-alkota-black/50 backdrop-blur-md p-4 text-xs font-bold uppercase tracking-widest text-white transition-all group-hover:border-cyan-400 group-hover:text-cyan-400 group-hover:bg-alkota-black rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
                 >
                   <span>View Specifications</span>
                   <ChevronRight className="h-4 w-4" />
@@ -155,7 +155,7 @@ export default function WaterTreatmentSection() {
         </div>
 
         {/* Environmental Stewardship Banner */}
-        <div className="bg-gradient-to-r from-cyan-950/20 via-alkota-steel to-alkota-steel border border-cyan-400/20 p-10 md:p-14">
+        <div className="bg-gradient-to-r from-cyan-950/20 via-alkota-steel to-alkota-steel border border-cyan-400/20 p-10 md:p-14 rounded-[6px] shadow-tactile">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-8">
               <div className="flex items-center gap-3 mb-4">
@@ -177,7 +177,7 @@ export default function WaterTreatmentSection() {
             <div className="lg:col-span-4 flex lg:justify-end">
               <Link
                 href="/contact"
-                className="w-full lg:w-auto inline-flex items-center justify-center gap-3 bg-cyan-400 px-8 py-5 text-xs font-black uppercase tracking-[0.2em] text-alkota-black hover:bg-cyan-300 transition-colors"
+                className="w-full lg:w-auto inline-flex items-center justify-center gap-3 bg-cyan-400 px-8 py-5 text-xs font-black uppercase tracking-[0.2em] text-alkota-black hover:bg-cyan-300 transition-colors rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
               >
                 <span>Consult An Advisor</span>
                 <ChevronRight className="h-4 w-4" />

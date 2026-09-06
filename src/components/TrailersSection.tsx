@@ -57,7 +57,7 @@ export default function TrailersSection() {
               Sometimes standard washers just don't cut it. For heavy duty mobile wash operations, our UK team designs and handcrafts custom road-legal trailer rigs from the ground up.
             </p>
 
-            <div className="bg-alkota-black border border-alkota-iron p-8 flex items-start gap-6 max-w-xl">
+            <div className="bg-alkota-black border border-alkota-iron p-8 flex items-start gap-6 max-w-xl rounded-[6px] shadow-tactile">
               <Hammer className="h-10 w-10 text-alkota-orange shrink-0 mt-1" />
               <div>
                 <h4 className="font-barlow-condensed text-xl font-bold uppercase italic text-white mb-2">Handcrafted Durability</h4>
@@ -75,7 +75,7 @@ export default function TrailersSection() {
               return (
                 <div 
                   key={idx}
-                  className="relative h-[380px] bg-alkota-black border border-alkota-iron flex flex-col justify-end group hover:border-alkota-orange transition-all duration-500 overflow-hidden"
+                  className="relative h-[380px] bg-alkota-black border border-alkota-iron flex flex-col justify-end group hover:border-alkota-orange transition-all duration-500 overflow-hidden rounded-[6px] shadow-tactile hover:shadow-tactile-hover transition-shadow"
                 >
                   {/* Full-Bleed Background Image */}
                   <div className="absolute inset-0 w-full h-full bg-alkota-bg">
@@ -90,7 +90,7 @@ export default function TrailersSection() {
                   {/* Content Container (Overlayed on top) */}
                   <div className="relative z-20 p-8 flex flex-col justify-between h-full">
                     <div className="flex justify-between items-start">
-                      <span className="font-ibm-plex-mono text-[9px] font-bold text-alkota-orange uppercase tracking-widest bg-alkota-black/40 px-2.5 py-1.5 backdrop-blur-sm border border-alkota-orange/20">
+                      <span className="font-ibm-plex-mono text-[9px] font-bold text-alkota-orange uppercase tracking-widest bg-alkota-black/40 px-2.5 py-1.5 backdrop-blur-sm border border-alkota-orange/20 rounded-[3px]">
                         Configuration 0{idx + 1}
                       </span>
                       <Icon className="h-5 w-5 text-alkota-orange group-hover:scale-110 transition-transform duration-500" />
@@ -112,7 +112,7 @@ export default function TrailersSection() {
         </div>
 
         {/* Call To Action Banner */}
-        <div className="bg-alkota-black border border-alkota-iron p-10 md:p-14 relative overflow-hidden">
+        <div className="bg-alkota-black border border-alkota-iron p-10 md:p-14 relative overflow-hidden rounded-[6px] shadow-tactile">
           <div className="absolute top-0 right-0 p-12 opacity-[0.02] pointer-events-none select-none">
             <Truck className="h-64 w-64 text-white" />
           </div>
@@ -138,7 +138,7 @@ export default function TrailersSection() {
             <div className="lg:col-span-4 flex flex-col md:flex-row gap-4 lg:justify-end">
               <Link
                 href="/machines/trailers"
-                className="inline-flex items-center justify-center gap-3 bg-alkota-orange px-8 py-5 text-xs font-black uppercase tracking-[0.2em] text-white hover:bg-alkota-orange/90 transition-colors no-underline"
+                className="inline-flex items-center justify-center gap-3 bg-alkota-orange px-8 py-5 text-xs font-black uppercase tracking-[0.2em] text-white hover:bg-alkota-orange/90 transition-colors no-underline rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
               >
                 <span>View Range</span>
                 <ChevronRight className="h-4 w-4" />

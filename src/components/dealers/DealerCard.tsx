@@ -17,17 +17,17 @@ export default function DealerCard({ dealer, onSelect, isSelected }: DealerCardP
   return (
     <div
       onClick={() => onSelect && onSelect(dealer)}
-      className={`border transition-all p-6 sm:p-8 flex flex-col justify-between cursor-pointer ${
+      className={`border transition-all p-6 sm:p-8 flex flex-col justify-between cursor-pointer rounded-[6px] ${
         isSelected
-          ? 'border-alkota-orange bg-white shadow-xl ring-2 ring-alkota-orange/20'
-          : 'border-[#D5D5D3] bg-white hover:border-alkota-black hover:shadow-md'
+          ? 'border-alkota-orange bg-white shadow-tactile-hover ring-2 ring-alkota-orange/20'
+          : 'border-[#D5D5D3] bg-white hover:border-alkota-black shadow-tactile hover:shadow-tactile-hover transition-shadow'
       }`}
     >
       <div>
         {/* Tier Badge & Distance */}
         <div className="flex items-center justify-between gap-2 mb-4">
           <span
-            className={`font-ibm-plex-mono text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 ${
+            className={`font-ibm-plex-mono text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-[3px] ${
               isHQ
                 ? 'bg-alkota-black text-white'
                 : 'bg-alkota-orange/10 text-alkota-orange border border-alkota-orange/20'
@@ -37,7 +37,7 @@ export default function DealerCard({ dealer, onSelect, isSelected }: DealerCardP
           </span>
 
           {dealer.distance_miles !== undefined && (
-            <span className="font-ibm-plex-mono text-[10px] font-bold text-alkota-orange bg-alkota-orange/5 px-2 py-0.5 border border-alkota-orange/20">
+            <span className="font-ibm-plex-mono text-[10px] font-bold text-alkota-orange bg-alkota-orange/5 px-2 py-0.5 border border-alkota-orange/20 rounded-[3px]">
               {formatDistanceMiles(dealer.distance_miles)}
             </span>
           )}
@@ -64,7 +64,7 @@ export default function DealerCard({ dealer, onSelect, isSelected }: DealerCardP
           {dealer.services?.slice(0, 4).map((s) => (
             <span
               key={s.service_key}
-              className="font-ibm-plex-mono text-[8px] uppercase tracking-wider text-[#666] bg-[#F0F0EE] px-2 py-0.5"
+              className="font-ibm-plex-mono text-[8px] uppercase tracking-wider text-[#666] bg-[#F0F0EE] px-2 py-0.5 rounded-[3px]"
             >
               {s.service_name}
             </span>

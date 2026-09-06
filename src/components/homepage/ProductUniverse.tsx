@@ -116,7 +116,7 @@ export default function ProductUniverse() {
             <button
               type="button"
               onClick={() => handleScroll('left')}
-              className="p-1 text-black/40 hover:text-black hover:bg-black/5 transition-colors cursor-pointer bg-transparent border-none shrink-0 flex items-center justify-center rounded-sm"
+              className="p-1 text-black/40 hover:text-black hover:bg-black/5 transition-colors cursor-pointer bg-transparent border-none shrink-0 flex items-center justify-center rounded-[3px]"
               aria-label="Scroll categories left"
             >
               <ChevronLeft className="h-4 w-4" />
@@ -149,7 +149,7 @@ export default function ProductUniverse() {
             <button
               type="button"
               onClick={() => handleScroll('right')}
-              className="p-1 text-black/40 hover:text-black hover:bg-black/5 transition-colors cursor-pointer bg-transparent border-none shrink-0 flex items-center justify-center rounded-sm"
+              className="p-1 text-black/40 hover:text-black hover:bg-black/5 transition-colors cursor-pointer bg-transparent border-none shrink-0 flex items-center justify-center rounded-[3px]"
               aria-label="Scroll categories right"
             >
               <ChevronRight className="h-4 w-4" />
@@ -220,7 +220,7 @@ export default function ProductUniverse() {
                 <div className="flex items-center gap-6 font-normal">
                   <Link
                     href={activeFamily.slug === 'water-treatment' ? '/water-treatment' : `/machines/${activeFamily.slug}`}
-                    className="inline-flex items-center gap-3 bg-alkota-black text-white px-8 py-4 text-xs uppercase tracking-[0.2em] hover:bg-alkota-orange transition-colors no-underline group shadow-lg font-normal"
+                    className="inline-flex items-center gap-3 bg-alkota-black text-white px-8 py-4 text-xs uppercase tracking-[0.2em] hover:bg-alkota-orange transition-colors no-underline group shadow-lg font-normal rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
                   >
                     <span>Explore {activeFamily.name} Range</span>
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />

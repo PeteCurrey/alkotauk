@@ -52,7 +52,7 @@ export default function MachineCard({ machine, index }: MachineCardProps) {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ delay: index * 0.05, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         viewport={{ once: true }}
-        className="group relative flex flex-col bg-white border border-alkota-iron transition-all duration-500 hover:border-alkota-orange/50 hover:bg-white font-normal"
+        className="group relative flex flex-col bg-white border border-alkota-iron transition-all duration-500 hover:border-alkota-orange/50 hover:bg-white font-normal rounded-[6px] overflow-hidden shadow-tactile hover:shadow-tactile-hover transition-shadow"
       >
         <BorderBeam 
           className="opacity-0 group-hover:opacity-100 transition-opacity duration-700"

@@ -51,7 +51,7 @@ export default function CleaningEquation({ equation, className = '' }: CleaningE
   ];
 
   return (
-    <div className={`border border-[#E0E0DC] bg-white p-6 sm:p-10 font-normal ${className}`}>
+    <div className={`border border-[#E0E0DC] bg-white p-6 sm:p-10 font-normal rounded-[6px] shadow-tactile ${className}`}>
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-8 border-b border-[#E0E0DC] mb-8">
         <div>
@@ -76,7 +76,7 @@ export default function CleaningEquation({ equation, className = '' }: CleaningE
           return (
             <div
               key={item.key}
-              className={`p-5 border flex flex-col justify-between transition-all ${
+              className={`p-5 border flex flex-col justify-between transition-all rounded-[5px] ${
                 isElevated
                   ? 'border-alkota-orange/40 bg-[#FAF9F5]'
                   : 'border-[#E8E8E4] bg-[#FCFCFA]'
@@ -88,7 +88,7 @@ export default function CleaningEquation({ equation, className = '' }: CleaningE
                     0{idx + 1} · {item.key}
                   </span>
                   <span
-                    className={`text-[9px] font-mono uppercase tracking-widest px-2 py-0.5 border ${style.bg} ${style.text} ${style.border}`}
+                    className={`text-[9px] font-mono uppercase tracking-widest px-2 py-0.5 border rounded-[3px] ${style.bg} ${style.text} ${style.border}`}
                   >
                     {item.data.level}
                   </span>
@@ -106,7 +106,7 @@ export default function CleaningEquation({ equation, className = '' }: CleaningE
 
               <div>
                 {/* Visual Meter Bar */}
-                <div className="h-1.5 w-full bg-[#E5E5E0] overflow-hidden mb-3">
+                <div className="h-1.5 w-full bg-[#E5E5E0] overflow-hidden mb-3 rounded-full">
                   <div className={`h-full ${style.bar} transition-all duration-500`} />
                 </div>
 
@@ -120,7 +120,7 @@ export default function CleaningEquation({ equation, className = '' }: CleaningE
       </div>
 
       {/* Summary Note */}
-      <div className="bg-[#F8F7F4] border-l-2 border-alkota-orange p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-[#F8F7F4] border-l-2 border-alkota-orange p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-[4px]">
         <div className="max-w-3xl">
           <span className="text-[9px] font-mono uppercase tracking-[0.2em] text-alkota-orange block mb-1">
             Application Weighting Analysis

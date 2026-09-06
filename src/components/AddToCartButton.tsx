@@ -30,9 +30,9 @@ export default function AddToCartButton({
     setTimeout(() => setAdded(false), 2000);
   };
 
-  const base = 'flex w-full items-center justify-center gap-2 py-4 text-sm font-black uppercase tracking-widest transition-all duration-200';
+  const base = 'flex w-full items-center justify-center gap-2 py-4 text-sm font-black uppercase tracking-widest transition-all duration-200 rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile';
   const styles = {
-    primary: `${base} bg-alkota-orange text-white hover:bg-alkota-orange-bright shadow-lg shadow-alkota-orange/20`,
+    primary: `${base} bg-alkota-orange text-white hover:bg-alkota-orange-bright`,
     secondary: `${base} border border-alkota-iron bg-alkota-steel/50 text-white hover:bg-alkota-iron`,
   };
 

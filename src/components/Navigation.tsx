@@ -215,7 +215,7 @@ export default function Navigation() {
           <div className="flex items-center gap-2 sm:gap-3 font-normal flex-1 justify-end shrink-0 flex-nowrap">
             <Link
               href="/lobby"
-              className="hidden xl:inline-flex items-center gap-1.5 bg-black text-white px-3 py-1.5 text-[10px] xl:text-[11px] uppercase tracking-[0.18em] transition-all hover:bg-alkota-orange no-underline group shadow-sm border border-white/20 font-normal whitespace-nowrap"
+              className="hidden xl:inline-flex items-center gap-1.5 bg-black text-white px-3 py-1.5 text-[10px] xl:text-[11px] uppercase tracking-[0.18em] transition-all hover:bg-alkota-orange no-underline group shadow-sm border border-white/20 font-normal whitespace-nowrap rounded-[4px] btn-tactile"
             >
               <span className="h-1.5 w-1.5 rounded-full bg-alkota-orange group-hover:bg-white animate-pulse shrink-0" />
               <span>The Lobby</span>
@@ -299,7 +299,7 @@ export default function Navigation() {
                     </div>
 
                     {/* Zone 2: Large Visual Showcase */}
-                    <div className="col-span-4 flex flex-col justify-between bg-white p-6 border border-[#E8E7E0]">
+                    <div className="col-span-4 flex flex-col justify-between bg-white p-6 border border-[#E8E7E0] rounded-[6px] shadow-tactile-sm">
                       <div>
                         <span className="inline-block font-mono text-[9px] uppercase tracking-wider text-[#666] bg-[#FAF9F5] border border-[#E0DFD8] px-2.5 py-0.5 mb-3 font-medium">
                           {activeMachine.spec}
@@ -332,7 +332,7 @@ export default function Navigation() {
                     </div>
 
                     {/* Zone 3: Contextual Tools */}
-                    <div className="col-span-3 flex flex-col justify-between bg-[#141412] text-white p-6 border border-[#222]">
+                    <div className="col-span-3 flex flex-col justify-between bg-[#141412] text-white p-6 border border-[#222] rounded-[6px] shadow-tactile-sm">
                       <div>
                         <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-alkota-orange block mb-3 font-medium">
                           Selection Guidance
@@ -349,7 +349,7 @@ export default function Navigation() {
                         <Link
                           href="/tools/machine-match"
                           onClick={() => setActiveMenu(null)}
-                          className="flex items-center justify-between w-full bg-alkota-orange text-white px-4 py-3 font-mono text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-colors no-underline font-medium shadow-md"
+                          className="flex items-center justify-between w-full bg-alkota-orange text-white px-4 py-3 font-mono text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-colors no-underline font-medium shadow-md rounded-[4px] btn-tactile"
                         >
                           <span>Run Machine Match</span>
                           <ArrowRight className="h-3.5 w-3.5" />
@@ -357,7 +357,7 @@ export default function Navigation() {
                         <Link
                           href="/dealers/demo-request"
                           onClick={() => setActiveMenu(null)}
-                          className="flex items-center justify-between w-full border border-white/20 bg-white/5 text-white px-4 py-2.5 font-mono text-xs uppercase tracking-widest hover:border-white hover:bg-white hover:text-black transition-all no-underline font-normal"
+                          className="flex items-center justify-between w-full border border-white/20 bg-white/5 text-white px-4 py-2.5 font-mono text-xs uppercase tracking-widest hover:border-white hover:bg-white hover:text-black transition-all no-underline font-normal rounded-[4px]"
                         >
                           <span>Book On-Site Demo</span>
                           <ArrowUpRight className="h-3.5 w-3.5" />
@@ -381,10 +381,10 @@ export default function Navigation() {
                         <Link
                           href="/parts-attachments"
                           onClick={() => setActiveMenu(null)}
-                          className="group relative overflow-hidden flex items-center justify-between p-3.5 bg-[#141412] text-white border border-alkota-orange/40 hover:border-alkota-orange transition-all mb-4 no-underline shadow-sm"
+                          className="group relative overflow-hidden flex items-center justify-between p-3.5 bg-[#141412] text-white border border-alkota-orange/40 hover:border-alkota-orange transition-all mb-4 no-underline shadow-sm rounded-[5px]"
                         >
                           <div className="flex items-center gap-3">
-                            <div className="h-8 w-8 bg-alkota-orange/20 border border-alkota-orange/40 flex items-center justify-center text-alkota-orange group-hover:bg-alkota-orange group-hover:text-white transition-colors shrink-0">
+                            <div className="h-8 w-8 bg-alkota-orange/20 border border-alkota-orange/40 flex items-center justify-center text-alkota-orange group-hover:bg-alkota-orange group-hover:text-white transition-colors shrink-0 rounded-[3px]">
                               <Wrench className="h-4 w-4" />
                             </div>
                             <div>
@@ -434,7 +434,7 @@ export default function Navigation() {
                     </div>
 
                     {/* Zone 2: Featured Visual Story */}
-                    <div className="col-span-5 bg-white border border-[#E8E7E0] p-7 flex flex-col justify-between">
+                    <div className="col-span-5 bg-white border border-[#E8E7E0] p-7 flex flex-col justify-between rounded-[6px] shadow-tactile-sm">
                       <div>
                         <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-alkota-orange block mb-2 font-medium">
                           Verified Field Engineering
@@ -447,7 +447,7 @@ export default function Navigation() {
                         </p>
                       </div>
 
-                      <div className="relative aspect-[16/9] bg-[#FAF9F5] mb-4 border border-[#E8E7E0] flex items-center justify-center overflow-hidden">
+                      <div className="relative aspect-[16/9] bg-[#FAF9F5] mb-4 border border-[#E8E7E0] flex items-center justify-center overflow-hidden rounded-[5px]">
                         <SafeImage
                           src="/assets/hot-water-gauge-hero.jpg"
                           alt="Alkota Field Engineering"
@@ -471,7 +471,7 @@ export default function Navigation() {
                     </div>
 
                     {/* Zone 3: Dispatch Action */}
-                    <div className="col-span-3 bg-[#141412] text-white p-6 border border-[#222] flex flex-col justify-between">
+                    <div className="col-span-3 bg-[#141412] text-white p-6 border border-[#222] flex flex-col justify-between rounded-[6px] shadow-tactile-sm">
                       <div>
                         <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-alkota-orange block mb-2 font-medium">
                           Dispatch Desk
@@ -488,7 +488,7 @@ export default function Navigation() {
                         <Link
                           href="/service/request"
                           onClick={() => setActiveMenu(null)}
-                          className="flex items-center justify-between w-full bg-alkota-orange text-white px-4 py-3 font-mono text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-colors no-underline shadow-md font-medium"
+                          className="flex items-center justify-between w-full bg-alkota-orange text-white px-4 py-3 font-mono text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-colors no-underline shadow-md font-medium rounded-[4px] btn-tactile"
                         >
                           <span>Book Service Online</span>
                           <ArrowRight className="h-3.5 w-3.5" />
@@ -542,7 +542,7 @@ export default function Navigation() {
                     </div>
 
                     {/* Zone 2: Large Visual Showcase */}
-                    <div className="col-span-5 bg-white border border-[#E8E7E0] p-7 flex flex-col justify-between">
+                    <div className="col-span-5 bg-white border border-[#E8E7E0] p-7 flex flex-col justify-between rounded-[6px] shadow-tactile-sm">
                       <div>
                         <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-alkota-orange block mb-2 font-medium">
                           Field Performance Verification
@@ -555,7 +555,7 @@ export default function Navigation() {
                         </p>
                       </div>
 
-                      <div className="relative aspect-[16/9] bg-[#FAF9F5] mb-4 border border-[#E8E7E0] overflow-hidden">
+                      <div className="relative aspect-[16/9] bg-[#FAF9F5] mb-4 border border-[#E8E7E0] overflow-hidden rounded-[5px]">
                         <SafeImage
                           src="/assets/industries/fleet.png"
                           alt="Alkota Demonstration Fleet"
@@ -579,7 +579,7 @@ export default function Navigation() {
                     </div>
 
                     {/* Zone 3: Postcode Lookup */}
-                    <div className="col-span-3 bg-[#141412] text-white p-6 border border-[#222] flex flex-col justify-between">
+                    <div className="col-span-3 bg-[#141412] text-white p-6 border border-[#222] flex flex-col justify-between rounded-[6px] shadow-tactile-sm">
                       <div>
                         <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-alkota-orange block mb-2 font-medium">
                           Direct Lookup
@@ -596,7 +596,7 @@ export default function Navigation() {
                         <Link
                           href="/dealers/find"
                           onClick={() => setActiveMenu(null)}
-                          className="flex items-center justify-between w-full bg-alkota-orange text-white px-4 py-3 font-mono text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-colors no-underline shadow-md font-medium"
+                          className="flex items-center justify-between w-full bg-alkota-orange text-white px-4 py-3 font-mono text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-colors no-underline shadow-md font-medium rounded-[4px] btn-tactile"
                         >
                           <span>Search Postcode</span>
                           <Search className="h-3.5 w-3.5" />
@@ -604,7 +604,7 @@ export default function Navigation() {
                         <Link
                           href="/dealer"
                           onClick={() => setActiveMenu(null)}
-                          className="flex items-center justify-between w-full border border-white/20 bg-white/5 text-white px-4 py-2.5 font-mono text-xs uppercase tracking-widest hover:border-white hover:bg-white hover:text-black transition-all no-underline font-normal"
+                          className="flex items-center justify-between w-full border border-white/20 bg-white/5 text-white px-4 py-2.5 font-mono text-xs uppercase tracking-widest hover:border-white hover:bg-white hover:text-black transition-all no-underline font-normal rounded-[4px]"
                         >
                           <span>Dealer Portal Login</span>
                           <ArrowRight className="h-3.5 w-3.5" />
@@ -651,7 +651,7 @@ export default function Navigation() {
                     </div>
 
                     {/* Zone 2: Large Visual Showcase */}
-                    <div className="col-span-5 bg-white border border-[#E8E7E0] p-7 flex flex-col justify-between">
+                    <div className="col-span-5 bg-white border border-[#E8E7E0] p-7 flex flex-col justify-between rounded-[6px] shadow-tactile-sm">
                       <div>
                         <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-alkota-orange block mb-2 font-medium">
                           Capital Project Engineering
@@ -664,7 +664,7 @@ export default function Navigation() {
                         </p>
                       </div>
 
-                      <div className="relative aspect-[16/9] bg-[#FAF9F5] mb-4 border border-[#E8E7E0] overflow-hidden">
+                      <div className="relative aspect-[16/9] bg-[#FAF9F5] mb-4 border border-[#E8E7E0] overflow-hidden rounded-[5px]">
                         <SafeImage
                           src="/assets/products/trailer-single.png"
                           alt="Alkota Custom Trailer Rigs"
@@ -684,7 +684,7 @@ export default function Navigation() {
                     </div>
 
                     {/* Zone 3: Scoping Tools */}
-                    <div className="col-span-3 bg-[#141412] text-white p-6 border border-[#222] flex flex-col justify-between">
+                    <div className="col-span-3 bg-[#141412] text-white p-6 border border-[#222] flex flex-col justify-between rounded-[6px] shadow-tactile-sm">
                       <div>
                         <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-alkota-orange block mb-2 font-medium">
                           Interactive Tools
@@ -701,7 +701,7 @@ export default function Navigation() {
                         <Link
                           href="/trailers/configure"
                           onClick={() => setActiveMenu(null)}
-                          className="flex items-center justify-between w-full bg-alkota-orange text-white px-4 py-3 font-mono text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-colors no-underline shadow-md font-medium"
+                          className="flex items-center justify-between w-full bg-alkota-orange text-white px-4 py-3 font-mono text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-colors no-underline shadow-md font-medium rounded-[4px] btn-tactile"
                         >
                           <span>Launch Rig Builder</span>
                           <ArrowRight className="h-3.5 w-3.5" />
@@ -709,7 +709,7 @@ export default function Navigation() {
                         <Link
                           href="/wash-plant/architect"
                           onClick={() => setActiveMenu(null)}
-                          className="flex items-center justify-between w-full border border-white/20 bg-white/5 text-white px-4 py-2.5 font-mono text-xs uppercase tracking-widest hover:border-white hover:bg-white hover:text-black transition-all no-underline font-normal"
+                          className="flex items-center justify-between w-full border border-white/20 bg-white/5 text-white px-4 py-2.5 font-mono text-xs uppercase tracking-widest hover:border-white hover:bg-white hover:text-black transition-all no-underline font-normal rounded-[4px]"
                         >
                           <span>Wash Plant Scoping</span>
                           <ArrowRight className="h-3.5 w-3.5" />
@@ -758,7 +758,7 @@ export default function Navigation() {
                     </div>
 
                     {/* Zone 2: Technical & Compliance Authority */}
-                    <div className="col-span-5 bg-white border border-[#E8E7E0] p-7 flex flex-col justify-between">
+                    <div className="col-span-5 bg-white border border-[#E8E7E0] p-7 flex flex-col justify-between rounded-[6px] shadow-tactile-sm">
                       <div>
                         <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-alkota-orange block mb-2 font-medium">
                           Thermal Saponification
@@ -771,7 +771,7 @@ export default function Navigation() {
                         </p>
                       </div>
 
-                      <div className="relative aspect-[16/9] bg-[#FAF9F5] mb-4 border border-[#E8E7E0] flex items-center justify-center overflow-hidden">
+                      <div className="relative aspect-[16/9] bg-[#FAF9F5] mb-4 border border-[#E8E7E0] flex items-center justify-center overflow-hidden rounded-[5px]">
                         <SafeImage
                           src="/assets/industries/fleet.png"
                           alt="Alkota Chemical Application"
@@ -804,7 +804,7 @@ export default function Navigation() {
                     </div>
 
                     {/* Zone 3: Buy Online & Bulk Commercial Bridge */}
-                    <div className="col-span-3 bg-[#141412] text-white p-6 border border-[#222] flex flex-col justify-between">
+                    <div className="col-span-3 bg-[#141412] text-white p-6 border border-[#222] flex flex-col justify-between rounded-[6px] shadow-tactile-sm">
                       <div>
                         <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-alkota-orange block mb-2 font-medium">
                           Purchasing &amp; Supply
@@ -821,7 +821,7 @@ export default function Navigation() {
                         <Link
                           href="/parts-attachments/chemicals"
                           onClick={() => setActiveMenu(null)}
-                          className="flex items-center justify-between w-full bg-alkota-orange text-white px-4 py-3 font-mono text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-colors no-underline shadow-md font-medium"
+                          className="flex items-center justify-between w-full bg-alkota-orange text-white px-4 py-3 font-mono text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-colors no-underline shadow-md font-medium rounded-[4px] btn-tactile"
                         >
                           <span>Buy Chemicals Online</span>
                           <ArrowRight className="h-3.5 w-3.5" />
@@ -829,7 +829,7 @@ export default function Navigation() {
                         <Link
                           href="/contact?type=chemical-bulk"
                           onClick={() => setActiveMenu(null)}
-                          className="flex items-center justify-between w-full border border-white/20 bg-white/5 text-white px-4 py-2.5 font-mono text-xs uppercase tracking-widest hover:border-white hover:bg-white hover:text-black transition-all no-underline font-normal"
+                          className="flex items-center justify-between w-full border border-white/20 bg-white/5 text-white px-4 py-2.5 font-mono text-xs uppercase tracking-widest hover:border-white hover:bg-white hover:text-black transition-all no-underline font-normal rounded-[4px]"
                         >
                           <span>Dealer &amp; Bulk Purchasing</span>
                           <ArrowUpRight className="h-3.5 w-3.5 text-[#BBB]" />
@@ -877,7 +877,7 @@ export default function Navigation() {
                     </div>
 
                     {/* Zone 2: Large Visual Showcase */}
-                    <div className="col-span-5 bg-white border border-[#E8E7E0] p-7 flex flex-col justify-between">
+                    <div className="col-span-5 bg-white border border-[#E8E7E0] p-7 flex flex-col justify-between rounded-[6px] shadow-tactile-sm">
                       <div>
                         <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-alkota-orange block mb-2 font-medium">
                           Technical Knowledge
@@ -890,7 +890,7 @@ export default function Navigation() {
                         </p>
                       </div>
 
-                      <div className="relative aspect-[16/9] bg-[#FAF9F5] mb-4 border border-[#E8E7E0] overflow-hidden">
+                      <div className="relative aspect-[16/9] bg-[#FAF9F5] mb-4 border border-[#E8E7E0] overflow-hidden rounded-[5px]">
                         <SafeImage
                           src="/assets/hot-water-gauge-hero.jpg"
                           alt="Alkota Technical Documentation"
@@ -914,7 +914,7 @@ export default function Navigation() {
                     </div>
 
                     {/* Zone 3: Direct The Lobby Link */}
-                    <div className="col-span-3 bg-[#141412] text-white p-6 border border-[#222] flex flex-col justify-between">
+                    <div className="col-span-3 bg-[#141412] text-white p-6 border border-[#222] flex flex-col justify-between rounded-[6px] shadow-tactile-sm">
                       <div>
                         <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-alkota-orange block mb-2 font-medium">
                           Engineering Journal
@@ -931,7 +931,7 @@ export default function Navigation() {
                         <Link
                           href="/lobby"
                           onClick={() => setActiveMenu(null)}
-                          className="flex items-center justify-between w-full bg-alkota-orange text-white px-4 py-3 font-mono text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-colors no-underline shadow-md font-medium"
+                          className="flex items-center justify-between w-full bg-alkota-orange text-white px-4 py-3 font-mono text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-colors no-underline shadow-md font-medium rounded-[4px] btn-tactile"
                         >
                           <span>Enter The Lobby</span>
                           <ArrowRight className="h-3.5 w-3.5" />
@@ -1015,7 +1015,7 @@ export default function Navigation() {
                               <Link
                                 href="/parts-attachments"
                                 onClick={() => setMobileMenuOpen(false)}
-                                className="flex items-center justify-between p-2.5 bg-[#141412] text-white border border-alkota-orange/40 hover:border-alkota-orange no-underline my-1"
+                                className="flex items-center justify-between p-2.5 bg-[#141412] text-white border border-alkota-orange/40 hover:border-alkota-orange no-underline my-1 rounded-[4px]"
                               >
                                 <div className="flex items-center gap-2">
                                   <Wrench className="h-3.5 w-3.5 text-alkota-orange" />
@@ -1049,7 +1049,7 @@ export default function Navigation() {
                               <Link
                                 href="/parts-attachments/chemicals"
                                 onClick={() => setMobileMenuOpen(false)}
-                                className="flex items-center justify-between p-2.5 bg-[#141412] text-white border border-alkota-orange/40 hover:border-alkota-orange no-underline my-1"
+                                className="flex items-center justify-between p-2.5 bg-[#141412] text-white border border-alkota-orange/40 hover:border-alkota-orange no-underline my-1 rounded-[4px]"
                               >
                                 <div className="flex items-center gap-2">
                                   <span className="h-2 w-2 rounded-full bg-alkota-orange" />
@@ -1081,14 +1081,14 @@ export default function Navigation() {
                   <Link
                     href="/lobby"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="w-full text-center bg-alkota-orange text-white py-3.5 text-xs uppercase tracking-[0.2em] no-underline shadow-lg font-medium"
+                    className="w-full text-center bg-alkota-orange text-white py-3.5 text-xs uppercase tracking-[0.2em] no-underline shadow-lg font-medium rounded-[4px] btn-tactile"
                   >
                     Enter The Lobby
                   </Link>
                   <Link
                     href="/tools/configurator"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="w-full text-center border border-white/30 bg-black/60 text-white py-3.5 text-xs uppercase tracking-[0.2em] no-underline font-normal"
+                    className="w-full text-center border border-white/30 bg-black/60 text-white py-3.5 text-xs uppercase tracking-[0.2em] no-underline font-normal rounded-[4px]"
                   >
                     Build Configurator
                   </Link>

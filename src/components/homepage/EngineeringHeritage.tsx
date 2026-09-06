@@ -37,7 +37,7 @@ export default function EngineeringHeritage() {
               </div>
             </div>
             <div className="lg:col-span-7">
-              <div className="aspect-[16/10] bg-[#EFEFEA] flex items-center justify-center p-8 overflow-hidden">
+              <div className="aspect-[16/10] bg-[#EFEFEA] flex items-center justify-center p-8 overflow-hidden rounded-[6px] shadow-tactile-sm">
                 <img
                   src="/assets/products/420x4.png"
                   alt="Alkota Schedule 80 Heating Coil Architecture"
@@ -51,7 +51,7 @@ export default function EngineeringHeritage() {
           {/* Item 2: Slow-Turning Triplex Pump */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
             <div className="lg:col-span-7 order-2 lg:order-1">
-              <div className="aspect-[16/10] bg-[#EFEFEA] flex items-center justify-center p-8 overflow-hidden">
+              <div className="aspect-[16/10] bg-[#EFEFEA] flex items-center justify-center p-8 overflow-hidden rounded-[6px] shadow-tactile-sm">
                 <img
                   src="/assets/products/4305xd4.png"
                   alt="Alkota Ceramic Triplex Plunger Pump"

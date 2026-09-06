@@ -110,7 +110,7 @@ export default function CategoryEngineering({ categorySlug }: CategoryEngineerin
 
           {/* Right Column: Macro Component Framing */}
           <div className="lg:col-span-5">
-            <div className="relative aspect-[4/3] bg-[#FAF9F5] p-8 sm:p-10 flex items-center justify-center border border-[#EAE9E2]">
+            <div className="relative aspect-[4/3] bg-[#FAF9F5] p-8 sm:p-10 flex items-center justify-center border border-[#EAE9E2] rounded-[6px] shadow-tactile-sm">
               <SafeImage
                 src={content.image}
                 alt={content.title}
@@ -118,7 +118,7 @@ export default function CategoryEngineering({ categorySlug }: CategoryEngineerin
                 sizes="(min-width: 1024px) 40vw, 90vw"
                 className="object-contain p-6 drop-shadow-lg"
               />
-              <div className="absolute bottom-3 left-3 bg-white/95 backdrop-blur-sm px-3 py-1 text-[10px] font-mono text-[#666] tracking-wider border border-[#EAE9E2]">
+              <div className="absolute bottom-3 left-3 bg-white/95 backdrop-blur-sm px-3 py-1 text-[10px] font-mono text-[#666] tracking-wider border border-[#EAE9E2] rounded-[3px]">
                 {content.caption}
               </div>
             </div>

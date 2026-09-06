@@ -30,14 +30,14 @@ export default function MachineMatchAndOwnership() {
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 shrink-0 font-normal">
               <Link
                 href="/tools/machine-match"
-                className="inline-flex items-center justify-center gap-3 bg-alkota-orange text-white px-8 py-4 text-xs uppercase tracking-[0.2em] hover:bg-black transition-colors no-underline group shadow-lg font-normal"
+                className="inline-flex items-center justify-center gap-3 bg-alkota-orange text-white px-8 py-4 text-xs uppercase tracking-[0.2em] hover:bg-black transition-colors no-underline group shadow-lg font-normal rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
               >
                 <span>Launch Machine Match</span>
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
               <Link
                 href="/tools/configurator"
-                className="inline-flex items-center justify-center gap-3 border border-alkota-black text-alkota-black px-8 py-4 text-xs uppercase tracking-[0.2em] hover:bg-alkota-black hover:text-white transition-all no-underline font-normal"
+                className="inline-flex items-center justify-center gap-3 border border-alkota-black text-alkota-black px-8 py-4 text-xs uppercase tracking-[0.2em] hover:bg-alkota-black hover:text-white transition-all no-underline font-normal rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
               >
                 <span>Build Configurator</span>
               </Link>
@@ -93,14 +93,14 @@ export default function MachineMatchAndOwnership() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 font-normal">
             <Link
               href="/machines"
-              className="inline-flex items-center gap-3 bg-alkota-orange text-white px-9 py-4 text-xs uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all no-underline group shadow-xl font-normal"
+              className="inline-flex items-center gap-3 bg-alkota-orange text-white px-9 py-4 text-xs uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all no-underline group shadow-xl font-normal rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
             >
               <span>Explore Machine Fleet</span>
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
             <Link
               href="/contact"
-              className="inline-flex items-center gap-3 border border-white/40 bg-black/40 backdrop-blur-sm text-white px-8 py-4 text-xs uppercase tracking-[0.2em] hover:border-white hover:bg-white hover:text-black transition-colors no-underline font-normal"
+              className="inline-flex items-center gap-3 border border-white/40 bg-black/40 backdrop-blur-sm text-white px-8 py-4 text-xs uppercase tracking-[0.2em] hover:border-white hover:bg-white hover:text-black transition-colors no-underline font-normal rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
             >
               <span>Contact Alkota UK</span>
             </Link>

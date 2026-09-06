@@ -74,7 +74,7 @@ export default function SiteBanner() {
       {activeBanner.dismissible && (
         <button
           onClick={handleDismiss}
-          className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:opacity-70 transition-opacity"
+          className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:opacity-70 transition-opacity rounded-[3px]"
           aria-label="Dismiss banner"
         >
           <X className="h-4 w-4" />

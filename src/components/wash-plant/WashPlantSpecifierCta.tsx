@@ -7,7 +7,7 @@ interface Props {
 
 export default function WashPlantSpecifierCta({ className = '' }: Props) {
   return (
-    <section className={`bg-alkota-black text-white p-8 sm:p-14 border border-[#222] shadow-xl ${className}`}>
+    <section className={`bg-alkota-black text-white p-8 sm:p-14 border border-[#222] rounded-[6px] shadow-tactile ${className}`}>
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
         <div className="lg:col-span-8 space-y-4">
           <div className="flex items-center gap-2">
@@ -47,14 +47,14 @@ export default function WashPlantSpecifierCta({ className = '' }: Props) {
         <div className="lg:col-span-4 flex flex-col gap-3 justify-center">
           <Link
             href="/wash-plant/architect"
-            className="inline-flex items-center justify-between w-full bg-alkota-orange text-white px-6 py-3.5 text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-colors"
+            className="inline-flex items-center justify-between w-full bg-alkota-orange text-white px-6 py-3.5 text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-colors rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
           >
             <span>Launch Scoping Tool</span>
             <ArrowRight className="h-4 w-4" />
           </Link>
           <Link
             href="/contact?enquiry=wash-plant-spec"
-            className="inline-flex items-center justify-between w-full border border-white/20 bg-white/5 text-white px-6 py-3.5 text-xs uppercase tracking-widest hover:border-white hover:bg-white hover:text-black transition-colors"
+            className="inline-flex items-center justify-between w-full border border-white/20 bg-white/5 text-white px-6 py-3.5 text-xs uppercase tracking-widest hover:border-white hover:bg-white hover:text-black transition-colors rounded-[4px] btn-tactile"
           >
             <span>Request Consultation</span>
             <Compass className="h-4 w-4" />

@@ -128,7 +128,7 @@ export default function MaintenanceScreen({
         {/* Audio Toggle */}
         <button 
           onClick={toggleAudio}
-          className="absolute bottom-8 right-8 z-30 flex items-center gap-3 bg-alkota-black/40 border border-white/10 px-4 py-2 hover:bg-alkota-orange transition-all group"
+          className="absolute bottom-8 right-8 z-30 flex items-center gap-3 bg-alkota-black/40 border border-white/10 px-4 py-2 hover:bg-alkota-orange transition-all group rounded-[3px] shadow-button hover:shadow-button-hover btn-tactile"
         >
           <span className="text-[9px] font-black uppercase tracking-widest text-white/60 group-hover:text-white">
             Audio: {isMuted ? 'Off' : 'On'}
@@ -186,7 +186,7 @@ export default function MaintenanceScreen({
               <motion.div 
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="bg-alkota-green/10 border border-alkota-green/30 p-8 text-center rounded-sm"
+                className="bg-alkota-green/10 border border-alkota-green/30 p-8 text-center rounded-[4px]"
               >
                 <CheckCircle2 className="w-12 h-12 text-alkota-green mx-auto mb-4" />
                 <h3 className="font-bold text-alkota-black uppercase tracking-widest text-sm mb-2">Transmission Confirmed</h3>
@@ -208,7 +208,7 @@ export default function MaintenanceScreen({
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
-                      className="w-full bg-white border border-alkota-iron px-4 py-3 text-sm focus:border-alkota-orange focus:outline-none transition-colors"
+                      className="w-full bg-white border border-alkota-iron px-4 py-3 text-sm focus:border-alkota-orange focus:outline-none transition-colors rounded-[5px]"
                       placeholder="John Doe"
                     />
                   </div>
@@ -218,7 +218,7 @@ export default function MaintenanceScreen({
                       name="company"
                       value={formData.company}
                       onChange={handleChange}
-                      className="w-full bg-white border border-alkota-iron px-4 py-3 text-sm focus:border-alkota-orange focus:outline-none transition-colors"
+                      className="w-full bg-white border border-alkota-iron px-4 py-3 text-sm focus:border-alkota-orange focus:outline-none transition-colors rounded-[5px]"
                       placeholder="Heavy Industries Ltd"
                     />
                   </div>
@@ -233,7 +233,7 @@ export default function MaintenanceScreen({
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      className="w-full bg-white border border-alkota-iron px-4 py-3 text-sm focus:border-alkota-orange focus:outline-none transition-colors"
+                      className="w-full bg-white border border-alkota-iron px-4 py-3 text-sm focus:border-alkota-orange focus:outline-none transition-colors rounded-[5px]"
                       placeholder="john@example.com"
                     />
                   </div>
@@ -244,7 +244,7 @@ export default function MaintenanceScreen({
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
-                      className="w-full bg-white border border-alkota-iron px-4 py-3 text-sm focus:border-alkota-orange focus:outline-none transition-colors"
+                      className="w-full bg-white border border-alkota-iron px-4 py-3 text-sm focus:border-alkota-orange focus:outline-none transition-colors rounded-[5px]"
                       placeholder="+44 123 456 789"
                     />
                   </div>
@@ -257,7 +257,7 @@ export default function MaintenanceScreen({
                     value={formData.message}
                     onChange={handleChange}
                     rows={4}
-                    className="w-full bg-white border border-alkota-iron p-4 text-sm focus:border-alkota-orange focus:outline-none transition-colors resize-none"
+                    className="w-full bg-white border border-alkota-iron p-4 text-sm focus:border-alkota-orange focus:outline-none transition-colors resize-none rounded-[5px]"
                     placeholder="We urgently need a quote for a ..."
                   />
                 </div>
@@ -266,7 +266,7 @@ export default function MaintenanceScreen({
                   <button 
                     disabled={status === 'submitting'}
                     type="submit"
-                    className="w-full bg-alkota-orange hover:bg-alkota-orange-hover disabled:bg-alkota-smoke text-white font-black uppercase tracking-widest text-[11px] py-4 transition-colors flex justify-center items-center gap-2"
+                    className="w-full bg-alkota-orange hover:bg-alkota-orange-hover disabled:bg-alkota-smoke text-white font-black uppercase tracking-widest text-[11px] py-4 transition-colors flex justify-center items-center gap-2 rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
                   >
                     {status === 'submitting' ? (
                       <><Loader2 className="w-4 h-4 animate-spin" /> Processing...</>
@@ -314,11 +314,11 @@ export default function MaintenanceScreen({
             <motion.div 
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              className="w-full max-w-sm bg-white p-10 relative"
+              className="w-full max-w-sm bg-white p-10 relative rounded-[6px] shadow-tactile"
             >
               <button 
                  onClick={() => setShowAdminLogin(false)}
-                 className="absolute top-4 right-4 text-alkota-silver hover:text-alkota-black"
+                 className="absolute top-4 right-4 text-alkota-silver hover:text-alkota-black rounded-[3px]"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -333,7 +333,7 @@ export default function MaintenanceScreen({
                     type="password"
                     value={adminPassword}
                     onChange={(e) => setAdminPassword(e.target.value)}
-                    className={`w-full bg-alkota-bg border ${adminError ? 'border-alkota-orange' : 'border-alkota-iron'} px-4 py-3 text-sm focus:border-alkota-black focus:outline-none transition-colors`}
+                    className={`w-full bg-alkota-bg border ${adminError ? 'border-alkota-orange' : 'border-alkota-iron'} px-4 py-3 text-sm focus:border-alkota-black focus:outline-none transition-colors rounded-[5px]`}
                     placeholder="••••••••"
                   />
                   {adminError && (
@@ -342,7 +342,7 @@ export default function MaintenanceScreen({
                 </div>
                 <button 
                   type="submit"
-                  className="w-full bg-alkota-black text-white font-black uppercase tracking-widest text-[11px] py-4 hover:bg-alkota-orange transition-colors"
+                  className="w-full bg-alkota-black text-white font-black uppercase tracking-widest text-[11px] py-4 hover:bg-alkota-orange transition-colors rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
                 >
                   Verify Access
                 </button>

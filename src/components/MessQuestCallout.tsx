@@ -18,7 +18,7 @@ export default function MessQuestCallout({
 }: MessQuestCalloutProps) {
   if (variant === 'panel') {
     return (
-      <div className={`relative overflow-hidden bg-[#0A0A0A] ${className}`}>
+      <div className={`relative overflow-hidden bg-[#0A0A0A] rounded-[6px] shadow-tactile ${className}`}>
         {/* Ambient background */}
         <div className="absolute inset-0 z-0">
           <video
@@ -47,7 +47,7 @@ export default function MessQuestCallout({
           </p>
           <Link
             href="/mess-quest"
-            className="inline-flex items-center gap-3 bg-alkota-orange text-white px-7 py-3 text-xs uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-colors group"
+            className="inline-flex items-center gap-3 bg-alkota-orange text-white px-7 py-3 text-xs uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-colors group rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
           >
             <span>Watch Mess Quest</span>
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
@@ -59,7 +59,7 @@ export default function MessQuestCallout({
 
   // Inline variant — a contained horizontal bar
   return (
-    <div className={`border border-[#E0E0DC] bg-[#F8F7F4] px-6 py-5 sm:px-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${className}`}>
+    <div className={`border border-[#E0E0DC] bg-[#F8F7F4] px-6 py-5 sm:px-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-[6px] shadow-tactile-sm ${className}`}>
       <div className="flex items-start gap-4">
         <span className="h-[2px] w-6 bg-alkota-orange mt-2.5 shrink-0" aria-hidden="true" />
         <div>

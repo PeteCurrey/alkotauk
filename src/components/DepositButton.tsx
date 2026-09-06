@@ -32,7 +32,7 @@ export default function DepositButton({ machineId, machineName, depositAmount }:
     <button
       onClick={handleDeposit}
       disabled={loading}
-      className="flex w-full items-center justify-center gap-2 rounded-sm border border-alkota-gold/50 bg-alkota-gold/10 px-10 py-5 text-sm font-bold uppercase tracking-widest text-alkota-gold hover:bg-alkota-gold hover:text-black transition-all disabled:opacity-50"
+      className="flex w-full items-center justify-center gap-2 rounded-[4px] border border-alkota-gold/50 bg-alkota-gold/10 px-10 py-5 text-sm font-bold uppercase tracking-widest text-alkota-gold hover:bg-alkota-gold hover:text-black transition-all disabled:opacity-50 shadow-button hover:shadow-button-hover btn-tactile"
     >
       {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShieldCheck className="h-4 w-4" />}
       Reserve with £{depositAmount} Deposit

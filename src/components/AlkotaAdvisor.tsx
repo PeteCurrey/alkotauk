@@ -93,17 +93,17 @@ export default function AlkotaAdvisor() {
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className="mb-4 w-[380px] h-[520px] overflow-hidden rounded-2xl border border-alkota-iron bg-alkota-black shadow-2xl flex flex-col"
+            className="mb-4 w-[380px] h-[520px] overflow-hidden rounded-[6px] border border-alkota-iron bg-alkota-black shadow-tactile flex flex-col"
           >
             {/* Header */}
             <div className="bg-alkota-steel p-6 border-b border-alkota-iron flex items-center justify-between">
               <div className="flex items-center gap-3">
                 {persona?.avatarUrl ? (
-                  <div className="h-10 w-10 overflow-hidden border-2 border-alkota-orange">
+                  <div className="h-10 w-10 overflow-hidden border-2 border-alkota-orange rounded-[3px]">
                     <img src={persona.avatarUrl} alt={persona.name} className="h-full w-full object-cover" />
                   </div>
                 ) : (
-                  <div className="h-10 w-10 bg-alkota-orange flex items-center justify-center">
+                  <div className="h-10 w-10 bg-alkota-orange flex items-center justify-center rounded-[3px]">
                     <Shield className="h-6 w-6 text-white" />
                   </div>
                 )}
@@ -118,7 +118,7 @@ export default function AlkotaAdvisor() {
               </div>
               <button 
                 onClick={() => setIsOpen(false)}
-                className="p-1 hover:bg-alkota-iron rounded-full transition-colors text-alkota-steel"
+                className="p-1 hover:bg-alkota-iron rounded-[3px] transition-colors text-alkota-steel"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -132,15 +132,15 @@ export default function AlkotaAdvisor() {
               {/* Initial Welcome */}
               <div className="flex gap-3">
                 {persona?.avatarUrl ? (
-                  <div className="h-8 w-8 overflow-hidden flex-shrink-0 border border-alkota-orange">
+                  <div className="h-8 w-8 overflow-hidden flex-shrink-0 border border-alkota-orange rounded-[3px]">
                     <img src={persona.avatarUrl} alt={persona.name} className="h-full w-full object-cover" />
                   </div>
                 ) : (
-                  <div className="h-8 w-8 rounded-sm bg-alkota-orange flex-shrink-0 flex items-center justify-center">
+                  <div className="h-8 w-8 rounded-[3px] bg-alkota-orange flex-shrink-0 flex items-center justify-center">
                     <Shield className="h-4 w-4 text-white" />
                   </div>
                 )}
-                <div className="bg-alkota-iron/30 rounded-2xl rounded-tl-none p-4 text-sm text-alkota-silver leading-relaxed">
+                <div className="bg-alkota-iron/30 rounded-[6px] rounded-tl-none p-4 text-sm text-alkota-silver leading-relaxed">
                   Hi, I'm {persona?.name ? `${persona.name}, your ${persona.role.toLowerCase()}` : 'the Alkota Technical Advisor'}. Tell me what you're cleaning and I'll point you to the right machine, chemical, or solution.
                 </div>
               </div>
@@ -153,7 +153,7 @@ export default function AlkotaAdvisor() {
                     <button
                       key={prompt}
                       onClick={() => handleSend(prompt)}
-                      className="block w-full text-left p-2.5 rounded-lg border border-alkota-iron bg-alkota-steel/50 text-[10px] font-bold text-white uppercase hover:border-alkota-orange hover:bg-alkota-orange/10 transition-all"
+                      className="block w-full text-left p-2.5 rounded-[4px] border border-alkota-iron bg-alkota-steel/50 text-[10px] font-bold text-white uppercase hover:border-alkota-orange hover:bg-alkota-orange/10 transition-all shadow-button hover:shadow-button-hover btn-tactile"
                     >
                       {prompt}
                     </button>
@@ -169,23 +169,23 @@ export default function AlkotaAdvisor() {
                 >
                   {msg.role === 'assistant' ? (
                     persona?.avatarUrl ? (
-                      <div className="h-8 w-8 overflow-hidden flex-shrink-0 border border-alkota-orange">
+                      <div className="h-8 w-8 overflow-hidden flex-shrink-0 border border-alkota-orange rounded-[3px]">
                         <img src={persona.avatarUrl} alt={persona.name} className="h-full w-full object-cover" />
                       </div>
                     ) : (
-                      <div className="h-8 w-8 rounded-sm bg-alkota-orange flex-shrink-0 flex items-center justify-center">
+                      <div className="h-8 w-8 rounded-[3px] bg-alkota-orange flex-shrink-0 flex items-center justify-center">
                         <Shield className="h-4 w-4 text-white" />
                       </div>
                     )
                   ) : (
-                    <div className="h-8 w-8 rounded-sm bg-alkota-blue flex-shrink-0 flex items-center justify-center">
+                    <div className="h-8 w-8 rounded-[3px] bg-alkota-blue flex-shrink-0 flex items-center justify-center">
                         <User className="h-4 w-4 text-white fill-white" />
                     </div>
                   )}
                   <div className={`p-4 text-sm leading-relaxed max-w-[85%] ${
                     msg.role === 'user' 
-                      ? 'bg-alkota-orange text-white rounded-2xl rounded-tr-none' 
-                      : 'bg-alkota-iron/30 text-alkota-silver rounded-2xl rounded-tl-none'
+                      ? 'bg-alkota-orange text-white rounded-[6px] rounded-tr-none' 
+                      : 'bg-alkota-iron/30 text-alkota-silver rounded-[6px] rounded-tl-none'
                   }`}>
                     {msg.content}
                   </div>
@@ -196,15 +196,15 @@ export default function AlkotaAdvisor() {
               {isLoading && (
                 <div className="flex gap-3">
                   {persona?.avatarUrl ? (
-                    <div className="h-8 w-8 overflow-hidden flex-shrink-0 border border-alkota-orange">
+                    <div className="h-8 w-8 overflow-hidden flex-shrink-0 border border-alkota-orange rounded-[3px]">
                       <img src={persona.avatarUrl} alt={persona.name} className="h-full w-full object-cover" />
                     </div>
                   ) : (
-                    <div className="h-8 w-8 rounded-sm bg-alkota-orange flex-shrink-0 flex items-center justify-center">
+                    <div className="h-8 w-8 rounded-[3px] bg-alkota-orange flex-shrink-0 flex items-center justify-center">
                       <Shield className="h-4 w-4 text-white" />
                     </div>
                   )}
-                  <div className="bg-alkota-iron/30 rounded-2xl rounded-tl-none p-4 flex gap-1 items-center">
+                  <div className="bg-alkota-iron/30 rounded-[6px] rounded-tl-none p-4 flex gap-1 items-center">
                     <motion.div animate={{ opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1 }} className="h-1.5 w-1.5 rounded-full bg-alkota-steel" />
                     <motion.div animate={{ opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1, delay: 0.2 }} className="h-1.5 w-1.5 rounded-full bg-alkota-steel" />
                     <motion.div animate={{ opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1, delay: 0.4 }} className="h-1.5 w-1.5 rounded-full bg-alkota-steel" />
@@ -224,12 +224,12 @@ export default function AlkotaAdvisor() {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Ask a technical question..."
-                  className="flex-1 bg-alkota-black border border-alkota-iron rounded-lg py-2.5 px-4 text-xs font-bold text-white placeholder-alkota-steel focus:outline-none focus:border-alkota-orange transition-colors"
+                  className="flex-1 bg-alkota-black border border-alkota-iron rounded-[5px] py-2.5 px-4 text-xs font-bold text-white placeholder-alkota-steel focus:outline-none focus:border-alkota-orange transition-colors"
                 />
                 <button 
                   type="submit"
                   disabled={isLoading || !input.trim()}
-                  className="h-10 w-10 flex items-center justify-center rounded-lg bg-alkota-orange text-white hover:bg-alkota-orange-bright disabled:opacity-50 transition-all"
+                  className="h-10 w-10 flex items-center justify-center rounded-[4px] bg-alkota-orange text-white hover:bg-alkota-orange-bright disabled:opacity-50 transition-all shadow-button hover:shadow-button-hover btn-tactile"
                 >
                   <Send className="h-4 w-4" />
                 </button>
@@ -247,7 +247,7 @@ export default function AlkotaAdvisor() {
         onClick={() => setIsOpen(!isOpen)}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="group relative flex items-center gap-3 rounded-full bg-black border border-alkota-iron px-6 py-4 text-white shadow-xl hover:bg-alkota-steel transition-all"
+        className="group relative flex items-center gap-3 rounded-[4px] bg-black border border-alkota-iron px-6 py-4 text-white shadow-button hover:shadow-button-hover transition-all btn-tactile"
       >
         <span className="text-[10px] font-black uppercase italic tracking-widest">
             {isOpen ? 'Close Advisor' : 'Ask the Alkota Advisor'}

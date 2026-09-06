@@ -57,7 +57,7 @@ export default async function CaseStudyRelatedProducts({
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {products.map((product) => {
+          {products.map((product) => {
           const cat = product.category || 'hot-water';
           const href = `/machines/${cat}/${product.slug}`;
           const imgUrl = product.cutout_image_url || product.primary_image_url || '/assets/products/420x4.png';
@@ -65,7 +65,7 @@ export default async function CaseStudyRelatedProducts({
           return (
             <div
               key={product.id || product.slug}
-              className="bg-white border border-[#E8E8E4] hover:border-black transition-all flex flex-col justify-between group overflow-hidden"
+              className="bg-white border border-[#E8E8E4] hover:border-black transition-all flex flex-col justify-between group overflow-hidden rounded-[6px] shadow-tactile hover:shadow-tactile-hover transition-shadow"
             >
               {/* Product Visual Area */}
               <div className="relative aspect-[16/11] bg-[#F8F7F4] p-6 flex items-center justify-center overflow-hidden">
@@ -75,7 +75,7 @@ export default async function CaseStudyRelatedProducts({
                   className="w-full h-full object-contain filter drop-shadow-[0_15px_25px_rgba(0,0,0,0.08)] transition-transform duration-500 group-hover:scale-105"
                   loading="lazy"
                 />
-                <div className="absolute top-4 left-4 bg-black text-white px-2.5 py-1 text-[10px] uppercase tracking-wider font-normal">
+                <div className="absolute top-4 left-4 bg-black text-white px-2.5 py-1 text-[10px] uppercase tracking-wider font-normal rounded-[3px]">
                   {product.series || product.category || 'Industrial'}
                 </div>
               </div>
@@ -113,7 +113,7 @@ export default async function CaseStudyRelatedProducts({
 
                   <Link
                     href={href}
-                    className="inline-flex items-center justify-between w-full bg-[#121212] text-white px-5 py-3 text-xs uppercase tracking-[0.2em] group-hover:bg-[#FF6900] transition-colors font-normal no-underline"
+                    className="inline-flex items-center justify-between w-full bg-[#121212] text-white px-5 py-3 text-xs uppercase tracking-[0.2em] group-hover:bg-[#FF6900] transition-colors font-normal no-underline rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
                   >
                     <span>View Machine Specs</span>
                     <ArrowRight className="h-3.5 w-3.5" />

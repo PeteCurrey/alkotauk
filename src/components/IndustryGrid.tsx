@@ -126,7 +126,7 @@ export default function IndustryGrid() {
             <button
               type="button"
               onClick={() => handleScroll('left')}
-              className="p-1 text-white/50 hover:text-white hover:bg-white/10 transition-colors cursor-pointer bg-transparent border-none shrink-0 flex items-center justify-center rounded-sm"
+              className="p-1 text-white/50 hover:text-white hover:bg-white/10 transition-colors cursor-pointer bg-transparent border-none shrink-0 flex items-center justify-center rounded-[3px]"
               aria-label="Scroll sectors left"
             >
               <ChevronLeft className="h-4 w-4" />
@@ -159,7 +159,7 @@ export default function IndustryGrid() {
             <button
               type="button"
               onClick={() => handleScroll('right')}
-              className="p-1 text-white/50 hover:text-white hover:bg-white/10 transition-colors cursor-pointer bg-transparent border-none shrink-0 flex items-center justify-center rounded-sm"
+              className="p-1 text-white/50 hover:text-white hover:bg-white/10 transition-colors cursor-pointer bg-transparent border-none shrink-0 flex items-center justify-center rounded-[3px]"
               aria-label="Scroll sectors right"
             >
               <ChevronRight className="h-4 w-4" />
@@ -200,7 +200,7 @@ export default function IndustryGrid() {
               <div className="flex items-center gap-6 font-normal">
                 <Link
                   href={`/industries/${activeSector.slug}`}
-                  className="inline-flex items-center gap-3 bg-white text-black px-8 py-4 text-xs uppercase tracking-[0.2em] hover:bg-alkota-orange hover:text-white transition-all no-underline group shadow-lg font-normal"
+                  className="inline-flex items-center gap-3 bg-white text-black px-8 py-4 text-xs uppercase tracking-[0.2em] hover:bg-alkota-orange hover:text-white transition-all no-underline group shadow-lg font-normal rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
                 >
                   <span>Explore {activeSector.name} Solutions</span>
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />

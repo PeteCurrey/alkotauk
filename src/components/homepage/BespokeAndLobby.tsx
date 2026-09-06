@@ -26,7 +26,7 @@ export default async function BespokeAndLobby() {
               <h2 className="font-extralight text-3xl sm:text-4xl lg:text-5xl uppercase tracking-tight text-alkota-black leading-tight mb-6">
                 Bespoke Engineering.
               </h2>
-              <div className="aspect-[16/10] bg-[#EFEFEA] flex items-center justify-center p-6 mb-8 overflow-hidden">
+              <div className="aspect-[16/10] bg-[#EFEFEA] flex items-center justify-center p-6 mb-8 overflow-hidden rounded-[6px] shadow-tactile-sm">
                 <img
                   src="/assets/products/trailer-single.png"
                   alt="Alkota Custom Mobile Wash Trailer"
@@ -41,7 +41,7 @@ export default async function BespokeAndLobby() {
             <div>
               <Link
                 href="/machines/trailers"
-                className="inline-flex items-center gap-3 bg-alkota-black text-white px-8 py-4 text-xs uppercase tracking-[0.2em] hover:bg-alkota-orange transition-colors no-underline group shadow-md font-normal"
+                className="inline-flex items-center gap-3 bg-alkota-black text-white px-8 py-4 text-xs uppercase tracking-[0.2em] hover:bg-alkota-orange transition-colors no-underline group shadow-md font-normal rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
               >
                 <span>Discuss Your Application</span>
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -58,7 +58,7 @@ export default async function BespokeAndLobby() {
               <h2 className="font-extralight text-3xl sm:text-4xl lg:text-5xl uppercase tracking-tight text-alkota-black leading-tight mb-6">
                 Technical Knowledge.
               </h2>
-              <div className="aspect-[16/10] bg-[#141412] overflow-hidden mb-8">
+              <div className="aspect-[16/10] bg-[#141412] overflow-hidden mb-8 rounded-[6px] shadow-tactile-sm">
                 <img
                   src="/assets/industries/manufacturing.png"
                   alt={featured.title}
@@ -86,7 +86,7 @@ export default async function BespokeAndLobby() {
             <div>
               <Link
                 href="/lobby"
-                className="inline-flex items-center gap-3 border border-alkota-black text-alkota-black px-8 py-4 text-xs uppercase tracking-[0.2em] hover:bg-alkota-black hover:text-white transition-all no-underline group font-normal"
+                className="inline-flex items-center gap-3 border border-alkota-black text-alkota-black px-8 py-4 text-xs uppercase tracking-[0.2em] hover:bg-alkota-black hover:text-white transition-all no-underline group font-normal rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
               >
                 <span>Enter The Lobby</span>
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />

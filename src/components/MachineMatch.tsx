@@ -118,7 +118,7 @@ export default function MachineMatch() {
             </h2>
         </div>
 
-        <div className="bg-alkota-bg/40 border border-alkota-iron min-h-[600px] flex flex-col relative group">
+        <div className="bg-alkota-bg/40 border border-alkota-iron min-h-[600px] flex flex-col relative group rounded-[6px] shadow-tactile">
           <div className="absolute top-0 left-0 w-full h-[2px] bg-alkota-iron" />
           <AnimatePresence mode="wait">
             {isMatching ? (
@@ -161,7 +161,7 @@ export default function MachineMatch() {
                         <button
                           key={option.id}
                           onClick={() => handleSelect(option.id)}
-                          className="flex flex-col items-center justify-center gap-6 border border-alkota-iron bg-white p-10 text-center transition-all hover:border-alkota-orange hover:bg-alkota-orange/5 active:scale-[0.98] group"
+                          className="flex flex-col items-center justify-center gap-6 border border-alkota-iron bg-white p-10 text-center transition-all hover:border-alkota-orange hover:bg-alkota-orange/5 active:scale-[0.98] group rounded-[6px] shadow-tactile-sm hover:shadow-tactile-hover"
                         >
                           {option.icon && <option.icon className="h-8 w-8 text-alkota-smoke transition-colors group-hover:text-alkota-orange" />}
                           <span className="font-barlow-condensed text-2xl font-bold uppercase tracking-tight text-alkota-black group-hover:text-alkota-orange">
@@ -174,7 +174,7 @@ export default function MachineMatch() {
                   {currentStep > 0 && (
                     <button
                       onClick={() => setCurrentStep(currentStep - 1)}
-                      className="mt-12 flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-alkota-silver hover:text-alkota-black transition-colors"
+                      className="mt-12 flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-alkota-silver hover:text-alkota-black transition-colors rounded-[3px]"
                     >
                       <ChevronLeft className="h-4 w-4" />
                       Back to Phase 0{currentStep}
@@ -193,14 +193,14 @@ export default function MachineMatch() {
                     THE MATCH.
                   </h2>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-alkota-iron border border-alkota-iron w-full mb-16 text-left">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-alkota-iron border border-alkota-iron w-full mb-16 text-left rounded-[6px] shadow-tactile overflow-hidden">
                       {results.map((machine) => (
                           <Link 
                               key={machine._id} 
                               href={`/machines/${machine.category}/${machine.slug}`}
                               className="group flex flex-col bg-white p-6 transition-all hover:bg-alkota-steel/40 no-underline"
                           >
-                              <div className="relative aspect-[16/10] overflow-hidden mb-6 bg-alkota-bg">
+                              <div className="relative aspect-[16/10] overflow-hidden mb-6 bg-alkota-bg rounded-[5px]">
                                   <img 
                                       src={machine.heroImage?.asset?.url || 'https://alkota.co.uk/assets/hot-water-pressure-washer-DHE0Q-_H.png'}
                                       alt={machine.name}
@@ -208,7 +208,7 @@ export default function MachineMatch() {
                                   />
                                   <div className="absolute inset-0 bg-gradient-to-t from-white/80 to-transparent" />
                                   <div className="absolute bottom-4 left-4">
-                                    <span className="font-ibm-plex-mono text-[9px] font-bold text-alkota-orange uppercase">Spec Match</span>
+                                    <span className="font-ibm-plex-mono text-[9px] font-bold text-alkota-orange uppercase rounded-[3px]">Spec Match</span>
                                   </div>
                               </div>
                               <h3 className="font-barlow-condensed text-2xl font-black text-alkota-black uppercase italic group-hover:text-alkota-orange transition-colors">{machine.name}</h3>
@@ -229,13 +229,13 @@ export default function MachineMatch() {
                   <div className="flex flex-col gap-6 sm:flex-row w-full justify-center">
                     <Link
                       href="/machines"
-                      className="border border-alkota-orange bg-alkota-orange/10 px-12 py-5 text-[11px] font-black uppercase tracking-[0.3em] text-alkota-orange hover:bg-alkota-orange hover:text-white transition-all text-center no-underline"
+                      className="border border-alkota-orange bg-alkota-orange/10 px-12 py-5 text-[11px] font-black uppercase tracking-[0.3em] text-alkota-orange hover:bg-alkota-orange hover:text-white transition-all text-center no-underline rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
                     >
                       Browse All Fleet
                     </Link>
                     <button 
                       onClick={reset}
-                      className="border border-alkota-iron bg-transparent px-12 py-5 text-[11px] font-black uppercase tracking-[0.3em] text-alkota-black hover:bg-alkota-iron transition-all"
+                      className="border border-alkota-iron bg-transparent px-12 py-5 text-[11px] font-black uppercase tracking-[0.3em] text-alkota-black hover:bg-alkota-iron transition-all rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
                     >
                       New Specification
                     </button>

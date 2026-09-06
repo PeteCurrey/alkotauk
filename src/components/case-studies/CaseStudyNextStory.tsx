@@ -28,7 +28,7 @@ export default function CaseStudyNextStory({ nextSlug }: Props) {
 
         {/* Large Editorial Next Story Preview */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch">
-          <div className="lg:col-span-7 relative min-h-[320px] sm:min-h-[420px] overflow-hidden bg-[#1A1A18] group">
+          <div className="lg:col-span-7 relative min-h-[320px] sm:min-h-[420px] overflow-hidden bg-[#1A1A18] group rounded-[6px]">
             <img
               src={nextStory.heroImage}
               alt={nextStory.heroAlt}
@@ -45,7 +45,7 @@ export default function CaseStudyNextStory({ nextSlug }: Props) {
             </div>
           </div>
 
-          <div className="lg:col-span-5 flex flex-col justify-between bg-[#141412] p-8 sm:p-12 border border-white/10">
+          <div className="lg:col-span-5 flex flex-col justify-between bg-[#141412] p-8 sm:p-12 border border-white/10 rounded-[6px] shadow-tactile">
             <div>
               <div className="text-[11px] text-[#888] uppercase tracking-wider mb-3">
                 Sector // {nextStory.sector}
@@ -60,7 +60,7 @@ export default function CaseStudyNextStory({ nextSlug }: Props) {
 
             <Link
               href={`/resources/case-studies/${nextStory.slug}`}
-              className="inline-flex items-center justify-between w-full bg-[#FF6900] text-white px-8 py-5 text-xs uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-colors font-normal no-underline group shadow-lg"
+              className="inline-flex items-center justify-between w-full bg-[#FF6900] text-white px-8 py-5 text-xs uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-colors font-normal no-underline group shadow-lg rounded-[4px] btn-tactile"
             >
               <span>Continue to Next Field Story</span>
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />

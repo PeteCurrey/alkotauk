@@ -23,7 +23,7 @@ export default function CaseStudyConsultationCTA({
   secondaryCTA = { label: 'Contact UK Engineering Team', href: '/contact' },
 }: Props) {
   return (
-    <section className="my-16 bg-[#121212] text-white p-8 sm:p-14 border border-[#222] font-normal">
+    <section className="my-16 bg-[#121212] text-white p-8 sm:p-14 border border-[#222] font-normal rounded-[6px] shadow-tactile">
       <div className="max-w-3xl">
         <span className="text-xs uppercase tracking-[0.25em] text-[#FF6900] block mb-3 font-normal font-mono">
           {eyebrow}
@@ -38,7 +38,7 @@ export default function CaseStudyConsultationCTA({
         <div className="flex flex-col sm:flex-row gap-4">
           <Link
             href={primaryCTA.href}
-            className="inline-flex items-center justify-center gap-2 bg-[#FF6900] hover:bg-[#E05800] text-white px-7 py-4 text-xs uppercase tracking-[0.2em] font-normal transition-colors no-underline shadow-lg"
+            className="inline-flex items-center justify-center gap-2 bg-[#FF6900] hover:bg-[#E05800] text-white px-7 py-4 text-xs uppercase tracking-[0.2em] font-normal transition-colors no-underline shadow-lg rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
           >
             <span>{primaryCTA.label}</span>
             <ArrowRight className="h-4 w-4" />
@@ -46,7 +46,7 @@ export default function CaseStudyConsultationCTA({
           {secondaryCTA && (
             <Link
               href={secondaryCTA.href}
-              className="inline-flex items-center justify-center gap-2 border border-white/30 hover:border-white text-white px-7 py-4 text-xs uppercase tracking-[0.2em] font-normal transition-colors no-underline"
+              className="inline-flex items-center justify-center gap-2 border border-white/30 hover:border-white text-white px-7 py-4 text-xs uppercase tracking-[0.2em] font-normal transition-colors no-underline rounded-[4px] btn-tactile"
             >
               <PhoneCall className="h-3.5 w-3.5 text-[#FF6900]" />
               <span>{secondaryCTA.label}</span>

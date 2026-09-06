@@ -57,7 +57,7 @@ export default function MessQuestFeature() {
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 font-normal">
             <Link
               href="/mess-quest"
-              className="inline-flex items-center justify-center gap-3 bg-alkota-orange text-white px-8 py-4 text-xs uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all no-underline group shadow-2xl font-normal"
+              className="inline-flex items-center justify-center gap-3 bg-alkota-orange text-white px-8 py-4 text-xs uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all no-underline group shadow-2xl font-normal rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
             >
               <Play className="h-4 w-4 fill-current transition-transform group-hover:scale-110" />
               <span>Watch Mess Quest</span>
@@ -65,7 +65,7 @@ export default function MessQuestFeature() {
 
             <Link
               href="/machines"
-              className="inline-flex items-center justify-center gap-3 border border-white/40 bg-black/40 backdrop-blur-sm text-white px-7 py-4 text-xs uppercase tracking-[0.2em] hover:border-white hover:bg-white hover:text-black transition-all no-underline group font-normal"
+              className="inline-flex items-center justify-center gap-3 border border-white/40 bg-black/40 backdrop-blur-sm text-white px-7 py-4 text-xs uppercase tracking-[0.2em] hover:border-white hover:bg-white hover:text-black transition-all no-underline group font-normal rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
             >
               <span>See the Equipment</span>
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />

@@ -42,7 +42,7 @@ export default function CategoryLobbyKnowledge({
             <Link
               key={article.id}
               href={`/lobby/${article.category_slug}/${article.slug}`}
-              className="group flex flex-col justify-between bg-[#FAFAF8] border border-[#E5E5E0] hover:border-[#FF6900] transition-colors p-6 sm:p-8 no-underline"
+              className="group flex flex-col justify-between bg-[#FAFAF8] border border-[#E5E5E0] hover:border-[#FF6900] transition-colors p-6 sm:p-8 no-underline rounded-[6px] shadow-tactile hover:shadow-tactile-hover transition-shadow"
             >
               <div>
                 <div className="flex items-center justify-between mb-4 text-[10px] font-mono text-[#888]">

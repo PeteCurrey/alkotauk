@@ -66,7 +66,7 @@ export default function ArchitectureNavigator({
                 key={arch.id}
                 type="button"
                 onClick={() => setSelectedArchId(arch.id)}
-                className={`px-5 py-3 text-xs font-mono uppercase tracking-wider transition-all text-left border ${
+                className={`px-5 py-3 text-xs font-mono uppercase tracking-wider transition-all text-left border rounded-[4px] ${
                   isSelected
                     ? 'bg-[#1A1A18] text-white border-[#1A1A18] shadow-sm'
                     : 'bg-white text-[#555] border-[#E5E5E0] hover:border-[#CCC] hover:text-[#1A1A18]'
@@ -83,11 +83,11 @@ export default function ArchitectureNavigator({
 
         {/* Selected Architecture Showcase Card */}
         {activeArch && (
-          <div className="bg-white border border-[#E5E5E0] shadow-sm grid grid-cols-1 lg:grid-cols-12 overflow-hidden">
+          <div className="bg-white border border-[#E5E5E0] shadow-sm grid grid-cols-1 lg:grid-cols-12 overflow-hidden rounded-[6px] shadow-tactile">
             {/* Left: Focal Machine Image */}
             <div className="lg:col-span-6 bg-[#F4F4F0] p-8 sm:p-12 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-[#E5E5E0] relative min-h-[360px]">
               <div className="relative z-10 flex items-center justify-between">
-                <span className="px-3 py-1 bg-[#1A1A18] text-[#FF6900] text-[10px] font-mono font-medium uppercase tracking-widest">
+                <span className="px-3 py-1 bg-[#1A1A18] text-[#FF6900] text-[10px] font-mono font-medium uppercase tracking-widest rounded-[3px]">
                   {activeArch.name}
                 </span>
                 <span className="text-xs font-mono text-[#888]">
@@ -124,7 +124,7 @@ export default function ArchitectureNavigator({
                 </p>
 
                 {/* Specs Matrix */}
-                <div className="grid grid-cols-2 gap-4 p-5 bg-[#FAFAF8] border border-[#E5E5E0] mb-6 font-mono text-xs">
+                <div className="grid grid-cols-2 gap-4 p-5 bg-[#FAFAF8] border border-[#E5E5E0] mb-6 font-mono text-xs rounded-[5px]">
                   <div>
                     <span className="text-[10px] text-[#888] uppercase block">Pressure Rating</span>
                     <span className="text-sm font-medium text-[#1A1A18]">{activeArch.pressureRange}</span>
@@ -157,7 +157,7 @@ export default function ArchitectureNavigator({
               <div className="pt-6 border-t border-[#E5E5E0] flex flex-wrap items-center gap-4">
                 <a
                   href="#catalogue"
-                  className="inline-flex items-center gap-2 bg-[#FF6900] hover:bg-[#1A1A18] text-white px-5 py-3 text-xs font-medium uppercase tracking-widest transition-colors no-underline"
+                  className="inline-flex items-center gap-2 bg-[#FF6900] hover:bg-[#1A1A18] text-white px-5 py-3 text-xs font-medium uppercase tracking-widest transition-colors no-underline rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
                 >
                   <span>Filter Catalogue for {activeArch.name}</span>
                   <ArrowRight className="h-3.5 w-3.5" />

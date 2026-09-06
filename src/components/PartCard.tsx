@@ -21,8 +21,8 @@ export default function PartCard({ part }: PartCardProps) {
   const displayPrice = part.price ? `£${part.price.toFixed(2)}` : 'Enquire for Pricing';
 
   return (
-    <div className="group relative flex flex-col border border-alkota-iron bg-alkota-steel/30 p-4 transition-all hover:bg-alkota-steel/50">
-      <Link href={`/shop/${part.slug.current}`} className="mb-4 aspect-square overflow-hidden bg-alkota-black/50 relative">
+    <div className="group relative flex flex-col border border-alkota-iron bg-alkota-steel/30 p-4 transition-all hover:bg-alkota-steel/50 rounded-[6px] shadow-tactile hover:shadow-tactile-hover transition-shadow">
+      <Link href={`/shop/${part.slug.current}`} className="mb-4 aspect-square overflow-hidden bg-alkota-black/50 relative rounded-[5px]">
         {imageUrl ? (
           <Image
             src={imageUrl}
@@ -66,7 +66,7 @@ export default function PartCard({ part }: PartCardProps) {
           ) : (
             <Link 
               href={`/contact?subject=Enquiry: ${part.name} (${part.sku})`}
-              className="flex w-full items-center justify-center gap-2 border border-alkota-orange bg-transparent py-4 text-sm font-black uppercase tracking-widest text-alkota-orange transition-all duration-200 hover:bg-alkota-orange hover:text-white"
+              className="flex w-full items-center justify-center gap-2 border border-alkota-orange bg-transparent py-4 text-sm font-black uppercase tracking-widest text-alkota-orange transition-all duration-200 hover:bg-alkota-orange hover:text-white rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
             >
               Enquire Now
             </Link>

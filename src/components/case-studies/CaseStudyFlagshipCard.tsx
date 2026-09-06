@@ -33,7 +33,7 @@ export default function CaseStudyFlagshipCard({ caseStudy }: Props) {
         {/* Magazine Cover Split Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch mb-16">
           {/* Image Canvas (Substantial Viewport Feature) */}
-          <div className="lg:col-span-7 relative min-h-[380px] sm:min-h-[480px] lg:min-h-[580px] overflow-hidden bg-[#1A1A18] group border border-white/10">
+          <div className="lg:col-span-7 relative min-h-[380px] sm:min-h-[480px] lg:min-h-[580px] overflow-hidden bg-[#1A1A18] group border border-white/10 rounded-[6px]">
             <img
               src={caseStudy.heroImage}
               alt={caseStudy.heroAlt}
@@ -43,11 +43,11 @@ export default function CaseStudyFlagshipCard({ caseStudy }: Props) {
             
             {/* Technical overlay badge on image */}
             <div className="absolute bottom-6 left-6 right-6 flex flex-wrap items-center justify-between gap-4 text-xs font-mono">
-              <div className="bg-black/90 backdrop-blur-sm px-4 py-2 border border-white/20 text-white">
+              <div className="bg-black/90 backdrop-blur-sm px-4 py-2 border border-white/20 text-white rounded-[3px]">
                 <span className="text-[#3B82F6] mr-2">LOCATION:</span>
                 <span>West Antarctic Ice Sheet (84.24°S, 153.64°W)</span>
               </div>
-              <div className="bg-black/90 backdrop-blur-sm px-4 py-2 border border-white/20 text-white">
+              <div className="bg-black/90 backdrop-blur-sm px-4 py-2 border border-white/20 text-white rounded-[3px]">
                 <span className="text-[#3B82F6] mr-2">EQUIPMENT:</span>
                 <span>6 × Alkota 12257K Units</span>
               </div>
@@ -55,7 +55,7 @@ export default function CaseStudyFlagshipCard({ caseStudy }: Props) {
           </div>
 
           {/* Editorial Story Content */}
-          <div className="lg:col-span-5 flex flex-col justify-between bg-[#181816] p-8 sm:p-12 border border-white/10">
+          <div className="lg:col-span-5 flex flex-col justify-between bg-[#181816] p-8 sm:p-12 border border-white/10 rounded-[6px] shadow-tactile">
             <div>
               <div className="text-[11px] uppercase tracking-[0.25em] text-[#888] font-mono mb-4">
                 Antarctica / 2013 // Subglacial Lake Whillans
@@ -96,7 +96,7 @@ export default function CaseStudyFlagshipCard({ caseStudy }: Props) {
             <div>
               <Link
                 href={`/resources/case-studies/${caseStudy.slug}`}
-                className="inline-flex items-center justify-between w-full bg-[#3B82F6] text-white px-8 py-5 text-xs uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-colors font-mono no-underline group shadow-lg"
+                className="inline-flex items-center justify-between w-full bg-[#3B82F6] text-white px-8 py-5 text-xs uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-colors font-mono no-underline group shadow-lg rounded-[4px] btn-tactile"
               >
                 <span>Enter the Story</span>
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />

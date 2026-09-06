@@ -21,7 +21,7 @@ export default function Footer() {
           <div className="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col gap-3 justify-end font-normal">
             <Link
               href="/tools/configurator"
-              className="inline-flex items-center justify-center gap-2 bg-[#FF6900] px-6 py-3.5 text-xs uppercase tracking-widest text-white hover:bg-white hover:text-black transition-colors font-normal"
+              className="inline-flex items-center justify-center gap-2 bg-[#FF6900] px-6 py-3.5 text-xs uppercase tracking-widest text-white hover:bg-white hover:text-black transition-colors font-normal rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
             >
               <span>Launch Build Configurator</span>
               <ArrowUpRight className="h-4 w-4" />

@@ -43,11 +43,11 @@ export default function FeaturedMachines({
           {featuredProducts.slice(0, 3).map((product) => (
             <div
               key={product.id}
-              className="group flex flex-col justify-between bg-[#FAFAF8] border border-[#E5E5E0] hover:border-[#FF6900] transition-all p-6 sm:p-8"
+              className="group flex flex-col justify-between bg-[#FAFAF8] border border-[#E5E5E0] hover:border-[#FF6900] transition-all p-6 sm:p-8 rounded-[6px] shadow-tactile hover:shadow-tactile-hover transition-shadow"
             >
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <span className="px-2.5 py-1 bg-white border border-[#E5E5E0] text-[10px] font-mono font-medium uppercase tracking-widest text-[#FF6900]">
+                  <span className="px-2.5 py-1 bg-white border border-[#E5E5E0] text-[10px] font-mono font-medium uppercase tracking-widest text-[#FF6900] rounded-[3px]">
                     {product.series || 'Elite Series'}
                   </span>
                   <span className="text-[10px] font-mono text-[#888]">
@@ -55,7 +55,7 @@ export default function FeaturedMachines({
                   </span>
                 </div>
 
-                <div className="relative w-full h-56 mb-6 flex items-center justify-center bg-white border border-[#EBEBE6] p-4">
+                <div className="relative w-full h-56 mb-6 flex items-center justify-center bg-white border border-[#EBEBE6] p-4 rounded-[5px] overflow-hidden">
                   <Image
                     src={product.primary_image_url || '/assets/products/hot-water-skid.png'}
                     alt={product.name}
@@ -91,7 +91,7 @@ export default function FeaturedMachines({
 
                 <Link
                   href={`/machines/${categorySlug}/${product.slug}`}
-                  className="w-full inline-flex items-center justify-center gap-2 bg-[#1A1A18] group-hover:bg-[#FF6900] text-white py-3 text-xs font-medium uppercase tracking-widest transition-colors no-underline"
+                  className="w-full inline-flex items-center justify-center gap-2 bg-[#1A1A18] group-hover:bg-[#FF6900] text-white py-3 text-xs font-medium uppercase tracking-widest transition-colors no-underline rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
                 >
                   <span>View Machine Specifications</span>
                   <ArrowRight className="h-3.5 w-3.5" />

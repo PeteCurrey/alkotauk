@@ -37,7 +37,7 @@ export default function HubSpotForm({ portalId, formId, region = 'eu1' }: HubSpo
   }, [portalId, formId, region]);
 
   return (
-    <div className="w-full bg-alkota-iron/30 p-8 rounded-xl border border-alkota-steel/30 shadow-2xl backdrop-blur-sm">
+    <div className="w-full bg-alkota-iron/30 p-8 rounded-[6px] border border-alkota-steel/30 shadow-tactile backdrop-blur-sm">
       {!isLoaded && (
         <div className="flex flex-col items-center justify-center py-12 space-y-4">
           <div className="w-12 h-12 border-4 border-alkota-orange border-t-transparent rounded-full animate-spin"></div>

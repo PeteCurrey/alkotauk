@@ -70,7 +70,7 @@ export default function CategoryApplications({ categorySlug }: CategoryApplicati
                 key={idx}
                 type="button"
                 onClick={() => setActiveTab(idx)}
-                className={`p-4 border text-left transition-all ${
+                className={`p-4 border text-left transition-all rounded-[4px] ${
                   isSelected
                     ? 'bg-[#1A1A18] text-white border-[#1A1A18]'
                     : 'bg-white text-[#555] border-[#E5E5E0] hover:border-[#CCC]'
@@ -84,7 +84,7 @@ export default function CategoryApplications({ categorySlug }: CategoryApplicati
         </div>
 
         {/* Application Card */}
-        <div className="bg-white border border-[#E5E5E0] grid grid-cols-1 lg:grid-cols-12 overflow-hidden shadow-sm">
+        <div className="bg-white border border-[#E5E5E0] grid grid-cols-1 lg:grid-cols-12 overflow-hidden shadow-sm rounded-[6px] shadow-tactile">
           <div className="lg:col-span-7 relative min-h-[320px] bg-[#EEE]">
             <Image
               src={current.image}

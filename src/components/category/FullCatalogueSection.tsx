@@ -88,13 +88,13 @@ export default function FullCatalogueSection({
               placeholder="Search model, series, specs..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-white border border-[#E5E5E0] pl-10 pr-4 py-2.5 text-xs text-[#1A1A18] placeholder-[#999] focus:outline-none focus:border-[#FF6900] font-normal"
+              className="w-full bg-white border border-[#E5E5E0] pl-10 pr-4 py-2.5 text-xs text-[#1A1A18] placeholder-[#999] focus:outline-none focus:border-[#FF6900] font-normal rounded-[5px]"
             />
           </div>
         </div>
 
         {/* Filter Toolbar */}
-        <div className="bg-white border border-[#E5E5E0] p-4 mb-8 flex flex-wrap items-center gap-4 text-xs font-mono">
+        <div className="bg-white border border-[#E5E5E0] p-4 mb-8 flex flex-wrap items-center gap-4 text-xs font-mono rounded-[6px] shadow-tactile-sm">
           <div className="flex items-center gap-1.5 text-[#888] pr-3 border-r border-[#E5E5E0]">
             <SlidersHorizontal className="h-3.5 w-3.5 text-[#FF6900]" />
             <span>Filters:</span>
@@ -104,7 +104,7 @@ export default function FullCatalogueSection({
           <select
             value={selectedPower}
             onChange={(e) => setSelectedPower(e.target.value)}
-            className="bg-[#FAFAF8] border border-[#E5E5E0] px-3 py-1.5 text-xs text-[#333] focus:outline-none focus:border-[#FF6900]"
+            className="bg-[#FAFAF8] border border-[#E5E5E0] px-3 py-1.5 text-xs text-[#333] focus:outline-none focus:border-[#FF6900] rounded-[4px]"
           >
             <option value="all">Power: All</option>
             {powerOptions.map(opt => (
@@ -116,7 +116,7 @@ export default function FullCatalogueSection({
           <select
             value={selectedMobility}
             onChange={(e) => setSelectedMobility(e.target.value)}
-            className="bg-[#FAFAF8] border border-[#E5E5E0] px-3 py-1.5 text-xs text-[#333] focus:outline-none focus:border-[#FF6900]"
+            className="bg-[#FAFAF8] border border-[#E5E5E0] px-3 py-1.5 text-xs text-[#333] focus:outline-none focus:border-[#FF6900] rounded-[4px]"
           >
             <option value="all">Mobility: All</option>
             <option value="portable">Portable (Wheel Kit)</option>
@@ -141,7 +141,7 @@ export default function FullCatalogueSection({
 
         {/* Catalogue Grid (Responsive layout without empty gaps) */}
         {filteredProducts.length === 0 ? (
-          <div className="bg-white border border-[#E5E5E0] p-12 text-center">
+          <div className="bg-white border border-[#E5E5E0] p-12 text-center rounded-[6px] shadow-tactile">
             <p className="text-base text-[#555] font-light mb-4">
               No matching machines found for your current filter criteria.
             </p>
@@ -152,7 +152,7 @@ export default function FullCatalogueSection({
                 setSelectedMobility('all');
                 setSearchTerm('');
               }}
-              className="inline-flex items-center gap-2 bg-[#FF6900] text-white px-5 py-2.5 text-xs font-medium uppercase tracking-wider"
+              className="inline-flex items-center gap-2 bg-[#FF6900] text-white px-5 py-2.5 text-xs font-medium uppercase tracking-wider rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
             >
               Reset Filters
             </button>
@@ -163,7 +163,7 @@ export default function FullCatalogueSection({
               <Link
                 key={product.id}
                 href={`/machines/${categorySlug}/${product.slug}`}
-                className="group flex flex-col justify-between bg-white border border-[#E5E5E0] hover:border-[#FF6900] transition-colors p-6 no-underline shadow-xs"
+                className="group flex flex-col justify-between bg-white border border-[#E5E5E0] hover:border-[#FF6900] transition-colors p-6 no-underline shadow-xs rounded-[6px] shadow-tactile hover:shadow-tactile-hover transition-shadow"
               >
                 <div>
                   <div className="flex items-center justify-between mb-3 text-[10px] font-mono">
@@ -175,7 +175,7 @@ export default function FullCatalogueSection({
                     </span>
                   </div>
 
-                  <div className="relative w-full h-44 mb-4 flex items-center justify-center bg-[#FAFAF8] border border-[#F0F0EC] p-3">
+                  <div className="relative w-full h-44 mb-4 flex items-center justify-center bg-[#FAFAF8] border border-[#F0F0EC] p-3 rounded-[5px] overflow-hidden">
                     <Image
                       src={product.primary_image_url || '/assets/products/hot-water-skid.png'}
                       alt={product.name}
@@ -211,7 +211,7 @@ export default function FullCatalogueSection({
             <button
               type="button"
               onClick={() => setIsExpanded(!isExpanded)}
-              className="inline-flex items-center gap-2 bg-white hover:bg-[#1A1A18] hover:text-white border border-[#E5E5E0] text-[#1A1A18] px-8 py-3 text-xs font-mono uppercase tracking-widest transition-all"
+              className="inline-flex items-center gap-2 bg-white hover:bg-[#1A1A18] hover:text-white border border-[#E5E5E0] text-[#1A1A18] px-8 py-3 text-xs font-mono uppercase tracking-widest transition-all rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
             >
               <span>{isExpanded ? 'Collapse Catalogue' : `View All ${filteredProducts.length} ${categoryName}`}</span>
               <ArrowRight className={`h-3.5 w-3.5 transition-transform ${isExpanded ? '-rotate-90' : 'rotate-90'}`} />

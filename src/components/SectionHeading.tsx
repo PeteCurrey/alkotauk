@@ -20,7 +20,7 @@ export default function SectionHeading({
   return (
     <div className={`flex flex-col gap-4 font-normal ${alignmentClasses[align]}`}>
       {badge && (
-        <span className="inline-block rounded-sm bg-alkota-orange/10 px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-alkota-orange border border-alkota-orange/20 w-fit font-light">
+        <span className="inline-block rounded-[3px] bg-alkota-orange/10 px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-alkota-orange border border-alkota-orange/20 w-fit font-light">
           {badge}
         </span>
       )}

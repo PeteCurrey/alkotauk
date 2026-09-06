@@ -53,7 +53,7 @@ export default function CartDrawer() {
           </div>
           <button
             onClick={closeCart}
-            className="flex h-8 w-8 items-center justify-center border border-alkota-iron text-alkota-steel transition-colors hover:border-alkota-orange hover:text-alkota-orange"
+            className="flex h-8 w-8 items-center justify-center border border-alkota-iron text-alkota-steel transition-colors hover:border-alkota-orange hover:text-alkota-orange rounded-[3px]"
             aria-label="Close cart"
           >
             <X className="h-4 w-4" />
@@ -78,7 +78,7 @@ export default function CartDrawer() {
               {items.map(item => (
                 <li key={item.id} className="flex gap-4 border-b border-alkota-iron pb-6 last:border-0">
                   {/* Image */}
-                  <div className="relative h-20 w-20 shrink-0 overflow-hidden border border-alkota-iron bg-alkota-steel/30">
+                  <div className="relative h-20 w-20 shrink-0 overflow-hidden border border-alkota-iron bg-alkota-steel/30 rounded-[5px]">
                     {item.image ? (
                       <Image src={item.image} alt={item.name} fill className="object-contain p-2" />
                     ) : (
@@ -150,7 +150,7 @@ export default function CartDrawer() {
             <button
               onClick={handleCheckout}
               disabled={loading}
-              className="flex w-full items-center justify-center gap-3 bg-alkota-orange py-5 text-sm font-black uppercase tracking-widest text-white transition-all hover:bg-alkota-orange-bright disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-3 bg-alkota-orange py-5 text-sm font-black uppercase tracking-widest text-white transition-all hover:bg-alkota-orange-bright disabled:cursor-not-allowed disabled:opacity-60 rounded-[4px] btn-tactile"
             >
               {loading ? (
                 <>
@@ -167,7 +167,7 @@ export default function CartDrawer() {
             <Link
               href="/cart"
               onClick={closeCart}
-              className="block w-full border border-alkota-iron py-3 text-center text-xs font-bold uppercase tracking-widest text-alkota-steel transition-all hover:border-alkota-steel hover:text-white"
+              className="block w-full border border-alkota-iron py-3 text-center text-xs font-bold uppercase tracking-widest text-alkota-steel transition-all hover:border-alkota-steel hover:text-white rounded-[4px]"
             >
               View Full Cart
             </Link>

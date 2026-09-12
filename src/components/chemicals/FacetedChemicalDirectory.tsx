@@ -6,6 +6,7 @@ import { Plus, Check, Search, Filter, X, ArrowRight, ShieldCheck, Droplet, Shopp
 import { ChemicalRetailProduct } from '@/lib/types/chemical-commerce';
 import { usePartsRequest } from '@/components/parts/PartsRequestListContext';
 import { CHEMICAL_APPLICATIONS } from '@/lib/chemicals/seed-data';
+import { resolveProductAction } from '@/lib/commerce/action-resolver';
 
 interface Props {
   products: ChemicalRetailProduct[];
@@ -57,11 +58,27 @@ export default function FacetedChemicalDirectory({ products }: Props) {
       price: 84.00,
     };
 
+    const decision = resolveProductAction({
+      id: `${product.id}-${sku.sku_code}`,
+      part_number: sku.sku_code,
+      name: `${product.retail_name} (${sku.pack_size})`,
+      slug: product.slug,
+      product_type: 'CHEMICAL',
+      category: 'chemicals',
+      price: sku.price,
+      in_stock: true,
+      active: product.status !== 'ARCHIVED',
+    });
+
+    if (decision.action !== 'PURCHASE' || !decision.price || decision.price <= 0) {
+      return;
+    }
+
     addItem({
       id: `${product.id}-${sku.sku_code}`,
       part_number: sku.sku_code,
       name: `${product.retail_name} (${sku.pack_size})`,
-      price_each: sku.price,
+      price_each: decision.price,
       quantity: 1,
       pack_size: sku.pack_size,
       machine_context: `${product.retail_family} (${product.originating_master_code})`,
@@ -192,7 +209,21 @@ export default function FacetedChemicalDirectory({ products }: Props) {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredProducts.map((prod) => {
               const isAdded = addedIds[prod.id] ?? false;
-              const defaultSku = (prod.skus && prod.skus[1]) || (prod.skus && prod.skus[0]) || { price: 84.00, pack_size: '20L Drum' };
+              const defaultSku = (prod.skus && prod.skus[1]) || (prod.skus && prod.skus[0]) || { sku_code: `ALK-${prod.originating_master_code}-20L`, price: 84.00, pack_size: '20L Drum' };
+
+              const decision = resolveProductAction({
+                id: `${prod.id}-${defaultSku.sku_code || 'pack'}`,
+                part_number: defaultSku.sku_code || `ALK-${prod.originating_master_code}`,
+                name: `${prod.retail_name} (${defaultSku.pack_size})`,
+                slug: prod.slug,
+                product_type: 'CHEMICAL',
+                category: 'chemicals',
+                price: defaultSku.price,
+                in_stock: true,
+                active: prod.status !== 'ARCHIVED',
+              });
+
+              if (decision.action === 'HIDDEN') return null;
 
               return (
                 <div
@@ -240,21 +271,30 @@ export default function FacetedChemicalDirectory({ products }: Props) {
                           Starting From ({defaultSku.pack_size})
                         </span>
                         <span className="font-ibm-plex-mono text-2xl font-bold text-[#1A1917]">
-                          £{defaultSku.price.toFixed(2)}
+                          {decision.priceExVat !== null ? `£${decision.priceExVat.toFixed(2)}` : 'POA'}
                         </span>
                       </div>
                       <span className="font-ibm-plex-mono text-xs text-[#777] uppercase">ex VAT</span>
                     </div>
 
                     <div className="grid grid-cols-2 gap-2">
-                      <button
-                        type="button"
-                        onClick={() => handleAddToCart(prod)}
-                        className="w-full bg-[#FF6900] hover:bg-[#1A1917] text-white py-3 px-3 font-ibm-plex-mono text-xs uppercase tracking-wider transition-colors font-semibold flex items-center justify-center gap-1.5 cursor-pointer rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
-                      >
-                        <Plus className="w-3.5 h-3.5" />
-                        <span>{isAdded ? 'Added ✓' : 'Add to Order'}</span>
-                      </button>
+                      {decision.action === 'PURCHASE' ? (
+                        <button
+                          type="button"
+                          onClick={() => handleAddToCart(prod)}
+                          className="w-full bg-[#FF6900] hover:bg-[#1A1917] text-white py-3 px-3 font-ibm-plex-mono text-xs uppercase tracking-wider transition-colors font-semibold flex items-center justify-center gap-1.5 cursor-pointer rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
+                        >
+                          <Plus className="w-3.5 h-3.5" />
+                          <span>{isAdded ? 'Added ✓' : 'Add to Order'}</span>
+                        </button>
+                      ) : (
+                        <Link
+                          href={`/chemicals/product/${prod.slug}`}
+                          className="w-full bg-[#1A1917] hover:bg-[#FF6900] text-white py-3 px-3 font-ibm-plex-mono text-xs uppercase tracking-wider transition-colors font-semibold flex items-center justify-center gap-1.5 cursor-pointer rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
+                        >
+                          <span>{decision.label}</span>
+                        </Link>
+                      )}
 
                       <Link
                         href={`/chemicals/product/${prod.slug}`}

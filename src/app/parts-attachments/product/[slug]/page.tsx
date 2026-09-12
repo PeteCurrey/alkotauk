@@ -25,6 +25,7 @@ import SafeImage from '@/components/ui/SafeImage';
 import ProductDetailActions from '@/components/parts/ProductDetailActions';
 import ProductCard from '@/components/parts/ProductCard';
 import { getPartEcosystem } from '@/lib/relationships/service';
+import { resolveProductAction } from '@/lib/commerce/action-resolver';
 
 export const dynamic = 'force-dynamic';
 
@@ -121,15 +122,24 @@ export default async function ProductDetailPage({ params, searchParams }: PagePr
     .neq('id', part.id)
     .limit(4);
 
-  const priceExVat = part.price ? Number(part.price) : null;
-  const priceIncVat = priceExVat ? priceExVat * 1.20 : null;
-  const isPurchasable = priceExVat !== null && priceExVat > 0;
+  // 6. Central Product Action Resolution
+  const decision = resolveProductAction(part, {
+    machineModel: machineContextParam || undefined,
+  });
+
+  if (decision.action === 'HIDDEN') {
+    notFound();
+  }
+
+  const priceExVat = decision.priceExVat;
+  const priceIncVat = decision.priceIncVat;
+  const isPurchasable = decision.action === 'PURCHASE';
   const compatibleList = Array.isArray(part.compatible_machines) ? part.compatible_machines : [];
   const verifiedMachines = ecosystem.verifiedMachines;
   const documentsList = Array.isArray(part.documents) ? part.documents : [];
   const supersededPart = ecosystem.supersedingPart;
 
-  // 6. Machine-Specific Context Verification Check
+  // 7. Machine-Specific Context Verification Check
   let machineVerificationState: 'confirmed' | 'unverified' | null = null;
   if (machineContextParam) {
     const upperCtx = machineContextParam.toUpperCase();
@@ -138,7 +148,7 @@ export default async function ProductDetailPage({ params, searchParams }: PagePr
     machineVerificationState = isConfirmed ? 'confirmed' : 'unverified';
   }
 
-  // 7. Filtered technical specifications table (only show populated non-null fields)
+  // 8. Filtered technical specifications table (only show populated non-null fields)
   const technicalSpecs: Array<{ label: string; value: string }> = [
     { label: 'Part Number', value: part.part_number },
     ...(part.mpn ? [{ label: 'Manufacturer MPN', value: part.mpn }] : []),
@@ -177,13 +187,26 @@ export default async function ProductDetailPage({ params, searchParams }: PagePr
     },
   };
 
-  if (isPurchasable && priceExVat) {
+  if (decision.action === 'PURCHASE' && priceExVat) {
     jsonLd.offers = {
       '@type': 'Offer',
       url: `https://alkota.co.uk/parts-attachments/product/${part.slug}`,
       priceCurrency: 'GBP',
       price: priceExVat.toFixed(2),
-      availability: part.in_stock ? 'https://schema.org/InStock' : 'https://schema.org/BackOrder',
+      availability: 'https://schema.org/InStock',
+      itemCondition: 'https://schema.org/NewCondition',
+      seller: {
+        '@type': 'Organization',
+        name: 'Alkota UK',
+      },
+    };
+  } else if (decision.action === 'REQUEST_AVAILABILITY') {
+    jsonLd.offers = {
+      '@type': 'Offer',
+      url: `https://alkota.co.uk/parts-attachments/product/${part.slug}`,
+      priceCurrency: 'GBP',
+      ...(priceExVat ? { price: priceExVat.toFixed(2) } : {}),
+      availability: 'https://schema.org/OutOfStock',
       itemCondition: 'https://schema.org/NewCondition',
       seller: {
         '@type': 'Organization',
@@ -410,11 +433,11 @@ export default async function ProductDetailPage({ params, searchParams }: PagePr
                 <div className="flex items-center gap-2">
                   <span
                     className={`h-2.5 w-2.5 rounded-full ${
-                      part.in_stock ? 'bg-green-500' : 'bg-amber-500'
+                      decision.action === 'PURCHASE' ? 'bg-green-500' : 'bg-amber-500'
                     }`}
                   />
                   <span className="font-ibm-plex-mono text-[10px] uppercase tracking-wider text-[#555]">
-                    {part.in_stock ? 'In Stock (UK Despatch)' : 'Available to Order'}
+                    {decision.action === 'PURCHASE' ? 'In Stock (UK Despatch)' : decision.label}
                   </span>
                 </div>
               </div>
@@ -433,11 +456,11 @@ export default async function ProductDetailPage({ params, searchParams }: PagePr
 
               {/* Pricing Display */}
               <div className="p-4 bg-[#FAF9F5] border border-[#E8E6DF] rounded-[4px] space-y-1">
-                {isPurchasable ? (
+                {decision.action === 'PURCHASE' && priceExVat !== null ? (
                   <div>
                     <div className="flex items-baseline gap-2">
                       <span className="text-3xl font-bold text-[#0F172A] tracking-tight font-ibm-plex-mono">
-                        £{priceExVat?.toFixed(2)}
+                        £{priceExVat.toFixed(2)}
                       </span>
                       <span className="font-ibm-plex-mono text-[10px] text-[#777] uppercase tracking-widest">
                         Ex. VAT
@@ -445,6 +468,20 @@ export default async function ProductDetailPage({ params, searchParams }: PagePr
                     </div>
                     <span className="font-ibm-plex-mono text-xs text-[#888]">
                       £{priceIncVat?.toFixed(2)} inc. 20% VAT
+                    </span>
+                  </div>
+                ) : priceExVat !== null && decision.action === 'REQUEST_AVAILABILITY' ? (
+                  <div>
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-3xl font-bold text-[#0F172A] tracking-tight font-ibm-plex-mono">
+                        £{priceExVat.toFixed(2)}
+                      </span>
+                      <span className="font-ibm-plex-mono text-[10px] text-[#777] uppercase tracking-widest">
+                        Ex. VAT
+                      </span>
+                    </div>
+                    <span className="font-ibm-plex-mono text-xs text-amber-700 font-semibold block">
+                      Awaiting Stock — Request Availability for Lead Time
                     </span>
                   </div>
                 ) : (

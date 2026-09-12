@@ -52,6 +52,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [items]);
 
   const addItem = useCallback((newItem: Omit<CartItem, 'quantity'>, qty: number = 1) => {
+    // Commercial safety invariant: Cart cannot accept £0, negative, or invalid price items
+    if (typeof newItem.price !== 'number' || isNaN(newItem.price) || newItem.price <= 0) {
+      console.warn(`[CartContext] Rejected unpriced or £0 commercial item: ${newItem.id} (${newItem.name})`);
+      return;
+    }
+
     const quantityToAdd = Math.max(1, qty);
     setItems(prev => {
       const existing = prev.find(i => i.id === newItem.id);

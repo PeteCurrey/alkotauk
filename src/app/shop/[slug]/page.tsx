@@ -47,7 +47,7 @@ export default async function PartDetailPage({ params }: { params: Promise<{ slu
 
   const imageUrl = part.image ? urlFor(part.image).width(800).height(800).url() : null;
 
-  const jsonLd = {
+  const jsonLd: Record<string, any> = {
     "@context": "https://schema.org",
     "@type": "Product",
     "name": part.name,
@@ -58,14 +58,25 @@ export default async function PartDetailPage({ params }: { params: Promise<{ slu
       "@type": "Brand",
       "name": "Alkota"
     },
-    "offers": {
+  };
+
+  if (decision.action === 'PURCHASE' && decision.priceExVat !== null) {
+    jsonLd.offers = {
       "@type": "Offer",
       "url": `https://alkota.co.uk/shop/${slug}`,
       "priceCurrency": "GBP",
-      "price": part.price,
+      "price": decision.priceExVat.toFixed(2),
       "availability": "https://schema.org/InStock"
-    }
-  };
+    };
+  } else if (decision.action === 'REQUEST_AVAILABILITY') {
+    jsonLd.offers = {
+      "@type": "Offer",
+      "url": `https://alkota.co.uk/shop/${slug}`,
+      "priceCurrency": "GBP",
+      ...(decision.priceExVat !== null ? { "price": decision.priceExVat.toFixed(2) } : {}),
+      "availability": "https://schema.org/OutOfStock"
+    };
+  }
 
   return (
     <main className="min-h-screen bg-alkota-black pt-20">

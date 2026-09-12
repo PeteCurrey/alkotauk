@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { ShoppingCart, Check, ShieldCheck, FileText, ArrowRight, Droplet, Plus, Minus } from 'lucide-react';
 import { ChemicalRetailProduct, ChemicalSKU } from '@/lib/types/chemical-commerce';
 import { usePartsRequest } from '@/components/parts/PartsRequestListContext';
+import { resolveProductAction } from '@/lib/commerce/action-resolver';
 
 interface Props {
   product: ChemicalRetailProduct;
@@ -71,12 +72,27 @@ export default function ProductLaunchHero({ product }: Props) {
   const [quantity, setQuantity] = useState<number>(1);
   const [added, setAdded] = useState(false);
 
+  const decision = resolveProductAction({
+    id: `${product.id}-${selectedSku.id}`,
+    part_number: selectedSku.sku_code,
+    name: `${product.retail_name} (${selectedSku.pack_size})`,
+    slug: product.slug,
+    product_type: 'CHEMICAL',
+    category: 'chemicals',
+    price: selectedSku.price,
+    in_stock: selectedSku.in_stock,
+    stock_quantity: selectedSku.stock_quantity,
+    active: product.status !== 'ARCHIVED' && selectedSku.active !== false,
+  });
+
   const handleAddToCart = () => {
+    if (decision.action !== 'PURCHASE' || !decision.price || decision.price <= 0) return;
+
     addItem({
       id: `${product.id}-${selectedSku.id}`,
       part_number: selectedSku.sku_code,
       name: `${product.retail_name} (${selectedSku.pack_size})`,
-      price_each: selectedSku.price,
+      price_each: decision.price,
       quantity: quantity,
       pack_size: selectedSku.pack_size,
       machine_context: `${product.retail_family} (${product.originating_master_code})`,
@@ -249,27 +265,37 @@ export default function ProductLaunchHero({ product }: Props) {
               </div>
 
               {/* Primary Action Button */}
-              <button
-                type="button"
-                onClick={handleAddToCart}
-                className={`w-full py-4 font-ibm-plex-mono text-xs uppercase tracking-widest font-semibold flex items-center justify-center gap-3 cursor-pointer rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile ${
-                  added
-                    ? 'bg-emerald-700 text-white'
-                    : 'bg-[#FF6900] hover:bg-[#1A1917] text-white shadow-[#FF6900]/20'
-                }`}
-              >
-                {added ? (
-                  <>
-                    <Check className="w-4 h-4" />
-                    <span>Added to Order ✓</span>
-                  </>
-                ) : (
-                  <>
-                    <ShoppingCart className="w-4 h-4" />
-                    <span>Add to Order — £{(selectedSku.price * quantity).toFixed(2)} ex VAT</span>
-                  </>
-                )}
-              </button>
+              {decision.action === 'PURCHASE' ? (
+                <button
+                  type="button"
+                  onClick={handleAddToCart}
+                  className={`w-full py-4 font-ibm-plex-mono text-xs uppercase tracking-widest font-semibold flex items-center justify-center gap-3 cursor-pointer rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile ${
+                    added
+                      ? 'bg-emerald-700 text-white'
+                      : 'bg-[#FF6900] hover:bg-[#1A1917] text-white shadow-[#FF6900]/20'
+                  }`}
+                >
+                  {added ? (
+                    <>
+                      <Check className="w-4 h-4" />
+                      <span>Added to Order ✓</span>
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingCart className="w-4 h-4" />
+                      <span>Add to Order — £{(selectedSku.price * quantity).toFixed(2)} ex VAT</span>
+                    </>
+                  )}
+                </button>
+              ) : (
+                <Link
+                  href={`/contact?subject=Chemical Enquiry: ${encodeURIComponent(product.retail_name)} (${selectedSku.sku_code})`}
+                  className="w-full py-4 font-ibm-plex-mono text-xs uppercase tracking-widest font-semibold flex items-center justify-center gap-3 cursor-pointer rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile bg-[#1A1917] hover:bg-[#FF6900] text-white"
+                >
+                  <span>{decision.label}</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              )}
 
               {/* Safety Sheet Quick Link */}
               <div className="pt-2 flex items-center justify-between text-xs font-ibm-plex-mono text-[#777]">

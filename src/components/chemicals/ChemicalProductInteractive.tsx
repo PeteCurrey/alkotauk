@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { ShoppingBag, Check, Plus, ShieldCheck, Truck, Sparkles } from 'lucide-react';
 import { ChemicalRetailProduct, ChemicalSKU } from '@/lib/types/chemical-commerce';
 import { useCart } from '@/context/CartContext';
+import { resolveProductAction } from '@/lib/commerce/action-resolver';
 
 interface Props {
   product: ChemicalRetailProduct;
@@ -20,8 +21,21 @@ export default function ChemicalProductInteractive({ product }: Props) {
   const price = selectedSku ? selectedSku.price : 0;
   const priceTotal = price * quantity;
 
+  const decision = resolveProductAction({
+    id: selectedSku ? `${product.id}-${selectedSku.id}` : product.id,
+    part_number: selectedSku?.sku_code || product.originating_master_code,
+    name: `${product.retail_name} (${selectedSku?.pack_size || ''})`,
+    slug: product.slug,
+    product_type: 'CHEMICAL',
+    category: 'chemicals',
+    price: selectedSku?.price ?? null,
+    in_stock: selectedSku?.in_stock ?? true,
+    stock_quantity: selectedSku?.stock_quantity ?? 20,
+    active: product.status !== 'ARCHIVED' && (selectedSku?.active !== false),
+  });
+
   const handleAddToCart = () => {
-    if (!selectedSku) return;
+    if (!selectedSku || decision.action !== 'PURCHASE' || !decision.price || decision.price <= 0) return;
 
     addItem({
       id: selectedSku.id,
@@ -29,7 +43,7 @@ export default function ChemicalProductInteractive({ product }: Props) {
       productSlug: product.slug,
       name: `${product.retail_name} (${selectedSku.pack_size})`,
       category: 'chemical',
-      price: selectedSku.price,
+      price: decision.price,
       quantity,
       variantName: selectedSku.pack_size,
       maxQuantity: selectedSku.stock_quantity || 20,
@@ -116,27 +130,36 @@ export default function ChemicalProductInteractive({ product }: Props) {
           </button>
         </div>
 
-        <button
-          type="button"
-          onClick={handleAddToCart}
-          className={`flex-1 py-4 px-8 font-ibm-plex-mono text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md ${
-            added
-              ? 'bg-emerald-600 text-white'
-              : 'bg-alkota-orange hover:bg-black text-white'
-          }`}
-        >
-          {added ? (
-            <>
-              <Check className="w-4 h-4" />
-              <span>Added to Basket</span>
-            </>
-          ) : (
-            <>
-              <ShoppingBag className="w-4 h-4" />
-              <span>Add to Basket (£{priceTotal.toFixed(2)})</span>
-            </>
-          )}
-        </button>
+        {decision.action === 'PURCHASE' ? (
+          <button
+            type="button"
+            onClick={handleAddToCart}
+            className={`flex-1 py-4 px-8 font-ibm-plex-mono text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md ${
+              added
+                ? 'bg-emerald-600 text-white'
+                : 'bg-alkota-orange hover:bg-black text-white'
+            }`}
+          >
+            {added ? (
+              <>
+                <Check className="w-4 h-4" />
+                <span>Added to Basket</span>
+              </>
+            ) : (
+              <>
+                <ShoppingBag className="w-4 h-4" />
+                <span>Add to Basket (£{priceTotal.toFixed(2)})</span>
+              </>
+            )}
+          </button>
+        ) : (
+          <a
+            href={`/contact?subject=Chemical Enquiry: ${encodeURIComponent(product.retail_name)} (${selectedSku?.sku_code})`}
+            className="flex-1 py-4 px-8 font-ibm-plex-mono text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md bg-alkota-black hover:bg-alkota-orange text-white text-center"
+          >
+            <span>{decision.label}</span>
+          </a>
+        )}
       </div>
 
       {/* Trust badging */}

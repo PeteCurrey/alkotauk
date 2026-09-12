@@ -5,7 +5,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Search, Plus, Check, Filter, X, ArrowRight, ShoppingCart, Wrench } from 'lucide-react';
 import { Part } from '@/lib/types/parts';
-import { usePartsRequest } from './PartsRequestListContext';
+import { resolveProductAction } from '@/lib/commerce/action-resolver';
+import ProductActionCTA from '@/components/commerce/ProductActionCTA';
 
 interface Props {
   initialParts: Partial<Part>[];
@@ -34,13 +35,11 @@ const BRANDS = [
 ];
 
 export default function FilterablePartsCatalogue({ initialParts }: Props) {
-  const { addItem, setIsDrawerOpen } = usePartsRequest();
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedBrand, setSelectedBrand] = useState('all');
   const [inStockOnly, setInStockOnly] = useState(false);
   const [sortOrder, setSortOrder] = useState<'default' | 'price_asc' | 'price_desc'>('default');
-  const [addedIds, setAddedIds] = useState<Record<string, boolean>>({});
 
   const filteredParts = useMemo(() => {
     return (initialParts || []).filter((part) => {
@@ -83,26 +82,6 @@ export default function FilterablePartsCatalogue({ initialParts }: Props) {
       return (a.sort_order ?? 99) - (b.sort_order ?? 99);
     });
   }, [initialParts, search, selectedCategory, selectedBrand, inStockOnly, sortOrder]);
-
-  const handleAddToCart = (part: Partial<Part>) => {
-    if (!part.id || !part.part_number || !part.name) return;
-
-    addItem({
-      id: part.id,
-      part_number: part.part_number,
-      name: part.name,
-      price_each: part.price ?? null,
-      quantity: 1,
-      image: part.image_url ?? undefined,
-      category: part.category,
-    });
-
-    setAddedIds((prev) => ({ ...prev, [part.id!]: true }));
-    setIsDrawerOpen(true);
-    setTimeout(() => {
-      setAddedIds((prev) => ({ ...prev, [part.id!]: false }));
-    }, 2000);
-  };
 
   const clearFilters = () => {
     setSearch('');
@@ -292,7 +271,9 @@ export default function FilterablePartsCatalogue({ initialParts }: Props) {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredParts.map((part) => {
-              const isAdded = addedIds[part.id!] ?? false;
+              const decision = resolveProductAction(part);
+              if (decision.action === 'HIDDEN') return null;
+
               return (
                 <div
                   key={part.id || part.slug}
@@ -304,9 +285,9 @@ export default function FilterablePartsCatalogue({ initialParts }: Props) {
                       <span className="text-[#FF6900] font-semibold uppercase">
                         {part.part_number}
                       </span>
-                      <span className={`flex items-center gap-1.5 ${part.in_stock ? 'text-emerald-700' : 'text-amber-700'}`}>
-                        <span className={`w-1.5 h-1.5 rounded-full ${part.in_stock ? 'bg-emerald-600' : 'bg-amber-600'}`} />
-                        <span>{part.in_stock ? 'In Stock' : 'Check Stock'}</span>
+                      <span className={`flex items-center gap-1.5 ${decision.action === 'PURCHASE' ? 'text-emerald-700' : 'text-amber-700'}`}>
+                        <span className={`w-1.5 h-1.5 rounded-full ${decision.action === 'PURCHASE' ? 'bg-emerald-600' : 'bg-amber-600'}`} />
+                        <span>{decision.action === 'PURCHASE' ? 'In Stock' : 'Check Stock'}</span>
                       </span>
                     </div>
 
@@ -357,21 +338,20 @@ export default function FilterablePartsCatalogue({ initialParts }: Props) {
                       <div>
                         <span className="font-ibm-plex-mono text-[10px] text-[#888] uppercase block">Trade Price</span>
                         <span className="font-ibm-plex-mono text-xl font-bold text-[#1A1917]">
-                          {part.price ? `£${part.price.toFixed(2)}` : 'POA'}
+                          {decision.priceExVat !== null ? `£${decision.priceExVat.toFixed(2)}` : 'POA'}
                         </span>
                       </div>
                       <span className="font-ibm-plex-mono text-[10px] text-[#777] uppercase">ex VAT</span>
                     </div>
 
                     <div className="grid grid-cols-2 gap-2">
-                      <button
-                        type="button"
-                        onClick={() => handleAddToCart(part)}
-                        className="w-full bg-[#FF6900] hover:bg-[#1A1917] text-white py-2.5 px-3 font-ibm-plex-mono text-[10px] uppercase tracking-wider transition-colors font-semibold flex items-center justify-center gap-1.5 cursor-pointer rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
-                      >
-                        <Plus className="w-3 h-3" />
-                        <span>{isAdded ? 'Added ✓' : 'Add to Order'}</span>
-                      </button>
+                      <ProductActionCTA
+                        product={part}
+                        decision={decision}
+                        variant="card"
+                        size="sm"
+                        className="w-full"
+                      />
 
                       <Link
                         href={`/parts-attachments/product/${part.slug || part.part_number?.toLowerCase()}`}

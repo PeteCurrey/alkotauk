@@ -25,6 +25,10 @@ export default function AddToCartButton({
   const [added, setAdded] = useState(false);
 
   const handleAdd = () => {
+    if (!price || price <= 0 || isNaN(price)) {
+      console.warn(`[AddToCartButton] Cannot add item without positive price: ${id} (${name})`);
+      return;
+    }
     addItem({ id, name, price, image, sku });
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);

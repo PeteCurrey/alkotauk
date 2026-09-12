@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { ShoppingBag, Check, Plus, Minus, ShieldCheck, Truck, Sparkles, Box, CheckCircle2 } from 'lucide-react';
 import { ChemicalRetailProduct, ChemicalSKU } from '@/lib/types/chemical-commerce';
 import { usePartsRequest } from '@/components/parts/PartsRequestListContext';
+import { resolveProductAction } from '@/lib/commerce/action-resolver';
 
 interface Props {
   product: ChemicalRetailProduct;
@@ -68,16 +69,31 @@ export default function ProductPackSelector({ product }: Props) {
   const [quantity, setQuantity] = useState<number>(1);
   const [added, setAdded] = useState(false);
 
+  const decision = resolveProductAction({
+    id: `${product.id}-${selectedSku.id}`,
+    part_number: selectedSku.sku_code,
+    name: `${product.retail_name} (${selectedSku.pack_size})`,
+    slug: product.slug,
+    product_type: 'CHEMICAL',
+    category: 'chemicals',
+    price: selectedSku.price,
+    in_stock: selectedSku.in_stock,
+    stock_quantity: selectedSku.stock_quantity,
+    active: product.status !== 'ARCHIVED' && selectedSku.active !== false,
+  });
+
   const priceExVat = selectedSku.price * quantity;
   const vat = priceExVat * 0.2;
   const priceIncVat = priceExVat + vat;
 
   const handleAddToCart = () => {
+    if (decision.action !== 'PURCHASE' || !decision.price || decision.price <= 0) return;
+
     addItem({
       id: `${product.id}-${selectedSku.id}`,
       part_number: selectedSku.sku_code,
       name: `${product.retail_name} (${selectedSku.pack_size})`,
-      price_each: selectedSku.price,
+      price_each: decision.price,
       quantity,
       pack_size: selectedSku.pack_size,
       machine_context: `${product.retail_family} (${product.originating_master_code})`,
@@ -219,27 +235,36 @@ export default function ProductPackSelector({ product }: Props) {
             </div>
 
             {/* Add to Basket CTA */}
-            <button
-              type="button"
-              onClick={handleAddToCart}
-              className={`px-8 py-4 text-xs font-ibm-plex-mono uppercase tracking-[0.2em] transition-all cursor-pointer inline-flex items-center justify-center gap-3 shrink-0 font-medium ${
-                added
-                  ? 'bg-emerald-600 text-white'
-                  : 'bg-alkota-orange hover:bg-white hover:text-black text-white shadow-lg'
-              }`}
-            >
-              {added ? (
-                <>
-                  <Check className="w-4 h-4" />
-                  <span>Added to Order</span>
-                </>
-              ) : (
-                <>
-                  <ShoppingBag className="w-4 h-4" />
-                  <span>Add to Order</span>
-                </>
-              )}
-            </button>
+            {decision.action === 'PURCHASE' ? (
+              <button
+                type="button"
+                onClick={handleAddToCart}
+                className={`px-8 py-4 text-xs font-ibm-plex-mono uppercase tracking-[0.2em] transition-all cursor-pointer inline-flex items-center justify-center gap-3 shrink-0 font-medium ${
+                  added
+                    ? 'bg-emerald-600 text-white'
+                    : 'bg-alkota-orange hover:bg-white hover:text-black text-white shadow-lg'
+                }`}
+              >
+                {added ? (
+                  <>
+                    <Check className="w-4 h-4" />
+                    <span>Added to Order</span>
+                  </>
+                ) : (
+                  <>
+                    <ShoppingBag className="w-4 h-4" />
+                    <span>Add to Order</span>
+                  </>
+                )}
+              </button>
+            ) : (
+              <a
+                href={`/contact?subject=Chemical Enquiry: ${encodeURIComponent(product.retail_name)} (${selectedSku.sku_code})`}
+                className="px-8 py-4 text-xs font-ibm-plex-mono uppercase tracking-[0.2em] transition-all cursor-pointer inline-flex items-center justify-center gap-3 shrink-0 font-medium bg-[#1A1917] hover:bg-alkota-orange text-white shadow-lg"
+              >
+                <span>{decision.label}</span>
+              </a>
+            )}
 
           </div>
 

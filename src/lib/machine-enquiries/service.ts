@@ -466,7 +466,7 @@ export function buildCanonicalEnquiryData(params: {
     } : {},
 
     // Selection & Revalidation
-    selector_version: params.selectorVersion || (hasReqs ? 'v6.3' : null),
+    selector_version: params.selectorVersion || (hasReqs || canonicalSource === 'MACHINE_SELECTOR' ? 'v6.3' : null),
     selection_outcome: selectionOutcome,
     revalidation_status: params.revalidation.revalidationResult.discrepancy_detected
       ? 'DISCREPANCY_DETECTED'

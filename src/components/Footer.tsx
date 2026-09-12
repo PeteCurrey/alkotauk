@@ -71,8 +71,8 @@ export default function Footer() {
               <li><Link href="/lobby" className="hover:text-white text-[#FF6900] transition-colors font-normal">The Lobby (Knowledge Hub)</Link></li>
               <li><Link href="/mess-quest" className="hover:text-white transition-colors">Mess Quest Video Series</Link></li>
               <li><Link href="/lobby#engineering-design" className="hover:text-white transition-colors">Schedule 80 Metallurgy</Link></li>
-              <li><Link href="/lobby#regulatory-compliance" className="hover:text-white transition-colors">Wash Bay Water Regs</Link></li>
-              <li><Link href="/tools/machine-match" className="hover:text-white transition-colors">Machine Matcher AI</Link></li>
+              <li><Link href="/machines/help-me-choose" className="hover:text-white transition-colors">Help Me Choose (Selector)</Link></li>
+              <li><Link href="/machines/compare" className="hover:text-white transition-colors">Compare Fleet</Link></li>
               <li><Link href="/tools/tco-calculator" className="hover:text-white transition-colors">TCO Fleet Calculator</Link></li>
             </ul>
           </div>

@@ -85,9 +85,18 @@ export async function searchParts(options: SearchOptions): Promise<SearchResult>
   const trimmedQuery = query.trim();
   const offset = (page - 1) * limit;
 
+  // Public storefront safe column projection (prevents leaking internal commercial data)
+  const PUBLIC_SAFE_COLUMNS = `
+    id, part_number, sku, mpn, name, slug, description, category, subcategory,
+    manufacturer, brand, price, vat_rate, in_stock, stock_type, availability_status,
+    superseded_by, weight_kg, dimensions_cm, specifications, technical_notes,
+    documents, compatible_machines, image_url, image_gallery, oem_genuine,
+    featured, is_attachment, tags, active, created_at, updated_at
+  `;
+
   let dbQuery = supabaseAdmin
     .from('parts')
-    .select('*', { count: 'exact' })
+    .select(PUBLIC_SAFE_COLUMNS, { count: 'exact' })
     .eq('active', true);
 
   // Exact filters
@@ -116,10 +125,16 @@ export async function searchParts(options: SearchOptions): Promise<SearchResult>
   }
 
   // Text search conditions
+  const cleanTerm = trimmedQuery.replace(/[^a-zA-Z0-9]/g, '');
+
   if (trimmedQuery) {
     // Check for synonym expansion
     const lowerQ = trimmedQuery.toLowerCase();
     const expansions = [trimmedQuery];
+    if (cleanTerm && cleanTerm !== trimmedQuery) {
+      expansions.push(cleanTerm);
+    }
+
     Object.entries(SYNONYMS).forEach(([term, syns]) => {
       if (lowerQ.includes(term)) {
         expansions.push(...syns);
@@ -129,13 +144,12 @@ export async function searchParts(options: SearchOptions): Promise<SearchResult>
     const searchClauses: string[] = [];
     expansions.forEach(term => {
       searchClauses.push(
-        `name.ilike.%${term}%`,
         `part_number.ilike.%${term}%`,
         `mpn.ilike.%${term}%`,
         `sku.ilike.%${term}%`,
+        `name.ilike.%${term}%`,
         `brand.ilike.%${term}%`,
         `manufacturer.ilike.%${term}%`,
-        `category.ilike.%${term}%`,
         `description.ilike.%${term}%`
       );
     });
@@ -159,14 +173,60 @@ export async function searchParts(options: SearchOptions): Promise<SearchResult>
       break;
     case 'relevance':
     default:
-      dbQuery = dbQuery.order('featured', { ascending: false }).order('sort_order', { ascending: true }).order('name', { ascending: true });
+      dbQuery = dbQuery
+        .order('featured', { ascending: false })
+        .order('sort_order', { ascending: true })
+        .order('name', { ascending: true });
       break;
   }
 
   // Pagination
   dbQuery = dbQuery.range(offset, offset + limit - 1);
 
-  const { data: parts, count, error } = await dbQuery;
+  const { data: rawParts, count, error } = await dbQuery;
+
+  let parts = (rawParts as Part[]) || [];
+
+  // Relevance Re-Ranking: Exact Part # / SKU / MPN Match goes strictly to Position #1
+  if (trimmedQuery && sortBy === 'relevance' && parts.length > 1) {
+    const qUpper = trimmedQuery.toUpperCase();
+    const qClean = cleanTerm.toUpperCase();
+
+    parts = [...parts].sort((a, b) => {
+      const aPn = (a.part_number || '').toUpperCase();
+      const bPn = (b.part_number || '').toUpperCase();
+      const aSku = (a.sku || '').toUpperCase();
+      const bSku = (b.sku || '').toUpperCase();
+      const aMpn = (a.mpn || '').toUpperCase();
+      const bMpn = (b.mpn || '').toUpperCase();
+
+      // 1. Exact Part Number match
+      const aExactPn = aPn === qUpper || aPn.replace(/[^A-Z0-9]/g, '') === qClean;
+      const bExactPn = bPn === qUpper || bPn.replace(/[^A-Z0-9]/g, '') === qClean;
+      if (aExactPn && !bExactPn) return -1;
+      if (!aExactPn && bExactPn) return 1;
+
+      // 2. Exact SKU / MPN match
+      const aExactSku = aSku === qUpper || aMpn === qUpper;
+      const bExactSku = bSku === qUpper || bMpn === qUpper;
+      if (aExactSku && !bExactSku) return -1;
+      if (!aExactSku && bExactSku) return 1;
+
+      // 3. Prefix Part Number match
+      const aStartsPn = aPn.startsWith(qUpper);
+      const bStartsPn = bPn.startsWith(qUpper);
+      if (aStartsPn && !bStartsPn) return -1;
+      if (!aStartsPn && bStartsPn) return 1;
+
+      // 4. Exact Word in Title match
+      const aNameHas = a.name?.toLowerCase().includes(trimmedQuery.toLowerCase());
+      const bNameHas = b.name?.toLowerCase().includes(trimmedQuery.toLowerCase());
+      if (aNameHas && !bNameHas) return -1;
+      if (!aNameHas && bNameHas) return 1;
+
+      return 0;
+    });
+  }
 
   const totalCount = count || 0;
   const totalPages = Math.ceil(totalCount / limit) || 1;

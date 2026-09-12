@@ -1,0 +1,76 @@
+{
+  "audited_at": "2026-09-10T18:49:28.059Z",
+  "source_count": 127,
+  "categories": {
+    "hot-water": 39,
+    "cold-water": 31,
+    "steam": 10,
+    "space-heater": 1,
+    "water-heater": 14,
+    "parts-washer": 22,
+    "trailer": 5,
+    "water-treatment": 5
+  },
+  "verification_status": {
+    "verified": 121,
+    "verified_with_minor_gaps": 6,
+    "needs_review": 0,
+    "source_unavailable": 0,
+    "legacy_uk": 0
+  },
+  "quality_scores": {
+    "average": 97.3,
+    "min": 80,
+    "max": 100,
+    "by_category": {
+      "hot-water": {
+        "count": 39,
+        "avg_score": 98.38461538461539
+      },
+      "cold-water": {
+        "count": 31,
+        "avg_score": 97.80645161290323
+      },
+      "steam": {
+        "count": 10,
+        "avg_score": 100
+      },
+      "space-heater": {
+        "count": 1,
+        "avg_score": 80
+      },
+      "water-heater": {
+        "count": 14,
+        "avg_score": 99.28571428571429
+      },
+      "parts-washer": {
+        "count": 22,
+        "avg_score": 95
+      },
+      "trailer": {
+        "count": 5,
+        "avg_score": 95
+      },
+      "water-treatment": {
+        "count": 5,
+        "avg_score": 91.8
+      }
+    }
+  },
+  "metrics": {
+    "total": 127,
+    "published": 127,
+    "active": 127,
+    "needs_review": 0,
+    "has_primary_image": 127,
+    "missing_primary_image": 0,
+    "has_pdf_spec": 121,
+    "unlinked_manufacturer_pdfs": 6,
+    "missing_pdf_spec": 0,
+    "category_specs_verified": 127,
+    "category_specs_incomplete": 0,
+    "duplicate_slugs": [],
+    "duplicate_model_codes": []
+  },
+  "flagged_machines": []
+}

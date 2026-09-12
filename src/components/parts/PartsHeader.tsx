@@ -17,6 +17,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import Logo from '@/components/Logo';
 import { usePartsRequest } from './PartsRequestListContext';
+import { useCart } from '@/context/CartContext';
 import { MASTER_TAXONOMY } from '@/lib/parts/taxonomy';
 
 const EXPLORE_LINKS = [
@@ -40,6 +41,7 @@ export default function PartsHeader() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { totalItemsCount, setIsDrawerOpen } = usePartsRequest();
+  const { itemCount: cartCount, openCart } = useCart();
 
   const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -68,17 +70,30 @@ export default function PartsHeader() {
     }
   };
 
-  const isLight = !isScrolled;
+  const cleanPath = pathname?.replace(/\/$/, '') || '';
+  const isDarkHeroPage =
+    cleanPath === '/parts-attachments' ||
+    cleanPath.startsWith('/parts-attachments/categories') ||
+    cleanPath.startsWith('/parts-attachments/brands') ||
+    cleanPath.startsWith('/parts-attachments/machines') ||
+    cleanPath.startsWith('/parts-attachments/applications') ||
+    cleanPath.startsWith('/parts-attachments/chemicals') ||
+    cleanPath.startsWith('/parts-attachments/search');
+
+  const isSolid = isScrolled || megaMenuOpen;
+  const isLight = !isSolid && !isDarkHeroPage;
 
   return (
     <header className={`fixed top-0 z-50 w-full font-sans select-none transition-all duration-300 ${
-      isScrolled
+      isSolid
         ? 'bg-black/85 backdrop-blur-md border-b border-white/10 shadow-xl text-white'
-        : 'bg-transparent border-b-0 shadow-none text-alkota-black'
+        : isLight
+        ? 'bg-transparent border-b-0 shadow-none text-alkota-black'
+        : 'bg-gradient-to-b from-black/80 via-black/40 to-transparent border-b-0 shadow-none text-white'
     }`}>
       {/* ── TOP UTILITY STRIP ── */}
       <div className={`px-4 sm:px-8 py-1.5 text-[11px] font-ibm-plex-mono flex items-center justify-between transition-all duration-300 ${
-        isScrolled
+        isSolid
           ? 'bg-black/40 border-b border-white/5 text-[#AAA]'
           : isLight
           ? 'bg-transparent border-b-0 text-[#666]'
@@ -219,27 +234,42 @@ export default function PartsHeader() {
           </form>
         </div>
 
-        {/* Right: Cart & Mobile Hamburger */}
-        <div className="flex items-center gap-3">
-          {/* Shopping Cart Drawer Trigger */}
+        {/* Right: Cart, Enquiry & Mobile Hamburger */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          {/* Enquiry List Trigger (if items present) */}
+          {totalItemsCount > 0 && (
+            <button
+              type="button"
+              onClick={() => setIsDrawerOpen(true)}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[#FAF9F5] hover:bg-[#F4F1EA] text-[#0F172A] border border-[#CBD5E1] rounded-[4px] font-ibm-plex-mono text-[10px] uppercase tracking-wider font-semibold transition-all cursor-pointer"
+              title="Open Parts Enquiry Desk"
+            >
+              <span>Enquiry</span>
+              <span className="bg-[#0F172A] text-white h-4 px-1.5 rounded-full flex items-center justify-center text-[9px]">
+                {totalItemsCount}
+              </span>
+            </button>
+          )}
+
+          {/* Ecommerce Shopping Cart Trigger */}
           <button
             type="button"
-            onClick={() => setIsDrawerOpen(true)}
+            onClick={openCart}
             className={`flex items-center gap-2 px-3.5 py-2 transition-all cursor-pointer border group rounded-[4px] btn-tactile shadow-button hover:shadow-button-hover ${
               isLight
-                ? 'bg-black/5 hover:bg-alkota-orange text-alkota-black hover:text-white border-black/15'
-                : 'bg-white/10 hover:bg-alkota-orange text-white border-white/15'
+                ? 'bg-black/5 hover:bg-[#FF6900] text-[#0F172A] hover:text-white border-black/15'
+                : 'bg-white/10 hover:bg-[#FF6900] text-white border-white/15'
             }`}
-            title="Open Shopping Cart"
-            aria-label="Open Shopping Cart"
+            title="Open Basket"
+            aria-label="Open Basket"
           >
-            <ShoppingCart className="w-4 h-4 text-alkota-orange group-hover:text-white" />
+            <ShoppingCart className="w-4 h-4 text-[#FF6900] group-hover:text-white" />
             <span className="font-ibm-plex-mono text-xs uppercase tracking-wider hidden sm:inline font-medium">
-              Cart
+              Basket
             </span>
-            {totalItemsCount > 0 && (
-              <span className="bg-alkota-orange text-white text-[10px] font-ibm-plex-mono font-normal h-4 w-4 rounded-full flex items-center justify-center">
-                {totalItemsCount}
+            {cartCount > 0 && (
+              <span className="bg-[#FF6900] text-white text-[10px] font-ibm-plex-mono font-bold h-4.5 px-1.5 rounded-full flex items-center justify-center">
+                {cartCount}
               </span>
             )}
           </button>

@@ -21,6 +21,10 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'pulpjomffnwtivqyqyam.supabase.co',
+      },
+      {
+        protocol: 'https',
         hostname: 'easttnchemicals.com',
       },
     ],

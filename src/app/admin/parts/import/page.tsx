@@ -36,54 +36,98 @@ COX-1125,Manual Hose Reel 100ft,Cox Reels,hoses,185.00,15`;
     setPublishStatus('');
 
     try {
-      // 1. Fetch current parts to check duplicates against
-      const res = await fetch('/api/admin/parts/categories');
-      // Simple parse CSV lines
       const lines = csvText.trim().split('\n');
-      const header = lines[0].split(',').map(h => h.trim().toLowerCase());
-      
       const parsed: any[] = [];
       for (let i = 1; i < lines.length; i++) {
         const row = lines[i].split(',').map(r => r.trim());
-        if (row.length >= 5) {
+        if (row.length >= 4) {
           const sku = row[0];
           const title = row[1];
           const brand = row[2];
           const category = row[3];
           const cost = parseFloat(row[4]) || 0;
           const stock = parseInt(row[5], 10) || 0;
-          const retail = cost / (1 - defaultMargin / 100);
-
-          // Run client duplicate test simulation
-          const isDup = sku.includes('101') || sku.includes('VRT3');
+          const retail = cost > 0 ? Number((cost / (1 - defaultMargin / 100)).toFixed(2)) : null;
 
           parsed.push({
-            id: `staged-${i}`,
-            supplier_sku: sku,
-            raw_title: title,
-            raw_brand: brand,
-            raw_category: category,
-            cost_price: cost,
-            calculated_retail: Number(retail.toFixed(2)),
+            part_number: sku,
+            sku: sku,
+            name: title,
+            brand: brand.toLowerCase().replace(/\s+/g, '-'),
+            category: category.toLowerCase().replace(/\s+/g, '-'),
+            cost_price: cost > 0 ? cost : null,
+            price: retail,
             stock_quantity: stock,
-            is_duplicate: isDup,
-            duplicate_reason: isDup ? 'Matched Existing MPN in Catalogue' : 'Unique Item (New Product)',
-            confidence: isDup ? 0.95 : 0.0,
-            status: isDup ? 'matched_duplicate' : 'new_product',
+            in_stock: stock > 0,
           });
         }
       }
 
-      setStagedItems(parsed);
+      const res = await fetch('/api/admin/parts/import', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mode: 'validate', items: parsed, supplier_slug: supplier }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Validation failed');
+
+      setStagedItems(data.preview.map((p: any, idx: number) => ({
+        id: `staged-${idx}`,
+        supplier_sku: p.part_number,
+        raw_title: p.name,
+        raw_brand: parsed[idx]?.brand || 'alkota',
+        raw_category: p.category,
+        cost_price: parsed[idx]?.cost_price || 0,
+        calculated_retail: p.new_price || 0,
+        stock_quantity: parsed[idx]?.stock_quantity || 0,
+        is_duplicate: p.status === 'update',
+        duplicate_reason: p.status === 'update' ? p.changes : 'Unique New SKU',
+        confidence: p.status === 'update' ? 1.0 : 0.0,
+        status: p.status === 'update' ? 'matched_duplicate' : 'new_product',
+        raw_payload: parsed[idx],
+      })));
     } catch (err: any) {
       console.error(err);
+      setPublishStatus(`Validation Error: ${err.message}`);
     } finally {
       setAnalyzing(false);
     }
   };
 
-  const handlePublishAll = () => {
-    setPublishStatus(`✓ Successfully validated and published ${stagedItems.filter(s => !s.is_duplicate).length} new products and mapped ${stagedItems.filter(s => s.is_duplicate).length} supplier feeds.`);
+  const handlePublishAll = async () => {
+    if (stagedItems.length === 0) return;
+    setAnalyzing(true);
+    setPublishStatus('');
+
+    try {
+      const itemsToCommit = stagedItems.map(s => s.raw_payload || {
+        part_number: s.supplier_sku,
+        name: s.raw_title,
+        brand: s.raw_brand,
+        category: s.raw_category,
+        cost_price: s.cost_price,
+        price: s.calculated_retail,
+        stock_quantity: s.stock_quantity,
+        in_stock: s.stock_quantity > 0,
+      });
+
+      const res = await fetch('/api/admin/parts/import', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mode: 'commit', items: itemsToCommit, supplier_slug: supplier }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Commit failed');
+
+      setPublishStatus(`✓ Successfully committed ${data.committed} catalogue products to Supabase.`);
+      setStagedItems([]);
+    } catch (err: any) {
+      setPublishStatus(`Commit Error: ${err.message}`);
+    } finally {
+      setAnalyzing(false);
+    }
   };
 
   return (

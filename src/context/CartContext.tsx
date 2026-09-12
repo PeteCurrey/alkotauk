@@ -15,7 +15,7 @@ interface CartContextValue {
   items: CartItem[];
   itemCount: number;
   subtotal: number;
-  addItem: (item: Omit<CartItem, 'quantity'>) => void;
+  addItem: (item: Omit<CartItem, 'quantity'>, quantity?: number) => void;
   removeItem: (id: string) => void;
   updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
@@ -51,15 +51,16 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   }, [items]);
 
-  const addItem = useCallback((newItem: Omit<CartItem, 'quantity'>) => {
+  const addItem = useCallback((newItem: Omit<CartItem, 'quantity'>, qty: number = 1) => {
+    const quantityToAdd = Math.max(1, qty);
     setItems(prev => {
       const existing = prev.find(i => i.id === newItem.id);
       if (existing) {
         return prev.map(i =>
-          i.id === newItem.id ? { ...i, quantity: i.quantity + 1 } : i
+          i.id === newItem.id ? { ...i, quantity: i.quantity + quantityToAdd } : i
         );
       }
-      return [...prev, { ...newItem, quantity: 1 }];
+      return [...prev, { ...newItem, quantity: quantityToAdd }];
     });
     setIsOpen(true);
   }, []);

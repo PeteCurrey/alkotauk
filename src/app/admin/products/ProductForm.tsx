@@ -184,6 +184,7 @@ const INITIAL: Partial<Product> = {
   certifications: ['CE', 'UKCA'], extra_specs: [], features: [], options: [], applications: [], industries: [],
   primary_image_url: '', cutout_image_url: '', gallery_images: [], pdf_spec_url: '', pdf_manual_url: '',
   meta_title: '', meta_description: '', canonical_url: '', no_index: false, sort_order: 0,
+  source_url: '', source_last_checked: '', migration_status: 'new', needs_review: false,
 };
 
 export default function ProductForm({ initial, id }: { initial?: Partial<Product>; id?: string }) {
@@ -652,7 +653,61 @@ export default function ProductForm({ initial, id }: { initial?: Partial<Product
             </div>
           </SectionCard>
 
-          {/* Section 5: SEO Suite & SERP Preview */}
+          {/* Section 5: Source Provenance & Ingestion */}
+          <SectionCard title="Source Provenance & Quality Review" badge="Ingestion Engine">
+            <div className="space-y-4">
+              <Field label="Alkota USA Source URL" note="Authoritative engineering page on alkota.com">
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={form.source_url || ''}
+                    readOnly
+                    placeholder="https://alkota.com/products/..."
+                    className="flex-1 bg-[#F6F7F9] border border-[#E6E8EC] rounded-xl text-[#0F172A] px-4 py-2.5 text-xs font-mono select-all focus:outline-none"
+                  />
+                  {form.source_url && (
+                    <a
+                      href={form.source_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-3.5 py-2.5 bg-[#FF6900]/10 hover:bg-[#FF6900] text-[#FF6900] hover:text-white rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 shrink-0"
+                    >
+                      <ExternalLink className="h-3.5 w-3.5" />
+                      <span>Open</span>
+                    </a>
+                  )}
+                </div>
+              </Field>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <Field label="Migration Status">
+                  <div className="p-3 bg-[#F6F7F9] border border-[#E6E8EC] rounded-xl text-xs font-mono flex items-center justify-between">
+                    <span className="font-bold text-[#0F172A] uppercase">{form.migration_status || 'new'}</span>
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800 uppercase">
+                      Ingested
+                    </span>
+                  </div>
+                </Field>
+
+                <Field label="Last Upstream Check">
+                  <div className="p-3 bg-[#F6F7F9] border border-[#E6E8EC] rounded-xl text-xs font-mono text-[#64748B]">
+                    {form.source_last_checked ? new Date(form.source_last_checked).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Verified at Seed'}
+                  </div>
+                </Field>
+              </div>
+
+              <div className="pt-3 border-t border-[#F0F2F5]">
+                <Toggle
+                  value={form.needs_review || false}
+                  onChange={v => set('needs_review', v)}
+                  label="Flag for Editorial Review"
+                  sub="Requires manual verification of specifications or visual imagery"
+                />
+              </div>
+            </div>
+          </SectionCard>
+
+          {/* Section 6: SEO Suite & SERP Preview */}
           <SectionCard title="SEO & Google SERP Preview" badge="Rankings">
             <Field label="Meta Title" note={`${(form.meta_title || '').length}/60 recommended characters`}>
               <input

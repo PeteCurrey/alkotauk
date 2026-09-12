@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation';
 import { client, urlFor } from '@/sanity/client';
 import Navigation from '@/components/Navigation';
 import AddToCartButton from '@/components/AddToCartButton';
+import { resolveProductAction } from '@/lib/commerce/action-resolver';
+import Link from 'next/link';
 import { CheckCircle2, ShieldCheck, Truck } from 'lucide-react';
 import Breadcrumbs from '@/components/Breadcrumbs';
 
@@ -33,6 +35,15 @@ export default async function PartDetailPage({ params }: { params: Promise<{ slu
   if (!part) {
     notFound();
   }
+
+  const decision = resolveProductAction({
+    id: part._id,
+    name: part.name,
+    price: part.price,
+    part_number: part.sku,
+    active: true,
+    in_stock: true,
+  });
 
   const imageUrl = part.image ? urlFor(part.image).width(800).height(800).url() : null;
 
@@ -99,8 +110,14 @@ export default async function PartDetailPage({ params }: { params: Promise<{ slu
             <p className="mb-2 text-sm text-alkota-iron">SKU: {part.sku}</p>
             
             <div className="mb-8 mt-4 text-3xl font-bold text-white">
-              £{part.price.toFixed(2)}
-              <span className="ml-2 text-sm font-normal text-secondary italic">Excl. VAT</span>
+              {decision.priceExVat !== null ? (
+                <>
+                  £{decision.priceExVat.toFixed(2)}
+                  <span className="ml-2 text-sm font-normal text-secondary italic">Excl. VAT</span>
+                </>
+              ) : (
+                <span className="text-xl text-alkota-silver">Price on Application</span>
+              )}
             </div>
 
             <div className="mb-8 prose prose-invert max-w-none text-secondary">
@@ -108,13 +125,22 @@ export default async function PartDetailPage({ params }: { params: Promise<{ slu
             </div>
 
             <div className="mb-10">
-              <AddToCartButton 
-                id={part._id}
-                name={part.name}
-                price={part.price}
-                image={imageUrl || undefined}
-                sku={part.sku}
-              />
+              {decision.action === 'PURCHASE' && decision.priceExVat ? (
+                <AddToCartButton 
+                  id={part._id}
+                  name={part.name}
+                  price={decision.priceExVat}
+                  image={imageUrl || undefined}
+                  sku={part.sku}
+                />
+              ) : (
+                <Link
+                  href={`/contact?subject=Enquiry: ${encodeURIComponent(part.name)} (${part.sku})`}
+                  className="flex w-full items-center justify-center gap-2 border border-alkota-orange bg-transparent py-4 text-sm font-black uppercase tracking-widest text-alkota-orange transition-all duration-200 hover:bg-alkota-orange hover:text-white rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
+                >
+                  {decision.label}
+                </Link>
+              )}
             </div>
 
             {/* Features */}

@@ -22,6 +22,9 @@ export const metadata: Metadata = {
 
 import { PartsRequestProvider } from "@/components/parts/PartsRequestListContext";
 import PartsRequestDrawer from "@/components/parts/PartsRequestDrawer";
+import CartDrawer from "@/components/CartDrawer";
+import { ComparisonProvider } from "@/lib/comparison/context";
+import ComparisonDock from "@/components/comparison/ComparisonDock";
 
 export default function RootLayout({
   children,
@@ -42,10 +45,14 @@ export default function RootLayout({
         <SessionProvider>
           <CartProvider>
             <PartsRequestProvider>
-              <div className="flex-1 flex flex-col">
-                {children}
-              </div>
-              <PartsRequestDrawer />
+              <ComparisonProvider>
+                <div className="flex-1 flex flex-col">
+                  {children}
+                </div>
+                <PartsRequestDrawer />
+                <CartDrawer />
+                <ComparisonDock />
+              </ComparisonProvider>
             </PartsRequestProvider>
           </CartProvider>
         </SessionProvider>

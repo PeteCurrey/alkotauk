@@ -347,11 +347,11 @@ export default function Navigation() {
 
                       <div className="space-y-2.5 font-normal">
                         <Link
-                          href="/tools/machine-match"
+                          href="/machines/help-me-choose"
                           onClick={() => setActiveMenu(null)}
                           className="flex items-center justify-between w-full bg-alkota-orange text-white px-4 py-3 font-mono text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-colors no-underline font-medium shadow-md rounded-[4px] btn-tactile"
                         >
-                          <span>Run Machine Match</span>
+                          <span>Help Me Choose</span>
                           <ArrowRight className="h-3.5 w-3.5" />
                         </Link>
                         <Link

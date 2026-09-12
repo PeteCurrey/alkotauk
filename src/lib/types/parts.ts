@@ -103,12 +103,39 @@ export interface Part {
   retail_url?: string | null;
   active: boolean;
   sort_order?: number;
+  data_quality_score?: number | null;
+  needs_review?: boolean;
+  review_flags?: string[];
+  review_notes?: string | null;
+  catalogue_source?: string | null;
+  catalogue_page?: string | null;
+  catalogue_section?: string | null;
   preferred_supplier_id?: string | null;
   last_supplier_sync?: string | null;
   last_price_update?: string | null;
+  source_type?: 'manual' | 'manufacturer_catalogue' | 'supplier_feed' | 'spec_sheet' | 'pdf_extract' | 'seed_v2' | 'supplier_import';
+  source_url?: string | null;
+  source_document?: string | null;
+  source_reference?: string | null;
+  source_last_checked?: string | null;
+  source_version?: string | null;
+  manual_override_fields?: string[];
+  publication_status?: PublicationStatus;
   created_at?: string;
   updated_at?: string;
 }
+
+export type PublicationStatus =
+  | 'draft'
+  | 'needs_review'
+  | 'ready'
+  | 'published'
+  | 'request_availability'
+  | 'request_quote'
+  | 'out_of_stock'
+  | 'discontinued'
+  | 'superseded'
+  | 'archived';
 
 export interface BrandPartner {
   id: string;
@@ -220,6 +247,17 @@ export interface ImportBatch {
   products_duplicate: number;
   products_failed: number;
   products_requiring_review: number;
+  records_received?: number;
+  records_valid?: number;
+  records_invalid?: number;
+  records_duplicates?: number;
+  records_new?: number;
+  records_review?: number;
+  records_approved?: number;
+  records_published?: number;
+  records_rejected?: number;
+  source_version?: string | null;
+  source_document?: string | null;
   error_message?: string | null;
   notes?: string | null;
   metadata?: Record<string, any>;
@@ -233,6 +271,7 @@ export interface StagedSupplierProduct {
   supplier_id: string;
   batch_id?: string | null;
   supplier_sku: string;
+  spn?: string | null;
   raw_title: string;
   raw_description?: string | null;
   raw_category?: string | null;
@@ -266,11 +305,42 @@ export interface StagedSupplierProduct {
   admin_action_at?: string | null;
   published_at?: string | null;
   raw_payload?: Record<string, any>;
+  raw_specs?: Record<string, any>;
+  provenance?: Record<string, any>;
+  source_reference?: string | null;
+  source_document?: string | null;
   created_at: string;
   updated_at?: string;
   supplier?: Supplier;
   matched_part?: Part;
   batch?: ImportBatch;
+}
+
+export interface PartAuditLog {
+  id: string;
+  part_id?: string | null;
+  part_number: string;
+  action: string;
+  changed_field: string;
+  old_value?: string | null;
+  new_value?: string | null;
+  changed_by: string;
+  source?: string | null;
+  notes?: string | null;
+  created_at: string;
+}
+
+export interface SupplierCategoryMapping {
+  id: string;
+  supplier_id: string;
+  raw_category: string;
+  alkota_category_slug?: string | null;
+  alkota_subcategory?: string | null;
+  is_verified: boolean;
+  verified_by?: string | null;
+  notes?: string | null;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface AIDecisionLog {

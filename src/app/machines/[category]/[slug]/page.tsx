@@ -26,6 +26,8 @@ import {
 import { resolveMachineImage } from '@/lib/images';
 import SeenInRealWorld from '@/components/mess-quest/SeenInRealWorld';
 import MachineDetailPricingCta from '@/components/MachineDetailPricingCta';
+import { getMachineEcosystem } from '@/lib/relationships/service';
+import MachineEcosystemSection from '@/components/machine-detail/MachineEcosystemSection';
 
 interface MachineDetailPageProps {
   params: Promise<{
@@ -70,6 +72,9 @@ export default async function MachineDetailPage({ params }: MachineDetailPagePro
     .filter(m => m.slug !== machine.slug)
     .slice(0, 3);
 
+  // Fetch verified product compatibility and general relationships ecosystem
+  const ecosystem = await getMachineEcosystem(machine.slug);
+
   const catInfo = CANONICAL_CATEGORIES[machine.category];
   const categoryLabel = catInfo?.name || category.replace('-', ' ');
 
@@ -97,7 +102,6 @@ export default async function MachineDetailPage({ params }: MachineDetailPagePro
       '@type': 'Organization',
       name: 'Alkota Cleaning Systems Inc.'
     },
-    category: categoryLabel,
     offers: {
       '@type': 'AggregateOffer',
       priceCurrency: 'GBP',
@@ -106,9 +110,35 @@ export default async function MachineDetailPage({ params }: MachineDetailPagePro
     }
   };
 
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Machines',
+        item: 'https://alkota.co.uk/machines'
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: categoryLabel,
+        item: `https://alkota.co.uk/machines/${category}`
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: `Alkota ${modelCode}`,
+        item: `https://alkota.co.uk/machines/${category}/${slug}`
+      }
+    ]
+  };
+
   return (
     <main className="min-h-screen bg-alkota-bg pt-32 pb-0 overflow-x-hidden relative">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
       <Navigation />
       
       {/* Background Watermark */}
@@ -395,6 +425,27 @@ export default async function MachineDetailPage({ params }: MachineDetailPagePro
               </tbody>
             </table>
           </div>
+
+          {/* Additional Dynamic Technical Specifications */}
+          {Array.isArray(machine.extra_specs) && machine.extra_specs.length > 0 && (
+            <div className="mt-8 bg-white border border-alkota-iron p-8">
+              <span className="font-ibm-plex-mono text-[9px] font-black uppercase tracking-[0.3em] text-alkota-orange block mb-4">
+                // DETAILED ENGINEERING DATA
+              </span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {machine.extra_specs.map((s: any, idx: number) => (
+                  <div key={idx} className="border-b border-alkota-iron/60 pb-3">
+                    <span className="font-ibm-plex-mono text-[10px] font-bold text-alkota-silver uppercase tracking-wider block mb-1">
+                      {s.label}
+                    </span>
+                    <span className="font-inter text-xs font-semibold text-alkota-black">
+                      {s.value}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </section>
 
         {/* ── 5. APPLICATIONS & FEATURES ───────────────────────────────────── */}
@@ -436,49 +487,104 @@ export default async function MachineDetailPage({ params }: MachineDetailPagePro
           </div>
         </section>
 
-        {/* ── 6. RELATED MACHINES ──────────────────────────────────────────── */}
-        {relatedMachines.length > 0 && (
-          <section className="mt-40">
-            <div className="mb-12 flex items-center justify-between border-b border-alkota-iron pb-6">
+        {/* ── 5.1 TECHNICAL DOCUMENTS & OPERATIONAL RESOURCES ──────────────── */}
+        {(machine.pdf_spec_url || machine.pdf_brochure_url || machine.pdf_manual_url) && (
+          <section className="mt-32 bg-[#111] text-white p-10 border border-[#222]">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 border-b border-white/10 pb-6">
               <div>
                 <span className="font-ibm-plex-mono text-[9px] font-black uppercase tracking-[0.3em] text-alkota-orange block mb-2">
-                  // FLEET ALTERNATIVES
+                  // TECHNICAL ARCHIVE
                 </span>
-                <h3 className="font-barlow-condensed text-4xl font-black uppercase italic text-alkota-black">
-                  Related {categoryLabel}
-                </h3>
+                <h4 className="font-barlow-condensed text-3xl font-black uppercase italic text-white">
+                  Engineering Documentation & Downloads
+                </h4>
               </div>
-              <Link href={`/machines/${category}`} className="text-xs font-black uppercase tracking-widest text-alkota-orange hover:underline">
-                View All {categoryLabel} →
-              </Link>
+              <p className="font-ibm-plex-mono text-xs text-[#888] uppercase tracking-wider">
+                Official Alkota Factory Publications
+              </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-alkota-iron border border-alkota-iron">
-              {relatedMachines.map((rel, i) => (
-                <div key={rel.slug} className="bg-white p-8 flex flex-col justify-between group hover:bg-alkota-steel/40 transition-colors">
-                  <div>
-                    <span className="font-ibm-plex-mono text-[9px] font-bold text-alkota-orange uppercase tracking-widest block mb-2">
-                      {rel.model_code}
-                    </span>
-                    <h5 className="font-barlow-condensed text-3xl font-black uppercase italic text-alkota-black mb-4">
-                      {rel.name}
-                    </h5>
-                    <p className="font-inter text-[11px] text-alkota-silver line-clamp-2 uppercase tracking-wider mb-6">
-                      {rel.tagline || rel.description}
-                    </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {machine.pdf_spec_url && (
+                <a
+                  href={machine.pdf_spec_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between bg-white/5 border border-white/10 p-5 hover:border-alkota-orange hover:bg-white/10 transition-all group no-underline text-white"
+                >
+                  <div className="flex items-center gap-4">
+                    <FileText className="h-6 w-6 text-alkota-orange group-hover:scale-110 transition-transform" />
+                    <div>
+                      <span className="font-barlow-condensed text-lg font-black uppercase tracking-wide block">
+                        Technical Specification Sheet
+                      </span>
+                      <span className="font-ibm-plex-mono text-[10px] text-[#888] uppercase">
+                        PDF Download · Factory Specs
+                      </span>
+                    </div>
                   </div>
-                  <Link 
-                    href={`/machines/${rel.category}/${rel.slug}`}
-                    className="flex items-center justify-between border border-alkota-iron p-3 text-[10px] font-black uppercase tracking-widest text-alkota-black group-hover:bg-alkota-orange group-hover:text-white group-hover:border-alkota-orange transition-colors"
-                  >
-                    <span>View Specifications</span>
-                    <ArrowRight className="h-3 w-3" />
-                  </Link>
-                </div>
-              ))}
+                  <Download className="h-4 w-4 text-alkota-silver group-hover:text-white transition-colors" />
+                </a>
+              )}
+
+              {machine.pdf_brochure_url && machine.pdf_brochure_url !== machine.pdf_spec_url && (
+                <a
+                  href={machine.pdf_brochure_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between bg-white/5 border border-white/10 p-5 hover:border-alkota-orange hover:bg-white/10 transition-all group no-underline text-white"
+                >
+                  <div className="flex items-center gap-4">
+                    <FileText className="h-6 w-6 text-alkota-orange group-hover:scale-110 transition-transform" />
+                    <div>
+                      <span className="font-barlow-condensed text-lg font-black uppercase tracking-wide block">
+                        Series Product Brochure
+                      </span>
+                      <span className="font-ibm-plex-mono text-[10px] text-[#888] uppercase">
+                        PDF Download · Full Lineup
+                      </span>
+                    </div>
+                  </div>
+                  <Download className="h-4 w-4 text-alkota-silver group-hover:text-white transition-colors" />
+                </a>
+              )}
+
+              {machine.pdf_manual_url && (
+                <a
+                  href={machine.pdf_manual_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between bg-white/5 border border-white/10 p-5 hover:border-alkota-orange hover:bg-white/10 transition-all group no-underline text-white"
+                >
+                  <div className="flex items-center gap-4">
+                    <FileText className="h-6 w-6 text-alkota-orange group-hover:scale-110 transition-transform" />
+                    <div>
+                      <span className="font-barlow-condensed text-lg font-black uppercase tracking-wide block">
+                        Operator & Service Manual
+                      </span>
+                      <span className="font-ibm-plex-mono text-[10px] text-[#888] uppercase">
+                        PDF Download · Maintenance
+                      </span>
+                    </div>
+                  </div>
+                  <Download className="h-4 w-4 text-alkota-silver group-hover:text-white transition-colors" />
+                </a>
+              )}
             </div>
           </section>
         )}
+
+        {/* ── 6. MACHINE ECOSYSTEM: COMPATIBLE PARTS, ATTACHMENTS, CHEMICALS & FLEET ALTERNATIVES ── */}
+        <MachineEcosystemSection
+          machine={{
+            id: machine.id,
+            slug: machine.slug,
+            model_code: modelCode,
+            name: machine.name,
+            category: machine.category,
+          }}
+          ecosystem={ecosystem}
+        />
 
         {/* ── 6B. SEEN IN THE REAL WORLD // MESS QUEST ────────────────────── */}
         <SeenInRealWorld category={machine.category} className="mt-24" />
@@ -501,14 +607,14 @@ export default async function MachineDetailPage({ params }: MachineDetailPagePro
 
               <div className="lg:col-span-5 flex flex-col sm:flex-row lg:flex-col gap-4">
                 <Link 
-                  href={`/contact?enquiry=quote&product=${machine.slug}&model=${modelCode}`}
+                  href={`/contact?enquiry=quote&product=${machine.slug}&machines=${machine.slug}&model=${modelCode}`}
                   className="flex items-center justify-center gap-4 bg-alkota-orange p-6 text-xs font-black uppercase tracking-[0.25em] text-white hover:bg-alkota-orange-hover transition-colors"
                 >
                   <span>Request Factory Quote</span>
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link 
-                  href={`/contact?enquiry=service&product=${machine.slug}`}
+                  href={`/contact?enquiry=service&product=${machine.slug}&machines=${machine.slug}&model=${modelCode}`}
                   className="flex items-center justify-center gap-4 border border-white/20 p-6 text-xs font-black uppercase tracking-[0.25em] text-white hover:bg-white hover:text-alkota-black transition-colors"
                 >
                   <span>Book Engineering Review</span>

@@ -131,9 +131,12 @@ CREATE TABLE IF NOT EXISTS products (
   canonical_url text,
   no_index boolean NOT NULL DEFAULT false,
   
-  -- Upstream Ingestion Tracking
+  -- Upstream Ingestion Tracking & Reconciliation
   source_url text,
   source_last_checked timestamptz,
+  source_verified_at timestamptz,
+  migration_status text NOT NULL DEFAULT 'new',
+  needs_review boolean NOT NULL DEFAULT false,
   upstream_data jsonb DEFAULT '{}'::jsonb,
   
   created_at timestamptz NOT NULL DEFAULT now(),
@@ -143,6 +146,9 @@ CREATE TABLE IF NOT EXISTS products (
 CREATE INDEX IF NOT EXISTS idx_products_category ON products(category);
 CREATE INDEX IF NOT EXISTS idx_products_slug ON products(slug);
 CREATE INDEX IF NOT EXISTS idx_products_status ON products(status, active);
+CREATE INDEX IF NOT EXISTS idx_products_needs_review ON products(needs_review) WHERE needs_review = true;
+CREATE INDEX IF NOT EXISTS idx_products_migration_status ON products(migration_status);
+CREATE INDEX IF NOT EXISTS idx_products_sort_order ON products(sort_order ASC);
 CREATE INDEX IF NOT EXISTS idx_products_series ON products(series);
 
 ALTER TABLE products ENABLE ROW LEVEL SECURITY;
@@ -212,7 +218,8 @@ CREATE TABLE IF NOT EXISTS bespoke_builds (
 ALTER TABLE bespoke_builds ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Public can read active bespoke_builds" ON bespoke_builds;
 CREATE POLICY "Public can read active bespoke_builds" ON bespoke_builds FOR SELECT USING (active = true);
-DROP POLICY IF EXISTS "Service role can modify bespoke_builds" ON bespoke_builds FOR ALL USING (true);
+DROP POLICY IF EXISTS "Service role can modify bespoke_builds" ON bespoke_builds;
+CREATE POLICY "Service role can modify bespoke_builds" ON bespoke_builds FOR ALL USING (true);
 
 -- ─── 6. PARTS ───────────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS parts (

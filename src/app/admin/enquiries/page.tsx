@@ -105,11 +105,26 @@ export default function EnquiriesPage() {
                 className="hover:bg-[#1A1A1A] transition-colors"
               >
                 <td className="px-4 py-3">
-                  <Link href={`/admin/enquiries/${enq.id}`} className="font-ibm-plex-mono text-[11px] text-[#FF6900] hover:underline">
+                  <Link href={`/admin/enquiries/${enq.id}`} className="font-ibm-plex-mono text-[11px] text-[#FF6900] hover:underline block">
                     {enq.reference || '—'}
                   </Link>
+                  {enq.metadata?.machines && enq.metadata.machines.length > 0 && (
+                    <span className="font-ibm-plex-mono text-[9px] text-[#888] block truncate max-w-[140px]" title={enq.metadata.machines.map((m: any) => m.model_code).join(', ')}>
+                      {enq.metadata.machines.map((m: any) => m.model_code).join(', ')}
+                    </span>
+                  )}
                 </td>
-                <td className="px-4 py-3 font-ibm-plex-mono text-[10px] text-[#888] uppercase">{enq.type}</td>
+                <td className="px-4 py-3 font-ibm-plex-mono text-[10px] uppercase">
+                  {enq.metadata?.machine_source === 'machine_selector' ? (
+                    <span className="text-[#FF6900] font-bold">SELECTOR</span>
+                  ) : enq.metadata?.machine_source === 'machine_comparison' ? (
+                    <span className="text-blue-400 font-bold">COMPARE</span>
+                  ) : enq.metadata?.machines?.length > 0 ? (
+                    <span className="text-emerald-400 font-bold">MACHINE</span>
+                  ) : (
+                    <span className="text-[#888]">{enq.type}</span>
+                  )}
+                </td>
                 <td className="px-4 py-3 font-inter text-[13px] text-white">{enq.name || '—'}</td>
                 <td className="px-4 py-3 font-inter text-[13px] text-[#888]">{enq.company || '—'}</td>
                 <td className="px-4 py-3 font-inter text-[13px] text-[#666]">{enq.email || '—'}</td>

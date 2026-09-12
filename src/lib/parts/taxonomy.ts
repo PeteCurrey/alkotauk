@@ -11,6 +11,8 @@ export interface MasterCategory {
   }[];
 }
 
+export type PartCategoryDefinition = MasterCategory;
+
 export const MASTER_TAXONOMY: MasterCategory[] = [
   {
     slug: 'pumps',

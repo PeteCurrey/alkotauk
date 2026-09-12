@@ -10,7 +10,7 @@ import {
   Flame, Waves, Wind, Truck, Factory,
   Droplets, Zap, PenSquare, BookOpen, Film,
   Bell, Package, Tag, ChevronDown, User, ShieldCheck, HardDrive,
-  ShoppingBag, AlertTriangle, ArrowRight, CheckCircle2, Clock
+  ShoppingBag, AlertTriangle, ArrowRight, CheckCircle2, Clock, ShieldAlert
 } from 'lucide-react';
 
 const NAV_SECTIONS = [
@@ -33,6 +33,7 @@ const NAV_SECTIONS = [
     section: 'Catalogue & Inventory',
     items: [
       { icon: Package, label: 'Machine Inventory', href: '/admin/products' },
+      { icon: ShieldCheck, label: 'Product Relationships', href: '/admin/relationships' },
       { icon: Tag, label: 'Store Categories', href: '/admin/categories' },
       { icon: Flame, label: 'Hot Water Washers', href: '/admin/products?category=hot-water' },
       { icon: Waves, label: 'Cold Water Washers', href: '/admin/products?category=cold-water' },
@@ -55,8 +56,11 @@ const NAV_SECTIONS = [
     section: 'Parts & Spares',
     items: [
       { icon: Wrench, label: 'Parts Catalogue', href: '/admin/parts' },
+      { icon: ShieldCheck, label: 'Machine Compatibility', href: '/admin/parts/compatibility' },
       { icon: Tag, label: 'Parts Categories', href: '/admin/parts/categories' },
       { icon: Building2, label: 'Brand Partners', href: '/admin/parts/brands' },
+      { icon: ShieldAlert, label: 'Data Quality & Review', href: '/admin/parts/quality' },
+      { icon: Inbox, label: 'Part Requests & Triage', href: '/admin/parts/requests' },
     ],
   },
   {

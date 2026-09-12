@@ -146,6 +146,180 @@ export default function EnquiryDetailPage({ params }: { params: Promise<{ id: st
             )}
           </div>
 
+          {/* Machine Engineering Consultation Dossier */}
+          {(enquiry.metadata?.machines?.length > 0 || enquiry.metadata?.revalidation_result) && (
+            <div className="border border-[#FF6900]/50 bg-[#0D0D0D] p-6 space-y-6">
+              {/* Header */}
+              <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-[#222]">
+                <div className="flex items-center gap-2">
+                  <span className="font-ibm-plex-mono text-[10px] bg-[#FF6900] text-white px-2 py-0.5 uppercase font-bold tracking-wider">
+                    {enquiry.metadata.machine_source === 'machine_selector' ? 'HELP ME CHOOSE SHORTLIST' :
+                     enquiry.metadata.machine_source === 'machine_comparison' ? 'FLEET COMPARISON MATRIX' :
+                     'MACHINE QUOTATION'}
+                  </span>
+                  <p className="font-ibm-plex-mono text-[10px] font-black uppercase tracking-widest text-white">
+                    Engineering Consultation Dossier
+                  </p>
+                </div>
+
+                {enquiry.metadata.revalidation_result && (
+                  <span className={`font-ibm-plex-mono text-[9px] uppercase px-2 py-0.5 border ${
+                    enquiry.metadata.revalidation_result.discrepancy_detected
+                      ? 'bg-red-950/40 text-red-400 border-red-500/40'
+                      : 'bg-emerald-950/40 text-emerald-400 border-emerald-500/40'
+                  }`}>
+                    {enquiry.metadata.revalidation_result.discrepancy_detected
+                      ? '● CLIENT DISCREPANCY DETECTED'
+                      : '✓ SERVER REVALIDATED'}
+                  </span>
+                )}
+              </div>
+
+              {/* Machine Cards */}
+              {enquiry.metadata.machines && enquiry.metadata.machines.length > 0 && (
+                <div>
+                  <p className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#666] mb-3">
+                    Evaluated Machinery ({enquiry.metadata.machines.length} Model{enquiry.metadata.machines.length > 1 ? 's' : ''}):
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {enquiry.metadata.machines.map((m: any, idx: number) => (
+                      <div key={idx} className="bg-[#111] p-4 border border-[#222] space-y-3">
+                        <div className="flex items-start justify-between gap-2">
+                          <div>
+                            <span className="font-ibm-plex-mono text-sm font-bold text-[#FF6900]">
+                              {m.model_code}
+                            </span>
+                            <p className="text-white text-xs font-semibold">{m.name}</p>
+                            <span className="font-ibm-plex-mono text-[9px] text-[#666] uppercase">{m.category}</span>
+                          </div>
+                          {m.slug && (
+                            <Link
+                              href={`/machines/${m.category || 'all'}/${m.slug}`}
+                              target="_blank"
+                              className="text-[#666] hover:text-[#FF6900] transition-colors p-1"
+                              title="View full specification sheet"
+                            >
+                              <ExternalLink className="h-3.5 w-3.5" />
+                            </Link>
+                          )}
+                        </div>
+
+                        {/* Specs grid */}
+                        <div className="grid grid-cols-2 gap-2 text-[10px] font-mono border-t border-b border-[#1A1A1A] py-2">
+                          <div>
+                            <span className="text-[#555] block">Pressure:</span>
+                            <span className="text-white font-bold">{m.pressure_bar ? `${m.pressure_bar} BAR` : '—'}</span>
+                          </div>
+                          <div>
+                            <span className="text-[#555] block">Flow Rate:</span>
+                            <span className="text-white font-bold">{m.flow_rate_lpm ? `${m.flow_rate_lpm} LPM` : '—'}</span>
+                          </div>
+                          <div>
+                            <span className="text-[#555] block">Power:</span>
+                            <span className="text-[#AAA]">{m.power_source || '—'}</span>
+                          </div>
+                          <div>
+                            <span className="text-[#555] block">Heating:</span>
+                            <span className="text-[#FF6900]">{m.heating_fuel || 'Cold / Ambient'}</span>
+                          </div>
+                          {m.voltage && (
+                            <div className="col-span-2">
+                              <span className="text-[#555] block">Electrical:</span>
+                              <span className="text-[#AAA]">{m.voltage}{m.phase ? ` (${m.phase}-Phase)` : ''}</span>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Match status */}
+                        {m.server_match_status && (
+                          <div className="flex items-center justify-between text-[9px] font-mono">
+                            <span className="text-[#666] uppercase">Server Status:</span>
+                            <span className={`px-2 py-0.5 font-bold uppercase ${
+                              m.server_match_status === 'STRONG_MATCH' ? 'text-emerald-400 bg-emerald-950/30' :
+                              m.server_match_status === 'POSSIBLE_MATCH' ? 'text-amber-400 bg-amber-950/30' :
+                              'text-red-400 bg-red-950/30'
+                            }`}>
+                              {m.server_match_status}
+                            </span>
+                          </div>
+                        )}
+
+                        {m.reasons && m.reasons.length > 0 && (
+                          <div className="text-[10px] text-[#888] space-y-0.5">
+                            <span className="text-[#555] font-mono text-[9px] uppercase block">Verified Capabilities:</span>
+                            {m.reasons.slice(0, 3).map((r: string, rIdx: number) => (
+                              <p key={rIdx} className="leading-tight">• {r}</p>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Stated Requirements Breakdown */}
+              {(enquiry.metadata.requirements_summary || enquiry.metadata.structured_requirements) && (
+                <div className="border-t border-[#222] pt-4">
+                  <p className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#666] mb-2">
+                    Customer's Stated Requirements:
+                  </p>
+                  {enquiry.metadata.requirements_summary ? (
+                    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-1 text-xs text-[#AAA] font-mono">
+                      {enquiry.metadata.requirements_summary.map((req: string, idx: number) => (
+                        <li key={idx} className="flex items-center gap-1.5 bg-[#141414] p-1.5 border border-[#1F1F1F]">
+                          <span className="text-[#FF6900]">✓</span>
+                          <span>{req}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+                </div>
+              )}
+
+              {/* Site Readiness (Power, Water, Postcode) */}
+              {(enquiry.metadata.site_power || enquiry.metadata.site_water || enquiry.metadata.postcode) && (
+                <div className="border-t border-[#222] pt-4 grid grid-cols-3 gap-3 text-xs font-mono">
+                  {enquiry.metadata.site_power && (
+                    <div className="bg-[#111] p-3 border border-[#222]">
+                      <span className="text-[#666] text-[9px] uppercase block">Site Power</span>
+                      <span className="text-white font-bold">{enquiry.metadata.site_power}</span>
+                    </div>
+                  )}
+                  {enquiry.metadata.site_water && (
+                    <div className="bg-[#111] p-3 border border-[#222]">
+                      <span className="text-[#666] text-[9px] uppercase block">Water Supply</span>
+                      <span className="text-white font-bold">{enquiry.metadata.site_water}</span>
+                    </div>
+                  )}
+                  {enquiry.metadata.postcode && (
+                    <div className="bg-[#111] p-3 border border-[#222]">
+                      <span className="text-[#666] text-[9px] uppercase block">Site Postcode</span>
+                      <span className="text-[#FF6900] font-bold">{enquiry.metadata.postcode}</span>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Sales Engineer Checklist (Confirmation Items) */}
+              {enquiry.metadata.confirmation_items && enquiry.metadata.confirmation_items.length > 0 && (
+                <div className="bg-amber-950/20 border border-amber-500/30 p-4 space-y-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-amber-500 font-bold text-xs">⚠</span>
+                    <p className="font-ibm-plex-mono text-[10px] font-black uppercase tracking-wider text-amber-400">
+                      Sales Engineer Pre-Quotation Checklist
+                    </p>
+                  </div>
+                  <ul className="space-y-1 text-xs font-mono text-amber-200/90 pl-4 list-disc">
+                    {enquiry.metadata.confirmation_items.map((item: string, idx: number) => (
+                      <li key={idx} className="leading-snug">{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Trailer Rig Build Metadata */}
           {enquiry.metadata?.build_code && (
             <div className="border border-[#FF6900]/40 bg-[#0D0D0D] p-6">

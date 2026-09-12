@@ -10,6 +10,7 @@ import type { Product } from '@/lib/admin/types';
 
 const CATEGORY_TABS: Array<{ label: string; value: string }> = [
   { label: 'All Catalogue', value: 'all' },
+  { label: 'Needs Review', value: 'needs_review' },
   { label: 'Hot Water', value: 'hot-water' },
   { label: 'Cold Water', value: 'cold-water' },
   { label: 'Steam Cleaners', value: 'steam' },
@@ -30,7 +31,13 @@ export default function ProductListClient({ initialProducts }: { initialProducts
 
   // Filter products
   const filtered = products.filter(p => {
-    const matchesCat = category === 'all' || p.category === category;
+    let matchesCat = true;
+    if (category === 'needs_review') {
+      matchesCat = !!p.needs_review || !p.primary_image_url || !p.pdf_spec_url;
+    } else if (category !== 'all') {
+      matchesCat = p.category === category;
+    }
+
     const matchesSearch = !search || 
       p.name?.toLowerCase().includes(search.toLowerCase()) ||
       p.slug?.toLowerCase().includes(search.toLowerCase()) ||
@@ -260,6 +267,11 @@ export default function ProductListClient({ initialProducts }: { initialProducts
                             Elite
                           </span>
                         )}
+                        {p.needs_review && (
+                          <span className="px-2 py-0.2 rounded-full bg-rose-100 text-rose-700 text-[10px] font-bold uppercase">
+                            Review
+                          </span>
+                        )}
                       </div>
                       {hasMissing && (
                         <div className="flex gap-1.5 mt-1.5">
@@ -294,13 +306,24 @@ export default function ProductListClient({ initialProducts }: { initialProducts
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
+                        {p.source_url && (
+                          <a
+                            href={p.source_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title="Alkota USA Source Specification"
+                            className="h-8 w-8 rounded-full bg-[#F6F7F9] border border-[#E6E8EC] flex items-center justify-center text-[#FF6900] hover:text-white hover:bg-[#FF6900] transition-colors"
+                          >
+                            <ExternalLink className="h-3.5 w-3.5" />
+                          </a>
+                        )}
                         <Link
                           href={storeUrl}
                           target="_blank"
                           title="View Live on Store"
                           className="h-8 w-8 rounded-full bg-[#F6F7F9] border border-[#E6E8EC] flex items-center justify-center text-[#64748B] hover:text-[#0F172A] hover:bg-[#EBECEF] transition-colors"
                         >
-                          <ExternalLink className="h-3.5 w-3.5" />
+                          <Eye className="h-3.5 w-3.5" />
                         </Link>
                         <Link
                           href={`/admin/products/${p.id}`}

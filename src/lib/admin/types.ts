@@ -82,6 +82,13 @@ export type Product = {
   canonical_url?: string | null;
   no_index?: boolean;
 
+  // Source Provenance & Reconciliation
+  source_url?: string | null;
+  source_last_checked?: string | null;
+  source_verified_at?: string | null;
+  migration_status?: 'new' | 'matched' | 'updated' | 'legacy' | 'needs_review' | string | null;
+  needs_review?: boolean;
+
   sort_order: number;
   created_at: string;
   updated_at: string;

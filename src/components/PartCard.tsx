@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 import AddToCartButton from './AddToCartButton';
+import { resolveProductAction } from '@/lib/commerce/action-resolver';
 
 interface PartCardProps {
   part: {
@@ -18,7 +19,16 @@ interface PartCardProps {
 
 export default function PartCard({ part }: PartCardProps) {
   const imageUrl = part.image || null;
-  const displayPrice = part.price ? `£${part.price.toFixed(2)}` : 'Enquire for Pricing';
+  const decision = resolveProductAction({
+    id: part._id,
+    name: part.name,
+    price: part.price,
+    part_number: part.sku,
+    active: true,
+    in_stock: true,
+  });
+
+  const displayPrice = decision.priceExVat !== null ? `£${decision.priceExVat.toFixed(2)}` : 'Enquire for Pricing';
 
   return (
     <div className="group relative flex flex-col border border-alkota-iron bg-alkota-steel/30 p-4 transition-all hover:bg-alkota-steel/50 rounded-[6px] shadow-tactile hover:shadow-tactile-hover transition-shadow">
@@ -55,20 +65,20 @@ export default function PartCard({ part }: PartCardProps) {
         </p>
         
         <div className="mt-auto">
-          {part.price !== null ? (
+          {decision.action === 'PURCHASE' && decision.priceExVat ? (
             <AddToCartButton 
               id={part._id}
               name={part.name}
-              price={part.price}
+              price={decision.priceExVat}
               image={imageUrl || undefined}
               sku={part.sku}
             />
           ) : (
             <Link 
-              href={`/contact?subject=Enquiry: ${part.name} (${part.sku})`}
+              href={`/contact?subject=Enquiry: ${encodeURIComponent(part.name)} (${part.sku})`}
               className="flex w-full items-center justify-center gap-2 border border-alkota-orange bg-transparent py-4 text-sm font-black uppercase tracking-widest text-alkota-orange transition-all duration-200 hover:bg-alkota-orange hover:text-white rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
             >
-              Enquire Now
+              {decision.label}
             </Link>
           )}
         </div>

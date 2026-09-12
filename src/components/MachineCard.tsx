@@ -3,12 +3,13 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowRight, Zap, Gauge, FileText } from 'lucide-react';
+import { ArrowRight, Zap, Gauge, FileText, Scale, Check } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { calculateDealerPrice, formatCurrency } from '@/lib/pricing';
 import BorderBeam from './ui/BorderBeam';
 import { resolveMachineImage } from '@/lib/images';
 import RequestPricingModal from './RequestPricingModal';
+import { useMachineComparison } from '@/lib/comparison/context';
 
 interface MachineCardProps {
   machine: any;
@@ -20,6 +21,9 @@ export default function MachineCard({ machine, index }: MachineCardProps) {
   const { data: session } = useSession();
   const user = session?.user as any;
   const isDealer = user?.role === 'dealer' || user?.role === 'admin';
+
+  const { isComparing, toggleMachine } = useMachineComparison();
+  const comparing = isComparing(machine.slug);
 
   const dealerPrice = isDealer ? calculateDealerPrice(machine.price, user.tier) : null;
 
@@ -68,6 +72,26 @@ export default function MachineCard({ machine, index }: MachineCardProps) {
             Elite Series
           </div>
         ) : null}
+
+        {/* Comparison Toggle Control */}
+        <button
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleMachine(machine.slug);
+          }}
+          className={`absolute right-4 top-4 z-30 flex items-center gap-1.5 px-2.5 py-1.5 rounded-[4px] font-mono text-[10px] uppercase tracking-wider transition-all cursor-pointer ${
+            comparing
+              ? 'bg-[#FF6900] text-white shadow-md font-bold ring-2 ring-white/50'
+              : 'bg-white/90 hover:bg-white text-alkota-black border border-alkota-iron/60 shadow-sm backdrop-blur-sm'
+          }`}
+          aria-label={comparing ? `Remove ${machine.name} from comparison` : `Add ${machine.name} to comparison`}
+          aria-pressed={comparing}
+        >
+          {comparing ? <Check className="w-3 h-3 text-white" /> : <Scale className="w-3 h-3 text-alkota-orange" />}
+          <span>{comparing ? 'Comparing' : 'Compare'}</span>
+        </button>
 
         {/* Image Container */}
         <Link 

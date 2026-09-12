@@ -1,10 +1,10 @@
-import { supabaseAdmin } from '@/lib/supabase/server';
 import Navigation from '@/components/Navigation';
 import Breadcrumbs from '@/components/Breadcrumbs';
-import MachineCard from '@/components/MachineCard';
 import Link from 'next/link';
-import { ArrowRight, ArrowDown, Sliders } from 'lucide-react';
+import { ArrowDown, Sliders } from 'lucide-react';
 import Footer from '@/components/Footer';
+import { getProducts, CANONICAL_CATEGORIES } from '@/lib/products';
+import MachineCatalogueGrid from '@/components/MachineCatalogueGrid';
 
 export const metadata = {
   title: 'Industrial Pressure Washers, Steam Cleaners & Wash Systems | Alkota UK',
@@ -17,23 +17,8 @@ export const metadata = {
 };
 
 export default async function MachinesPage() {
-  // Fetch all machines from Supabase products table
-  const { data } = await supabaseAdmin
-    .from('products')
-    .select('*')
-    .eq('active', true)
-    .order('sort_order');
-    
-  const machines = data || [];
-  
-  // Unique categories from real data
-  const categories = Array.from(new Set((machines || []).map((m: any) => m.category))).map(cat => {
-    const slug = cat === 'parts-washer' ? 'parts-washers' : cat as string;
-    return {
-      name: (slug as string).replace('-', ' '),
-      slug
-    };
-  });
+  // Fetch all published machines via data access layer (Supabase with canonical snapshot fallback)
+  const machines = await getProducts();
 
   return (
     <main className="min-h-screen bg-[#FAF9F5] text-alkota-black font-normal pb-0">
@@ -65,7 +50,7 @@ export default async function MachinesPage() {
             <div className="flex items-center gap-3 mb-6">
               <span className="h-[2px] w-8 bg-alkota-orange" />
               <span className="font-mono text-[10px] font-medium uppercase tracking-[0.35em] text-alkota-orange">
-                THE 127-MACHINE INDUSTRIAL FLEET
+                THE {machines.length}-MACHINE INDUSTRIAL FLEET
               </span>
             </div>
 
@@ -91,11 +76,11 @@ export default async function MachinesPage() {
               </a>
 
               <Link
-                href="/tools/machine-match"
+                href="/machines/help-me-choose"
                 className="inline-flex items-center gap-2 border border-white/25 bg-black/40 text-white px-6 py-4 text-xs font-medium uppercase tracking-widest hover:border-white hover:bg-white hover:text-black transition-all backdrop-blur-sm no-underline"
               >
                 <Sliders className="h-4 w-4 text-alkota-orange" />
-                <span>Launch Machine Matcher</span>
+                <span>Help Me Choose</span>
               </Link>
             </div>
           </div>
@@ -103,28 +88,22 @@ export default async function MachinesPage() {
 
         {/* Bottom Category Quick-Jump Strip */}
         <div className="relative z-10 mx-auto max-w-7xl w-full pt-8 border-t border-white/10">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs font-mono">
-            <Link href="/machines/hot-water" className="p-4 bg-white/5 hover:bg-alkota-orange/20 border border-white/10 hover:border-alkota-orange transition-all no-underline text-white block">
-              <span className="text-[10px] text-alkota-orange uppercase block mb-1">01 · THERMAL</span>
-              <span className="text-sm uppercase font-light">Hot Water Washers →</span>
-            </Link>
-            <Link href="/machines/cold-water" className="p-4 bg-white/5 hover:bg-alkota-orange/20 border border-white/10 hover:border-alkota-orange transition-all no-underline text-white block">
-              <span className="text-[10px] text-alkota-orange uppercase block mb-1">02 · HIGH-FLOW</span>
-              <span className="text-sm uppercase font-light">Cold Water Washers →</span>
-            </Link>
-            <Link href="/machines/steam" className="p-4 bg-white/5 hover:bg-alkota-orange/20 border border-white/10 hover:border-alkota-orange transition-all no-underline text-white block">
-              <span className="text-[10px] text-alkota-orange uppercase block mb-1">03 · SANITATION</span>
-              <span className="text-sm uppercase font-light">Steam Cleaners →</span>
-            </Link>
-            <Link href="/trailers" className="p-4 bg-white/5 hover:bg-alkota-orange/20 border border-white/10 hover:border-alkota-orange transition-all no-underline text-white block">
-              <span className="text-[10px] text-alkota-orange uppercase block mb-1">04 · MOBILE</span>
-              <span className="text-sm uppercase font-light">Trailer Rigs →</span>
-            </Link>
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3 text-xs font-mono">
+            {Object.entries(CANONICAL_CATEGORIES).map(([slug, info], i) => (
+              <Link
+                key={slug}
+                href={`/machines/${slug === 'parts-washer' ? 'parts-washers' : slug}`}
+                className="p-3 bg-white/5 hover:bg-alkota-orange/20 border border-white/10 hover:border-alkota-orange transition-all no-underline text-white block"
+              >
+                <span className="text-[9px] text-alkota-orange uppercase block mb-1">0{i + 1}</span>
+                <span className="text-xs uppercase font-light truncate block">{info.name.replace('Pressure Washers', '').replace('Industrial', '').trim()} →</span>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ── 02. FULL CATALOGUE GRID ────────────────────────────────────────── */}
+      {/* ── 02. FULL CATALOGUE GRID & INTERACTIVE FILTER ────────────────────── */}
       <section id="catalogue" className="py-24 px-6 sm:px-12">
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12 pb-6 border-b border-[#E0E0DC]">
@@ -133,7 +112,7 @@ export default async function MachinesPage() {
                 COMPLETE INVENTORY
               </span>
               <h2 className="font-extralight text-3xl sm:text-4xl uppercase tracking-tight text-alkota-black">
-                All Available Models ({machines.length})
+                Industrial Fleet ({machines.length})
               </h2>
             </div>
             <p className="text-xs font-mono text-[#888] uppercase tracking-wider">
@@ -141,11 +120,7 @@ export default async function MachinesPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {machines.map((machine: any, idx: number) => (
-              <MachineCard key={machine.id} machine={machine} index={idx} />
-            ))}
-          </div>
+          <MachineCatalogueGrid initialMachines={machines} />
         </div>
       </section>
 

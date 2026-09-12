@@ -72,13 +72,22 @@ export default async function AdminCompatibilityPage() {
                   {m.heating_type || 'Diesel Fired'}
                 </td>
                 <td className="py-3.5 px-4 text-right">
-                  <Link
-                    href={`/parts-attachments/machines/alkota/${m.slug}`}
-                    target="_blank"
-                    className="text-xs text-[#FF6900] hover:underline font-medium"
-                  >
-                    View Spares →
-                  </Link>
+                  <div className="flex items-center justify-end gap-3">
+                    <Link
+                      href={`/admin/parts?q=${m.model_code}`}
+                      className="text-xs text-[#0F172A] hover:text-[#FF6900] font-semibold transition-colors"
+                    >
+                      Studio Parts
+                    </Link>
+                    <span className="text-[#CBD5E1]">·</span>
+                    <Link
+                      href={`/parts-attachments/machines/alkota/${m.slug}`}
+                      target="_blank"
+                      className="text-xs text-[#FF6900] hover:underline font-medium"
+                    >
+                      Live Spares →
+                    </Link>
+                  </div>
                 </td>
               </tr>
             ))}

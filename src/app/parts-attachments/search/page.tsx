@@ -1,29 +1,14 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { Metadata } from 'next';
-import { Search, Sparkles, ArrowRight } from 'lucide-react';
+import { Search, Sparkles, ArrowRight, X, ChevronLeft, ChevronRight, Wrench } from 'lucide-react';
 import { searchParts } from '@/lib/parts/search-engine';
 import { supabaseAdmin } from '@/lib/supabase/server';
 import ProductCard from '@/components/parts/ProductCard';
 
 export const dynamic = 'force-dynamic';
 
-export async function generateMetadata({
-  searchParams,
-}: {
-  searchParams: Promise<{ q?: string }>;
-}): Promise<Metadata> {
-  const sp = await searchParams;
-  const q = sp.q || 'Parts';
-  return {
-    title: `Search: "${q}" | Alkota UK Parts & Attachments`,
-    description: `Search results for "${q}" across genuine OEM pumps, heating coils, hoses, guns, and accessories.`,
-  };
-}
-
-export default async function SearchResultsPage({
-  searchParams,
-}: {
+interface PageProps {
   searchParams: Promise<{
     q?: string;
     cat?: string;
@@ -32,14 +17,27 @@ export default async function SearchResultsPage({
     sort?: string;
     page?: string;
   }>;
-}) {
+}
+
+export async function generateMetadata({ searchParams }: PageProps): Promise<Metadata> {
+  const sp = await searchParams;
+  const q = sp.q || 'Parts';
+  return {
+    title: `Search: "${q}" | Alkota UK Parts & Attachments`,
+    description: `Search results for "${q}" across genuine OEM pumps, heating coils, hoses, guns, and accessories.`,
+    robots: { index: false, follow: true }, // Search result pages should generally be noindex to prevent crawl bloat
+  };
+}
+
+export default async function SearchResultsPage({ searchParams }: PageProps) {
   const sp = await searchParams;
   const query = sp.q || '';
   const category = sp.cat;
   const brand = sp.brand;
   const inStockOnly = sp.available === 'yes';
   const sort = (sp.sort as any) || 'relevance';
-  const page = parseInt(sp.page || '1', 10);
+  const page = Math.max(1, parseInt(sp.page || '1', 10));
+  const limit = 24;
 
   const searchResult = await searchParts({
     query,
@@ -48,220 +46,272 @@ export default async function SearchResultsPage({
     inStockOnly,
     sortBy: sort,
     page,
-    limit: 24,
+    limit,
     logAnalytics: true,
   });
 
-  const { data: dbBrands } = await supabaseAdmin
-    .from('brand_partners')
-    .select('slug, name')
-    .eq('active', true)
-    .order('sort_order');
+  const [{ data: dbBrands }, { data: dbCategories }] = await Promise.all([
+    supabaseAdmin.from('brand_partners').select('slug, name').eq('active', true).order('sort_order'),
+    supabaseAdmin.from('part_categories').select('slug, name').eq('active', true).order('sort_order'),
+  ]);
 
-  const { data: dbCategories } = await supabaseAdmin
-    .from('part_categories')
-    .select('slug, name')
-    .eq('active', true)
-    .order('sort_order');
+  const brands = dbBrands || [];
+  const categories = dbCategories || [];
+  const hasFilters = Boolean(brand || category || inStockOnly);
+  const total = searchResult.totalCount;
+  const totalPages = Math.max(1, Math.ceil(total / limit));
 
-  const hasFilters = !!(brand || category || inStockOnly);
+  const buildSearchUrl = (overrides: Record<string, string | undefined>) => {
+    const p = new URLSearchParams();
+    if (query) p.set('q', query);
+    if (category) p.set('cat', category);
+    if (brand) p.set('brand', brand);
+    if (inStockOnly) p.set('available', 'yes');
+    if (sort !== 'relevance') p.set('sort', sort);
+
+    for (const [k, v] of Object.entries(overrides)) {
+      if (!v || v === 'all') p.delete(k);
+      else p.set(k, v);
+    }
+    if (!('page' in overrides)) p.delete('page');
+
+    const qs = p.toString();
+    return `/parts-attachments/search${qs ? `?${qs}` : ''}`;
+  };
 
   return (
-    <main className="min-h-screen bg-[#FAF9F5] text-alkota-black pb-24 font-sans">
-      {/* ── SEARCH HEADER ── */}
-      <section className="bg-[#0A0A0A] text-white pt-28 pb-12 px-6 sm:px-12 lg:px-24 border-b border-[#222]">
+    <main className="min-h-screen bg-[#FAF9F5] text-[#1A1917] pb-24 font-sans selection:bg-[#FF6900] selection:text-white">
+      
+      {/* ── 01: SEARCH HEADER ── */}
+      <section className="bg-[#0F172A] text-white pt-32 pb-12 px-6 sm:px-12 lg:px-24 border-b border-[#1E293B]">
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-center gap-2 font-ibm-plex-mono text-[10px] uppercase tracking-widest text-[#777] mb-4">
-            <Link href="/parts-attachments" className="hover:text-alkota-orange transition-colors">
-              Parts Hub
+          <div className="flex items-center gap-2 font-ibm-plex-mono text-[10px] uppercase tracking-widest text-[#94A3B8] mb-4">
+            <Link href="/parts-attachments" className="hover:text-[#FF6900] transition-colors">
+              Parts Store
             </Link>
             <span>/</span>
-            <span className="text-alkota-orange">Search</span>
+            <span className="text-[#FF6900]">Search</span>
           </div>
 
-          {/* Search Form — Large & Prominent */}
-          <form action="/parts-attachments/search" method="GET" className="flex items-stretch gap-0 mb-8 max-w-3xl">
-            <div className="flex items-center flex-1 bg-white px-4 gap-3">
-              <Search className="w-4 h-4 text-[#999] shrink-0" />
-              <input
-                type="text"
-                name="q"
-                defaultValue={query}
-                placeholder="Search by part number, brand, machine model or component type"
-                className="w-full bg-transparent text-alkota-black text-sm py-4 focus:outline-none font-normal"
-                autoFocus
-              />
+          {/* Search Form */}
+          <form action="/parts-attachments/search" method="GET" className="max-w-3xl mb-6">
+            <div className="flex items-stretch bg-white rounded-[5px] p-1.5 shadow-[0_8px_30px_rgba(0,0,0,0.25)] border border-[#334155] focus-within:border-[#FF6900] transition-colors">
+              <div className="flex items-center flex-1 px-3 gap-3">
+                <Search className="w-5 h-5 text-[#64748B] shrink-0" />
+                <input
+                  type="text"
+                  name="q"
+                  defaultValue={query}
+                  placeholder="Search by part number, description, or SKU..."
+                  className="w-full bg-transparent text-[#0F172A] text-sm py-2.5 focus:outline-none placeholder-[#94A3B8]"
+                  autoFocus
+                />
+              </div>
+              <button
+                type="submit"
+                className="px-6 py-3 bg-[#FF6900] hover:bg-[#E55D00] text-white font-ibm-plex-mono text-xs uppercase tracking-wider font-bold rounded-[4px] transition-all cursor-pointer shrink-0"
+              >
+                Search
+              </button>
             </div>
-            <button
-              type="submit"
-              className="bg-alkota-orange hover:bg-white hover:text-alkota-black text-white px-8 py-4 font-ibm-plex-mono text-xs uppercase tracking-widest transition-all shrink-0"
-            >
-              Search
-            </button>
           </form>
 
-          {/* Results Summary — DB driven count only */}
-          <div className="flex items-center justify-between gap-4">
+          {/* Results Summary */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               {query ? (
-                <h1 className="text-2xl sm:text-3xl font-extralight text-white">
-                  Results for <span className="text-alkota-orange italic font-light">"{query}"</span>
+                <h1 className="text-2xl sm:text-3xl font-light text-white tracking-tight">
+                  Search Results for <span className="text-[#FF6900] font-normal">"{query}"</span>
                 </h1>
               ) : (
-                <h1 className="text-2xl sm:text-3xl font-extralight text-white">All Catalogue Components</h1>
+                <h1 className="text-2xl sm:text-3xl font-light text-white tracking-tight">
+                  All Catalogue Components
+                </h1>
               )}
-              {searchResult.totalCount > 0 && (
-                <p className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-[#666] mt-1">
-                  {searchResult.totalCount} {searchResult.totalCount === 1 ? 'component' : 'components'} found
-                </p>
-              )}
+              <p className="font-ibm-plex-mono text-xs text-[#94A3B8] mt-1">
+                {total.toLocaleString()} {total === 1 ? 'part' : 'parts'} found in catalogue
+              </p>
             </div>
+
             <Link
               href="/parts-attachments/finder"
-              className="hidden sm:inline-flex items-center gap-2 bg-[#1A1A1A] hover:bg-[#252525] text-white px-5 py-3 text-xs font-ibm-plex-mono uppercase tracking-widest transition-all border border-[#333] shrink-0"
+              className="inline-flex items-center gap-2 bg-[#1E293B] hover:bg-[#334155] text-white px-4 py-2.5 text-xs font-ibm-plex-mono uppercase tracking-wider rounded-[4px] transition-all border border-[#334155] self-start sm:self-auto"
             >
-              <Sparkles className="w-3.5 h-3.5 text-alkota-orange" />
-              Parts Finder Wizard
+              <Sparkles className="w-3.5 h-3.5 text-[#FF6900]" />
+              <span>Machine Fitment Finder</span>
             </Link>
           </div>
         </div>
       </section>
 
-      {/* ── FILTER ROW + RESULTS ── */}
+      {/* ── 02: FILTER BAR ── */}
       <div className="max-w-7xl mx-auto px-6 sm:px-12 lg:px-24 py-8">
-
-        {/* ── Filter Bar — horizontal, restrained ── */}
-        <div className="flex flex-wrap items-center gap-4 pb-6 border-b border-[#E0DEDC] mb-8">
-          <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-[#888]">
-            Filter:
+        <div className="bg-white border border-[#E8E6DF] rounded-[6px] p-4 shadow-[0_2px_8px_rgba(0,0,0,0.03)] flex flex-wrap items-center gap-3 mb-8">
+          <span className="font-ibm-plex-mono text-[10px] uppercase tracking-wider text-[#64748B] font-semibold">
+            Filter Results:
           </span>
 
           {/* In Stock Toggle */}
           <Link
-            href={`/parts-attachments/search?q=${encodeURIComponent(query)}${category ? `&cat=${category}` : ''}${brand ? `&brand=${brand}` : ''}${!inStockOnly ? '&available=yes' : ''}`}
-            className={`font-ibm-plex-mono text-[10px] uppercase tracking-widest px-4 py-1.5 border transition-colors ${
+            href={buildSearchUrl({ available: inStockOnly ? undefined : 'yes' })}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-[4px] text-xs font-medium border transition-colors ${
               inStockOnly
-                ? 'bg-alkota-orange border-alkota-orange text-white'
-                : 'border-[#D0CEC9] text-[#666] hover:border-alkota-orange hover:text-alkota-orange'
+                ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
+                : 'bg-white text-[#475569] border-[#CBD5E1] hover:border-[#94A3B8]'
             }`}
           >
-            In Stock
+            <span className={`w-1.5 h-1.5 rounded-full ${inStockOnly ? 'bg-emerald-600' : 'bg-[#94A3B8]'}`} />
+            <span>In Stock Only</span>
           </Link>
 
-          {/* Brand Filter Pills — DB only */}
-          {(dbBrands || []).slice(0, 8).map((b) => (
-            <Link
-              key={b.slug}
-              href={`/parts-attachments/search?q=${encodeURIComponent(query)}${brand === b.slug ? '' : `&brand=${b.slug}`}${category ? `&cat=${category}` : ''}${inStockOnly ? '&available=yes' : ''}`}
-              className={`font-ibm-plex-mono text-[10px] uppercase tracking-widest px-4 py-1.5 border transition-colors ${
-                brand === b.slug
-                  ? 'bg-alkota-orange border-alkota-orange text-white'
-                  : 'border-[#D0CEC9] text-[#666] hover:border-alkota-orange hover:text-alkota-orange'
-              }`}
+          {/* Brand Filter */}
+          <div className="relative">
+            <select
+              value={brand || 'all'}
+              onChange={e => {
+                window.location.href = buildSearchUrl({ brand: e.target.value === 'all' ? undefined : e.target.value });
+              }}
+              className="bg-white border border-[#CBD5E1] rounded-[4px] pl-3 pr-8 py-1.5 text-xs text-[#0F172A] focus:outline-none focus:border-[#FF6900] cursor-pointer"
             >
-              {b.name}
-            </Link>
-          ))}
+              <option value="all">All Brands</option>
+              {brands.map(b => (
+                <option key={b.slug} value={b.slug}>{b.name}</option>
+              ))}
+            </select>
+          </div>
 
-          {/* Category Filter — DB only */}
-          {(dbCategories || []).slice(0, 6).map((c) => (
-            <Link
-              key={c.slug}
-              href={`/parts-attachments/search?q=${encodeURIComponent(query)}${brand ? `&brand=${brand}` : ''}${category === c.slug ? '' : `&cat=${c.slug}`}${inStockOnly ? '&available=yes' : ''}`}
-              className={`font-ibm-plex-mono text-[10px] uppercase tracking-widest px-4 py-1.5 border transition-colors hidden lg:inline-flex ${
-                category === c.slug
-                  ? 'bg-[#0A0A0A] border-[#0A0A0A] text-white'
-                  : 'border-[#D0CEC9] text-[#666] hover:border-[#0A0A0A] hover:text-alkota-black'
-              }`}
+          {/* Category Filter */}
+          <div className="relative">
+            <select
+              value={category || 'all'}
+              onChange={e => {
+                window.location.href = buildSearchUrl({ cat: e.target.value === 'all' ? undefined : e.target.value });
+              }}
+              className="bg-white border border-[#CBD5E1] rounded-[4px] pl-3 pr-8 py-1.5 text-xs text-[#0F172A] focus:outline-none focus:border-[#FF6900] cursor-pointer"
             >
-              {c.name}
-            </Link>
-          ))}
+              <option value="all">All Categories</option>
+              {categories.map(c => (
+                <option key={c.slug} value={c.slug}>{c.name}</option>
+              ))}
+            </select>
+          </div>
 
           {/* Clear Filters */}
           {hasFilters && (
             <Link
-              href={`/parts-attachments/search?q=${encodeURIComponent(query)}`}
-              className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-orange hover:text-alkota-black transition-colors ml-auto"
+              href={buildSearchUrl({ brand: undefined, cat: undefined, available: undefined })}
+              className="flex items-center gap-1 px-3 py-1.5 bg-[#FFF0E6] text-[#FF6900] hover:bg-[#FFE0CC] text-xs font-semibold rounded-[4px] transition-colors"
             >
-              Clear Filters ×
+              <X className="w-3.5 h-3.5" />
+              Reset Filters
             </Link>
           )}
+
+          {/* Sort Select */}
+          <div className="ml-auto flex items-center gap-2">
+            <span className="text-[11px] font-ibm-plex-mono text-[#64748B] uppercase tracking-wider hidden sm:inline">
+              Sort:
+            </span>
+            <select
+              value={sort}
+              onChange={e => {
+                window.location.href = buildSearchUrl({ sort: e.target.value === 'relevance' ? undefined : e.target.value });
+              }}
+              className="bg-white border border-[#CBD5E1] rounded-[4px] pl-3 pr-8 py-1.5 text-xs text-[#0F172A] focus:outline-none focus:border-[#FF6900] cursor-pointer"
+            >
+              <option value="relevance">Best Match</option>
+              <option value="name_asc">Name: A to Z</option>
+              <option value="price_asc">Price: Low to High</option>
+              <option value="price_desc">Price: High to Low</option>
+              <option value="newest">Recently Added</option>
+            </select>
+          </div>
         </div>
 
-        {/* ── Product Grid / Empty State ── */}
+        {/* ── 03: PRODUCT GRID / NO RESULTS EXPERIENCE ── */}
         {searchResult.parts.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-px bg-[#E0DEDC]">
-            {searchResult.parts.map((part) => (
-              <div key={part.id} className="bg-[#FAF9F5]">
-                <ProductCard part={part} />
-              </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {searchResult.parts.map(part => (
+              <ProductCard key={part.id} part={part} />
             ))}
           </div>
         ) : (
-          /* Premium empty state — no icon-in-a-box */
-          <div className="py-24 flex flex-col items-center text-center space-y-8">
-            <div className="space-y-3">
-              <p className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-[#AAA]">
-                // No Components Found
-              </p>
-              {query ? (
-                <>
-                  <h2 className="text-3xl font-extralight text-alkota-black">
-                    Nothing matched <span className="text-alkota-orange">"{query}"</span>
-                  </h2>
-                  <p className="text-sm font-light text-[#666] max-w-md leading-relaxed">
-                    Try checking the part number spelling, broadening your brand filters, or use the Parts Finder to identify the correct component.
-                  </p>
-                </>
-              ) : (
-                <>
-                  <h2 className="text-3xl font-extralight text-alkota-black">Nothing to show yet.</h2>
-                  <p className="text-sm font-light text-[#666] max-w-md">Try searching or browsing categories.</p>
-                </>
-              )}
+          /* Useful No-Results Experience with Enquiry Action */
+          <div className="bg-white border border-[#E8E6DF] rounded-[6px] p-12 sm:p-16 text-center space-y-6 shadow-[0_2px_8px_rgba(0,0,0,0.03)]">
+            <div className="w-16 h-16 rounded-full bg-[#FFF0E6] text-[#FF6900] flex items-center justify-center mx-auto">
+              <Search className="w-7 h-7 stroke-[1.5]" />
             </div>
-            <div className="flex flex-wrap justify-center gap-4">
+
+            <div className="space-y-2 max-w-lg mx-auto">
+              <h2 className="text-2xl font-light text-[#0F172A] tracking-tight">
+                Can't find the part you're looking for?
+              </h2>
+              <p className="text-xs sm:text-sm text-[#64748B] font-light leading-relaxed">
+                No components matched <strong className="text-[#0F172A]">"{query}"</strong> with your current filters. If you have an Alkota machine model or a stamped part number from your pump or burner, our workshop team can source and dispatch it.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap justify-center gap-4 pt-2">
               <Link
-                href="/parts-attachments/finder"
-                className="inline-flex items-center gap-2 bg-alkota-orange text-white px-8 py-3.5 text-xs font-ibm-plex-mono uppercase tracking-widest hover:bg-black transition-colors"
+                href={`/parts-attachments/enquiry?part=${encodeURIComponent(query)}&notes=${encodeURIComponent(`Search query with no result: "${query}"`)}`}
+                className="inline-flex items-center gap-2 bg-[#FF6900] hover:bg-[#E55D00] text-white px-6 py-3 text-xs font-ibm-plex-mono uppercase tracking-wider font-bold rounded-[4px] transition-colors shadow-sm"
               >
-                <Sparkles className="w-3.5 h-3.5" />
-                Open Parts Finder
+                <span>Request This Part from Sourcing Desk</span>
+                <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
-                href={`/parts-attachments/enquiry?notes=${encodeURIComponent(`Search query with no results: ${query}`)}`}
-                className="inline-flex items-center gap-2 bg-[#0A0A0A] text-white px-8 py-3.5 text-xs font-ibm-plex-mono uppercase tracking-widest hover:bg-alkota-orange transition-colors"
+                href="/parts-attachments"
+                className="inline-flex items-center gap-2 bg-[#F1F5F9] hover:bg-[#E2E8F0] text-[#334155] px-6 py-3 text-xs font-ibm-plex-mono uppercase tracking-wider font-semibold rounded-[4px] transition-colors"
               >
-                Submit Parts Enquiry
-                <ArrowRight className="w-3.5 h-3.5" />
+                Browse All Categories
               </Link>
             </div>
           </div>
         )}
 
-        {/* Pagination — only show if DB has more pages */}
-        {searchResult.totalCount > 24 && (
-          <div className="flex items-center justify-center gap-4 pt-12">
-            {page > 1 && (
-              <Link
-                href={`/parts-attachments/search?q=${encodeURIComponent(query)}&page=${page - 1}${brand ? `&brand=${brand}` : ''}${category ? `&cat=${category}` : ''}${inStockOnly ? '&available=yes' : ''}`}
-                className="font-ibm-plex-mono text-xs uppercase tracking-widest text-[#666] hover:text-alkota-orange transition-colors"
-              >
-                ← Previous
-              </Link>
-            )}
-            <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-[#AAA]">
-              Page {page} of {Math.ceil(searchResult.totalCount / 24)}
+        {/* ── 04: PAGINATION ── */}
+        {total > limit && (
+          <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-[#E8E6DF]">
+            <span className="text-xs text-[#64748B] font-ibm-plex-mono">
+              Showing <span className="font-bold text-[#0F172A]">{((page - 1) * limit + 1).toLocaleString()}–{Math.min(page * limit, total).toLocaleString()}</span> of{' '}
+              <span className="font-bold text-[#0F172A]">{total.toLocaleString()}</span> parts
             </span>
-            {page < Math.ceil(searchResult.totalCount / 24) && (
-              <Link
-                href={`/parts-attachments/search?q=${encodeURIComponent(query)}&page=${page + 1}${brand ? `&brand=${brand}` : ''}${category ? `&cat=${category}` : ''}${inStockOnly ? '&available=yes' : ''}`}
-                className="font-ibm-plex-mono text-xs uppercase tracking-widest text-[#666] hover:text-alkota-orange transition-colors"
-              >
-                Next →
-              </Link>
-            )}
+
+            <div className="flex items-center gap-1.5">
+              {page > 1 ? (
+                <Link
+                  href={buildSearchUrl({ page: String(page - 1) })}
+                  className="flex items-center gap-1 px-3 py-2 bg-white border border-[#CBD5E1] rounded-[4px] text-xs font-semibold text-[#334155] hover:bg-[#F1F5F9] transition-colors"
+                >
+                  <ChevronLeft className="w-3.5 h-3.5" />
+                  <span>Previous</span>
+                </Link>
+              ) : (
+                <span className="flex items-center gap-1 px-3 py-2 bg-[#F8FAFC] border border-[#E2E8F0] rounded-[4px] text-xs text-[#94A3B8] cursor-not-allowed">
+                  <ChevronLeft className="w-3.5 h-3.5" />
+                  <span>Previous</span>
+                </span>
+              )}
+
+              <span className="px-3 py-2 font-ibm-plex-mono text-xs text-[#0F172A] font-bold">
+                {page} / {totalPages}
+              </span>
+
+              {page < totalPages ? (
+                <Link
+                  href={buildSearchUrl({ page: String(page + 1) })}
+                  className="flex items-center gap-1 px-3 py-2 bg-white border border-[#CBD5E1] rounded-[4px] text-xs font-semibold text-[#334155] hover:bg-[#F1F5F9] transition-colors"
+                >
+                  <span>Next</span>
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </Link>
+              ) : (
+                <span className="flex items-center gap-1 px-3 py-2 bg-[#F8FAFC] border border-[#E2E8F0] rounded-[4px] text-xs text-[#94A3B8] cursor-not-allowed">
+                  <span>Next</span>
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </span>
+              )}
+            </div>
           </div>
         )}
       </div>

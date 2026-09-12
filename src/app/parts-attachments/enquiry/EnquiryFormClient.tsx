@@ -31,6 +31,7 @@ export default function EnquiryFormClient() {
 
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
+  const [refId, setRefId] = useState('');
 
   function set(key: string, val: string) {
     setForm(f => ({ ...f, [key]: val }));
@@ -39,25 +40,36 @@ export default function EnquiryFormClient() {
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setStatus('sending');
+    setErrorMsg('');
+
     try {
-      const res = await fetch('/api/service', {
+      const res = await fetch('/api/parts/enquiry', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          type: 'parts_enquiry',
-          ...form,
+          customer_name: form.customer_name,
+          company: form.company,
+          email: form.email,
+          phone: form.phone,
+          postcode: form.postcode,
+          machine_model: form.machine_model,
+          serial_number: form.serial_number,
+          urgency: form.urgency,
+          notes: form.notes,
           requested_parts: [{ part_number: prefillPart || 'ENQUIRY', name: form.parts_text, quantity: 1 }],
         }),
       });
+
+      const data = await res.json();
       if (res.ok) {
+        setRefId(data.reference_id || '');
         setStatus('success');
       } else {
-        const d = await res.json();
-        setErrorMsg(d.error || 'Submission failed. Please try again.');
+        setErrorMsg(data.error || 'Submission failed. Please check required fields.');
         setStatus('error');
       }
     } catch {
-      setErrorMsg('Network error. Please try again.');
+      setErrorMsg('Network error. Please try again or call our workshop directly.');
       setStatus('error');
     }
   }
@@ -68,18 +80,23 @@ export default function EnquiryFormClient() {
   if (status === 'success') {
     return (
       <div className="min-h-[60vh] flex items-center justify-center px-6">
-        <div className="text-center max-w-md">
-          <CheckCircle2 className="w-12 h-12 text-green-500 mx-auto mb-6" />
-          <h2 className="font-extralight text-3xl text-alkota-black mb-4">Enquiry Received</h2>
-          <p className="text-[#666] text-sm leading-relaxed mb-8">
-            Thank you. Our parts team will review your enquiry and respond within 24 hours with availability and pricing.
+        <div className="text-center max-w-md bg-white border border-[#E8E6DF] rounded-[6px] p-8 shadow-[0_4px_16px_rgba(0,0,0,0.04)]">
+          <CheckCircle2 className="w-12 h-12 text-emerald-600 mx-auto mb-4" />
+          <h2 className="font-light text-2xl text-[#0F172A] mb-2">Parts Enquiry Logged</h2>
+          {refId && (
+            <div className="inline-block px-3 py-1 bg-[#F1F5F9] border border-[#CBD5E1] rounded-[4px] font-ibm-plex-mono text-xs text-[#0F172A] mb-4">
+              Reference: <span className="font-bold">{refId.slice(0, 8).toUpperCase()}</span>
+            </div>
+          )}
+          <p className="text-[#64748B] text-xs leading-relaxed mb-6 font-light">
+            Thank you. Our workshop parts team will cross-reference your request with factory schematics and respond within one working day with confirmed pricing, lead time, and delivery options.
           </p>
           <Link
             href="/parts-attachments"
-            className="inline-flex items-center gap-2 bg-alkota-orange text-white px-8 py-4 font-ibm-plex-mono text-xs uppercase tracking-widest hover:bg-alkota-black transition-colors"
+            className="inline-flex items-center gap-2 bg-[#FF6900] text-white px-6 py-3 font-ibm-plex-mono text-xs uppercase tracking-wider rounded-[4px] font-bold hover:bg-[#0F172A] transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            Back to Parts Catalogue
+            Return to Parts Catalogue
           </Link>
         </div>
       </div>

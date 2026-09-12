@@ -2,8 +2,6 @@ import React from 'react';
 import type { Metadata } from 'next';
 import PartsHeader from '@/components/parts/PartsHeader';
 import Footer from '@/components/Footer';
-import { PartsRequestProvider } from '@/components/parts/PartsRequestListContext';
-import PartsRequestDrawer from '@/components/parts/PartsRequestDrawer';
 
 export const metadata: Metadata = {
   title: 'Parts & Attachments Catalogue | Alkota UK',
@@ -16,15 +14,14 @@ export default function PartsAttachmentsLayout({
   children: React.ReactNode;
 }) {
   return (
-    <PartsRequestProvider>
-      <div className="min-h-screen flex flex-col bg-[#FAF9F5] text-alkota-black selection:bg-alkota-orange selection:text-white">
+    <div className="min-h-screen flex flex-col bg-[#FAF9F5] text-alkota-black selection:bg-alkota-orange selection:text-white">
+      <React.Suspense fallback={null}>
         <PartsHeader />
-        <div className="flex-1">
-          {children}
-        </div>
-        <Footer />
-        <PartsRequestDrawer />
+      </React.Suspense>
+      <div className="flex-1">
+        {children}
       </div>
-    </PartsRequestProvider>
+      <Footer />
+    </div>
   );
 }

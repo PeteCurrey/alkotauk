@@ -559,7 +559,7 @@ export default function ComparisonClient({ allMachines, initialSlugs = [] }: Com
 
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 shrink-0">
                 <Link
-                  href={`/contact?enquiry=compare&machines=${encodeURIComponent(enquiryMachinesParam)}&models=${encodeURIComponent(enquiryModelsParam)}`}
+                  href={`/enquire?source=MACHINE_COMPARISON&machines=${encodeURIComponent(enquiryMachinesParam)}&models=${encodeURIComponent(enquiryModelsParam)}`}
                   className="px-6 py-4 bg-[#FF6900] hover:bg-orange-600 font-mono text-xs uppercase tracking-widest text-white transition-colors font-bold rounded text-center shadow-lg shadow-orange-600/20"
                 >
                   Enquire About These {comparedMachines.length} Models →

@@ -2,17 +2,19 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { ArrowRight, Zap, Gauge, FileText, Scale, Check } from 'lucide-react';
+import { ArrowRight, Zap, Gauge, Scale, Check, Flame, Thermometer } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { calculateDealerPrice, formatCurrency } from '@/lib/pricing';
-import BorderBeam from './ui/BorderBeam';
 import { resolveMachineImage } from '@/lib/images';
 import RequestPricingModal from './RequestPricingModal';
 import { useMachineComparison } from '@/lib/comparison/context';
+import { Product } from '@/lib/products';
+import { toCategoryRoute } from '@/lib/catalogue/series';
 
 interface MachineCardProps {
-  machine: any;
+  machine: Product;
   index: number;
 }
 
@@ -25,15 +27,20 @@ export default function MachineCard({ machine, index }: MachineCardProps) {
   const { isComparing, toggleMachine } = useMachineComparison();
   const comparing = isComparing(machine.slug);
 
-  const dealerPrice = isDealer ? calculateDealerPrice(machine.price, user.tier) : null;
+  const dealerPrice = isDealer ? calculateDealerPrice((machine as any).price, user?.tier) : null;
 
-  // Specs from Supabase / Products
-  const gpm = machine.flow_rate_gpm !== undefined && machine.flow_rate_gpm !== null ? machine.flow_rate_gpm : (machine.gpm || 0);
-  const lpm = machine.flow_rate_lpm !== undefined && machine.flow_rate_lpm !== null ? machine.flow_rate_lpm : (gpm * 3.785).toFixed(1);
-  const psi = machine.pressure_psi || machine.psi || 0;
-  const bar = machine.pressure_bar || (psi / 14.5).toFixed(0);
-  const imageUrl = machine.primary_image_url || machine.image_url;
-  const modelCode = machine.model_code || machine.slug?.replace('alkota-', '').toUpperCase() || machine.name;
+  // Technical specifications (strict null / zero suppression)
+  const gpm = machine.flow_rate_gpm && machine.flow_rate_gpm > 0 ? machine.flow_rate_gpm : null;
+  const lpm = machine.flow_rate_lpm && machine.flow_rate_lpm > 0 ? machine.flow_rate_lpm : null;
+  const psi = machine.pressure_psi && machine.pressure_psi > 0 ? machine.pressure_psi : null;
+  const bar = machine.pressure_bar && machine.pressure_bar > 0 ? machine.pressure_bar : null;
+  const tempC = machine.max_temp_c && machine.max_temp_c > 0 ? machine.max_temp_c : null;
+  const power = machine.power_source || (machine.motor_hp ? `${machine.motor_hp} HP` : null);
+  const fuel = machine.heating_fuel || null;
+
+  const modelCode = machine.model_code || machine.slug.replace(/^alkota-/, '').toUpperCase();
+  const categoryRoute = toCategoryRoute(machine.category || 'hot-water');
+  const resolvedImage = resolveMachineImage(machine.primary_image_url, modelCode, machine.category);
 
   return (
     <>
@@ -46,140 +53,173 @@ export default function MachineCard({ machine, index }: MachineCardProps) {
           slug: machine.slug,
           category: machine.category,
           series: machine.series,
-          pressure_bar: bar,
-          flow_rate_lpm: lpm,
+          pressure_bar: bar || undefined,
+          flow_rate_lpm: lpm || undefined,
         }}
       />
 
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
+      <motion.article
+        initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ delay: index * 0.05, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        viewport={{ once: true }}
-        className="group relative flex flex-col bg-white border border-alkota-iron transition-all duration-500 hover:border-alkota-orange/50 hover:bg-white font-normal rounded-[6px] overflow-hidden shadow-tactile hover:shadow-tactile-hover transition-shadow"
+        transition={{ delay: Math.min(index * 0.04, 0.4), duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+        viewport={{ once: true, margin: '-50px' }}
+        className="group relative flex flex-col bg-white border border-[#E5E5E0] hover:border-[#FF6900] transition-colors duration-300 rounded-[4px] shadow-xs hover:shadow-md overflow-hidden"
       >
-        <BorderBeam 
-          className="opacity-0 group-hover:opacity-100 transition-opacity duration-700"
-          size={500} 
-          duration={10}
-          colorFrom="var(--color-alkota-orange)"
-          colorTo="var(--color-alkota-iron)"
-        />
-
-        {/* Elite Series Indicator */}
-        {machine.series?.toLowerCase().includes('elite') || machine.is_elite_series ? (
-          <div className="absolute left-0 top-6 z-20 bg-alkota-orange px-4 py-1.5 text-[10px] uppercase tracking-[0.2em] text-white shadow-xl font-light">
-            Elite Series
+        {/* Top Badges & Comparison Action */}
+        <div className="absolute top-3 left-3 right-3 z-20 flex items-center justify-between gap-2 pointer-events-none">
+          {/* Series Pill / Elite Badge */}
+          <div className="flex items-center gap-1.5 flex-wrap">
+            {machine.is_elite_series && (
+              <span className="bg-[#1A1A18] text-[#FF6900] border border-[#333] px-2 py-0.5 text-[9px] font-mono font-bold uppercase tracking-wider rounded-[2px]">
+                Elite Series
+              </span>
+            )}
+            {machine.series && (
+              <span className="bg-white/90 backdrop-blur-xs text-[#666] border border-[#E5E5E0] px-2 py-0.5 text-[9px] font-mono uppercase tracking-wider rounded-[2px] truncate max-w-[180px]">
+                {machine.series.replace(/Series$/i, '').trim()}
+              </span>
+            )}
           </div>
-        ) : null}
 
-        {/* Comparison Toggle Control */}
-        <button
-          type="button"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            toggleMachine(machine.slug);
-          }}
-          className={`absolute right-4 top-4 z-30 flex items-center gap-1.5 px-2.5 py-1.5 rounded-[4px] font-mono text-[10px] uppercase tracking-wider transition-all cursor-pointer ${
-            comparing
-              ? 'bg-[#FF6900] text-white shadow-md font-bold ring-2 ring-white/50'
-              : 'bg-white/90 hover:bg-white text-alkota-black border border-alkota-iron/60 shadow-sm backdrop-blur-sm'
-          }`}
-          aria-label={comparing ? `Remove ${machine.name} from comparison` : `Add ${machine.name} to comparison`}
-          aria-pressed={comparing}
-        >
-          {comparing ? <Check className="w-3 h-3 text-white" /> : <Scale className="w-3 h-3 text-alkota-orange" />}
-          <span>{comparing ? 'Comparing' : 'Compare'}</span>
-        </button>
+          {/* Comparison Toggle Control */}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              toggleMachine(machine.slug);
+            }}
+            className={`pointer-events-auto flex items-center gap-1 px-2.5 py-1 rounded-[3px] font-mono text-[10px] uppercase tracking-wider transition-all cursor-pointer ${
+              comparing
+                ? 'bg-[#FF6900] text-white font-bold shadow-sm ring-2 ring-[#FF6900]/30'
+                : 'bg-white/95 hover:bg-white text-[#1A1A18] border border-[#DDD] shadow-xs'
+            }`}
+            aria-label={comparing ? `Remove ${modelCode} from comparison` : `Add ${modelCode} to comparison`}
+            aria-pressed={comparing}
+          >
+            {comparing ? <Check className="w-3 h-3 text-white" /> : <Scale className="w-3 h-3 text-[#FF6900]" />}
+            <span className="hidden xs:inline">{comparing ? 'Added' : 'Compare'}</span>
+          </button>
+        </div>
 
-        {/* Image Container */}
+        {/* Machine Photography Frame */}
         <Link 
-          href={`/machines/${machine.category || 'hot-water'}/${machine.slug}`}
-          className="relative aspect-[16/10] w-full overflow-hidden bg-alkota-bg block"
+          href={`/machines/${categoryRoute}/${machine.slug}`}
+          className="relative aspect-[4/3] w-full bg-[#FAF9F5] border-b border-[#EFEFEA] p-6 flex items-center justify-center overflow-hidden block"
         >
-          <div className="absolute inset-0 bg-gradient-to-t from-white/40 to-transparent z-10" />
-          <img
-            src={resolveMachineImage(imageUrl, modelCode, machine.category)}
-            alt={machine.name}
-            className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110 grayscale-[0.8] group-hover:grayscale-0"
-          />
-          <div className="absolute bottom-6 left-6 z-20 font-normal">
-            <span className="text-[10px] uppercase tracking-[0.3em] text-alkota-orange font-light">
-              {modelCode}
-            </span>
+          <div className="relative w-full h-full flex items-center justify-center">
+            {/* Real machine image framed with clean containment and subtle elevation */}
+            <img
+              src={resolvedImage}
+              alt={`${machine.name} industrial pressure washer`}
+              loading="lazy"
+              className="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-[1.03] filter drop-shadow-sm"
+            />
           </div>
+
+          {/* Model Code Watermark / Badge */}
+          <span className="absolute bottom-3 left-4 font-mono text-[11px] font-bold uppercase tracking-widest text-[#888] bg-white/80 px-2 py-0.5 rounded-[2px] border border-[#EAEAEA]">
+            {modelCode}
+          </span>
         </Link>
 
-        {/* Content */}
-        <div className="flex flex-1 flex-col p-8 font-normal">
+        {/* Card Content & Specifications */}
+        <div className="flex flex-1 flex-col p-5 font-normal">
+          {/* Model Title */}
           <Link 
-            href={`/machines/${machine.category || 'hot-water'}/${machine.slug}`}
-            className="no-underline"
+            href={`/machines/${categoryRoute}/${machine.slug}`}
+            className="no-underline mb-1.5"
           >
-            <h3 className="mb-2 text-2xl font-light uppercase tracking-tight text-alkota-black group-hover:text-alkota-orange transition-colors duration-300">
+            <h3 className="text-lg font-medium text-[#1A1A18] group-hover:text-[#FF6900] transition-colors leading-tight">
               {machine.name}
             </h3>
           </Link>
-          <p className="mb-8 text-xs leading-relaxed text-alkota-silver uppercase tracking-wider line-clamp-2 font-normal">
-            {machine.tagline || 'Industrial engineering for the toughest environments.'}
+
+          {/* Tagline / Subtitle */}
+          <p className="text-xs text-[#666] line-clamp-2 leading-relaxed mb-4 min-h-[32px]">
+            {machine.tagline || machine.short_description || 'Heavy-duty industrial build engineered for continuous operation.'}
           </p>
 
-          {/* Technical Specification Grid */}
-          <div className="mt-auto grid grid-cols-2 gap-px bg-alkota-iron border border-alkota-iron font-normal">
-            <div className="bg-alkota-steel/40 p-4">
-              <div className="flex items-center gap-2 mb-1 font-normal">
-                <Zap className="h-3 w-3 text-alkota-orange" />
-                <span className="text-[9px] uppercase tracking-widest text-alkota-smoke font-light">Flow Rate</span>
+          {/* Factual Specification Cells */}
+          <div className="mt-auto grid grid-cols-2 gap-2 text-xs font-mono mb-4 pt-3 border-t border-[#F0F0EC]">
+            {/* Flow Rate */}
+            {lpm ? (
+              <div className="bg-[#FAF9F5] p-2.5 rounded-[2px] border border-[#EAEAEA]">
+                <div className="flex items-center gap-1.5 text-[#888] text-[9px] uppercase tracking-wider mb-0.5">
+                  <Zap className="h-3 w-3 text-[#FF6900]" />
+                  <span>Flow Rate</span>
+                </div>
+                <div className="text-xs font-bold text-[#1A1A18]">
+                  {lpm} <span className="font-normal text-[10px] text-[#666]">L/M</span>
+                  {gpm && <span className="font-normal text-[10px] text-[#999] ml-1.5">({gpm} GPM)</span>}
+                </div>
               </div>
-              <div className="text-sm text-alkota-black font-normal">
-                {gpm} <span className="text-[10px] text-alkota-silver">GPM</span>
-                <span className="mx-2 text-alkota-iron">|</span>
-                {lpm} <span className="text-[10px] text-alkota-silver">LPM</span>
+            ) : power ? (
+              <div className="bg-[#FAF9F5] p-2.5 rounded-[2px] border border-[#EAEAEA]">
+                <div className="flex items-center gap-1.5 text-[#888] text-[9px] uppercase tracking-wider mb-0.5">
+                  <Zap className="h-3 w-3 text-[#FF6900]" />
+                  <span>Drive Unit</span>
+                </div>
+                <div className="text-xs font-bold text-[#1A1A18] truncate" title={power}>
+                  {power}
+                </div>
               </div>
-            </div>
-            <div className="bg-alkota-steel/40 p-4">
-              <div className="flex items-center gap-2 mb-1 font-normal">
-                <Gauge className="h-3 w-3 text-alkota-orange" />
-                <span className="text-[9px] uppercase tracking-widest text-alkota-smoke font-light">Pressure</span>
+            ) : null}
+
+            {/* Operating Pressure */}
+            {bar ? (
+              <div className="bg-[#FAF9F5] p-2.5 rounded-[2px] border border-[#EAEAEA]">
+                <div className="flex items-center gap-1.5 text-[#888] text-[9px] uppercase tracking-wider mb-0.5">
+                  <Gauge className="h-3 w-3 text-[#FF6900]" />
+                  <span>Pressure</span>
+                </div>
+                <div className="text-xs font-bold text-[#1A1A18]">
+                  {bar} <span className="font-normal text-[10px] text-[#666]">BAR</span>
+                  {psi && <span className="font-normal text-[10px] text-[#999] ml-1.5">({psi} PSI)</span>}
+                </div>
               </div>
-              <div className="text-sm text-alkota-black font-normal">
-                {bar} <span className="text-[10px] text-alkota-silver">BAR</span>
-                <span className="mx-2 text-alkota-iron">|</span>
-                {psi} <span className="text-[10px] text-alkota-silver">PSI</span>
+            ) : tempC ? (
+              <div className="bg-[#FAF9F5] p-2.5 rounded-[2px] border border-[#EAEAEA]">
+                <div className="flex items-center gap-1.5 text-[#888] text-[9px] uppercase tracking-wider mb-0.5">
+                  <Thermometer className="h-3 w-3 text-[#FF6900]" />
+                  <span>Max Temp</span>
+                </div>
+                <div className="text-xs font-bold text-[#1A1A18]">
+                  {tempC}°C
+                </div>
               </div>
-            </div>
+            ) : null}
           </div>
 
-          {/* Action Link & Pricing Action */}
-          <div className="mt-8 flex items-center justify-between border-t border-alkota-iron/40 pt-6 font-normal gap-2">
+          {/* Action Row */}
+          <div className="flex items-center justify-between pt-3 border-t border-[#F0F0EC] gap-2">
             <div>
               {dealerPrice ? (
                 <div>
-                  <span className="text-[9px] uppercase tracking-widest text-alkota-smoke block font-light">Dealer Spec</span>
-                  <span className="text-sm text-alkota-orange font-normal">{formatCurrency(dealerPrice)}</span>
+                  <span className="text-[9px] uppercase font-mono text-[#888] block">Dealer Net</span>
+                  <span className="text-xs font-bold font-mono text-[#FF6900]">{formatCurrency(dealerPrice)}</span>
                 </div>
               ) : (
                 <button
                   type="button"
                   onClick={() => setIsPricingModalOpen(true)}
-                  className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-orange font-bold hover:underline text-left cursor-pointer"
+                  className="font-mono text-[11px] text-[#666] hover:text-[#FF6900] transition-colors uppercase tracking-wider cursor-pointer"
                 >
-                  Request Pricing →
+                  Request Quote
                 </button>
               )}
             </div>
+
             <Link
-              href={`/machines/${machine.category || 'hot-water'}/${machine.slug}`}
-              className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-alkota-black group-hover:text-alkota-orange transition-colors font-normal no-underline"
+              href={`/machines/${categoryRoute}/${machine.slug}`}
+              className="inline-flex items-center gap-1.5 text-xs font-medium font-mono uppercase tracking-wider text-[#1A1A18] group-hover:text-[#FF6900] transition-colors no-underline"
             >
-              <span>Spec Sheet</span>
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              <span>View Machine</span>
+              <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1 text-[#FF6900]" />
             </Link>
           </div>
         </div>
-      </motion.div>
+      </motion.article>
     </>
   );
 }
-

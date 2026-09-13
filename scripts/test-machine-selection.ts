@@ -82,15 +82,15 @@ console.log(' ALKOTA UK — FORENSIC MACHINE SELECTION VALIDATION SUITE (QA)');
 console.log('===============================================================\n');
 
 // -------------------------------------------------------------
-// GROUP 1: 127-MACHINE TEST UNIVERSE COVERAGE
+// GROUP 1: 131-MACHINE TEST UNIVERSE COVERAGE
 // -------------------------------------------------------------
-console.log('[Group 1: 127-Machine Test Universe Coverage]');
-assert(allMachines.length === 127, 'Exact canonical universe of 127 machines loaded', `Got ${allMachines.length}`);
+console.log('[Group 1: 131-Machine Test Universe Coverage]');
+assert(allMachines.length === 131, 'Exact canonical universe of 131 machines loaded', `Got ${allMachines.length}`);
 const activeMachines = allMachines.filter(m => m.active && m.status === 'published');
-assert(activeMachines.length === 127, 'All 127 machines are active and published');
+assert(activeMachines.length === 131, 'All 131 machines are active and published');
 
 const resUniverse = selectMachines(allMachines, DEFAULT_REQUIREMENTS);
-assert(resUniverse.totalEvaluated === 127, 'Evaluated all 127 machines with 0 silently skipped');
+assert(resUniverse.totalEvaluated === 131, 'Evaluated all 131 machines with 0 silently skipped');
 assert(
   allMachines.every(m => m.slug && m.model_code && m.category),
   'Every machine record possesses valid canonical slug, model_code, and category'

@@ -43,7 +43,7 @@ export default function MachineDetailPricingCta({ machine }: MachineDetailPricin
             <ArrowRight className="h-4 w-4" />
           </button>
           <Link 
-            href={`/contact?enquiry=consultation&product=${machine.slug}&machines=${machine.slug}&model=${machine.model_code || machine.name}`}
+            href={`/enquire?source=MACHINE_DETAIL&machines=${machine.slug}&model=${machine.model_code || machine.name}`}
             className="flex-1 flex items-center justify-center gap-3 bg-alkota-black p-5 text-xs font-black uppercase tracking-[0.25em] text-white hover:bg-neutral-800 transition-all rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
           >
             Technical Consultation

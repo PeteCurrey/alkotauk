@@ -1,8 +1,8 @@
 {
-  "audited_at": "2026-09-10T18:49:28.059Z",
-  "source_count": 127,
+  "audited_at": "2026-09-13T11:36:02.955Z",
+  "source_count": 131,
   "categories": {
-    "hot-water": 39,
+    "hot-water": 43,
     "cold-water": 31,
     "steam": 10,
     "space-heater": 1,
@@ -12,20 +12,20 @@
     "water-treatment": 5
   },
   "verification_status": {
-    "verified": 121,
+    "verified": 125,
     "verified_with_minor_gaps": 6,
     "needs_review": 0,
     "source_unavailable": 0,
     "legacy_uk": 0
   },
   "quality_scores": {
-    "average": 97.3,
+    "average": 97.4,
     "min": 80,
     "max": 100,
     "by_category": {
       "hot-water": {
-        "count": 39,
-        "avg_score": 98.38461538461539
+        "count": 43,
+        "avg_score": 98.53488372093024
       },
       "cold-water": {
         "count": 31,
@@ -58,16 +58,16 @@
     }
   },
   "metrics": {
-    "total": 127,
-    "published": 127,
-    "active": 127,
+    "total": 131,
+    "published": 131,
+    "active": 131,
     "needs_review": 0,
-    "has_primary_image": 127,
+    "has_primary_image": 131,
     "missing_primary_image": 0,
-    "has_pdf_spec": 121,
+    "has_pdf_spec": 125,
     "unlinked_manufacturer_pdfs": 6,
     "missing_pdf_spec": 0,
-    "category_specs_verified": 127,
+    "category_specs_verified": 131,
     "category_specs_incomplete": 0,
     "duplicate_slugs": [],
     "duplicate_model_codes": []

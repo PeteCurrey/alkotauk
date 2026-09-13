@@ -5465,5 +5465,169 @@
     "source_conflicts": [],
     "gaps_identified": [],
     "notes": "Verified from authoritative series page at https://alkota.com/products/water-treatment-and-recovery-systems/water-treatment-systems/"
+  },
+  {
+    "model_code": "108",
+    "slug": "alkota-108",
+    "name": "Alkota 108",
+    "category": "hot-water",
+    "series": "All Electric Series",
+    "source_url": "https://alkota.com/products/hot-water-pressure-washers/power-washer-industrial-hot-water-all-electric-series/",
+    "verification_status": "VERIFIED",
+    "data_quality_score": 100,
+    "checks": {
+      "identity_verified": true,
+      "name_verified": true,
+      "category_verified": true,
+      "specs_verified": true,
+      "features_verified": true,
+      "certifications_verified": true,
+      "primary_image_verified": true,
+      "pdf_brochure_verified": true,
+      "source_provenance_verified": true
+    },
+    "verified_specs": {
+      "pressure_psi": 400,
+      "pressure_bar": 28,
+      "flow_gpm": 1.7,
+      "flow_lpm": 6.4,
+      "power_source": "Electric Motor",
+      "heating_fuel": "All-Electric / Immersion",
+      "voltage": "240 to 460 v",
+      "phase": 3,
+      "motor_hp": 0.75,
+      "burner_btu": 205000,
+      "dimensions_inches": "34\" L × 24\" W × 37\" H",
+      "weight_lbs": 350
+    },
+    "asset_provenance": {
+      "primary_image_url": "https://alkota.com/wp-content/uploads/2023/07/All_Electric_Hot_Water_Pressure_Washer_02_Alkota-1-1024x1024.png",
+      "image_source": "alkota_cdn",
+      "has_brochure_link_on_source": true,
+      "pdf_spec_url": "https://alkota.com/wp-content/uploads/2023/12/Tech_Data_Hot_Water_Pressure_Washer_All_Electric_Series_Alkota_12_23.pdf"
+    }
+  },
+  {
+    "model_code": "4208",
+    "slug": "alkota-4208",
+    "name": "Alkota 4208",
+    "category": "hot-water",
+    "series": "All Electric Series",
+    "source_url": "https://alkota.com/products/hot-water-pressure-washers/power-washer-industrial-hot-water-all-electric-series/",
+    "verification_status": "VERIFIED",
+    "data_quality_score": 100,
+    "checks": {
+      "identity_verified": true,
+      "name_verified": true,
+      "category_verified": true,
+      "specs_verified": true,
+      "features_verified": true,
+      "certifications_verified": true,
+      "primary_image_verified": true,
+      "pdf_brochure_verified": true,
+      "source_provenance_verified": true
+    },
+    "verified_specs": {
+      "pressure_psi": 2000,
+      "pressure_bar": 138,
+      "flow_gpm": 3.5,
+      "flow_lpm": 13.2,
+      "power_source": "Electric Motor",
+      "heating_fuel": "All-Electric / Immersion",
+      "voltage": "240 to 460 v",
+      "phase": 3,
+      "motor_hp": 5,
+      "burner_btu": 205000,
+      "dimensions_inches": "34\" L × 24\" W × 37\" H",
+      "weight_lbs": 485
+    },
+    "asset_provenance": {
+      "primary_image_url": "https://alkota.com/wp-content/uploads/2023/07/All_Electric_Hot_Water_Pressure_Washer_02_Alkota-1-1024x1024.png",
+      "image_source": "alkota_cdn",
+      "has_brochure_link_on_source": true,
+      "pdf_spec_url": "https://alkota.com/wp-content/uploads/2023/12/Tech_Data_Hot_Water_Pressure_Washer_All_Electric_Series_Alkota_12_23.pdf"
+    }
+  },
+  {
+    "model_code": "4308",
+    "slug": "alkota-4308",
+    "name": "Alkota 4308",
+    "category": "hot-water",
+    "series": "All Electric Series",
+    "source_url": "https://alkota.com/products/hot-water-pressure-washers/power-washer-industrial-hot-water-all-electric-series/",
+    "verification_status": "VERIFIED",
+    "data_quality_score": 100,
+    "checks": {
+      "identity_verified": true,
+      "name_verified": true,
+      "category_verified": true,
+      "specs_verified": true,
+      "features_verified": true,
+      "certifications_verified": true,
+      "primary_image_verified": true,
+      "pdf_brochure_verified": true,
+      "source_provenance_verified": true
+    },
+    "verified_specs": {
+      "pressure_psi": 3000,
+      "pressure_bar": 207,
+      "flow_gpm": 3.5,
+      "flow_lpm": 13.2,
+      "power_source": "Electric Motor",
+      "heating_fuel": "All-Electric / Immersion",
+      "voltage": "240 to 460 v",
+      "phase": 3,
+      "motor_hp": 7.5,
+      "burner_btu": 205000,
+      "dimensions_inches": "34\" L × 24\" W × 37\" H",
+      "weight_lbs": 530
+    },
+    "asset_provenance": {
+      "primary_image_url": "https://alkota.com/wp-content/uploads/2023/07/All_Electric_Hot_Water_Pressure_Washer_02_Alkota-1-1024x1024.png",
+      "image_source": "alkota_cdn",
+      "has_brochure_link_on_source": true,
+      "pdf_spec_url": "https://alkota.com/wp-content/uploads/2023/12/Tech_Data_Hot_Water_Pressure_Washer_All_Electric_Series_Alkota_12_23.pdf"
+    }
+  },
+  {
+    "model_code": "5308",
+    "slug": "alkota-5308",
+    "name": "Alkota 5308",
+    "category": "hot-water",
+    "series": "All Electric Series",
+    "source_url": "https://alkota.com/products/hot-water-pressure-washers/power-washer-industrial-hot-water-all-electric-series/",
+    "verification_status": "VERIFIED",
+    "data_quality_score": 100,
+    "checks": {
+      "identity_verified": true,
+      "name_verified": true,
+      "category_verified": true,
+      "specs_verified": true,
+      "features_verified": true,
+      "certifications_verified": true,
+      "primary_image_verified": true,
+      "pdf_brochure_verified": true,
+      "source_provenance_verified": true
+    },
+    "verified_specs": {
+      "pressure_psi": 3000,
+      "pressure_bar": 207,
+      "flow_gpm": 4.8,
+      "flow_lpm": 18.2,
+      "power_source": "Electric Motor",
+      "heating_fuel": "All-Electric / Immersion",
+      "voltage": "460 v",
+      "phase": 3,
+      "motor_hp": 10,
+      "burner_btu": 307000,
+      "dimensions_inches": "34\" L × 24\" W × 37\" H",
+      "weight_lbs": 530
+    },
+    "asset_provenance": {
+      "primary_image_url": "https://alkota.com/wp-content/uploads/2023/07/All_Electric_Hot_Water_Pressure_Washer_02_Alkota-1-1024x1024.png",
+      "image_source": "alkota_cdn",
+      "has_brochure_link_on_source": true,
+      "pdf_spec_url": "https://alkota.com/wp-content/uploads/2023/12/Tech_Data_Hot_Water_Pressure_Washer_All_Electric_Series_Alkota_12_23.pdf"
+    }
   }
 ]

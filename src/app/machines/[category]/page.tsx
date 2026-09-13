@@ -1,9 +1,12 @@
+import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
+import ComparisonDock from '@/components/comparison/ComparisonDock';
 import { getProducts, CANONICAL_CATEGORIES, Product } from '@/lib/products';
+import { getSeriesByCategory, fromCategoryRoute, toCategoryRoute } from '@/lib/catalogue/series';
 import { getLobbyArticles } from '@/lib/lobby';
 
 // Category Hub Components
@@ -24,9 +27,22 @@ interface CategoryPageProps {
   }>;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// METADATA DEFINITIONS PER CATEGORY
-// ─────────────────────────────────────────────────────────────────────────────
+// Pre-render all canonical category routes
+export async function generateStaticParams() {
+  const categories = Object.keys(CANONICAL_CATEGORIES);
+  const params: Array<{ category: string }> = [];
+
+  for (const cat of categories) {
+    params.push({ category: toCategoryRoute(cat) });
+    if (cat === 'parts-washer') {
+      params.push({ category: 'parts-washer' });
+    }
+  }
+
+  return params;
+}
+
+// Rich metadata configs for all 8 categories
 const CATEGORY_METADATA_CONFIG: Record<string, {
   title: string;
   tagline: string;
@@ -44,7 +60,6 @@ const CATEGORY_METADATA_CONFIG: Record<string, {
     pressureRange: string;
     flowRange: string;
     idealApplication: string;
-    representativeModelSlug?: string;
     representativeImage: string;
   }>;
 }> = {
@@ -74,6 +89,18 @@ const CATEGORY_METADATA_CONFIG: Record<string, {
         representativeImage: '/assets/products/hot-water-skid.png'
       },
       {
+        id: 'all-electric',
+        name: 'All-Electric Zero-Emission Range',
+        tagline: 'Food Processing, Cleanroom & Mining Plant',
+        description: '100% electrically powered and heated pressure washers delivering up to 88°C hot water with zero exhaust gases, zero flames, and zero fossil fuel storage requirements.',
+        drive: 'Industrial Electric Triplex Belt Drive',
+        powerFuel: '460V / 400V 3-Phase Electric Motor + Incoloy Immersion Heating',
+        pressureRange: '69 – 207 BAR (1,000 – 3,000 PSI)',
+        flowRange: '8.3 – 18.9 L/MIN (2.2 – 5.0 GPM)',
+        idealApplication: 'Enclosed manufacturing halls, pharmaceutical suites, and subterranean facilities.',
+        representativeImage: '/assets/products/hot-water-skid.png'
+      },
+      {
         id: 'diesel-engine',
         name: 'Diesel & Petrol Engine Skids',
         tagline: 'Self-Powered Road & Remote Site Rigs',
@@ -95,18 +122,6 @@ const CATEGORY_METADATA_CONFIG: Record<string, {
         pressureRange: '110 – 207 BAR (1,600 – 3,000 PSI)',
         flowRange: '11 – 38 L/MIN (3.0 – 10.0 GPM)',
         idealApplication: 'Indoor food factories, automotive workshops, and multi-bay commercial wash centers.',
-        representativeImage: '/assets/products/hot-water-skid.png'
-      },
-      {
-        id: 'direct-drive',
-        name: 'Compact Direct-Drive Portables',
-        tagline: 'Manoeuvrable Workshop & Agricultural Washers',
-        description: 'Compact 4-wheel mobile chassis with direct-coupled hollow-shaft triplex pumps. Lightweight and easy to navigate through narrow farm buildings and vehicle service workshops.',
-        drive: 'Direct Drive Flange Mount (2800 RPM)',
-        powerFuel: '230V 1PH / 400V 3PH + Diesel Burner',
-        pressureRange: '110 – 180 BAR (1,600 – 2,600 PSI)',
-        flowRange: '9 – 15 L/MIN (2.4 – 4.0 GPM)',
-        idealApplication: 'Agricultural workshops, car dealerships, and light plant maintenance.',
         representativeImage: '/assets/products/hot-water-skid.png'
       }
     ]
@@ -147,18 +162,6 @@ const CATEGORY_METADATA_CONFIG: Record<string, {
         flowRange: '15 – 38 L/MIN (4.0 – 10.0 GPM)',
         idealApplication: 'Quarries, plant hire yards, agricultural combine washdown, and concrete contractor sites.',
         representativeImage: '/assets/products/ged-12v-skid.png'
-      },
-      {
-        id: 'electric-mobile',
-        name: 'Mobile Electric Hand-Truck Washers',
-        tagline: 'Agile Workshop & Facility Maintenance',
-        description: 'Compact two-wheel hand-truck format with non-marking tyres and durable powder-coated steel roll frames. Plug-and-play operation for facilities maintenance and machinery rinsing.',
-        drive: 'Direct Drive Flange Mount',
-        powerFuel: '230V 13A/16A Single Phase Electric',
-        pressureRange: '100 – 160 BAR (1,500 – 2,300 PSI)',
-        flowRange: '8 – 14 L/MIN (2.1 – 3.7 GPM)',
-        idealApplication: 'Property maintenance, facility washrooms, vehicle forecourts, and engineering workshops.',
-        representativeImage: '/assets/products/ged-12v-skid.png'
       }
     ]
   },
@@ -186,37 +189,95 @@ const CATEGORY_METADATA_CONFIG: Record<string, {
         flowRange: '2.5 – 6.0 L/MIN (0.6 – 1.6 GPM)',
         idealApplication: 'Machine rebuild workshops, engine remanufacturing, aerospace maintenance, and precision tooling.',
         representativeImage: '/assets/products/hot-water-skid.png'
-      },
-      {
-        id: 'steam-gas-fired',
-        name: 'Stationary Gas-Fired Steam Cleaners',
-        tagline: 'Indoor Food & Pharmaceutical Processing Plant',
-        description: 'Clean-burning Natural Gas or LPG stationary steam generators. Piped into food production lines for conveyor decontamination, microbial biofilm eradication, and CIP sanitisation without chemical residues.',
-        drive: 'Continuous-Duty Electric Pump Unit',
-        powerFuel: 'Electric Motor + Natural Gas / LPG Burner',
-        pressureRange: '10 – 30 BAR (150 – 435 PSI)',
-        flowRange: '2.0 – 5.0 L/MIN (0.5 – 1.3 GPM)',
-        idealApplication: 'Food & beverage packaging lines, dairy processing, commercial bakeries, and cleanroom facilities.',
-        representativeImage: '/assets/products/hot-water-skid.png'
       }
     ]
+  },
+  'parts-washer': {
+    title: 'Aqueous Parts Washers',
+    tagline: 'Biodegradable Component Wash & Degreasing Cabinets',
+    statement: 'Aqueous hot-water parts cleaning cabinets using biodegradable detergents. Eliminates hazardous solvent degreasing while automatically cleaning automotive, aerospace, and plant machinery components.',
+    heroImage: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=2000&q=80',
+    accentColor: '#10B981',
+    metrics: [
+      { label: 'Wash Temp', value: 'Up to 80°C', detail: 'Thermal detergent activation' },
+      { label: 'Cabinet Formats', value: 'Front & Top Load', detail: 'Turntables up to 72" diameter' },
+      { label: 'Solvent Free', value: '100% Aqueous', detail: 'Safe for workshop personnel & EA compliance' },
+      { label: 'Oil Separation', value: 'Disc Skimmer', detail: 'Automatic continuous hydrocarbon removal' },
+    ],
+    architectures: []
+  },
+  'water-heater': {
+    title: 'Continuous Industrial Water Heaters',
+    tagline: 'Instant High-Output Inline Water Heating',
+    statement: 'Heavy-duty inline water heating modules that instantly convert any cold water pressure washer or industrial wash system into a high-output hot water cleaning operation.',
+    heroImage: '/assets/hot-water-gauge-hero.jpg',
+    accentColor: '#F59E0B',
+    metrics: [
+      { label: 'Coil Rating', value: 'Schedule 80', detail: 'Continuous high-pressure heating' },
+      { label: 'Fuel Types', value: 'Oil / Natural Gas / LP', detail: 'High-efficiency thermal exchangers' },
+      { label: 'Max Pressure', value: 'Up to 350 BAR', detail: 'Preserves full pump discharge force' },
+      { label: 'Warranty', value: '7 Years', detail: 'Schedule 80 coil guarantee' },
+    ],
+    architectures: []
+  },
+  'trailer': {
+    title: 'Mobile Wash Trailers & Custom Rigs',
+    tagline: 'Turnkey Road-Legal Mobile Cleaning Platforms',
+    statement: 'Bespoke single and tandem-axle mobile wash trailers engineered for civil engineering contractors, local authorities, and remote industrial cleaning operations.',
+    heroImage: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=2000&q=80',
+    accentColor: '#EC4899',
+    metrics: [
+      { label: 'Axle Systems', value: 'Single / Tandem', detail: 'Type-approved road chassis' },
+      { label: 'Water Capacity', value: 'Up to 1000 Litres', detail: 'Baffled heavy-duty poly storage' },
+      { label: 'Power Units', value: 'Diesel / Petrol', detail: 'Off-grid independent operation' },
+      { label: 'Build Origin', value: 'Turnkey Alkota UK', detail: 'Commissioned ready for highway use' },
+    ],
+    architectures: []
+  },
+  'water-treatment': {
+    title: 'Water Recovery & Treatment Systems',
+    tagline: 'Closed-Loop Recycling & Trade Effluent Compliance',
+    statement: 'Vacuum recovery, oil-water separation, media filtration, and bulk wastewater evaporators supporting UK Environment Agency discharge compliance.',
+    heroImage: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=2000&q=80',
+    accentColor: '#06B6D4',
+    metrics: [
+      { label: 'Recovery Method', value: 'Berm / Vac Suction', detail: 'Captures 100% of wash runoff' },
+      { label: 'Filtration', value: 'Media & Hydrocyclone', detail: 'Suspended solids separation' },
+      { label: 'Compliance', value: 'UK EA Standard', detail: 'Trade effluent discharge compliance' },
+      { label: 'Operation', value: 'Continuous Recycling', detail: 'Drastically reduces mains water costs' },
+    ],
+    architectures: []
+  },
+  'space-heater': {
+    title: 'Industrial Space Heaters',
+    tagline: 'High-Output Indirect & Direct Fired Workshop Heating',
+    statement: 'High-efficiency industrial forced-air heaters for construction sites, warehouses, and agricultural buildings needing reliable bulk heating during winter operations.',
+    heroImage: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=2000&q=80',
+    accentColor: '#EF4444',
+    metrics: [
+      { label: 'Thermal Fuel', value: 'Diesel / Kerosene', detail: 'High-efficiency clean combustion' },
+      { label: 'Duty Cycle', value: 'Continuous Workshop', detail: 'Thermostatically controlled' },
+      { label: 'Mobility', value: 'Heavy Wheel Kit', detail: 'Easy positioning across job sites' },
+      { label: 'Safety', value: 'Flame-Out Protection', detail: 'Automated safety shut-off' },
+    ],
+    architectures: []
   }
 };
 
 export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
   const { category } = await params;
-  const dbCat = category === 'parts-washers' ? 'parts-washer' : category;
-  const config = CATEGORY_METADATA_CONFIG[category];
+  const dbCat = fromCategoryRoute(category);
+  const config = CATEGORY_METADATA_CONFIG[dbCat] || CATEGORY_METADATA_CONFIG[category];
   const catInfo = CANONICAL_CATEGORIES[dbCat];
   
   const title = config?.title || catInfo?.name || category.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
   const description = config?.statement || catInfo?.description || `Alkota UK industrial ${title.toLowerCase()} systems engineered in South Dakota for continuous-duty performance.`;
 
   return {
-    title: `${title} | Industrial Specification | Alkota UK`,
+    title: `${title} | Industrial Specification Fleet | Alkota UK`,
     description,
     alternates: {
-      canonical: `https://alkota.co.uk/machines/${category}`,
+      canonical: `https://alkota.co.uk/machines/${toCategoryRoute(category)}`,
     },
     openGraph: {
       title: `${title} | Alkota UK`,
@@ -229,15 +290,20 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
 
 export default async function MachineCategoryPage({ params }: CategoryPageProps) {
   const { category: categorySlug } = await params;
-  const dbCategory = categorySlug === 'parts-washers' ? 'parts-washer' : categorySlug;
+  const dbCategory = fromCategoryRoute(categorySlug);
   
-  const [allProducts, lobbyArticles] = await Promise.all([
+  const [allProducts, categorySeries, lobbyArticles] = await Promise.all([
     getProducts({ category: dbCategory }),
+    getSeriesByCategory(dbCategory),
     getLobbyArticles().catch(() => [])
   ]);
 
+  if (allProducts.length === 0 && !CANONICAL_CATEGORIES[dbCategory]) {
+    notFound();
+  }
+
   const catInfo = CANONICAL_CATEGORIES[dbCategory];
-  const config = CATEGORY_METADATA_CONFIG[categorySlug] || {
+  const config = CATEGORY_METADATA_CONFIG[dbCategory] || CATEGORY_METADATA_CONFIG[categorySlug] || {
     title: catInfo?.name || categorySlug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
     tagline: catInfo?.tagline || 'Industrial Specification Cleaning Systems',
     statement: catInfo?.description || 'Built for continuous industrial duty, Alkota cleaning systems deliver uncompromising durability and engineering excellence.',
@@ -249,20 +315,7 @@ export default async function MachineCategoryPage({ params }: CategoryPageProps)
       { label: 'UK Support', value: 'Direct Spares', detail: 'Full technical engineering backup' },
       { label: 'Warranty', value: 'Full Standard', detail: 'Industrial manufacturer warranty' }
     ],
-    architectures: [
-      {
-        id: 'industrial-chassis',
-        name: 'Standard Industrial Chassis',
-        tagline: 'Heavy-Duty Continuous Duty Platform',
-        description: 'Engineered for tough industrial applications with heavy-gauge steel frame and premium components.',
-        drive: 'Industrial Pump Assembly',
-        powerFuel: 'Electric / Engine Driven',
-        pressureRange: 'Heavy Duty',
-        flowRange: 'Standard Flow',
-        idealApplication: 'Industrial workshops and manufacturing facilities.',
-        representativeImage: '/assets/products/hot-water-skid.png'
-      }
-    ]
+    architectures: []
   };
 
   // Filter curated featured products
@@ -296,28 +349,43 @@ export default async function MachineCategoryPage({ params }: CategoryPageProps)
       {/* ─── 02. WHY THIS TECHNOLOGY ──────────────────────────────────────── */}
       <WhyTechnology categorySlug={categorySlug} />
 
-      {/* ─── 03. MACHINE ARCHITECTURE NAVIGATOR ───────────────────────────── */}
-      <ArchitectureNavigator
-        categorySlug={categorySlug}
-        architectures={config.architectures}
-        allCategoryProducts={allProducts}
-      />
+      {/* ─── 03. MACHINE ARCHITECTURE NAVIGATOR (IF APPLICABLE) ───────────── */}
+      {config.architectures && config.architectures.length > 0 && (
+        <ArchitectureNavigator
+          categorySlug={categorySlug}
+          architectures={config.architectures}
+          allCategoryProducts={allProducts}
+        />
+      )}
 
       {/* ─── 04. FEATURED CURATED SYSTEMS ─────────────────────────────────── */}
-      <FeaturedMachines
-        categorySlug={categorySlug}
-        featuredProducts={displayFeatured}
-      />
+      {displayFeatured.length > 0 && (
+        <FeaturedMachines
+          categorySlug={categorySlug}
+          featuredProducts={displayFeatured}
+        />
+      )}
 
       {/* ─── 05. VISUAL ENGINEERING DEEP DIVE ─────────────────────────────── */}
       <CategoryEngineering categorySlug={categorySlug} />
 
-      {/* ─── 06. FULL FILTERABLE CATALOGUE ────────────────────────────────── */}
-      <FullCatalogueSection
-        categorySlug={categorySlug}
-        categoryName={config.title}
-        allProducts={allProducts}
-      />
+      {/* ─── 06. FULL FILTERABLE CATALOGUE WITH SERIES-FIRST NAVIGATION ─────── */}
+      <Suspense fallback={
+        <section className="bg-[#FAF9F5] border-b border-[#E5E5E0] py-20 px-6 sm:px-12">
+          <div className="mx-auto max-w-7xl">
+            <div className="py-12 font-mono text-xs text-[#888] uppercase tracking-wider animate-pulse">
+              Loading {config.title} catalogue...
+            </div>
+          </div>
+        </section>
+      }>
+        <FullCatalogueSection
+          categorySlug={categorySlug}
+          categoryName={config.title}
+          allProducts={allProducts}
+          seriesList={categorySeries}
+        />
+      </Suspense>
 
       {/* ─── 06B. SEEN IN THE REAL WORLD // MESS QUEST ─────────────────────── */}
       <SeenInRealWorld category={categorySlug} />
@@ -331,8 +399,8 @@ export default async function MachineCategoryPage({ params }: CategoryPageProps)
         articles={displayLobbyArticles}
       />
 
-      {/* ─── 08B. EDITORIAL FIELD CASE LINK ─────────────────────────────────── */}
-      {categorySlug === 'hot-water' && (
+      {/* ─── 08B. EDITORIAL FIELD CASE LINK (HOT WATER SPECIFIC) ────────────── */}
+      {dbCategory === 'hot-water' && (
         <section className="bg-[#121212] text-white py-12 px-6 sm:px-12 border-t border-b border-[#222]">
           <div className="mx-auto max-w-7xl flex flex-col sm:flex-row sm:items-center justify-between gap-6">
             <div>
@@ -362,6 +430,7 @@ export default async function MachineCategoryPage({ params }: CategoryPageProps)
         categoryName={config.title}
       />
 
+      <ComparisonDock />
       <Footer />
     </main>
   );

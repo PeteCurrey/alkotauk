@@ -232,6 +232,7 @@ export default function HelpMeChooseClient({
     const models = selectionResult.shortlist.map(s => s.machine.model_code).join(',');
     const machines = selectionResult.shortlist.map(s => s.machine.slug).join(',');
     const params = new URLSearchParams();
+    params.set('source', 'MACHINE_SELECTOR');
     params.set('enquiry', 'selector');
     if (models) params.set('models', models);
     if (machines) params.set('machines', machines);
@@ -249,7 +250,7 @@ export default function HelpMeChooseClient({
     if (reqs.preferences && reqs.preferences.length > 0) {
       params.set('prefs', reqs.preferences.join(','));
     }
-    return `/contact?${params.toString()}`;
+    return `/enquire?${params.toString()}`;
   }, [selectionResult, reqs]);
 
   // Filter unmet machines for inspector

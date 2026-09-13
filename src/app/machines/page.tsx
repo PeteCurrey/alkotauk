@@ -1,129 +1,125 @@
+import { Suspense } from 'react';
+import { Metadata } from 'next';
+import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 import Breadcrumbs from '@/components/Breadcrumbs';
-import Link from 'next/link';
-import { ArrowDown, Sliders } from 'lucide-react';
 import Footer from '@/components/Footer';
-import { getProducts, CANONICAL_CATEGORIES } from '@/lib/products';
-import MachineCatalogueGrid from '@/components/MachineCatalogueGrid';
+import ComparisonDock from '@/components/comparison/ComparisonDock';
+import { getProducts } from '@/lib/products';
+import { getAllSeries, getCategoriesWithDetails } from '@/lib/catalogue/series';
+import CategoryShowcaseGrid from '@/components/catalogue/CategoryShowcaseGrid';
+import CatalogueFleetExplorer from '@/components/catalogue/CatalogueFleetExplorer';
+import { Sliders, ShieldCheck, Wrench, ArrowRight } from 'lucide-react';
 
-export const metadata = {
-  title: 'Industrial Pressure Washers, Steam Cleaners & Wash Systems | Alkota UK',
-  description: 'Explore the complete Alkota industrial pressure washing fleet. Heavy-duty hot water pressure washers, cold water units, industrial steam cleaners, mobile trailer rigs, and bespoke wash plant systems.',
+export const metadata: Metadata = {
+  title: 'Industrial Pressure Washers & Cleaning Equipment Fleet | Alkota UK',
+  description: 'Explore the authoritative Alkota UK machine catalogue. 131 heavy-duty industrial configurations across 36 manufacturer series and 8 categories. Engineered in South Dakota for continuous industrial duty.',
+  alternates: {
+    canonical: 'https://alkota.co.uk/machines',
+  },
   openGraph: {
-    title: 'Industrial Pressure Washing Fleet & Machinery | Alkota UK',
-    description: 'American industrial pressure washers engineered with cold-rolled steel, triplex ceramic plunger pumps, and Schedule 80 heating coils with a 7-year warranty.',
+    title: 'Alkota Industrial Cleaning Machinery & Fleet Catalogue',
+    description: 'Hot water pressure washers, cold wash units, industrial steam generators, mobile trailer rigs, and aqueous parts washers.',
     url: 'https://alkota.co.uk/machines',
+    type: 'website',
   },
 };
 
 export default async function MachinesPage() {
-  // Fetch all published machines via data access layer (Supabase with canonical snapshot fallback)
-  const machines = await getProducts();
+  // Fetch authoritative data from single source of truth
+  const [machines, allSeries, categories] = await Promise.all([
+    getProducts(),
+    getAllSeries(),
+    getCategoriesWithDetails(),
+  ]);
 
   return (
-    <main className="min-h-screen bg-[#FAF9F5] text-alkota-black font-normal pb-0">
+    <main className="min-h-screen bg-[#FAF9F5] text-[#1A1A18] font-normal pb-0">
       <Navigation />
 
-      {/* ── 01. FULL-SCREEN CINEMATIC HERO ─────────────────────────────────── */}
-      <section className="relative min-h-screen flex flex-col justify-between bg-[#0A0A08] text-white px-6 sm:px-12 pt-32 pb-16 overflow-hidden border-b border-[#222]">
-        {/* Background Image / Ambient Overlay */}
-        <div className="absolute inset-0 z-0 overflow-hidden">
-          <div 
-            className="w-full h-full bg-cover bg-center scale-105"
-            style={{ 
-              backgroundImage: 'url(/assets/hero-home-header.jpg)',
-              filter: 'brightness(0.45) contrast(1.15)'
-            }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-black/30" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A08] via-transparent to-black/60" />
-        </div>
+      {/* ── 01. INTRODUCTORY DISCOVERY HEADER ─────────────────────────────── */}
+      <header className="bg-white border-b border-[#E5E5E0] pt-28 pb-14 px-6 sm:px-12">
+        <div className="mx-auto max-w-7xl">
+          <Breadcrumbs items={[{ label: 'Equipment Catalogue' }]} />
 
-        {/* Top Breadcrumbs */}
-        <div className="relative z-10 mx-auto max-w-7xl w-full">
-          <Breadcrumbs items={[{ label: 'Fleet & Catalogue' }]} />
-        </div>
+          <div className="mt-8 flex flex-col lg:flex-row lg:items-end justify-between gap-8">
+            <div className="max-w-3xl">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="h-0.5 w-6 bg-[#FF6900]" />
+                <span className="font-mono text-xs font-semibold uppercase tracking-[0.25em] text-[#FF6900]">
+                  Alkota Industrial Range
+                </span>
+              </div>
 
-        {/* Hero Centrepiece */}
-        <div className="relative z-10 mx-auto max-w-7xl w-full my-auto py-10">
-          <div className="max-w-4xl">
-            <div className="flex items-center gap-3 mb-6">
-              <span className="h-[2px] w-8 bg-alkota-orange" />
-              <span className="font-mono text-[10px] font-medium uppercase tracking-[0.35em] text-alkota-orange">
-                THE {machines.length}-MACHINE INDUSTRIAL FLEET
-              </span>
+              <h1 className="text-3xl sm:text-5xl font-light text-[#1A1A18] tracking-tight leading-none mb-4">
+                The Heavy Industrial Fleet
+              </h1>
+
+              <p className="text-sm sm:text-base text-[#555] leading-relaxed max-w-2xl font-normal">
+                Direct UK access to Alkota’s complete range: <strong>{machines.length} verified machines</strong> across <strong>{allSeries.length} manufacturer series</strong> and <strong>8 canonical categories</strong>. Engineered with ASTM A53 Schedule 80 cold-rolled coils, triplex ceramic plunger pumps, and continuous-duty electric, diesel, and gas powerplants.
+              </p>
             </div>
 
-            <h1
-              className="font-extralight uppercase tracking-tight text-white leading-[0.92] mb-6"
-              style={{ fontSize: 'clamp(2.5rem, 6.5vw, 5.5rem)' }}
-            >
-              Industrial <br />
-              <span className="text-alkota-orange">Command.</span>
-            </h1>
-
-            <p className="text-base sm:text-xl text-[#CCC] leading-relaxed max-w-2xl mb-10 font-light">
-              The definitive standard in industrial cleaning. From continuous-duty hot water skids and high-flow cold water systems to saturated dry steam and turnkey road trailers.
-            </p>
-
-            <div className="flex flex-wrap items-center gap-4">
-              <a
-                href="#catalogue"
-                className="inline-flex items-center gap-3 bg-alkota-orange hover:bg-white hover:text-black text-white px-8 py-4 text-xs font-medium uppercase tracking-widest transition-all shadow-xl no-underline"
-              >
-                <span>Browse Full Fleet Below</span>
-                <ArrowDown className="h-4 w-4" />
-              </a>
-
+            {/* Help Me Choose Pathway Card */}
+            <aside className="bg-[#FAF9F5] border border-[#E0E0DC] p-5 rounded-[4px] lg:max-w-sm shrink-0">
+              <div className="flex items-center gap-2 mb-1.5 font-mono text-xs font-semibold text-[#1A1A18] uppercase tracking-wider">
+                <Sliders className="w-4 h-4 text-[#FF6900]" />
+                <span>Not Sure What You Need?</span>
+              </div>
+              <p className="text-xs text-[#666] leading-relaxed mb-3">
+                Answer 4 operational questions to instantly identify the optimal water temperature, drive configuration, and pressure rating for your site.
+              </p>
               <Link
                 href="/machines/help-me-choose"
-                className="inline-flex items-center gap-2 border border-white/25 bg-black/40 text-white px-6 py-4 text-xs font-medium uppercase tracking-widest hover:border-white hover:bg-white hover:text-black transition-all backdrop-blur-sm no-underline"
+                className="inline-flex items-center gap-2 bg-[#1A1A18] hover:bg-[#FF6900] text-white px-4 py-2 text-xs font-mono uppercase tracking-wider font-semibold rounded-[3px] transition-colors no-underline"
               >
-                <Sliders className="h-4 w-4 text-alkota-orange" />
-                <span>Help Me Choose</span>
+                <span>Launch Machine Selector</span>
+                <ArrowRight className="w-3 h-3" />
               </Link>
-            </div>
+            </aside>
           </div>
         </div>
+      </header>
 
-        {/* Bottom Category Quick-Jump Strip */}
-        <div className="relative z-10 mx-auto max-w-7xl w-full pt-8 border-t border-white/10">
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3 text-xs font-mono">
-            {Object.entries(CANONICAL_CATEGORIES).map(([slug, info], i) => (
-              <Link
-                key={slug}
-                href={`/machines/${slug === 'parts-washer' ? 'parts-washers' : slug}`}
-                className="p-3 bg-white/5 hover:bg-alkota-orange/20 border border-white/10 hover:border-alkota-orange transition-all no-underline text-white block"
-              >
-                <span className="text-[9px] text-alkota-orange uppercase block mb-1">0{i + 1}</span>
-                <span className="text-xs uppercase font-light truncate block">{info.name.replace('Pressure Washers', '').replace('Industrial', '').trim()} →</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* ── 02. MAIN CATALOGUE CONTENT BODY ───────────────────────────────── */}
+      <div className="py-16 px-6 sm:px-12 mx-auto max-w-7xl">
+        {/* Category Showcase (8 Canonical Categories) */}
+        <CategoryShowcaseGrid categories={categories} />
 
-      {/* ── 02. FULL CATALOGUE GRID & INTERACTIVE FILTER ────────────────────── */}
-      <section id="catalogue" className="py-24 px-6 sm:px-12">
-        <div className="mx-auto max-w-7xl">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12 pb-6 border-b border-[#E0E0DC]">
+        {/* Full Interactive Fleet Explorer (Category tabs, series navigation, filters, grid) */}
+        <section id="fleet-explorer" className="pt-8">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 pb-4 border-b border-[#E5E5E0] gap-4">
             <div>
-              <span className="font-mono text-xs uppercase tracking-[0.25em] text-alkota-orange block mb-2 font-medium">
-                COMPLETE INVENTORY
+              <span className="font-mono text-[11px] uppercase tracking-[0.25em] text-[#FF6900] block mb-1 font-semibold">
+                02 // INTERACTIVE FLEET DISCOVERY
               </span>
-              <h2 className="font-extralight text-3xl sm:text-4xl uppercase tracking-tight text-alkota-black">
-                Industrial Fleet ({machines.length})
+              <h2 className="text-2xl sm:text-3xl font-light text-[#1A1A18] tracking-tight">
+                Filter & Compare Models
               </h2>
             </div>
-            <p className="text-xs font-mono text-[#888] uppercase tracking-wider">
-              Engineered in Alcester, SD · Backed Across the UK
+            <p className="font-mono text-xs text-[#888] uppercase tracking-wider">
+              Real-time specification filters & side-by-side comparison
             </p>
           </div>
 
-          <MachineCatalogueGrid initialMachines={machines} />
-        </div>
-      </section>
+          <Suspense fallback={
+            <div className="py-16 text-center">
+              <div className="inline-block h-6 w-6 animate-spin rounded-full border-2 border-[#FF6900] border-t-transparent mb-3" />
+              <p className="font-mono text-xs text-[#888] uppercase tracking-wider">
+                Loading fleet explorer...
+              </p>
+            </div>
+          }>
+            <CatalogueFleetExplorer
+              initialMachines={machines}
+              allSeries={allSeries}
+              categories={categories}
+            />
+          </Suspense>
+        </section>
+      </div>
 
+      <ComparisonDock />
       <Footer />
     </main>
   );

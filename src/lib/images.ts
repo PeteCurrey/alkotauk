@@ -87,10 +87,13 @@ export function resolveMachineImage(
     '25755': '/assets/products/25755.png',
     '25755-gas-engine': '/assets/products/25755.png',
     '325csh': '/assets/products/325csh.png',
-    '216cse': '/assets/products/216ax4.png',
-    '320cse': '/assets/products/216ax4.png',
-    '845s': '/assets/products/ged-12v-skid.png',
     'jetter': '/assets/products/jetter-series.png',
+
+    // All Electric Hot Water Series
+    '108': 'https://alkota.com/wp-content/uploads/2023/07/All_Electric_Hot_Water_Pressure_Washer_02_Alkota-1-1024x1024.png',
+    '4208': 'https://alkota.com/wp-content/uploads/2023/07/All_Electric_Hot_Water_Pressure_Washer_02_Alkota-1-1024x1024.png',
+    '4308': 'https://alkota.com/wp-content/uploads/2023/07/All_Electric_Hot_Water_Pressure_Washer_02_Alkota-1-1024x1024.png',
+    '5308': 'https://alkota.com/wp-content/uploads/2023/07/All_Electric_Hot_Water_Pressure_Washer_02_Alkota-1-1024x1024.png',
 
     // Steam Cleaners
     '111': '/assets/products/steam-oil.png',

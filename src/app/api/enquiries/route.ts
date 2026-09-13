@@ -42,6 +42,7 @@ import {
   getClientKey,
   MAX_PAYLOAD_BYTES,
 } from '@/lib/enquiries/validation';
+import { sendEnquiryNotification } from '@/lib/enquiries/notifications';
 
 // ---------------------------------------------------------------------------
 // POST /api/enquiries
@@ -405,6 +406,17 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         return NextResponse.json(buildErrorResponse(err), { status: 500 });
       }
     }
+
+    // ── 13b. Internal Notification (Non-blocking) ───────────────────────────
+    sendEnquiryNotification({
+      enquiry: {
+        ...enquiryRecord,
+        id: enquiryId,
+      },
+      machines: machineRecords,
+    }).catch(notifyErr => {
+      console.error('[API/Enquiries] Notification dispatch error:', notifyErr);
+    });
 
     // ── 14. Success ──────────────────────────────────────────────────────────
     return NextResponse.json(

@@ -5,11 +5,21 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Mail, Copy, CheckCircle, Calendar, User, Building2, Phone, Tag, FileText, ExternalLink } from 'lucide-react';
 
-const STATUS_OPTIONS = ['new', 'in-progress', 'quoted', 'won', 'lost', 'archived'];
+const STATUS_OPTIONS = ['new', 'acknowledged', 'contacted', 'qualifying', 'quoting', 'won', 'lost', 'closed'];
 const STATUS_COLOURS: Record<string, string> = {
-  new: '#FF6900', 'in-progress': '#2563EB', quoted: '#7C3AED',
-  won: '#16A34A', lost: '#DC2626', archived: '#9CA3AF',
-  read: '#666', responded: '#3B82F6', closed: '#22C55E',
+  new: '#FF6900',
+  acknowledged: '#F59E0B',
+  contacted: '#3B82F6',
+  qualifying: '#8B5CF6',
+  quoting: '#EC4899',
+  won: '#16A34A',
+  lost: '#DC2626',
+  closed: '#6B7280',
+  'in-progress': '#2563EB',
+  quoted: '#7C3AED',
+  archived: '#9CA3AF',
+  read: '#666',
+  responded: '#3B82F6',
 };
 
 function CopyButton({ value }: { value: string }) {
@@ -124,6 +134,8 @@ export default function EnquiryDetailPage({ params }: { params: Promise<{ id: st
             <DetailRow label="Job Title" value={enquiry.job_title} />
             <DetailRow label="Email" value={enquiry.email} copyable />
             <DetailRow label="Phone" value={enquiry.phone} copyable />
+            <DetailRow label="Postcode" value={enquiry.postcode} copyable />
+            <DetailRow label="Preferred Contact" value={enquiry.preferred_contact_method} />
           </div>
 
           {/* Enquiry Details */}
@@ -132,7 +144,9 @@ export default function EnquiryDetailPage({ params }: { params: Promise<{ id: st
               <FileText className="h-4 w-4 text-[#FF6900]" />
               <p className="font-ibm-plex-mono text-[9px] font-black uppercase tracking-widest text-[#FF6900]">Enquiry Details</p>
             </div>
-            <DetailRow label="Type" value={enquiry.type} />
+            <DetailRow label="Source" value={enquiry.source || enquiry.type} />
+            <DetailRow label="Context" value={enquiry.enquiry_context} />
+            <DetailRow label="Outcome" value={enquiry.selection_outcome} />
             <DetailRow label="Product" value={enquiry.product_name} />
             <DetailRow label="Industry" value={enquiry.industry} />
             <DetailRow label="Quantity" value={enquiry.quantity?.toString()} />
@@ -147,178 +161,261 @@ export default function EnquiryDetailPage({ params }: { params: Promise<{ id: st
           </div>
 
           {/* Machine Engineering Consultation Dossier */}
-          {(enquiry.metadata?.machines?.length > 0 || enquiry.metadata?.revalidation_result) && (
-            <div className="border border-[#FF6900]/50 bg-[#0D0D0D] p-6 space-y-6">
-              {/* Header */}
-              <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-[#222]">
-                <div className="flex items-center gap-2">
-                  <span className="font-ibm-plex-mono text-[10px] bg-[#FF6900] text-white px-2 py-0.5 uppercase font-bold tracking-wider">
-                    {enquiry.metadata.machine_source === 'machine_selector' ? 'HELP ME CHOOSE SHORTLIST' :
-                     enquiry.metadata.machine_source === 'machine_comparison' ? 'FLEET COMPARISON MATRIX' :
-                     'MACHINE QUOTATION'}
-                  </span>
-                  <p className="font-ibm-plex-mono text-[10px] font-black uppercase tracking-widest text-white">
-                    Engineering Consultation Dossier
-                  </p>
+          {(() => {
+            const machinesList = (enquiry.enquiry_machines && enquiry.enquiry_machines.length > 0)
+              ? enquiry.enquiry_machines.map((em: any) => ({
+                  model_code: em.model_code_snapshot,
+                  name: em.machine_name_snapshot,
+                  slug: em.slug_snapshot,
+                  category: em.category_snapshot,
+                  pressure_bar: em.specs_snapshot?.pressure_bar,
+                  flow_rate_lpm: em.specs_snapshot?.flow_rate_lpm,
+                  power_source: em.specs_snapshot?.power_source,
+                  heating_fuel: em.specs_snapshot?.heating_fuel,
+                  voltage: em.specs_snapshot?.voltage,
+                  phase: em.specs_snapshot?.phase,
+                  server_match_status: em.selection_status,
+                  reasons: em.match_reasons,
+                  failure_reasons: em.failure_reasons,
+                  role: em.role,
+                }))
+              : enquiry.metadata?.machines || [];
+
+            const isSelector = enquiry.source === 'MACHINE_SELECTOR' || enquiry.metadata?.machine_source === 'machine_selector';
+            const isCompare = enquiry.source === 'MACHINE_COMPARISON' || enquiry.metadata?.machine_source === 'machine_comparison';
+            const hasRevalidation = enquiry.revalidation_status || enquiry.metadata?.revalidation_result;
+            const discrepancyDetected = enquiry.discrepancy_detected || enquiry.metadata?.revalidation_result?.discrepancy_detected;
+
+            if (machinesList.length === 0 && !hasRevalidation && !enquiry.req_application) return null;
+
+            return (
+              <div className="border border-[#FF6900]/50 bg-[#0D0D0D] p-6 space-y-6">
+                {/* Header */}
+                <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-[#222]">
+                  <div className="flex items-center gap-2">
+                    <span className="font-ibm-plex-mono text-[10px] bg-[#FF6900] text-white px-2 py-0.5 uppercase font-bold tracking-wider">
+                      {isSelector ? 'HELP ME CHOOSE SHORTLIST' : isCompare ? 'FLEET COMPARISON MATRIX' : 'MACHINE SPECIFICATION'}
+                    </span>
+                    <p className="font-ibm-plex-mono text-[10px] font-black uppercase tracking-widest text-white">
+                      Engineering Consultation Dossier
+                    </p>
+                  </div>
+
+                  {hasRevalidation && (
+                    <span className={`font-ibm-plex-mono text-[9px] uppercase px-2 py-0.5 border ${
+                      discrepancyDetected
+                        ? 'bg-red-950/40 text-red-400 border-red-500/40'
+                        : 'bg-emerald-950/40 text-emerald-400 border-emerald-500/40'
+                    }`}>
+                      {discrepancyDetected
+                        ? '● CLIENT DISCREPANCY DETECTED'
+                        : '✓ SERVER REVALIDATED'}
+                    </span>
+                  )}
                 </div>
 
-                {enquiry.metadata.revalidation_result && (
-                  <span className={`font-ibm-plex-mono text-[9px] uppercase px-2 py-0.5 border ${
-                    enquiry.metadata.revalidation_result.discrepancy_detected
-                      ? 'bg-red-950/40 text-red-400 border-red-500/40'
-                      : 'bg-emerald-950/40 text-emerald-400 border-emerald-500/40'
-                  }`}>
-                    {enquiry.metadata.revalidation_result.discrepancy_detected
-                      ? '● CLIENT DISCREPANCY DETECTED'
-                      : '✓ SERVER REVALIDATED'}
-                  </span>
+                {/* Discrepancy details alert */}
+                {discrepancyDetected && enquiry.discrepancy_details && enquiry.discrepancy_details.length > 0 && (
+                  <div className="bg-red-950/30 border border-red-500/40 p-3 space-y-1">
+                    <span className="font-ibm-plex-mono text-[10px] text-red-400 font-bold block uppercase">
+                      Audit Trail: Discrepancies Between Client Claim & Server Verification
+                    </span>
+                    {enquiry.discrepancy_details.map((d: string, dIdx: number) => (
+                      <p key={dIdx} className="text-xs text-red-300/90 font-mono">• {d}</p>
+                    ))}
+                  </div>
                 )}
-              </div>
 
-              {/* Machine Cards */}
-              {enquiry.metadata.machines && enquiry.metadata.machines.length > 0 && (
-                <div>
-                  <p className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#666] mb-3">
-                    Evaluated Machinery ({enquiry.metadata.machines.length} Model{enquiry.metadata.machines.length > 1 ? 's' : ''}):
-                  </p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {enquiry.metadata.machines.map((m: any, idx: number) => (
-                      <div key={idx} className="bg-[#111] p-4 border border-[#222] space-y-3">
-                        <div className="flex items-start justify-between gap-2">
-                          <div>
-                            <span className="font-ibm-plex-mono text-sm font-bold text-[#FF6900]">
-                              {m.model_code}
-                            </span>
-                            <p className="text-white text-xs font-semibold">{m.name}</p>
-                            <span className="font-ibm-plex-mono text-[9px] text-[#666] uppercase">{m.category}</span>
+                {/* Machine Cards */}
+                {machinesList.length > 0 && (
+                  <div>
+                    <p className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#666] mb-3">
+                      Evaluated Machinery ({machinesList.length} Model{machinesList.length > 1 ? 's' : ''}):
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {machinesList.map((m: any, idx: number) => (
+                        <div key={idx} className="bg-[#111] p-4 border border-[#222] space-y-3">
+                          <div className="flex items-start justify-between gap-2">
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <span className="font-ibm-plex-mono text-sm font-bold text-[#FF6900]">
+                                  {m.model_code}
+                                </span>
+                                {m.role && (
+                                  <span className="font-ibm-plex-mono text-[8px] px-1 py-0.2 bg-[#222] text-[#888] uppercase">
+                                    {m.role}
+                                  </span>
+                                )}
+                              </div>
+                              <p className="text-white text-xs font-semibold">{m.name}</p>
+                              <span className="font-ibm-plex-mono text-[9px] text-[#666] uppercase">{m.category}</span>
+                            </div>
+                            {m.slug && (
+                              <Link
+                                href={`/machines/${m.category || 'all'}/${m.slug}`}
+                                target="_blank"
+                                className="text-[#666] hover:text-[#FF6900] transition-colors p-1"
+                                title="View full specification sheet"
+                              >
+                                <ExternalLink className="h-3.5 w-3.5" />
+                              </Link>
+                            )}
                           </div>
-                          {m.slug && (
-                            <Link
-                              href={`/machines/${m.category || 'all'}/${m.slug}`}
-                              target="_blank"
-                              className="text-[#666] hover:text-[#FF6900] transition-colors p-1"
-                              title="View full specification sheet"
-                            >
-                              <ExternalLink className="h-3.5 w-3.5" />
-                            </Link>
+
+                          {/* Specs grid */}
+                          <div className="grid grid-cols-2 gap-2 text-[10px] font-mono border-t border-b border-[#1A1A1A] py-2">
+                            <div>
+                              <span className="text-[#555] block">Pressure:</span>
+                              <span className="text-white font-bold">{m.pressure_bar ? `${m.pressure_bar} BAR` : '—'}</span>
+                            </div>
+                            <div>
+                              <span className="text-[#555] block">Flow Rate:</span>
+                              <span className="text-white font-bold">{m.flow_rate_lpm ? `${m.flow_rate_lpm} LPM` : '—'}</span>
+                            </div>
+                            <div>
+                              <span className="text-[#555] block">Power:</span>
+                              <span className="text-[#AAA]">{m.power_source || '—'}</span>
+                            </div>
+                            <div>
+                              <span className="text-[#555] block">Heating:</span>
+                              <span className="text-[#FF6900]">{m.heating_fuel || 'Cold / Ambient'}</span>
+                            </div>
+                            {m.voltage && (
+                              <div className="col-span-2">
+                                <span className="text-[#555] block">Electrical:</span>
+                                <span className="text-[#AAA]">{m.voltage}{m.phase ? ` (${m.phase}-Phase)` : ''}</span>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Match status */}
+                          {m.server_match_status && (
+                            <div className="flex items-center justify-between text-[9px] font-mono">
+                              <span className="text-[#666] uppercase">Server Status:</span>
+                              <span className={`px-2 py-0.5 font-bold uppercase ${
+                                m.server_match_status === 'STRONG_MATCH' ? 'text-emerald-400 bg-emerald-950/30' :
+                                m.server_match_status === 'POSSIBLE_MATCH' ? 'text-amber-400 bg-amber-950/30' :
+                                'text-red-400 bg-red-950/30'
+                              }`}>
+                                {m.server_match_status}
+                              </span>
+                            </div>
                           )}
-                        </div>
 
-                        {/* Specs grid */}
-                        <div className="grid grid-cols-2 gap-2 text-[10px] font-mono border-t border-b border-[#1A1A1A] py-2">
-                          <div>
-                            <span className="text-[#555] block">Pressure:</span>
-                            <span className="text-white font-bold">{m.pressure_bar ? `${m.pressure_bar} BAR` : '—'}</span>
-                          </div>
-                          <div>
-                            <span className="text-[#555] block">Flow Rate:</span>
-                            <span className="text-white font-bold">{m.flow_rate_lpm ? `${m.flow_rate_lpm} LPM` : '—'}</span>
-                          </div>
-                          <div>
-                            <span className="text-[#555] block">Power:</span>
-                            <span className="text-[#AAA]">{m.power_source || '—'}</span>
-                          </div>
-                          <div>
-                            <span className="text-[#555] block">Heating:</span>
-                            <span className="text-[#FF6900]">{m.heating_fuel || 'Cold / Ambient'}</span>
-                          </div>
-                          {m.voltage && (
-                            <div className="col-span-2">
-                              <span className="text-[#555] block">Electrical:</span>
-                              <span className="text-[#AAA]">{m.voltage}{m.phase ? ` (${m.phase}-Phase)` : ''}</span>
+                          {m.reasons && m.reasons.length > 0 && (
+                            <div className="text-[10px] text-[#888] space-y-0.5">
+                              <span className="text-[#555] font-mono text-[9px] uppercase block">Verified Capabilities:</span>
+                              {m.reasons.slice(0, 3).map((r: string, rIdx: number) => (
+                                <p key={rIdx} className="leading-tight">• {r}</p>
+                              ))}
                             </div>
                           )}
                         </div>
-
-                        {/* Match status */}
-                        {m.server_match_status && (
-                          <div className="flex items-center justify-between text-[9px] font-mono">
-                            <span className="text-[#666] uppercase">Server Status:</span>
-                            <span className={`px-2 py-0.5 font-bold uppercase ${
-                              m.server_match_status === 'STRONG_MATCH' ? 'text-emerald-400 bg-emerald-950/30' :
-                              m.server_match_status === 'POSSIBLE_MATCH' ? 'text-amber-400 bg-amber-950/30' :
-                              'text-red-400 bg-red-950/30'
-                            }`}>
-                              {m.server_match_status}
-                            </span>
-                          </div>
-                        )}
-
-                        {m.reasons && m.reasons.length > 0 && (
-                          <div className="text-[10px] text-[#888] space-y-0.5">
-                            <span className="text-[#555] font-mono text-[9px] uppercase block">Verified Capabilities:</span>
-                            {m.reasons.slice(0, 3).map((r: string, rIdx: number) => (
-                              <p key={rIdx} className="leading-tight">• {r}</p>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Stated Requirements Breakdown */}
-              {(enquiry.metadata.requirements_summary || enquiry.metadata.structured_requirements) && (
-                <div className="border-t border-[#222] pt-4">
-                  <p className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#666] mb-2">
-                    Customer's Stated Requirements:
-                  </p>
-                  {enquiry.metadata.requirements_summary ? (
-                    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-1 text-xs text-[#AAA] font-mono">
-                      {enquiry.metadata.requirements_summary.map((req: string, idx: number) => (
-                        <li key={idx} className="flex items-center gap-1.5 bg-[#141414] p-1.5 border border-[#1F1F1F]">
-                          <span className="text-[#FF6900]">✓</span>
-                          <span>{req}</span>
-                        </li>
                       ))}
-                    </ul>
-                  ) : null}
-                </div>
-              )}
-
-              {/* Site Readiness (Power, Water, Postcode) */}
-              {(enquiry.metadata.site_power || enquiry.metadata.site_water || enquiry.metadata.postcode) && (
-                <div className="border-t border-[#222] pt-4 grid grid-cols-3 gap-3 text-xs font-mono">
-                  {enquiry.metadata.site_power && (
-                    <div className="bg-[#111] p-3 border border-[#222]">
-                      <span className="text-[#666] text-[9px] uppercase block">Site Power</span>
-                      <span className="text-white font-bold">{enquiry.metadata.site_power}</span>
                     </div>
-                  )}
-                  {enquiry.metadata.site_water && (
-                    <div className="bg-[#111] p-3 border border-[#222]">
-                      <span className="text-[#666] text-[9px] uppercase block">Water Supply</span>
-                      <span className="text-white font-bold">{enquiry.metadata.site_water}</span>
-                    </div>
-                  )}
-                  {enquiry.metadata.postcode && (
-                    <div className="bg-[#111] p-3 border border-[#222]">
-                      <span className="text-[#666] text-[9px] uppercase block">Site Postcode</span>
-                      <span className="text-[#FF6900] font-bold">{enquiry.metadata.postcode}</span>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* Sales Engineer Checklist (Confirmation Items) */}
-              {enquiry.metadata.confirmation_items && enquiry.metadata.confirmation_items.length > 0 && (
-                <div className="bg-amber-950/20 border border-amber-500/30 p-4 space-y-2">
-                  <div className="flex items-center gap-2">
-                    <span className="text-amber-500 font-bold text-xs">⚠</span>
-                    <p className="font-ibm-plex-mono text-[10px] font-black uppercase tracking-wider text-amber-400">
-                      Sales Engineer Pre-Quotation Checklist
-                    </p>
                   </div>
-                  <ul className="space-y-1 text-xs font-mono text-amber-200/90 pl-4 list-disc">
-                    {enquiry.metadata.confirmation_items.map((item: string, idx: number) => (
-                      <li key={idx} className="leading-snug">{item}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-          )}
+                )}
+
+                {/* Stated Requirements Breakdown */}
+                {(enquiry.req_application || enquiry.req_min_pressure_bar || enquiry.metadata?.requirements_summary) && (
+                  <div className="border-t border-[#222] pt-4">
+                    <p className="font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#666] mb-2">
+                      Customer's Stated Requirements:
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-[#AAA] font-mono">
+                      {enquiry.req_application && (
+                        <div className="bg-[#141414] p-2 border border-[#1F1F1F] flex items-center gap-2">
+                          <span className="text-[#FF6900]">✓</span>
+                          <span>Application: {enquiry.req_application.replace(/_/g, ' ')}</span>
+                        </div>
+                      )}
+                      {enquiry.req_water_type && (
+                        <div className="bg-[#141414] p-2 border border-[#1F1F1F] flex items-center gap-2">
+                          <span className="text-[#FF6900]">✓</span>
+                          <span>Water: {enquiry.req_water_type.toUpperCase()}</span>
+                        </div>
+                      )}
+                      {enquiry.req_min_pressure_bar && (
+                        <div className="bg-[#141414] p-2 border border-[#1F1F1F] flex items-center gap-2">
+                          <span className="text-[#FF6900]">✓</span>
+                          <span>Min Pressure: {enquiry.req_min_pressure_bar} BAR</span>
+                        </div>
+                      )}
+                      {enquiry.req_min_flow_lpm && (
+                        <div className="bg-[#141414] p-2 border border-[#1F1F1F] flex items-center gap-2">
+                          <span className="text-[#FF6900]">✓</span>
+                          <span>Min Flow: {enquiry.req_min_flow_lpm} L/min</span>
+                        </div>
+                      )}
+                      {enquiry.req_power_source && (
+                        <div className="bg-[#141414] p-2 border border-[#1F1F1F] flex items-center gap-2">
+                          <span className="text-[#FF6900]">✓</span>
+                          <span>Power: {enquiry.req_power_source}</span>
+                        </div>
+                      )}
+                      {enquiry.req_voltage && (
+                        <div className="bg-[#141414] p-2 border border-[#1F1F1F] flex items-center gap-2">
+                          <span className="text-[#FF6900]">✓</span>
+                          <span>Voltage: {enquiry.req_voltage} {enquiry.req_phase ? `(${enquiry.req_phase}-Phase)` : ''}</span>
+                        </div>
+                      )}
+                      {enquiry.metadata?.requirements_summary && Array.isArray(enquiry.metadata.requirements_summary) &&
+                        enquiry.metadata.requirements_summary.map((req: string, idx: number) => (
+                          <div key={idx} className="bg-[#141414] p-2 border border-[#1F1F1F] flex items-center gap-2">
+                            <span className="text-[#FF6900]">✓</span>
+                            <span>{req}</span>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Site Readiness (Power, Water, Postcode) */}
+                {(enquiry.site_power || enquiry.site_water || enquiry.postcode || enquiry.metadata?.site_power) && (
+                  <div className="border-t border-[#222] pt-4 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-mono">
+                    {(enquiry.site_power || enquiry.metadata?.site_power) && (
+                      <div className="bg-[#111] p-3 border border-[#222]">
+                        <span className="text-[#666] text-[9px] uppercase block">Site Power</span>
+                        <span className="text-white font-bold">{enquiry.site_power || enquiry.metadata?.site_power}</span>
+                      </div>
+                    )}
+                    {(enquiry.site_water || enquiry.metadata?.site_water) && (
+                      <div className="bg-[#111] p-3 border border-[#222]">
+                        <span className="text-[#666] text-[9px] uppercase block">Water Supply</span>
+                        <span className="text-white font-bold">{enquiry.site_water || enquiry.metadata?.site_water}</span>
+                      </div>
+                    )}
+                    {(enquiry.postcode || enquiry.metadata?.postcode) && (
+                      <div className="bg-[#111] p-3 border border-[#222]">
+                        <span className="text-[#666] text-[9px] uppercase block">Site Postcode</span>
+                        <span className="text-[#FF6900] font-bold">{enquiry.postcode || enquiry.metadata?.postcode}</span>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Sales Engineer Checklist (Confirmation Items) */}
+                {((enquiry.confirmation_items && enquiry.confirmation_items.length > 0) ||
+                  (enquiry.metadata?.confirmation_items && enquiry.metadata.confirmation_items.length > 0)) && (
+                  <div className="bg-amber-950/20 border border-amber-500/30 p-4 space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-amber-500 font-bold text-xs">⚠</span>
+                      <p className="font-ibm-plex-mono text-[10px] font-black uppercase tracking-wider text-amber-400">
+                        Sales Engineer Pre-Quotation Checklist
+                      </p>
+                    </div>
+                    <ul className="space-y-1 text-xs font-mono text-amber-200/90 pl-4 list-disc">
+                      {(enquiry.confirmation_items || enquiry.metadata?.confirmation_items || []).map(
+                        (item: string, idx: number) => (
+                          <li key={idx} className="leading-snug">{item}</li>
+                        )
+                      )}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            );
+          })()}
 
           {/* Trailer Rig Build Metadata */}
           {enquiry.metadata?.build_code && (

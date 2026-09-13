@@ -10,7 +10,7 @@ import {
   Flame, Waves, Wind, Truck, Factory,
   Droplets, Zap, PenSquare, BookOpen, Film,
   Bell, Package, Tag, ChevronDown, User, ShieldCheck, HardDrive,
-  ShoppingBag, AlertTriangle, ArrowRight, CheckCircle2, Clock, ShieldAlert
+  ShoppingBag, AlertTriangle, ArrowRight, CheckCircle2, Clock, ShieldAlert, Mail
 } from 'lucide-react';
 
 const NAV_SECTIONS = [
@@ -23,6 +23,7 @@ const NAV_SECTIONS = [
   {
     section: 'Orders & Commerce',
     items: [
+      { icon: Mail, label: 'Commercial Enquiries', href: '/admin/enquiries' },
       { icon: ShoppingBag, label: 'Orders & Dispatch', href: '/admin/orders', badge: 'orders' },
       { icon: FileText, label: 'Quote Requests', href: '/admin/quotes', badge: 'quotes' },
       { icon: Inbox, label: 'Contact Leads', href: '/admin/leads', badge: 'leads' },

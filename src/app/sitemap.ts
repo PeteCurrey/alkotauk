@@ -8,15 +8,17 @@ import { getAllMessQuestEpisodes } from '@/lib/messQuestEpisodes';
 import { getAllCaseStudies } from '@/lib/case-studies/data';
 import { getRetailProducts, getChemicalApplications } from '@/lib/chemicals/service';
 import { MASTER_TAXONOMY } from '@/lib/parts/taxonomy';
+import { getProducts, CANONICAL_CATEGORIES } from '@/lib/products';
+import { getAllSeries, toCategoryRoute } from '@/lib/catalogue/series';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://alkota.co.uk';
 
-  // 1. Fetch live machines from Supabase
-  const { data: machines } = await supabaseAdmin
-    .from('products')
-    .select('slug, category, updated_at')
-    .eq('active', true);
+  // 1. Fetch machines and series using authoritative data layer with offline canonical fallback
+  const [machines, allSeries] = await Promise.all([
+    getProducts(),
+    getAllSeries()
+  ]);
 
   const { data: industries } = await supabaseAdmin
     .from('industries')
@@ -63,8 +65,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const dealers = await getDealers({ onlyActive: true });
 
   // Map dynamic entities
-  const machineUrls = (machines || []).map((m: any) => ({
-    url: `${baseUrl}/machines/${m.category}/${m.slug}`,
+  const machineUrls = machines.map((m: any) => ({
+    url: `${baseUrl}/machines/${toCategoryRoute(m.category)}/${m.slug}`,
     lastModified: new Date(m.updated_at || new Date()),
     changeFrequency: 'weekly' as const,
     priority: 0.85,
@@ -139,11 +141,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  const categoryUrls = ['hot-water', 'cold-water', 'parts-washers', 'water-treatment'].map(cat => ({
-    url: `${baseUrl}/machines/${cat}`,
+  const categoryUrls = Object.keys(CANONICAL_CATEGORIES).map(cat => ({
+    url: `${baseUrl}/machines/${toCategoryRoute(cat)}`,
     lastModified: new Date(),
     changeFrequency: 'weekly' as const,
     priority: 0.9,
+  }));
+
+  const seriesUrls = allSeries.map(s => ({
+    url: `${baseUrl}/machines/${s.categorySlug}/series/${s.slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.88,
   }));
 
   const industryUrls = (industries || []).map((i: any) => ({
@@ -179,7 +188,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  return [
+  const allEntries = [
     // ── CORE HUBS ─────────────────────────────────────────
     {
       url: baseUrl,
@@ -273,12 +282,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
 
     // ── CHEMICALS SUB-PAGES ──────────────────────────────
-    {
-      url: `${baseUrl}/parts-attachments/chemicals`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
     {
       url: `${baseUrl}/chemicals/finder`,
       lastModified: new Date(),
@@ -750,6 +753,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...baselineWashPlantSlugs,
     ...washPlantProjectUrls,
     ...categoryUrls,
+    ...seriesUrls,
     ...machineUrls,
     ...industryUrls,
     ...applicationUrls,
@@ -761,4 +765,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...lobbyUrls,
     ...dealerUrls,
   ];
+
+  // Deduplicate entries by canonical URL, preserving highest priority
+  const urlMap = new Map<string, (typeof allEntries)[number]>();
+  for (const entry of allEntries) {
+    const existing = urlMap.get(entry.url);
+    if (!existing || (entry.priority ?? 0) > (existing.priority ?? 0)) {
+      urlMap.set(entry.url, entry);
+    }
+  }
+  return Array.from(urlMap.values());
 }
+

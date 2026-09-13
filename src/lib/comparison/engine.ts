@@ -122,7 +122,18 @@ export function formatPower(p: Product, unit: UnitSystem): SpecValue {
 export function formatElectrical(p: Product): SpecValue {
   const parts: string[] = [];
   if (p.voltage) parts.push(p.voltage);
-  if (p.phase) parts.push(p.phase === 1 ? '1-Phase' : p.phase === 3 ? '3-Phase' : `${p.phase}-Phase`);
+
+  // Check extra_specs for manufacturer phase description (e.g. 530B: "1/3 Dual Phase Available")
+  const extraPhase = Array.isArray(p.extra_specs)
+    ? p.extra_specs.find((s) => s.label.toLowerCase() === 'phase')?.value
+    : undefined;
+
+  if (extraPhase && extraPhase !== String(p.phase)) {
+    parts.push(extraPhase);
+  } else if (p.phase) {
+    parts.push(p.phase === 1 ? '1-Phase' : p.phase === 3 ? '3-Phase' : `${p.phase}-Phase`);
+  }
+
   if (p.amp_requirement) parts.push(`${p.amp_requirement}A`);
 
   if (parts.length > 0) {

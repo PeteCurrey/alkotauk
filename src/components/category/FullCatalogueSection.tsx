@@ -168,7 +168,7 @@ function FullCatalogueSectionInner({
               CATEGORY INVENTORY // {categoryName}
             </span>
             <h2 className="text-2xl sm:text-4xl font-light text-[#1A1A18] tracking-tight">
-              All Verified {categoryName} Configurations
+              All {categoryName} Configurations
             </h2>
             <p className="text-xs sm:text-sm text-[#666] mt-1 font-normal">
               Showing {filteredProducts.length} of {allProducts.length} industrial configurations engineered for UK applications.

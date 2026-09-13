@@ -16,6 +16,7 @@ import ArchitectureNavigator from '@/components/category/ArchitectureNavigator';
 import FeaturedMachines from '@/components/category/FeaturedMachines';
 import FullCatalogueSection from '@/components/category/FullCatalogueSection';
 import CategoryEngineering from '@/components/category/CategoryEngineering';
+import CategorySeriesShowcase from '@/components/category/CategorySeriesShowcase';
 import CategoryApplications from '@/components/category/CategoryApplications';
 import CategoryLobbyKnowledge from '@/components/category/CategoryLobbyKnowledge';
 import CategoryDemoCTA from '@/components/category/CategoryDemoCTA';
@@ -369,7 +370,15 @@ export default async function MachineCategoryPage({ params }: CategoryPageProps)
       {/* ─── 05. VISUAL ENGINEERING DEEP DIVE ─────────────────────────────── */}
       <CategoryEngineering categorySlug={categorySlug} />
 
-      {/* ─── 06. FULL FILTERABLE CATALOGUE WITH SERIES-FIRST NAVIGATION ─────── */}
+      {/* ─── 06. DEDICATED BROWSE BY SERIES SHOWCASE ───────────────────────── */}
+      <CategorySeriesShowcase
+        categorySlug={categorySlug}
+        categoryName={config.title}
+        seriesList={categorySeries}
+        totalModels={allProducts.length}
+      />
+
+      {/* ─── 07. FULL FILTERABLE CATALOGUE WITH SERIES-FIRST NAVIGATION ─────── */}
       <Suspense fallback={
         <section className="bg-[#FAF9F5] border-b border-[#E5E5E0] py-20 px-6 sm:px-12">
           <div className="mx-auto max-w-7xl">

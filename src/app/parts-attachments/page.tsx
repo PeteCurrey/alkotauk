@@ -1,6 +1,7 @@
 import React from 'react';
 import { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { 
   Search, 
   Wrench, 
@@ -70,13 +71,28 @@ export default async function PartsHomePage() {
       
       {/* ── 01: HERO SECTION WITH PROMINENT PARTS SEARCH ── */}
       <section className="relative bg-[#0F172A] text-white pt-32 pb-20 px-6 sm:px-12 lg:px-24 border-b border-[#1E293B] overflow-hidden">
-        {/* Subtle engineering grid background overlay */}
-        <div 
-          className="absolute inset-0 opacity-10 pointer-events-none" 
-          style={{ backgroundImage: 'radial-gradient(#94A3B8 1px, transparent 1px)', backgroundSize: '24px 24px' }}
-        />
+        {/* Background Image with Authentic Alkota Engineering Instrumentation */}
+        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none select-none">
+          <Image
+            src="/assets/parts/parts-hero-bg.jpg"
+            alt="Alkota UK industrial pressure washer instrumentation and genuine parts"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-[75%_center] lg:object-right"
+            style={{ filter: 'brightness(0.38) contrast(1.15)' }}
+          />
+          {/* Multi-stage gradients to guarantee text legibility while revealing the gauge instrumentation */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0F172A] via-[#0F172A]/85 to-[#0F172A]/35" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A] via-transparent to-[#0F172A]/70" />
+          {/* Subtle engineering grid background overlay */}
+          <div 
+            className="absolute inset-0 opacity-10 mix-blend-overlay" 
+            style={{ backgroundImage: 'radial-gradient(#94A3B8 1px, transparent 1px)', backgroundSize: '24px 24px' }}
+          />
+        </div>
 
-        <div className="relative max-w-7xl mx-auto">
+        <div className="relative z-10 max-w-7xl mx-auto">
           {/* Tagline */}
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#1E293B] border border-[#334155] rounded-[4px] mb-6">
             <span className="h-1.5 w-1.5 rounded-full bg-[#FF6900] animate-pulse" />

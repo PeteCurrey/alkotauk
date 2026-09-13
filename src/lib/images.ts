@@ -1,10 +1,53 @@
+export type ImageRole =
+  | 'PRIMARY'
+  | 'GALLERY'
+  | 'DETAIL'
+  | 'OPTION'
+  | 'TECHNICAL'
+  | 'OTHER_MANUFACTURER_MEDIA';
+
+export type ImageVerificationStatus =
+  | 'VERIFIED_EXACT_MODEL'
+  | 'VERIFIED_SHARED_MANUFACTURER'
+  | 'VERIFIED_SERIES'
+  | 'REQUIRES_REVIEW'
+  | 'NOT_AVAILABLE';
+
+export interface ResolvedMachineImageDetails {
+  url: string;
+  source: 'LOCAL_VERIFIED_ASSET' | 'OFFICIAL_MANUFACTURER_CDN' | 'CATEGORY_FALLBACK';
+  verificationStatus: ImageVerificationStatus;
+  role: ImageRole;
+  isExactModel: boolean;
+  caption: string;
+}
+
+// Models with verified exact-model photography (asset specifically depicts this exact configuration)
+const EXACT_MODEL_CODES = new Set<string>([
+  '216ax4', '420ax4', '216x4', '420x4', '430xm4', '4405xd4', '3305xd4',
+  '4301-ng/lp', '5357c', '5355jb', '5355j', '5355ens', '8405hnl',
+  '2110', '216bd', '311bd', '420bd', '430bd', '530bd',
+  '420s', '530s', '25500', '25750', '25755-gas-engine', '325csh',
+  '219cse', '122', 'INDUSTRIAL-HEATERS', '8-vfs-1'
+]);
+
 export function resolveMachineImage(
   image_url: string | null,
   model_code: string | null,
   category: string | null
 ): string {
-  const modelKey = (model_code || '').toLowerCase().trim().replace(/^alkota-?/, '');
-  
+  return getMachineImageDetails(image_url, model_code, category).url;
+}
+
+export function getMachineImageDetails(
+  image_url: string | null,
+  model_code: string | null,
+  category: string | null
+): ResolvedMachineImageDetails {
+  const rawKey = (model_code || '').toLowerCase().trim();
+  const modelKey = rawKey.replace(/^alkota-?/, '');
+
+  // Local verified photographic assets
   const productImages: Record<string, string> = {
     // AX4 Series
     '216ax4': '/assets/products/216ax4.png',
@@ -53,13 +96,15 @@ export function resolveMachineImage(
     '10307kka': '/assets/products/ded-big-boy.png',
     '10307kk': '/assets/products/ded-big-boy.png',
 
-    // GED 115V / 12V Skids
+    // GED 115V Skids
     '5355jb': '/assets/products/ged-115v-skid.png',
     '5305eab': '/assets/products/ged-115v-skid.png',
     '8305h': '/assets/products/ged-115v-skid.png',
+
+    // Industrial Series (5355J, 5355EAD, 5505J share the heavy Industrial Series chassis)
     '5355j': '/assets/products/5355j.png',
-    '5355ead': '/assets/products/ged-12v-skid.png',
-    '5505j': '/assets/products/ged-12v-skid.png',
+    '5355ead': '/assets/products/5355j.png',
+    '5505j': '/assets/products/5355j.png',
 
     // EN / HN Narrow Frame
     '5355ens': '/assets/products/5355ens.png',
@@ -87,7 +132,6 @@ export function resolveMachineImage(
     '25755': '/assets/products/25755.png',
     '25755-gas-engine': '/assets/products/25755.png',
     '325csh': '/assets/products/325csh.png',
-    'jetter': '/assets/products/jetter-series.png',
 
     // All Electric Hot Water Series
     '108': 'https://alkota.com/wp-content/uploads/2023/07/All_Electric_Hot_Water_Pressure_Washer_02_Alkota-1-1024x1024.png',
@@ -95,53 +139,68 @@ export function resolveMachineImage(
     '4308': 'https://alkota.com/wp-content/uploads/2023/07/All_Electric_Hot_Water_Pressure_Washer_02_Alkota-1-1024x1024.png',
     '5308': 'https://alkota.com/wp-content/uploads/2023/07/All_Electric_Hot_Water_Pressure_Washer_02_Alkota-1-1024x1024.png',
 
-    // Steam Cleaners
-    '111': '/assets/products/steam-oil.png',
+    // Oil-Fired Steam Cleaners (Dedicated oil burner equipment)
     '122': '/assets/products/steam-oil.png',
-    '126': '/assets/products/steam-oil.png',
-    '181': '/assets/products/steam-oil.png',
-    '241': '/assets/products/steam-oil.png',
-    '246en': '/assets/products/steam-oil.png',
-    '301': '/assets/products/steam-oil.png',
-    '401': '/assets/products/steam-oil.png',
+    '240': '/assets/products/steam-oil.png',
+    '122x4': '/assets/products/steam-oil.png',
+    '240en': '/assets/products/steam-oil.png',
 
-    // Trailers & Water Treatment
-    'trailer': '/assets/products/trailer-single.png',
-    'vfs-1': '/assets/products/steam-oil.png',
-    '911': '/assets/products/steam-oil.png',
+    // Note: 181, 241, 301, 401 are LP/NG Gas Fired Steam Cleaners.
+    // They are intentionally NOT mapped to steam-oil.png and use their authoritative
+    // manufacturer CDN asset: Steam_Cleaners_Gas_Fired_Steam_Cleaner_301_Alkota-1024x1024.png
 
-    // Legacy codes
-    '430xh': '/assets/products/430xm4.png',
-    '420xh': '/assets/products/420x4.png',
-    '330xh4': '/assets/products/216x4.png',
-    '4405f': '/assets/products/4405xd4.png'
+    // Note: 246EN and 126 are Dry Steam Generators.
+    // They are intentionally NOT mapped to steam-oil.png and use their authoritative
+    // manufacturer CDN asset: 246EN_Dry_Steam_Web.webp
   };
 
-  // 1. Explicit local asset match
+  // 1. Explicit local verified asset match
   if (productImages[modelKey]) {
-    return productImages[modelKey];
+    const isExact = EXACT_MODEL_CODES.has(modelKey);
+    const isLocal = productImages[modelKey].startsWith('/');
+    return {
+      url: productImages[modelKey],
+      source: isLocal ? 'LOCAL_VERIFIED_ASSET' : 'OFFICIAL_MANUFACTURER_CDN',
+      verificationStatus: isExact ? 'VERIFIED_EXACT_MODEL' : 'VERIFIED_SERIES',
+      role: 'PRIMARY',
+      isExactModel: isExact,
+      caption: isExact ? 'Exact Model Specification' : 'Manufacturer Series Photography',
+    };
   }
 
-  // 2. If database / source provides an image URL
+  // 2. Official Manufacturer CDN URL provided by database/reconciliation
   if (image_url && image_url.trim() !== '') {
-    // If it points to an asset that exists locally by filename
-    const filename = image_url.split('/').pop()?.toLowerCase() || '';
-    const fileKey = filename.replace(/\.(png|jpg|jpeg|webp)$/i, '');
-    if (productImages[fileKey]) {
-      return productImages[fileKey];
-    }
-    return image_url;
+    const isExact = EXACT_MODEL_CODES.has(modelKey);
+    return {
+      url: image_url,
+      source: 'OFFICIAL_MANUFACTURER_CDN',
+      verificationStatus: isExact ? 'VERIFIED_EXACT_MODEL' : 'VERIFIED_SHARED_MANUFACTURER',
+      role: 'PRIMARY',
+      isExactModel: isExact,
+      caption: isExact ? 'Exact Model Specification' : 'Official Manufacturer Equipment Photography',
+    };
   }
 
-  // 3. Sensible category fallbacks
-  if (category === 'hot-water') return '/assets/products/420x4.png';
-  if (category === 'cold-water') return '/assets/products/420s.png';
-  if (category === 'steam') return '/assets/products/steam-oil.png';
-  if (category === 'trailer') return '/assets/products/trailer-single.png';
-  if (category === 'parts-washer' || category === 'parts-washers') return '/assets/products/stationary-gas-fired.png';
-  if (category === 'water-heater') return '/assets/products/4301-ng-lp.png';
-  if (category === 'space-heater') return '/assets/products/steam-oil.png';
-  if (category === 'water-treatment') return '/assets/products/steam-oil.png';
+  // 3. Category fallbacks (Last resort)
+  const categoryFallbacks: Record<string, string> = {
+    'hot-water': '/assets/products/420x4.png',
+    'cold-water': '/assets/products/420s.png',
+    'steam': '/assets/products/steam-oil.png',
+    'trailer': '/assets/products/trailer-single.png',
+    'parts-washer': '/assets/products/stationary-gas-fired.png',
+    'parts-washers': '/assets/products/stationary-gas-fired.png',
+    'water-heater': '/assets/products/4301-ng-lp.png',
+    'space-heater': '/assets/products/steam-oil.png',
+    'water-treatment': '/assets/products/steam-oil.png',
+  };
 
-  return '/assets/products/4405xd4.png';
+  const fallbackUrl = (category && categoryFallbacks[category]) || '/assets/products/4405xd4.png';
+  return {
+    url: fallbackUrl,
+    source: 'CATEGORY_FALLBACK',
+    verificationStatus: 'REQUIRES_REVIEW',
+    role: 'PRIMARY',
+    isExactModel: false,
+    caption: 'Alkota Category Representative Image',
+  };
 }

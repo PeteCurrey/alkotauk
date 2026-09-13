@@ -8,6 +8,7 @@ import ComparisonDock from '@/components/comparison/ComparisonDock';
 import { getProducts } from '@/lib/products';
 import { getAllSeries, getCategoriesWithDetails } from '@/lib/catalogue/series';
 import CategoryShowcaseGrid from '@/components/catalogue/CategoryShowcaseGrid';
+import SeriesShowcaseGrid from '@/components/catalogue/SeriesShowcaseGrid';
 import CatalogueFleetExplorer from '@/components/catalogue/CatalogueFleetExplorer';
 import { Sliders, ShieldCheck, Wrench, ArrowRight } from 'lucide-react';
 
@@ -83,15 +84,18 @@ export default async function MachinesPage() {
 
       {/* ── 02. MAIN CATALOGUE CONTENT BODY ───────────────────────────────── */}
       <div className="py-16 px-6 sm:px-12 mx-auto max-w-7xl">
-        {/* Category Showcase (8 Canonical Categories) */}
+        {/* Pathway A: Category Showcase (8 Canonical Categories) */}
         <CategoryShowcaseGrid categories={categories} />
+
+        {/* Pathway B: Series Showcase (36 Canonical Manufacturer Series) */}
+        <SeriesShowcaseGrid allSeries={allSeries} />
 
         {/* Full Interactive Fleet Explorer (Category tabs, series navigation, filters, grid) */}
         <section id="fleet-explorer" className="pt-8">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 pb-4 border-b border-[#E5E5E0] gap-4">
             <div>
               <span className="font-mono text-[11px] uppercase tracking-[0.25em] text-[#FF6900] block mb-1 font-semibold">
-                02 // INTERACTIVE FLEET DISCOVERY
+                03 // INTERACTIVE FLEET DISCOVERY
               </span>
               <h2 className="text-2xl sm:text-3xl font-light text-[#1A1A18] tracking-tight">
                 Filter & Compare Models

@@ -15,7 +15,7 @@ import {
   ShieldCheck,
   ExternalLink,
 } from 'lucide-react';
-import { resolveMachineImage } from '@/lib/images';
+import { resolveMachineImage, getMachineImageDetails } from '@/lib/images';
 import SeenInRealWorld from '@/components/mess-quest/SeenInRealWorld';
 import MachineDetailPricingCta from '@/components/MachineDetailPricingCta';
 import { getMachineEcosystem } from '@/lib/relationships/service';
@@ -100,7 +100,8 @@ export default async function MachineDetailPage({ params }: MachineDetailPagePro
   const categoryLabel = catInfo?.name || category.replace(/-/g, ' ');
 
   const modelCode = machine.model_code || machine.name.replace(/^Alkota\s+/i, '');
-  const imageUrl = resolveMachineImage(machine.primary_image_url, modelCode, machine.category);
+  const imageDetails = getMachineImageDetails(machine.primary_image_url, modelCode, machine.category);
+  const imageUrl = imageDetails.url;
 
   // Enquiry URL with full machine context
   const enquiryBase = `/contact?enquiry=quote&product=${machine.slug}&machines=${machine.slug}&model=${modelCode}`;
@@ -184,8 +185,8 @@ export default async function MachineDetailPage({ params }: MachineDetailPagePro
                 className="max-h-[85%] max-w-[85%] object-contain filter drop-shadow-2xl transition-transform duration-700 hover:scale-105"
               />
               <div className="absolute bottom-6 right-6">
-                <span className="font-ibm-plex-mono text-[9px] font-bold text-alkota-silver uppercase tracking-[0.3em]">
-                  MADE IN SOUTH DAKOTA, USA
+                <span className="font-ibm-plex-mono text-[9px] font-bold text-alkota-silver uppercase tracking-[0.25em]">
+                  {imageDetails.caption} · ALKOTA USA
                 </span>
               </div>
             </div>

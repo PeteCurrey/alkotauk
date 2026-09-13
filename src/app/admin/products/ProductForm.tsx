@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import type { Product, ProductCategory, Industry, ProductPricingType, ProductAvailability } from '@/lib/admin/types';
 import { PRODUCT_CATEGORY_LABELS, INDUSTRY_LABELS } from '@/lib/admin/types';
+import { getMachineImageDetails } from '@/lib/images';
 
 const INDUSTRIES = Object.entries(INDUSTRY_LABELS) as [Industry, string][];
 const CATEGORIES = Object.entries(PRODUCT_CATEGORY_LABELS) as [ProductCategory, string][];
@@ -531,24 +532,37 @@ export default function ProductForm({ initial, id }: { initial?: Partial<Product
               helper="Primary high-resolution machine photography used on storefront and card grids."
             />
 
-            {form.primary_image_url && (
-              <div className="p-4 rounded-2xl bg-[#F6F7F9] border border-[#E6E8EC] flex items-center gap-4">
-                <div className="h-16 w-16 rounded-xl bg-white border border-[#E6E8EC] p-1 flex items-center justify-center shrink-0">
-                  <img src={form.primary_image_url} alt="Preview" className="h-full w-full object-contain" />
+            {form.primary_image_url && (() => {
+              const imgDetails = getMachineImageDetails(form.primary_image_url, form.model_code || null, form.category || null);
+              return (
+                <div className="p-4 rounded-2xl bg-[#F6F7F9] border border-[#E6E8EC] flex items-center gap-4">
+                  <div className="h-16 w-16 rounded-xl bg-white border border-[#E6E8EC] p-1 flex items-center justify-center shrink-0">
+                    <img src={imgDetails.url || form.primary_image_url} alt="Preview" className="h-full w-full object-contain" />
+                  </div>
+                  <div className="flex-1 min-w-0 text-xs">
+                    <div className="flex items-center gap-2 mb-1">
+                      <p className="font-bold text-[#0F172A]">Primary Product Photography</p>
+                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${
+                        imgDetails.verificationStatus === 'VERIFIED_EXACT_MODEL'
+                          ? 'bg-emerald-100 text-emerald-800'
+                          : 'bg-blue-100 text-blue-800'
+                      }`}>
+                        {imgDetails.verificationStatus.replace(/_/g, ' ')}
+                      </span>
+                    </div>
+                    <p className="text-[#64748B] truncate">{imgDetails.url}</p>
+                    <p className="text-[10px] text-[#888] mt-0.5 font-mono">Source: {imgDetails.source} · {imgDetails.caption}</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => set('primary_image_url', '')}
+                    className="text-xs text-red-500 font-bold hover:underline"
+                  >
+                    Remove
+                  </button>
                 </div>
-                <div className="flex-1 min-w-0 text-xs">
-                  <p className="font-bold text-[#0F172A]">Primary Cutout Photography Set</p>
-                  <p className="text-[#64748B] truncate">{form.primary_image_url}</p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => set('primary_image_url', '')}
-                  className="text-xs text-red-500 font-bold hover:underline"
-                >
-                  Remove
-                </button>
-              </div>
-            )}
+              );
+            })()}
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <FileUploadField

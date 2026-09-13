@@ -49,7 +49,7 @@ export default function ProductCard({ part }: ProductCardProps) {
   const brandName = (part.brand || part.manufacturer || 'Alkota OEM').replace(/-/g, ' ');
 
   return (
-    <div className="group relative flex flex-col bg-white border border-[#E8E6DF] hover:border-[#C4C0B6] rounded-[6px] shadow-[0_2px_8px_rgba(0,0,0,0.03)] hover:shadow-[0_10px_25px_rgba(0,0,0,0.07)] hover:-translate-y-0.5 transition-all duration-300 overflow-hidden">
+    <div className="group relative flex flex-col bg-white border border-[#E6E4DD] hover:border-[#CCC8BD] rounded-[5px] shadow-[0_2px_6px_rgba(26,25,23,0.03),0_1px_2px_rgba(26,25,23,0.02)] hover:shadow-[0_10px_24px_-2px_rgba(26,25,23,0.07),0_3px_8px_-1px_rgba(26,25,23,0.04)] hover:-translate-y-1 transition-all duration-[420ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transform-none motion-reduce:transition-none overflow-hidden">
       {/* ── IMAGE AREA WITH CONTACT SHADOW ── */}
       <Link
         href={`/parts-attachments/product/${part.slug}`}

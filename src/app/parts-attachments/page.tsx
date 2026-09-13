@@ -16,6 +16,8 @@ import {
 } from 'lucide-react';
 import { supabaseAdmin } from '@/lib/supabase/server';
 import ProductCard from '@/components/parts/ProductCard';
+import CategoryCard from '@/components/parts/CategoryCard';
+import { MASTER_TAXONOMY } from '@/lib/parts/taxonomy';
 
 export const dynamic = 'force-dynamic';
 
@@ -30,10 +32,10 @@ export const metadata: Metadata = {
 };
 
 export default async function PartsHomePage() {
-  // 1. Fetch categories from Supabase with counts
+  // 1. Fetch categories from Supabase with counts and hero images
   const { data: categories } = await supabaseAdmin
     .from('part_categories')
-    .select('id, slug, name, short_desc, icon_name, sort_order')
+    .select('id, slug, name, short_desc, icon_name, sort_order, hero_image_url')
     .eq('active', true)
     .order('sort_order');
 
@@ -62,7 +64,19 @@ export default async function PartsHomePage() {
     supabaseAdmin.from('parts').select('*', { count: 'exact', head: true }).eq('active', true).eq('in_stock', true),
   ]);
 
-  const catList = categories || [];
+  // Fallback to authoritative MASTER_TAXONOMY if categories not populated
+  const catList = (categories && categories.length > 0)
+    ? categories
+    : MASTER_TAXONOMY.map((m, idx) => ({
+        id: m.slug,
+        slug: m.slug,
+        name: m.name,
+        short_desc: m.shortDesc,
+        icon_name: m.iconName,
+        sort_order: idx + 1,
+        hero_image_url: null,
+      }));
+
   const brandList = brands || [];
   const partsList = featuredParts || [];
 
@@ -165,53 +179,31 @@ export default async function PartsHomePage() {
       </section>
 
       {/* ── 02: DATABASE CATEGORIES DIRECTORY ── */}
-      <section className="py-16 sm:py-20 px-6 sm:px-12 lg:px-24 max-w-7xl mx-auto">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10 pb-4 border-b border-[#E8E6DF]">
-          <div>
-            <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-[#FF6900] font-semibold block mb-1">
-              // Database Taxonomy
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-light text-[#0F172A] tracking-tight">
-              Browse by Equipment Category
-            </h2>
-          </div>
-          <Link
-            href="/parts-attachments/categories"
-            className="inline-flex items-center gap-1.5 font-ibm-plex-mono text-xs uppercase tracking-wider text-[#64748B] hover:text-[#FF6900] transition-colors font-medium"
-          >
-            <span>View All Categories</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-          {catList.map(cat => (
-            <Link
-              key={cat.slug}
-              href={`/parts-attachments/${cat.slug}`}
-              className="group bg-white border border-[#E8E6DF] hover:border-[#C4C0B6] rounded-[6px] p-5 shadow-[0_2px_8px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.06)] hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between min-h-[140px]"
-            >
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <div className="w-8 h-8 rounded-[4px] bg-[#FAF9F5] border border-[#EDECEA] flex items-center justify-center text-[#64748B] group-hover:text-[#FF6900] group-hover:border-[#FF6900]/30 transition-colors">
-                    <Wrench className="w-4 h-4 stroke-[1.5]" />
-                  </div>
-                  <ArrowUpRight className="w-3.5 h-3.5 text-[#CBD5E1] group-hover:text-[#FF6900] transition-colors" />
-                </div>
-                <h3 className="text-sm font-semibold text-[#0F172A] group-hover:text-[#FF6900] transition-colors line-clamp-1">
-                  {cat.name}
-                </h3>
-                {cat.short_desc && (
-                  <p className="text-[11px] text-[#64748B] line-clamp-2 mt-1 font-light leading-relaxed">
-                    {cat.short_desc}
-                  </p>
-                )}
-              </div>
-              <span className="font-ibm-plex-mono text-[9px] uppercase tracking-wider text-[#94A3B8] group-hover:text-[#FF6900] mt-3 block">
-                Explore range →
+      <section className="py-20 sm:py-24 px-6 sm:px-12 lg:px-24 bg-[#FAF9F5] border-b border-[#E8E6DF]/70 relative">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12 pb-5 border-b border-[#E8E6DF]">
+            <div>
+              <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-[#FF6900] font-semibold block mb-1.5">
+                // Equipment Catalogue Taxonomy
               </span>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light text-[#0F172A] tracking-tight">
+                Browse by Equipment Department
+              </h2>
+            </div>
+            <Link
+              href="/parts-attachments/categories"
+              className="inline-flex items-center gap-2 font-ibm-plex-mono text-xs uppercase tracking-wider text-[#64748B] hover:text-[#FF6900] transition-colors font-medium group"
+            >
+              <span>View All Departments</span>
+              <ArrowRight className="w-3.5 h-3.5 text-[#94A3B8] group-hover:text-[#FF6900] group-hover:translate-x-1 transition-all" />
             </Link>
-          ))}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+            {catList.map((cat, idx) => (
+              <CategoryCard key={cat.slug} category={cat} priority={idx < 4} />
+            ))}
+          </div>
         </div>
       </section>
 
@@ -243,41 +235,46 @@ export default async function PartsHomePage() {
       )}
 
       {/* ── 04: BRAND PARTNERS DIRECTORY ── */}
-      <section className="py-16 sm:py-20 px-6 sm:px-12 lg:px-24 max-w-7xl mx-auto">
-        <div className="mb-10 pb-4 border-b border-[#E8E6DF]">
-          <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-[#FF6900] font-semibold block mb-1">
+      <section className="py-20 sm:py-24 px-6 sm:px-12 lg:px-24 max-w-7xl mx-auto">
+        <div className="mb-12 pb-5 border-b border-[#E8E6DF]">
+          <span className="font-ibm-plex-mono text-[10px] uppercase tracking-widest text-[#FF6900] font-semibold block mb-1.5">
             // Approved Manufacturers
           </span>
-          <h2 className="text-2xl sm:text-3xl font-light text-[#0F172A] tracking-tight">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light text-[#0F172A] tracking-tight">
             Official Equipment &amp; Brand Partners
           </h2>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
           {brandList.map(brand => (
             <Link
               key={brand.slug}
               href={`/parts-attachments/brands/${brand.slug}`}
-              className="group bg-white border border-[#E8E6DF] hover:border-[#C4C0B6] rounded-[6px] p-5 shadow-[0_2px_8px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.06)] hover:-translate-y-0.5 transition-all duration-200"
+              className="group relative flex flex-col justify-between bg-white border border-[#E6E4DD] hover:border-[#CCC8BD] rounded-[5px] p-5 sm:p-6 shadow-[0_2px_6px_rgba(26,25,23,0.03),0_1px_2px_rgba(26,25,23,0.02)] hover:shadow-[0_10px_24px_-2px_rgba(26,25,23,0.07),0_3px_8px_-1px_rgba(26,25,23,0.04)] hover:-translate-y-1 transition-all duration-[420ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transform-none motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF6900] focus-visible:ring-offset-2 select-none"
             >
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-bold text-[#0F172A] group-hover:text-[#FF6900] transition-colors">
-                  {brand.name}
-                </span>
-                {brand.country_of_origin && (
-                  <span className="font-ibm-plex-mono text-[9px] uppercase tracking-wider text-[#94A3B8] bg-[#F1F5F9] px-2 py-0.5 rounded-[2px]">
-                    {brand.country_of_origin}
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-[15px] sm:text-base font-normal text-[#0F172A] group-hover:text-[#FF6900] transition-colors duration-300 tracking-tight">
+                    {brand.name}
                   </span>
+                  {brand.country_of_origin && (
+                    <span className="font-ibm-plex-mono text-[9px] uppercase tracking-wider text-[#94A3B8] bg-[#FAF9F5] border border-[#EAE8E1] px-2 py-0.5 rounded-[3px]">
+                      {brand.country_of_origin}
+                    </span>
+                  )}
+                </div>
+                {brand.tagline && (
+                  <p className="text-[11px] sm:text-xs text-[#64748B] font-light line-clamp-2 leading-relaxed mt-1">
+                    {brand.tagline}
+                  </p>
                 )}
               </div>
-              {brand.tagline && (
-                <p className="text-xs text-[#64748B] font-light line-clamp-2 mt-1">
-                  {brand.tagline}
-                </p>
-              )}
-              <span className="font-ibm-plex-mono text-[9px] uppercase tracking-wider text-[#FF6900] mt-3 block font-semibold">
-                View Brand Range →
-              </span>
+              <div className="mt-5 pt-3 border-t border-[#F0EEE8] flex items-center justify-between">
+                <span className="font-ibm-plex-mono text-[9px] uppercase tracking-wider text-[#8A8780] group-hover:text-[#FF6900] transition-colors duration-300">
+                  View Brand Range
+                </span>
+                <ArrowRight className="w-3 h-3 text-[#CBD5E1] group-hover:text-[#FF6900] group-hover:translate-x-1 transition-all duration-300 motion-reduce:transform-none" />
+              </div>
             </Link>
           ))}
         </div>

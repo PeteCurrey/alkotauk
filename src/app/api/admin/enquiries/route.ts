@@ -19,17 +19,38 @@ export async function GET(req: NextRequest) {
 
   const countOnly = searchParams.get('countOnly') === 'true';
 
-  let query = supabaseAdmin.from('enquiries').select('*, enquiry_machines(*)', { count: countOnly ? 'exact' : undefined, head: countOnly }).order('created_at', { ascending: false });
+  const buildQuery = (selectExpr: string) => {
+    let q = supabaseAdmin
+      .from('enquiries')
+      .select(selectExpr, { count: countOnly ? 'exact' : undefined, head: countOnly })
+      .order('created_at', { ascending: false });
 
-  if (status && status !== 'all') query = query.eq('status', status);
-  if (type && type !== 'all') query = query.eq('type', type);
-  if (source && source !== 'all') query = query.eq('source', source);
-  if (search) query = query.or(`name.ilike.%${search}%,email.ilike.%${search}%,company.ilike.%${search}%,reference.ilike.%${search}%`);
+    if (status && status !== 'all') q = q.eq('status', status);
+    if (type && type !== 'all') q = q.eq('type', type);
+    if (source && source !== 'all') q = q.eq('source', source);
+    if (search) q = q.or(`name.ilike.%${search}%,email.ilike.%${search}%,company.ilike.%${search}%,reference.ilike.%${search}%`);
+    return q;
+  };
 
-  const { data, count, error } = await query;
+  let { data, count, error } = await buildQuery('*, enquiry_machines(*)');
+  if (error) {
+    // Fallback if enquiry_machines relation or source column is not yet migrated
+    let fallbackQ = supabaseAdmin
+      .from('enquiries')
+      .select('*', { count: countOnly ? 'exact' : undefined, head: countOnly })
+      .order('created_at', { ascending: false });
+    if (status && status !== 'all') fallbackQ = fallbackQ.eq('status', status);
+    if (type && type !== 'all') fallbackQ = fallbackQ.eq('type', type);
+    if (search) fallbackQ = fallbackQ.or(`name.ilike.%${search}%,email.ilike.%${search}%,company.ilike.%${search}%,reference.ilike.%${search}%`);
+    const fallbackRes = await fallbackQ;
+    data = fallbackRes.data;
+    count = fallbackRes.count;
+    error = fallbackRes.error;
+  }
+
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   if (countOnly) return NextResponse.json({ count: count ?? 0 });
-  return NextResponse.json(data);
+  return NextResponse.json(data || []);
 }
 
 export async function POST(req: NextRequest) {

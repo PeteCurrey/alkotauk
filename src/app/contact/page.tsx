@@ -119,6 +119,7 @@ function ContactFormInner() {
   });
 
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (initialEnquiry) {
@@ -143,6 +144,7 @@ function ContactFormInner() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('submitting');
+    setErrorMessage(null);
 
     try {
       const machineSlugs = previewMachines.map(m => m.slug).filter(Boolean);
@@ -159,6 +161,17 @@ function ContactFormInner() {
       if (mobParam) structuredReqs.mobility = mobParam;
       if (prefsParam) structuredReqs.preferences = prefsParam.split(',');
 
+      const normalizedSource =
+        source === 'selector'
+          ? 'machine_selector'
+          : source === 'compare'
+          ? 'machine_comparison'
+          : source === 'quote'
+          ? 'direct_machine'
+          : source === 'service'
+          ? 'service'
+          : 'general';
+
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -171,9 +184,9 @@ function ContactFormInner() {
           site_power: formData.sitePower,
           site_water: formData.siteWater,
           timeline: formData.timeline,
-          enquiry: rawEnquiry || 'quote',
-          source: source === 'selector' ? 'machine_selector' : source === 'compare' ? 'machine_comparison' : 'direct_machine',
-          subject: formData.enquiry ? `Enquiry: ${formData.enquiry}` : 'General Machine Enquiry',
+          enquiry: rawEnquiry || (source === 'general' ? 'general' : 'quote'),
+          source: normalizedSource,
+          subject: formData.enquiry ? `Enquiry: ${formData.enquiry}` : 'General Website Enquiry',
           message: formData.message,
           machines: machineSlugs.length > 0 ? machineSlugs : machinesParam || productParam,
           models: machineModels.length > 0 ? machineModels : modelsParam,
@@ -183,9 +196,11 @@ function ContactFormInner() {
         }),
       });
 
-      if (!res.ok) throw new Error('Submission failed');
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || 'Submission failed');
+      }
 
-      const data = await res.json();
       setSubmissionReference(data.reference || 'ALKO-REF');
       setStatus('success');
 
@@ -198,8 +213,9 @@ function ContactFormInner() {
         phone_provided: Boolean(formData.phone),
       });
 
-    } catch (err) {
+    } catch (err: any) {
       console.error('Contact submission error:', err);
+      setErrorMessage(err?.message && err.message !== 'Submission failed' ? err.message : null);
       setStatus('error');
     }
   };
@@ -435,7 +451,11 @@ function ContactFormInner() {
             {status === 'error' && (
               <div className="bg-red-950/40 border border-red-500/30 p-4 flex items-center gap-3 text-red-400 text-xs font-ibm-plex-mono">
                 <AlertTriangle className="h-5 w-5 shrink-0" />
-                <span>Unable to dispatch message. Please ensure your details are correct or email sales@alkota.co.uk directly.</span>
+                <span>
+                  {errorMessage
+                    ? `Unable to dispatch message (${errorMessage}). Please email sales@alkota.co.uk directly.`
+                    : 'Unable to dispatch message. Please ensure your details are correct or email sales@alkota.co.uk directly.'}
+                </span>
               </div>
             )}
 

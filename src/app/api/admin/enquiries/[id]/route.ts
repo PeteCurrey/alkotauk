@@ -26,11 +26,20 @@ const VALID_STATUSES = new Set([
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   if (!(await requireAdmin(req))) return NextResponse.json({ error: 'Unauthorised' }, { status: 401 });
   const { id } = await params;
-  const { data, error } = await supabaseAdmin
+  let { data, error } = await supabaseAdmin
     .from('enquiries')
     .select('*, enquiry_machines(*)')
     .eq('id', id)
     .single();
+  if (error) {
+    const fallback = await supabaseAdmin
+      .from('enquiries')
+      .select('*')
+      .eq('id', id)
+      .single();
+    data = fallback.data;
+    error = fallback.error;
+  }
   if (error) return NextResponse.json({ error: error.message }, { status: 404 });
   return NextResponse.json(data);
 }
@@ -59,12 +68,23 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   if (body.follow_up_date !== undefined) allowed.follow_up_date = body.follow_up_date;
   allowed.updated_at = new Date().toISOString();
 
-  const { data, error } = await supabaseAdmin
+  let { data, error } = await supabaseAdmin
     .from('enquiries')
     .update(allowed)
     .eq('id', id)
     .select('*, enquiry_machines(*)')
     .single();
+
+  if (error) {
+    const fallback = await supabaseAdmin
+      .from('enquiries')
+      .update(allowed)
+      .eq('id', id)
+      .select('*')
+      .single();
+    data = fallback.data;
+    error = fallback.error;
+  }
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json(data);

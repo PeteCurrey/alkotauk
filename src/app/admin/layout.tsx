@@ -23,7 +23,7 @@ const NAV_SECTIONS = [
   {
     section: 'Orders & Commerce',
     items: [
-      { icon: Mail, label: 'Commercial Enquiries', href: '/admin/enquiries' },
+      { icon: Mail, label: 'Commercial Enquiries', href: '/admin/enquiries', badge: 'enquiries' },
       { icon: ShoppingBag, label: 'Orders & Dispatch', href: '/admin/orders', badge: 'orders' },
       { icon: FileText, label: 'Quote Requests', href: '/admin/quotes', badge: 'quotes' },
       { icon: Inbox, label: 'Contact Leads', href: '/admin/leads', badge: 'leads' },
@@ -138,18 +138,21 @@ function NavItem({
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [newOrderCount, setNewOrderCount] = useState(0);
+  const [newEnquiryCount, setNewEnquiryCount] = useState(0);
   const [newQuoteCount, setNewQuoteCount] = useState(0);
   const [newLeadCount, setNewLeadCount] = useState(0);
   const [lowStockCount, setLowStockCount] = useState(0);
   const [notifications, setNotifications] = useState<{
     totalCount: number;
     newOrders: any[];
+    newEnquiries: any[];
     newQuotes: any[];
     newLeads: any[];
     lowStockParts: any[];
   }>({
     totalCount: 0,
     newOrders: [],
+    newEnquiries: [],
     newQuotes: [],
     newLeads: [],
     lowStockParts: [],
@@ -158,20 +161,30 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [showNotifications, setShowNotifications] = useState(false);
   const notifRef = useRef<HTMLDivElement>(null);
 
-  // Fetch live notifications stream
+  // Fetch live notifications stream (on route change & every 30s)
   useEffect(() => {
-    fetch('/api/admin/notifications')
-      .then(r => r.json())
-      .then(d => {
-        if (d) {
+    let active = true;
+    const loadNotifications = () => {
+      fetch('/api/admin/notifications')
+        .then(r => r.json())
+        .then(d => {
+          if (!active || !d) return;
           setNotifications(d);
-          setNewOrderCount(d.newOrders?.length || 0);
-          setNewQuoteCount(d.newQuotes?.length || 0);
-          setNewLeadCount(d.newLeads?.length || 0);
-          setLowStockCount(d.lowStockParts?.length || 0);
-        }
-      })
-      .catch(() => {});
+          setNewOrderCount(d.newOrdersCount ?? d.newOrders?.length ?? 0);
+          setNewEnquiryCount(d.newEnquiriesCount ?? d.newEnquiries?.length ?? 0);
+          setNewQuoteCount(d.newQuotesCount ?? d.newQuotes?.length ?? 0);
+          setNewLeadCount(d.newLeadsCount ?? d.newLeads?.length ?? 0);
+          setLowStockCount(d.lowStockCount ?? d.lowStockParts?.length ?? 0);
+        })
+        .catch(() => {});
+    };
+
+    loadNotifications();
+    const timer = setInterval(loadNotifications, 30000);
+    return () => {
+      active = false;
+      clearInterval(timer);
+    };
   }, [pathname]);
 
   // Click outside to close notification dropdown
@@ -228,6 +241,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   key={item.href}
                   {...item}
                   badgeCount={
+                    item.badge === 'enquiries' ? newEnquiryCount :
                     item.badge === 'orders' ? newOrderCount :
                     item.badge === 'quotes' ? newQuoteCount :
                     item.badge === 'leads' ? newLeadCount : undefined
@@ -338,29 +352,29 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                         </div>
                       )}
 
-                      {/* New Quotes Section */}
-                      {notifications.newQuotes && notifications.newQuotes.length > 0 && (
+                      {/* New Enquiries (Contact Form, Quotes & Leads) */}
+                      {notifications.newEnquiries && notifications.newEnquiries.length > 0 && (
                         <div className="space-y-1.5">
                           <p className="text-[10px] font-bold uppercase text-blue-600 tracking-wider px-1">
-                            New Quote Inquiries ({notifications.newQuotes.length})
+                            New Enquiries ({newEnquiryCount || notifications.newEnquiries.length})
                           </p>
-                          {notifications.newQuotes.map((q) => (
+                          {notifications.newEnquiries.map((enq) => (
                             <Link
-                              key={q.id}
-                              href={`/admin/quotes/${q.id}`}
+                              key={enq.id}
+                              href={`/admin/enquiries/${enq.id}`}
                               onClick={() => setShowNotifications(false)}
                               className="flex items-center justify-between p-2.5 rounded-xl bg-[#F8F9FB] hover:bg-[#F1F3F7] border border-[#F0F2F5] transition-colors"
                             >
                               <div className="min-w-0 pr-2">
                                 <p className="text-xs font-bold text-[#0F172A] truncate">
-                                  {q.name} {q.company ? `(${q.company})` : ''}
+                                  {enq.name || 'Enquiry'} {enq.company ? `(${enq.company})` : ''}
                                 </p>
                                 <p className="text-[10px] text-[#64748B] truncate">
-                                  {q.metadata?.product_name || q.subject || 'Machinery Quote'}
+                                  {enq.metadata?.product_name || enq.subject || enq.reference || 'Website Enquiry'}
                                 </p>
                               </div>
-                              <span className="px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 text-[9px] font-bold shrink-0">
-                                Pricing Request
+                              <span className="px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 text-[9px] font-bold uppercase shrink-0">
+                                {enq.type || 'Enquiry'}
                               </span>
                             </Link>
                           ))}
@@ -402,18 +416,25 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
                     <div className="pt-2 border-t border-[#F0F2F5] flex items-center justify-between text-xs">
                       <Link
-                        href="/admin/orders"
+                        href="/admin/enquiries"
                         onClick={() => setShowNotifications(false)}
                         className="font-bold text-[#FF6900] hover:underline"
                       >
-                        All Orders →
+                        All Enquiries →
+                      </Link>
+                      <Link
+                        href="/admin/orders"
+                        onClick={() => setShowNotifications(false)}
+                        className="font-bold text-[#64748B] hover:text-[#0F172A]"
+                      >
+                        Orders →
                       </Link>
                       <Link
                         href="/admin/parts"
                         onClick={() => setShowNotifications(false)}
                         className="font-bold text-[#64748B] hover:text-[#0F172A]"
                       >
-                        Parts Inventory →
+                        Parts →
                       </Link>
                     </div>
                   </div>

@@ -71,18 +71,22 @@ export async function POST(req: Request) {
     let equipmentLabel = '';
 
     if (uniqueIdentifiers.length > 0) {
-      const allProducts = await getProducts();
-      revalidationData = revalidateMachineEnquiry({
-        source: machineSource,
-        machineIdentifiers: uniqueIdentifiers,
-        rawRequirements: structuredReqs,
-        claimedMatchStatus,
-      }, allProducts);
+      try {
+        const allProducts = await getProducts();
+        revalidationData = revalidateMachineEnquiry({
+          source: machineSource,
+          machineIdentifiers: uniqueIdentifiers,
+          rawRequirements: structuredReqs,
+          claimedMatchStatus,
+        }, allProducts);
 
-      if (revalidationData.enquiryMachines.length > 0) {
-        equipmentLabel = revalidationData.enquiryMachines
-          .map(m => m.model_code || m.name)
-          .join(', ');
+        if (revalidationData.enquiryMachines.length > 0) {
+          equipmentLabel = revalidationData.enquiryMachines
+            .map(m => m.model_code || m.name)
+            .join(', ');
+        }
+      } catch (revalErr) {
+        console.warn('Non-fatal machine revalidation error in /api/contact:', revalErr);
       }
     }
 
@@ -200,21 +204,37 @@ export async function POST(req: Request) {
       .single();
 
     if (dbError) {
-      console.error('Failed to save enquiry to Supabase, attempting fallback:', dbError);
-      const fallbackPayload = {
+      console.error('Failed to save enquiry to Supabase, attempting schema-safe fallback:', dbError);
+      const schemaSafePayload = {
+        type: payload.type,
         name: payload.name,
         email: payload.email,
         company: payload.company,
         phone: payload.phone,
         subject: payload.subject,
         message: payload.message,
-        type: payload.type,
         status: 'new',
+        reference: payload.reference,
+        metadata: payload.metadata,
       };
-      const { error: fallbackError } = await supabaseAdmin.from('enquiries').insert(fallbackPayload);
-      if (fallbackError) {
-        console.error('Fallback enquiry insert error:', fallbackError);
-        return NextResponse.json({ error: 'Database saving failed: ' + fallbackError.message }, { status: 500 });
+      const { error: safeError } = await supabaseAdmin.from('enquiries').insert(schemaSafePayload);
+      if (safeError) {
+        console.error('Schema-safe fallback failed, attempting minimal insert:', safeError);
+        const minimalPayload = {
+          name: payload.name,
+          email: payload.email,
+          company: payload.company,
+          phone: payload.phone,
+          subject: payload.subject,
+          message: payload.message,
+          type: payload.type,
+          status: 'new',
+        };
+        const { error: minimalError } = await supabaseAdmin.from('enquiries').insert(minimalPayload);
+        if (minimalError) {
+          console.error('Minimal enquiry insert error:', minimalError);
+          return NextResponse.json({ error: 'Database saving failed: ' + minimalError.message }, { status: 500 });
+        }
       }
     } else if (savedEnquiry?.id && canonicalMachineRows.length > 0) {
       // Save normalised enquiry_machines relationship records

@@ -204,8 +204,9 @@ export async function POST(req: Request) {
       ...canonicalEnquiryCols,
     };
 
-    // ── 4b. Persist to Supabase (non-fatal — form succeeds even if DB is unreachable) ───
+    // ── 4b. Persist to Supabase (non-fatal if email succeeds, 500 if both fail) ───
     let dbSaved = false;
+    let lastDbError: string | null = null;
     try {
       const { data: savedEnquiry, error: dbError } = await supabaseAdmin
         .from('enquiries')
@@ -215,6 +216,7 @@ export async function POST(req: Request) {
 
       if (dbError) {
         console.error('Failed to save enquiry (canonical), trying schema-safe fallback:', dbError);
+        lastDbError = dbError.message;
         const schemaSafePayload = {
           type: payload.type,
           name: payload.name,
@@ -237,6 +239,7 @@ export async function POST(req: Request) {
 
         if (safeError) {
           console.error('Schema-safe fallback failed, trying minimal insert:', safeError);
+          lastDbError = safeError.message;
           const minimalPayload = {
             name: payload.name,
             first_name: payload.first_name,
@@ -252,6 +255,7 @@ export async function POST(req: Request) {
           const { error: minimalError } = await supabaseAdmin.from('enquiries').insert(minimalPayload);
           if (minimalError) {
             console.error('Minimal enquiry insert also failed:', minimalError);
+            lastDbError = minimalError.message;
           } else {
             dbSaved = true;
           }
@@ -272,12 +276,13 @@ export async function POST(req: Request) {
           }
         }
       }
-    } catch (dbConnErr) {
-      // Supabase unreachable (e.g. missing env vars, network error) — still return success
+    } catch (dbConnErr: any) {
+      lastDbError = dbConnErr?.message || 'Supabase connection failed';
       console.error('Supabase connection error — enquiry will be delivered by email only:', dbConnErr);
     }
 
     // ── 5. Send Email Notifications (Resend API) ─────────────────────────────
+    let emailSent = false;
     const apiKey = process.env.RESEND_API_KEY;
     if (apiKey) {
       // Build machine breakdown table HTML
@@ -391,7 +396,7 @@ export async function POST(req: Request) {
       `;
 
       try {
-        await fetch('https://api.resend.com/emails', {
+        const internalRes = await fetch('https://api.resend.com/emails', {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${apiKey}`,
@@ -405,6 +410,9 @@ export async function POST(req: Request) {
             html: internalHtml,
           }),
         });
+        if (internalRes.ok) {
+          emailSent = true;
+        }
 
         // Customer Auto-Acknowledgement
         const customerAckHtml = `
@@ -462,11 +470,20 @@ export async function POST(req: Request) {
       }
     }
 
+    if (!dbSaved && !emailSent) {
+      return NextResponse.json(
+        { error: lastDbError ? `Database saving failed: ${lastDbError}` : 'Unable to save enquiry or send notification' },
+        { status: 500 }
+      );
+    }
+
     return NextResponse.json(
       { 
         success: true, 
         message: 'Enquiry received and verified successfully', 
         reference,
+        dbSaved,
+        emailSent,
         revalidation: revalidationData?.revalidationResult || null
       },
       { status: 200 }

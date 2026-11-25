@@ -265,13 +265,13 @@ function ContactFormInner() {
               Enquiry Successfully Dispatched
             </h3>
             <p className="text-emerald-300/80 text-sm max-w-lg mx-auto mb-6">
-              Thank you. Your enquiry and engineering requirements have been routed directly to our UK application specialists at <span className="text-white font-bold">sales@alkota.co.uk</span>.
+              Thank you. Your enquiry has been received and routed directly to our UK team at <span className="text-white font-bold">sales@alkota.co.uk</span>.
             </p>
 
             <div className="bg-emerald-900/30 border border-emerald-500/20 p-4 max-w-md mx-auto text-left mb-8 font-ibm-plex-mono text-xs text-emerald-200">
               <p className="font-bold text-white mb-1">What Happens Next?</p>
               <p className="leading-relaxed">
-                An application engineer will review your power supply suitability, pump ratings, and application requirements, and issue your formal proposal within <span className="font-bold text-white">2 business hours</span>.
+                A member of our UK team will review your message and respond within <span className="font-bold text-white">2 business hours</span>.
               </p>
             </div>
 

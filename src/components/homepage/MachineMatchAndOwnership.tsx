@@ -80,10 +80,13 @@ export default function MachineMatchAndOwnership() {
               <motion.div key={idx} {...fadeUp(idx * 0.08, 14)}>
                 <Link
                   href={link.href}
-                  className="group flex items-center justify-between text-xs uppercase tracking-wider text-alkota-black hover:text-alkota-orange transition-colors no-underline"
+                  className="group relative block pt-3 text-xs uppercase tracking-wider text-alkota-black hover:text-alkota-orange transition-colors no-underline"
                 >
-                  <span>{link.title}</span>
-                  <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                  <span className="absolute top-0 left-0 h-[2px] w-0 bg-alkota-orange transition-all duration-300 ease-out group-hover:w-full" />
+                  <span className="flex items-center justify-between">
+                    <span>{link.title}</span>
+                    <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+                  </span>
                 </Link>
               </motion.div>
             ))}

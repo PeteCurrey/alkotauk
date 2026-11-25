@@ -103,11 +103,21 @@ export default function ProductUniverse() {
     }
   };
 
+  const fadeUp = (delay = 0) =>
+    shouldReduceMotion
+      ? {}
+      : {
+          initial: { opacity: 0, y: 20 },
+          whileInView: { opacity: 1, y: 0 },
+          viewport: { once: true, amount: 0.15 },
+          transition: { duration: 0.75, delay, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
+        };
+
   return (
     <section className="bg-[#F8F7F4] text-alkota-black py-28 sm:py-36 px-6 sm:px-12 overflow-hidden font-normal" aria-label="Alkota Product World">
       <div className="mx-auto max-w-7xl w-full">
         {/* Top Line: Eyebrow + Interactive Scrollable Category Tabs */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-4">
+        <motion.div {...fadeUp(0)} className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-4">
           <span className="text-xs uppercase tracking-[0.25em] text-alkota-orange block font-light shrink-0">
             The Product World
           </span>
@@ -168,19 +178,19 @@ export default function ProductUniverse() {
               <ChevronRight className="h-4 w-4" />
             </button>
           </div>
-        </div>
+        </motion.div>
 
         {/* Section Headline */}
-        <div className="pb-8 sm:pb-12">
+        <motion.div {...fadeUp(0.08)} className="pb-8 sm:pb-12">
           <h2 className="font-extralight text-4xl sm:text-5xl lg:text-6xl uppercase tracking-tight text-alkota-black leading-none">
             Engineered by Category.
           </h2>
-        </div>
+        </motion.div>
 
         {/* Gallery Product Showcase Canvas */}
-        <div className="relative mt-8 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center min-h-[520px]">
+        <motion.div {...fadeUp(0.14)} className="relative mt-8 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center min-h-[520px]">
           {/* Machine Cutout — Enormous 60–70% scale floating in architectural space */}
-          <div className="lg:col-span-7 flex items-center justify-center relative order-2 lg:order-1">
+          <div className="lg:col-span-7 flex items-center justify-center relative order-2 lg:order-1 group">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeFamily.id}
@@ -195,7 +205,7 @@ export default function ProductUniverse() {
                   alt={`Alkota ${activeFamily.name}`}
                   fill
                   sizes="(max-width: 1024px) 100vw, 58vw"
-                  className="object-contain filter drop-shadow-[0_25px_45px_rgba(0,0,0,0.12)] transition-transform duration-700 hover:scale-[1.02]"
+                  className="object-contain filter drop-shadow-[0_25px_45px_rgba(0,0,0,0.12)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
                 />
               </motion.div>
             </AnimatePresence>
@@ -206,10 +216,10 @@ export default function ProductUniverse() {
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeFamily.id}
-                initial={{ opacity: 0, y: 12 }}
+                initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -12 }}
-                transition={{ duration: 0.25 }}
+                exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -12 }}
+                transition={{ duration: shouldReduceMotion ? 0 : 0.28, ease: [0.16, 1, 0.3, 1] }}
               >
                 <span className="text-xs uppercase tracking-widest text-alkota-orange block mb-2 font-light">
                   {activeFamily.subtitle}
@@ -249,7 +259,7 @@ export default function ProductUniverse() {
               </motion.div>
             </AnimatePresence>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

@@ -116,6 +116,28 @@ export default function Hero() {
           </motion.div>
         </motion.div>
       </div>
+
+      {/* Subtle Scroll Cue */}
+      <motion.div
+        initial={shouldReduceMotion ? { opacity: 0.6 } : { opacity: 0, y: 8 }}
+        animate={{ opacity: 0.6, y: 0 }}
+        transition={shouldReduceMotion ? { duration: 0 } : { delay: 0.9, duration: 0.8, ease: INDUSTRIAL_EASE }}
+        className="relative z-10 mx-auto max-w-7xl w-full pb-8 flex items-center gap-3 pointer-events-none"
+        aria-hidden="true"
+      >
+        <span className="h-6 w-[1px] bg-white/30 relative overflow-hidden block">
+          {!shouldReduceMotion && (
+            <motion.span
+              animate={{ y: ['-100%', '100%'] }}
+              transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
+              className="absolute inset-x-0 top-0 h-1/2 bg-alkota-orange"
+            />
+          )}
+        </span>
+        <span className="font-ibm-plex-mono text-[10px] uppercase tracking-[0.25em] text-white/60">
+          Scroll to Explore
+        </span>
+      </motion.div>
     </section>
   );
 }

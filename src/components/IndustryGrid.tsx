@@ -89,6 +89,16 @@ export default function IndustryGrid() {
     }
   };
 
+  const fadeUp = (delay = 0) =>
+    shouldReduceMotion
+      ? {}
+      : {
+          initial: { opacity: 0, y: 20 },
+          whileInView: { opacity: 1, y: 0 },
+          viewport: { once: true, amount: 0.15 },
+          transition: { duration: 0.75, delay, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
+        };
+
   return (
     <section className="relative min-h-screen w-full bg-[#0F0F0D] text-white flex flex-col justify-start pt-28 sm:pt-36 pb-20 px-6 sm:px-12 font-normal overflow-hidden" aria-label="Real World Applications">
       {/* Dynamic Full-Bleed Environment Background — Lightened for photographic richness */}
@@ -119,7 +129,7 @@ export default function IndustryGrid() {
 
       <div className="relative z-10 mx-auto max-w-7xl w-full">
         {/* Top Line: Eyebrow + Interactive Scrollable Category Tabs */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-4">
+        <motion.div {...fadeUp(0)} className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-4">
           <span className="text-xs uppercase tracking-[0.25em] text-alkota-orange block font-light shrink-0">
             Real-World Applications
           </span>
@@ -180,24 +190,24 @@ export default function IndustryGrid() {
               <ChevronRight className="h-4 w-4" />
             </button>
           </div>
-        </div>
+        </motion.div>
 
         {/* Section Headline */}
-        <div className="pb-6 sm:pb-10">
+        <motion.div {...fadeUp(0.08)} className="pb-6 sm:pb-10">
           <h2 className="font-extralight text-4xl sm:text-5xl lg:text-6xl uppercase tracking-tight text-white leading-none">
             Built for Your Industry.
           </h2>
-        </div>
+        </motion.div>
 
         {/* Sector Information Canvas */}
-        <div className="pt-8 max-w-2xl font-normal">
+        <motion.div {...fadeUp(0.14)} className="pt-8 max-w-2xl font-normal">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeSector.slug}
-              initial={{ opacity: 0, y: 12 }}
+              initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.3 }}
+              exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -12 }}
+              transition={{ duration: shouldReduceMotion ? 0 : 0.3, ease: [0.16, 1, 0.3, 1] }}
             >
               <h3 className="font-light text-2xl sm:text-3xl text-white leading-tight mb-6">
                 {activeSector.statement}
@@ -229,7 +239,7 @@ export default function IndustryGrid() {
               </div>
             </motion.div>
           </AnimatePresence>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

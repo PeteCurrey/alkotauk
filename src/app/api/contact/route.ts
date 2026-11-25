@@ -178,9 +178,16 @@ export async function POST(req: Request) {
       canonicalMachineRows = canonicalData.machineRecords;
     }
 
+    const trimmedName = name.trim();
+    const nameParts = trimmedName.split(/\s+/);
+    const firstName = nameParts[0] || trimmedName;
+    const lastName = nameParts.slice(1).join(' ') || '-';
+
     const payload = {
       type: leadType,
-      name: name.trim(),
+      name: trimmedName,
+      first_name: firstName,
+      last_name: lastName,
       email: email.trim().toLowerCase(),
       company: (company || '').trim(),
       phone: (phone || '').trim(),
@@ -211,6 +218,8 @@ export async function POST(req: Request) {
         const schemaSafePayload = {
           type: payload.type,
           name: payload.name,
+          first_name: payload.first_name,
+          last_name: payload.last_name,
           email: payload.email,
           company: payload.company,
           phone: payload.phone,
@@ -230,6 +239,8 @@ export async function POST(req: Request) {
           console.error('Schema-safe fallback failed, trying minimal insert:', safeError);
           const minimalPayload = {
             name: payload.name,
+            first_name: payload.first_name,
+            last_name: payload.last_name,
             email: payload.email,
             company: payload.company,
             phone: payload.phone,

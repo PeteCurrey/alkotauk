@@ -262,7 +262,7 @@ function ContactFormInner() {
               Reference: {submissionReference}
             </span>
             <h3 className="font-barlow-condensed text-3xl md:text-4xl font-black uppercase italic text-white mb-3">
-              Enquiry Successfully Dispatched
+              Enquiry Submitted
             </h3>
             <p className="text-emerald-300/80 text-sm max-w-lg mx-auto mb-6">
               Thank you. Your enquiry has been received and routed directly to our UK team at <span className="text-white font-bold">sales@alkota.co.uk</span>.
@@ -271,7 +271,7 @@ function ContactFormInner() {
             <div className="bg-emerald-900/30 border border-emerald-500/20 p-4 max-w-md mx-auto text-left mb-8 font-ibm-plex-mono text-xs text-emerald-200">
               <p className="font-bold text-white mb-1">What Happens Next?</p>
               <p className="leading-relaxed">
-                A member of our UK team will review your message and respond within <span className="font-bold text-white">2 business hours</span>.
+                A member of our team will review your message and respond as soon as possible.
               </p>
             </div>
 

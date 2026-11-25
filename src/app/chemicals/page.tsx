@@ -1,6 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { Metadata } from 'next';
+import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 import { 
   ArrowRight, 
   Search, 
@@ -14,7 +16,8 @@ import {
   ArrowUpRight, 
   CheckCircle2,
   Layers,
-  Gauge
+  Gauge,
+  AlertTriangle
 } from 'lucide-react';
 import { 
   getChemicalApplications, 
@@ -34,10 +37,11 @@ export default async function ProfessionalChemicalsHubPage() {
 
   return (
     <main className="min-h-screen bg-[#FAF9F5] text-alkota-black font-sans selection:bg-alkota-orange selection:text-white">
+      <Navigation />
 
       {/* ── 01: HERO (Professional / B2B Technical Hub) ────────────────────────── */}
       <section
-        className="relative min-h-screen w-full flex flex-col justify-center overflow-hidden bg-[#0F0F0D] text-white px-6 sm:px-12 font-normal"
+        className="relative min-h-screen w-full flex flex-col justify-center overflow-hidden bg-[#0F0F0D] text-white px-6 sm:px-12 font-normal pt-32"
         aria-label="Alkota UK Professional Chemistry Hub"
       >
         <div className="absolute inset-0 z-0 overflow-hidden">
@@ -268,7 +272,7 @@ export default async function ProfessionalChemicalsHubPage() {
       {/* ── 04: ENGINEERING VALUE: THERMAL SAPONIFICATION & COIL CARE ────────── */}
       <section className="py-20 px-6 sm:px-12 lg:px-24 bg-[#F2EFEB] border-b border-[#E0DEDC]">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="bg-white p-8 border border-[#E0DEDC] space-y-4">
               <div className="h-10 w-10 bg-alkota-orange/10 flex items-center justify-center text-alkota-orange">
                 <FlaskConical className="h-5 w-5" />
@@ -304,6 +308,18 @@ export default async function ProfessionalChemicalsHubPage() {
                 Quick-breaking surfactant formulations allow oil-water interceptors to quickly split emulsified hydrocarbon fractions for clean environmental discharge compliance.
               </p>
             </div>
+
+            <div className="bg-white p-8 border border-[#E0DEDC] space-y-4">
+              <div className="h-10 w-10 bg-alkota-orange/10 flex items-center justify-center text-alkota-orange">
+                <AlertTriangle className="h-5 w-5" />
+              </div>
+              <h3 className="text-xl font-normal text-alkota-black">
+                Full COSHH Documentation
+              </h3>
+              <p className="text-xs sm:text-sm text-[#666] leading-relaxed font-normal">
+                Every Alkota formulation ships with current GHS-compliant Safety Data Sheets, COSHH risk assessment templates, and storage and disposal guidance for UK regulatory compliance.
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -329,7 +345,7 @@ export default async function ProfessionalChemicalsHubPage() {
                   <span className="text-xs text-[#CCC]">Palletised IBC &amp; multi-drum scheduled delivery.</span>
                 </div>
                 <div className="p-4 bg-white/5 border border-white/10">
-                  <span className="font-mono text-alkota-orange text-xs block mb-1">02 / Technical Sosing</span>
+                  <span className="font-mono text-alkota-orange text-xs block mb-1">02 / Technical Dosing</span>
                   <span className="text-xs text-[#CCC]">Venturi &amp; peristaltic wash-plant integration.</span>
                 </div>
                 <div className="p-4 bg-white/5 border border-white/10">
@@ -366,6 +382,7 @@ export default async function ProfessionalChemicalsHubPage() {
         </div>
       </section>
 
+      <Footer />
     </main>
   );
 }

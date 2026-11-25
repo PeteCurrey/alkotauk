@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 import { ArrowRight, Zap, Thermometer, Droplets, AlertTriangle, CheckCircle, Info, PhoneCall } from 'lucide-react';
 import {
   VERIFIED_ATTACHMENTS,
@@ -242,6 +244,7 @@ function CompatibilityMatrix() {
 export default function AttachmentsPage() {
   return (
     <main className="bg-[#FDFDFC] text-[#0A0A0A]">
+      <Navigation />
 
       {/* ── HERO ─────────────────────────────────────────────────────────────── */}
       <section className="relative min-h-screen flex flex-col justify-end bg-[#0A0A0A] overflow-hidden">
@@ -835,6 +838,7 @@ export default function AttachmentsPage() {
           </div>
         </div>
       </section>
+      <Footer />
     </main>
   );
 }

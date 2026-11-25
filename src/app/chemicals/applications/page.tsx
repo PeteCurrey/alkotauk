@@ -1,6 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { Metadata } from 'next';
+import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 import { ArrowRight, Sparkles, Droplets } from 'lucide-react';
 import { getChemicalApplications } from '@/lib/chemicals/service';
 
@@ -15,7 +17,8 @@ export default async function ChemicalApplicationsDirectoryPage() {
   const applications = await getChemicalApplications();
 
   return (
-    <main className="min-h-screen bg-[#FAF9F5] text-alkota-black font-sans pb-28">
+    <main className="min-h-screen bg-[#FAF9F5] text-alkota-black font-sans">
+      <Navigation />
       {/* ── HEADER HERO ── */}
       <section className="bg-[#0A0A0A] text-white pt-28 pb-16 px-6 sm:px-12 lg:px-24 border-b border-[#222]">
         <div className="max-w-7xl mx-auto">
@@ -93,6 +96,7 @@ export default async function ChemicalApplicationsDirectoryPage() {
           ))}
         </div>
       </section>
+      <Footer />
     </main>
   );
 }

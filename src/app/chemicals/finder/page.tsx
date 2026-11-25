@@ -1,6 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { Metadata } from 'next';
+import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 import { Sparkles, ShieldCheck } from 'lucide-react';
 import ChemicalFinderClient from '@/components/chemicals/ChemicalFinderClient';
 import { 
@@ -24,7 +26,8 @@ export default async function ChemicalFinderPage() {
   const products = await getRetailProducts();
 
   return (
-    <main className="min-h-screen bg-[#FAF9F5] text-alkota-black font-sans pb-28">
+    <main className="min-h-screen bg-[#FAF9F5] text-alkota-black font-sans">
+      <Navigation />
       {/* ── HEADER HERO ── */}
       <section className="bg-[#0A0A0A] text-white pt-28 pb-14 px-6 sm:px-12 lg:px-24 border-b border-[#222]">
         <div className="max-w-7xl mx-auto">
@@ -51,7 +54,7 @@ export default async function ChemicalFinderPage() {
       </section>
 
       {/* ── INTERACTIVE FINDER ── */}
-      <section className="py-12 px-6 sm:px-12 lg:px-24">
+      <section className="py-12 pb-28 px-6 sm:px-12 lg:px-24">
         <div className="max-w-7xl mx-auto">
           <ChemicalFinderClient
             applications={applications}
@@ -61,6 +64,7 @@ export default async function ChemicalFinderPage() {
           />
         </div>
       </section>
+      <Footer />
     </main>
   );
 }

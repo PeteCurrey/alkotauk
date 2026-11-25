@@ -2,6 +2,8 @@ import React from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
+import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 import { ChevronRight, ArrowRight, Sparkles, ShieldCheck } from 'lucide-react';
 import ChemicalCard from '@/components/chemicals/ChemicalCard';
 import { 
@@ -40,7 +42,8 @@ export default async function ChemicalApplicationDetailPage({ params }: PageProp
   const otherApps = (await getChemicalApplications()).filter(a => a.slug !== slug);
 
   return (
-    <main className="min-h-screen bg-[#FAF9F5] text-alkota-black font-sans pb-28">
+    <main className="min-h-screen bg-[#FAF9F5] text-alkota-black font-sans">
+      <Navigation />
 
       {/* ── EDITORIAL APPLICATION HERO ── */}
       <section className="bg-[#0A0A0A] text-white pt-28 pb-16 px-6 sm:px-12 lg:px-24 border-b border-[#222]">
@@ -133,6 +136,7 @@ export default async function ChemicalApplicationDetailPage({ params }: PageProp
         </div>
       </section>
 
+      <Footer />
     </main>
   );
 }

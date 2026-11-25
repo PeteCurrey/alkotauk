@@ -1,5 +1,7 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 import { ArrowLeft, ArrowRight, Zap } from 'lucide-react';
 import {
   ATTACHMENT_CATEGORIES,
@@ -38,9 +40,10 @@ export default async function AttachmentCategoryPage({
 
   return (
     <main className="bg-[#FDFDFC] text-[#0A0A0A]">
+      <Navigation />
 
       {/* ── BREADCRUMB ─────────────────────────────────────────────────────────── */}
-      <div className="border-b border-[#E8E8E4] bg-[#F7F7F4]">
+      <div className="border-b border-[#E8E8E4] bg-[#F7F7F4] pt-24">
         <div className="max-w-[1400px] mx-auto px-8 md:px-16 lg:px-24 py-4 flex items-center gap-2">
           <Link href="/attachments" className="inline-flex items-center gap-1.5 font-ibm-plex-mono text-[9px] uppercase tracking-widest text-[#888] hover:text-alkota-orange transition-colors">
             <ArrowLeft className="h-3 w-3" /> Attachments
@@ -199,6 +202,7 @@ export default async function AttachmentCategoryPage({
           </Link>
         </div>
       </section>
+      <Footer />
     </main>
   );
 }

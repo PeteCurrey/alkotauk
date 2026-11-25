@@ -57,7 +57,7 @@ export default async function ChemicalsStorefrontPage() {
               Request IBC Pricing →
             </Link>
             <a
-              href="tel:01234567890"
+              href="tel:+447912506738"
               className="px-6 py-4 border border-white/20 hover:border-white text-white font-ibm-plex-mono text-xs uppercase tracking-widest transition-colors font-medium whitespace-nowrap text-center flex items-center justify-center gap-2"
             >
               <Phone className="w-3.5 h-3.5 text-[#FF6900]" />

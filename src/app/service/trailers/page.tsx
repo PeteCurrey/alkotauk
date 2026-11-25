@@ -1,6 +1,4 @@
 import Link from 'next/link';
-import Navigation from '@/components/Navigation';
-import Footer from '@/components/Footer';
 import { ArrowRight, Wrench, ShieldCheck, Clock, CheckCircle2, Flame, Droplets, Zap, Shield, HelpCircle, Phone } from 'lucide-react';
 import { TRAILER_SERVICE_SCHEDULE, TRAILER_SERVICE_PLANS } from '@/lib/trailers/service-data';
 
@@ -12,7 +10,6 @@ export const metadata = {
 export default function TrailerServicePage() {
   return (
     <main className="bg-white text-alkota-black min-h-screen">
-      <Navigation />
 
       {/* Hero (Cinematic Dark) */}
       <section className="pt-36 pb-20 px-6 border-b border-alkota-iron bg-[#0A0A0A] text-white">
@@ -213,8 +210,6 @@ export default function TrailerServicePage() {
           </Link>
         </div>
       </section>
-
-      <Footer />
     </main>
   );
 }

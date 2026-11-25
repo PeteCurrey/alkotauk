@@ -8,6 +8,7 @@ export const metadata: Metadata = {
     description: 'Direct engineering support, nationwide service dispatch, and parts sourcing across the United Kingdom.',
     url: 'https://alkota.co.uk/contact',
   },
+  alternates: { canonical: 'https://alkota.co.uk/contact' },
 };
 
 export default function ContactLayout({ children }: { children: React.ReactNode }) {

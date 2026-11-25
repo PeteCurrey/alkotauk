@@ -131,7 +131,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
 
   trustHost: true,
-  secret: process.env.AUTH_SECRET || 'rehsaw1964aallkkkkoootttaaaa',
+  secret: process.env.AUTH_SECRET,
 });
 
 // ─── Helpers ─────────────────────────────────────────────────

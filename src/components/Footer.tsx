@@ -41,7 +41,7 @@ export default function Footer() {
               <li><Link href="/machines/cold-water" className="hover:text-white transition-colors">Cold Water Industrial</Link></li>
               <li><Link href="/machines/steam" className="hover:text-white transition-colors">Dry Vapour Steam Cleaners</Link></li>
               <li><Link href="/machines/parts-washers" className="hover:text-white transition-colors">Aqueous Parts Washers</Link></li>
-              <li><Link href="/machines/trailers" className="hover:text-white transition-colors">Bespoke Mobile Trailers</Link></li>
+              <li><Link href="/trailers" className="hover:text-white transition-colors">Bespoke Mobile Trailers</Link></li>
               <li><Link href="/machines" className="text-white hover:text-[#FF6900] transition-colors mt-2 inline-block font-normal">All 127 Machines →</Link></li>
             </ul>
           </div>
@@ -83,7 +83,7 @@ export default function Footer() {
               // Ownership & Support
             </h4>
             <ul className="space-y-2.5 text-[#999] font-normal">
-              <li><Link href="/support/service" className="hover:text-white transition-colors">Service & Breakdown Support</Link></li>
+              <li><Link href="/support/service" className="hover:text-white transition-colors">Service &amp; Breakdown Support</Link></li>
               <li><Link href="/support/warranty" className="hover:text-white transition-colors">7-Year Warranty Registration</Link></li>
               <li><Link href="/support/replacement-parts" className="hover:text-white transition-colors">Genuine Replacement Parts</Link></li>
               <li><Link href="/support/manuals" className="hover:text-white transition-colors">Technical Manuals & Schematics</Link></li>

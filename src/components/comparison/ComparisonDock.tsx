@@ -4,24 +4,28 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Scale, X, ArrowRight, AlertCircle } from 'lucide-react';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { useMachineComparison } from '@/lib/comparison/context';
 
 export default function ComparisonDock() {
   const pathname = usePathname();
+  const shouldReduceMotion = useReducedMotion();
   const { selectedSlugs, removeMachine, clearComparison, notice, clearNotice } = useMachineComparison();
 
-  // Don't show dock when already on the comparison page or when nothing is selected
-  if (pathname === '/machines/compare' || selectedSlugs.length === 0) {
-    return null;
-  }
-
+  const isVisible = pathname !== '/machines/compare' && selectedSlugs.length > 0;
   const compareHref = `/machines/compare?machines=${selectedSlugs.join(',')}`;
 
   return (
-    <aside
-      aria-label="Machine comparison tray"
-      className="fixed bottom-0 left-0 right-0 z-40 bg-[#1A1A18] text-white border-t border-white/15 shadow-2xl transition-transform duration-300 transform translate-y-0"
-    >
+    <AnimatePresence>
+      {isVisible && (
+        <motion.aside
+          aria-label="Machine comparison tray"
+          initial={shouldReduceMotion ? { opacity: 1 } : { y: 40, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={shouldReduceMotion ? { opacity: 0 } : { y: 40, opacity: 0 }}
+          transition={{ duration: shouldReduceMotion ? 0 : 0.35, ease: [0.16, 1, 0.3, 1] }}
+          className="fixed bottom-0 left-0 right-0 z-40 bg-[#1A1A18] text-white border-t border-white/15 shadow-2xl"
+        >
       {notice && (
         <div className="bg-[#FF6900] text-white px-4 py-2 text-xs flex items-center justify-between font-mono">
           <div className="flex items-center gap-2">
@@ -89,6 +93,8 @@ export default function ComparisonDock() {
           </Link>
         </div>
       </div>
-    </aside>
+        </motion.aside>
+      )}
+    </AnimatePresence>
   );
 }

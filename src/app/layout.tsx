@@ -1,7 +1,22 @@
 import type { Metadata } from "next";
+import { Work_Sans, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import { SessionProvider } from "@/components/SessionProvider";
 import { CartProvider } from "@/context/CartContext";
+
+const workSans = Work_Sans({
+  subsets: ["latin"],
+  weight: ["200", "300", "400"],
+  variable: "--font-work-sans",
+  display: "swap",
+});
+
+const ibmPlexMono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-ibm-plex-mono",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://alkota.co.uk'),
@@ -32,15 +47,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@200;300;400&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+    <html lang="en-GB" className={`${workSans.variable} ${ibmPlexMono.variable}`}>
       <body className="bg-alkota-bg text-alkota-black min-h-screen flex flex-col font-normal antialiased">
         <SessionProvider>
           <CartProvider>

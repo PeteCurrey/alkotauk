@@ -1,41 +1,58 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
+import { motion, useReducedMotion } from 'framer-motion';
+import AccentLine from './ui/AccentLine';
+
+const INDUSTRIAL_EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
 export default function Hero() {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const shouldReduceMotion = useReducedMotion();
 
-  useEffect(() => {
-    const items = containerRef.current?.querySelectorAll('.hero-fade-in');
-    if (!items) return;
-    items.forEach((el, i) => {
-      const htmlEl = el as HTMLElement;
-      htmlEl.style.opacity = '0';
-      htmlEl.style.transform = 'translateY(20px)';
-      setTimeout(() => {
-        htmlEl.style.transition = 'opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1)';
-        htmlEl.style.opacity = '1';
-        htmlEl.style.transform = 'translateY(0)';
-      }, 100 + i * 120);
-    });
-  }, []);
+  const containerVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: shouldReduceMotion ? 0 : 0.12,
+        delayChildren: shouldReduceMotion ? 0 : 0.08,
+      },
+    },
+  };
+
+  const itemVariants = shouldReduceMotion
+    ? {
+        hidden: { opacity: 1, y: 0 },
+        visible: { opacity: 1, y: 0 },
+      }
+    : {
+        hidden: { opacity: 0, y: 20 },
+        visible: {
+          opacity: 1,
+          y: 0,
+          transition: { duration: 0.9, ease: INDUSTRIAL_EASE },
+        },
+      };
 
   return (
     <section
-      ref={containerRef}
       className="relative min-h-screen w-full flex flex-col justify-center overflow-hidden bg-[#0F0F0D] text-white px-6 sm:px-12 font-normal"
       aria-label="Alkota UK Industrial Cleaning Equipment"
     >
       {/* Full-bleed authentic photography background */}
       <div className="absolute inset-0 z-0 overflow-hidden">
-        <img
-          src="/assets/hero-home-header.jpg"
-          alt="Alkota industrial hot water pressure washer on site"
-          className="h-full w-full object-cover object-center scale-105"
-          style={{ filter: 'brightness(0.65) contrast(1.12)' }}
-        />
+        <div className="relative h-full w-full animate-ambient-zoom">
+          <Image
+            src="/assets/hero-home-header.jpg"
+            alt="Alkota industrial hot water pressure washer on site"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-center scale-105"
+            style={{ filter: 'brightness(0.65) contrast(1.12)' }}
+          />
+        </div>
         {/* Cinematic soft vignettes for text clarity */}
         <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/45 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0F0F0D] via-transparent to-black/60" />
@@ -43,31 +60,46 @@ export default function Hero() {
 
       {/* Main hero typography & CTAs — Vertically centered */}
       <div className="relative z-10 mx-auto max-w-7xl w-full my-auto py-20">
-        <div className="max-w-2xl">
+        <motion.div
+          className="max-w-2xl"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
           {/* Subtle provenance monoline */}
-          <div className="hero-fade-in mb-5 inline-flex items-center gap-3 font-normal">
-            <span className="h-[1.5px] w-5 bg-alkota-orange" />
+          <motion.div
+            variants={itemVariants}
+            className="mb-5 inline-flex items-center gap-3 font-normal"
+          >
+            <AccentLine widthClass="w-5" immediate delay={0.1} />
             <span className="text-xs uppercase tracking-[0.25em] text-white/80 font-light">
               Est. 1964 · Alcester, South Dakota · UK Direct
             </span>
-          </div>
+          </motion.div>
 
           {/* Primary Statement — Extra Light Work Sans */}
-          <h1
-            className="hero-fade-in font-extralight uppercase tracking-tight text-white leading-[0.92] mb-6"
+          <motion.h1
+            variants={itemVariants}
+            className="font-extralight uppercase tracking-tight text-white leading-[0.92] mb-6"
             style={{ fontSize: 'clamp(3.2rem, 7.5vw, 6.8rem)' }}
           >
             Industrial Power.<br />
             <span className="text-alkota-orange">Built to</span> Outlast.
-          </h1>
+          </motion.h1>
 
           {/* Concise supporting paragraph — clean Normal Work Sans */}
-          <p className="hero-fade-in text-[#E0E0DC] text-base sm:text-lg leading-relaxed mb-10 max-w-lg font-normal">
+          <motion.p
+            variants={itemVariants}
+            className="text-[#E0E0DC] text-base sm:text-lg leading-relaxed mb-10 max-w-lg font-normal"
+          >
             Six decades of heavy American industrial engineering. Cold-rolled structural steel, ceramic triplex pumps, and Schedule 80 seamless heating coils built for continuous duty.
-          </p>
+          </motion.p>
 
           {/* Dual CTAs — Clean and confident */}
-          <div className="hero-fade-in flex flex-col sm:flex-row items-stretch sm:items-center gap-4 font-normal">
+          <motion.div
+            variants={itemVariants}
+            className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 font-normal"
+          >
             <Link
               href="/machines"
               className="inline-flex items-center justify-center gap-3 bg-alkota-orange text-white px-8 py-3.5 text-xs uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all no-underline group shadow-xl font-normal rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
@@ -81,8 +113,8 @@ export default function Hero() {
             >
               <span>Book On-Site Demo</span>
             </Link>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   );

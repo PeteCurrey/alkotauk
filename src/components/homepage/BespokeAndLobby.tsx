@@ -1,6 +1,8 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight, Clock } from 'lucide-react';
 import { getLobbyArticles } from '@/lib/lobby';
+import Reveal from '../ui/Reveal';
 
 export default async function BespokeAndLobby() {
   const articles = await getLobbyArticles({ limit: 1 });
@@ -18,7 +20,7 @@ export default async function BespokeAndLobby() {
       <div className="mx-auto max-w-7xl w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-20 items-start">
           {/* Left Column: Bespoke Engineering */}
-          <div className="lg:col-span-6 flex flex-col justify-between h-full font-normal">
+          <Reveal delay={0} className="lg:col-span-6 flex flex-col justify-between h-full font-normal">
             <div>
               <span className="text-xs uppercase tracking-[0.25em] text-alkota-orange block mb-3 font-light">
                 Custom Systems
@@ -26,13 +28,16 @@ export default async function BespokeAndLobby() {
               <h2 className="font-extralight text-3xl sm:text-4xl lg:text-5xl uppercase tracking-tight text-alkota-black leading-tight mb-6">
                 Bespoke Engineering.
               </h2>
-              <div className="aspect-[16/10] bg-[#EFEFEA] flex items-center justify-center p-6 mb-8 overflow-hidden rounded-[6px] shadow-tactile-sm">
-                <img
-                  src="/assets/products/trailer-single.png"
-                  alt="Alkota Custom Mobile Wash Trailer"
-                  className="w-full h-full object-contain filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.12)]"
-                  loading="lazy"
-                />
+              <div className="relative aspect-[16/10] bg-[#EFEFEA] flex items-center justify-center p-6 mb-8 overflow-hidden rounded-[6px] shadow-tactile-sm">
+                <div className="relative w-full h-full animate-breathe-subtle">
+                  <Image
+                    src="/assets/products/trailer-single.png"
+                    alt="Alkota Custom Mobile Wash Trailer"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="object-contain filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.12)]"
+                  />
+                </div>
               </div>
               <p className="text-base text-[#555] leading-relaxed mb-8 font-normal">
                 Single and tandem-axle highway wash rigs, multi-lance skid-mounted plant, and closed-loop water treatment systems tailored to your transport platform and site power specs.
@@ -40,17 +45,17 @@ export default async function BespokeAndLobby() {
             </div>
             <div>
               <Link
-                href="/machines/trailers"
+                href="/trailers"
                 className="inline-flex items-center gap-3 bg-alkota-black text-white px-8 py-4 text-xs uppercase tracking-[0.2em] hover:bg-alkota-orange transition-colors no-underline group shadow-md font-normal rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
               >
                 <span>Discuss Your Application</span>
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
             </div>
-          </div>
+          </Reveal>
 
           {/* Right Column: The Lobby Knowledge Preview */}
-          <div className="lg:col-span-6 flex flex-col justify-between h-full font-normal">
+          <Reveal delay={0.12} className="lg:col-span-6 flex flex-col justify-between h-full font-normal">
             <div>
               <span className="text-xs uppercase tracking-[0.25em] text-alkota-orange block mb-3 font-light">
                 The Lobby // Journal
@@ -58,12 +63,13 @@ export default async function BespokeAndLobby() {
               <h2 className="font-extralight text-3xl sm:text-4xl lg:text-5xl uppercase tracking-tight text-alkota-black leading-tight mb-6">
                 Technical Knowledge.
               </h2>
-              <div className="aspect-[16/10] bg-[#141412] overflow-hidden mb-8 rounded-[6px] shadow-tactile-sm">
-                <img
+              <div className="relative aspect-[16/10] bg-[#141412] overflow-hidden mb-8 rounded-[6px] shadow-tactile-sm">
+                <Image
                   src="/assets/industries/manufacturing.png"
                   alt={featured.title}
-                  className="w-full h-full object-cover filter brightness-[0.75] contrast-[1.1]"
-                  loading="lazy"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover filter brightness-[0.75] contrast-[1.1] transition-transform duration-700 hover:scale-[1.03]"
                 />
               </div>
               <div className="flex items-center gap-4 text-xs text-[#777] mb-3 font-light">
@@ -92,7 +98,7 @@ export default async function BespokeAndLobby() {
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
             </div>
-          </div>
+          </Reveal>
         </div>
       </div>
     </section>

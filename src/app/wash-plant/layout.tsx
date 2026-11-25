@@ -29,6 +29,7 @@ export const metadata: Metadata = {
     url: 'https://alkota.co.uk/wash-plant',
     type: 'website',
   },
+  alternates: { canonical: 'https://alkota.co.uk/wash-plant' },
 };
 
 export default function WashPlantLayout({ children }: { children: React.ReactNode }) {

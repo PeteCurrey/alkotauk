@@ -1,6 +1,8 @@
+'use client';
+
 /**
  * MachineSpecTable — full technical specification table.
- * Server component. Category-aware. Deduplicates extra_specs.
+ * Category-aware, unit-system-aware (Metric / Imperial), deduplicates extra_specs.
  * Never renders empty rows or placeholder zeros.
  */
 
@@ -23,6 +25,7 @@ import {
   categoryHasFlow,
   SpecValue,
 } from '@/lib/spec-format';
+import { useUnitPreference } from '@/context/UnitPreferenceContext';
 
 // Labels that are already rendered in the top-level spec table — skip from extra_specs
 const SKIP_EXTRA_LABELS = new Set([
@@ -57,6 +60,7 @@ interface Props {
 }
 
 export default function MachineSpecTable({ machine, modelCode }: Props) {
+  const { unit } = useUnitPreference();
   const cat = machine.category;
   const hasPressure = categoryHasPressure(cat);
   const hasFlow = categoryHasFlow(cat);
@@ -65,14 +69,14 @@ export default function MachineSpecTable({ machine, modelCode }: Props) {
   // ── Left column rows ───────────────────────────────────────────────────────
   const leftRows: Array<{ label: string; value: SpecValue }> = [];
 
-  if (hasPressure) leftRows.push({ label: 'Operating Pressure', value: formatPressure(machine, 'metric') });
-  if (hasFlow) leftRows.push({ label: 'Water Flow Rate', value: formatFlowRate(machine, 'metric') });
+  if (hasPressure) leftRows.push({ label: 'Operating Pressure', value: formatPressure(machine, unit) });
+  if (hasFlow) leftRows.push({ label: 'Water Flow Rate', value: formatFlowRate(machine, unit) });
   if (hasHeating) {
-    leftRows.push({ label: 'Max Temperature', value: formatTemperature(machine, 'metric') });
+    leftRows.push({ label: 'Max Temperature', value: formatTemperature(machine, unit) });
     leftRows.push({ label: 'Thermal Output', value: formatBtu(machine) });
   }
   leftRows.push({ label: 'Electrical Supply', value: formatElectrical(machine) });
-  leftRows.push({ label: 'Drive Unit', value: formatMotorPower(machine, 'metric') });
+  leftRows.push({ label: 'Drive Unit', value: formatMotorPower(machine, unit) });
   if (machine.heating_fuel && hasHeating) {
     leftRows.push({
       label: 'Heating Fuel',
@@ -80,17 +84,17 @@ export default function MachineSpecTable({ machine, modelCode }: Props) {
     });
   }
   if (machine.fuel_tank_capacity_gal && hasHeating) {
-    leftRows.push({ label: 'Fuel Tank Capacity', value: formatFuelTank(machine, 'metric') });
+    leftRows.push({ label: 'Fuel Tank Capacity', value: formatFuelTank(machine, unit) });
   }
   if (machine.fuel_consumption_gph && hasHeating) {
-    leftRows.push({ label: 'Fuel Consumption', value: formatFuelConsumption(machine, 'metric') });
+    leftRows.push({ label: 'Fuel Consumption', value: formatFuelConsumption(machine, unit) });
   }
 
   // ── Right column rows ──────────────────────────────────────────────────────
   const rightRows: Array<{ label: string; value: SpecValue }> = [];
 
-  rightRows.push({ label: 'Operating Weight', value: formatWeight(machine, 'metric') });
-  rightRows.push({ label: 'Dimensions (L×W×H)', value: formatDimensions(machine, 'metric') });
+  rightRows.push({ label: 'Operating Weight', value: formatWeight(machine, unit) });
+  rightRows.push({ label: 'Dimensions (L×W×H)', value: formatDimensions(machine, unit) });
 
   if (machine.mobility) {
     rightRows.push({
@@ -111,7 +115,7 @@ export default function MachineSpecTable({ machine, modelCode }: Props) {
     });
   }
   if (machine.coil_length_ft) {
-    rightRows.push({ label: 'Coil Pipe Length', value: formatCoilLength(machine, 'metric') });
+    rightRows.push({ label: 'Coil Pipe Length', value: formatCoilLength(machine, unit) });
   }
   if (machine.duty_application) {
     rightRows.push({

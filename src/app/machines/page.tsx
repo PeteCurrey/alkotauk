@@ -47,17 +47,17 @@ export default async function MachinesPage() {
             <div className="max-w-3xl">
               <div className="flex items-center gap-2 mb-3">
                 <span className="h-0.5 w-6 bg-[#FF6900]" />
-                <span className="font-mono text-xs font-semibold uppercase tracking-[0.25em] text-[#FF6900]">
+                <span className="font-mono text-xs uppercase tracking-[0.25em] text-[#FF6900]">
                   Alkota Industrial Range
                 </span>
               </div>
 
-              <h1 className="text-3xl sm:text-5xl font-light text-[#1A1A18] tracking-tight leading-none mb-4">
+              <h1 className="text-3xl sm:text-5xl font-extralight text-[#1A1A18] tracking-tight leading-none mb-4">
                 The Heavy Industrial Fleet
               </h1>
 
               <p className="text-sm sm:text-base text-[#555] leading-relaxed max-w-2xl font-normal">
-                Direct UK access to Alkota’s complete range: <strong>{machines.length} verified machines</strong> across <strong>{allSeries.length} manufacturer series</strong> and <strong>8 canonical categories</strong>. Engineered with ASTM A53 Schedule 80 cold-rolled coils, triplex ceramic plunger pumps, and continuous-duty electric, diesel, and gas powerplants.
+                Direct UK access to Alkota’s complete range: {machines.length} verified machines across {allSeries.length} manufacturer series and 8 canonical categories. Engineered with ASTM A53 Schedule 80 cold-rolled coils, triplex ceramic plunger pumps, and continuous-duty electric, diesel, and gas powerplants.
               </p>
             </div>
 

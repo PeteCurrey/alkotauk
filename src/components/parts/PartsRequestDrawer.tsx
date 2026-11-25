@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePartsRequest } from './PartsRequestListContext';
 import {
@@ -17,7 +17,7 @@ import {
   Loader2,
   AlertCircle
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { createCartCheckoutSession } from '@/app/actions/stripe';
 
 export default function PartsRequestDrawer() {
@@ -37,6 +37,16 @@ export default function PartsRequestDrawer() {
 
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
+  const shouldReduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    if (!isDrawerOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsDrawerOpen(false);
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [isDrawerOpen, setIsDrawerOpen]);
 
   const handleCheckout = async () => {
     if (items.length === 0) return;
@@ -105,10 +115,10 @@ export default function PartsRequestDrawer() {
 
             <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
               <motion.div
-                initial={{ x: '100%' }}
+                initial={shouldReduceMotion ? { x: 0 } : { x: '100%' }}
                 animate={{ x: 0 }}
-                exit={{ x: '100%' }}
-                transition={{ type: 'spring', damping: 28, stiffness: 280 }}
+                exit={shouldReduceMotion ? { opacity: 0 } : { x: '100%' }}
+                transition={{ duration: shouldReduceMotion ? 0 : 0.35, ease: [0.16, 1, 0.3, 1] }}
                 className="w-screen max-w-md bg-[#141414] border-l border-[#2A2A2A] text-white flex flex-col justify-between shadow-2xl"
               >
                 {/* Header */}

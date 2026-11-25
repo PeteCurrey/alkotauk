@@ -20,40 +20,32 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     getAllSeries()
   ]);
 
-  const { data: industries } = await supabaseAdmin
-    .from('industries')
-    .select('slug, updated_at')
-    .eq('active', true);
-
-  const { data: applications } = await supabaseAdmin
-    .from('applications')
-    .select('slug, updated_at')
-    .eq('active', true);
-
-  // 2. Fetch live parts & brand partners from Supabase
-  const { data: parts } = await supabaseAdmin
-    .from('parts')
-    .select('slug, updated_at')
-    .eq('active', true)
-    .limit(500);
-
-  const { data: brands } = await supabaseAdmin
-    .from('brand_partners')
-    .select('slug, updated_at')
-    .eq('active', true);
-
-  // 3. Fetch published wash plant projects
+  let industries: any[] | null = null;
+  let applications: any[] | null = null;
+  let parts: any[] | null = null;
+  let brands: any[] | null = null;
   let washPlantProjects: any[] = [];
+
   try {
-    const { data: wpData } = await supabaseAdmin
-      .from('wash_plant_projects')
-      .select('case_study_slug, updated_at')
-      .eq('published', true)
-      .in('visibility', ['public', 'anonymised'])
-      .not('case_study_slug', 'is', null);
-    if (wpData) washPlantProjects = wpData;
-  } catch (err) {
-    // fallback
+    const [indRes, appRes, partsRes, brandsRes, wpRes] = await Promise.all([
+      supabaseAdmin.from('industries').select('slug, updated_at').eq('active', true),
+      supabaseAdmin.from('applications').select('slug, updated_at').eq('active', true),
+      supabaseAdmin.from('parts').select('slug, updated_at').eq('active', true).limit(500),
+      supabaseAdmin.from('brand_partners').select('slug, updated_at').eq('active', true),
+      supabaseAdmin
+        .from('wash_plant_projects')
+        .select('case_study_slug, updated_at')
+        .eq('published', true)
+        .in('visibility', ['public', 'anonymised'])
+        .not('case_study_slug', 'is', null),
+    ]);
+    industries = indRes.data;
+    applications = appRes.data;
+    parts = partsRes.data;
+    brands = brandsRes.data;
+    if (wpRes.data) washPlantProjects = wpRes.data;
+  } catch {
+    // Graceful fallback when Supabase env vars are not configured at build time
   }
 
   // 4. Fetch dynamic Chemical Retail Products & Applications
@@ -201,6 +193,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 0.95,
+    },
+    {
+      url: `${baseUrl}/machines/help-me-choose`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.85,
+    },
+    {
+      url: `${baseUrl}/machines/compare`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
     },
     {
       url: `${baseUrl}/trailers`,

@@ -23,6 +23,9 @@ import MachineEcosystemSection from '@/components/machine-detail/MachineEcosyste
 import CategoryHeroGrid from '@/components/machine-detail/CategoryHeroGrid';
 import MachineSpecTable from '@/components/machine-detail/MachineSpecTable';
 import MachineGallery from '@/components/machine-detail/MachineGallery';
+import StickyQuickSpecBar from '@/components/machine-detail/StickyQuickSpecBar';
+import UnitTogglePill from '@/components/machine-detail/UnitTogglePill';
+import { UnitPreferenceProvider } from '@/context/UnitPreferenceContext';
 import { toCategoryRoute } from '@/lib/catalogue/series';
 import {
   formatPressure,
@@ -142,12 +145,14 @@ export default async function MachineDetailPage({ params }: MachineDetailPagePro
   const showPressurePillars = categoryHasPressure(machine.category);
 
   return (
+    <UnitPreferenceProvider>
     <main className="min-h-screen bg-alkota-bg pt-32 pb-0 overflow-x-hidden relative">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <Navigation />
+      <StickyQuickSpecBar machine={machine} modelCode={modelCode} enquiryHref={enquiryBase} />
 
       {/* Background model code watermark */}
       <div className="absolute top-40 left-0 pointer-events-none select-none opacity-[0.04] z-0">
@@ -223,10 +228,11 @@ export default async function MachineDetailPage({ params }: MachineDetailPagePro
 
           {/* Core machine details & positioning (5 cols) */}
           <div className="lg:col-span-5 flex flex-col justify-center">
-            <div className="mb-4 flex items-center gap-3">
+            <div className="mb-4 flex items-center justify-between gap-3 flex-wrap">
               <span className="font-ibm-plex-mono text-[10px] font-black uppercase tracking-[0.3em] text-alkota-orange">
                 {machine.series || categoryLabel}
               </span>
+              <UnitTogglePill compact />
             </div>
 
             <h1 className="font-barlow-condensed mb-6 text-6xl font-black text-alkota-black uppercase italic tracking-tighter leading-[0.85] md:text-8xl">
@@ -349,9 +355,12 @@ export default async function MachineDetailPage({ params }: MachineDetailPagePro
                 Full Technical Specifications
               </h3>
             </div>
-            <span className="font-ibm-plex-mono text-xs text-alkota-silver uppercase tracking-widest hidden sm:block">
-              MODEL: {modelCode}
-            </span>
+            <div className="flex items-center gap-4">
+              <UnitTogglePill />
+              <span className="font-ibm-plex-mono text-xs text-alkota-silver uppercase tracking-widest hidden sm:block">
+                MODEL: {modelCode}
+              </span>
+            </div>
           </div>
 
           {/* BUG-01/04/07 fixed via MachineSpecTable */}
@@ -599,5 +608,6 @@ export default async function MachineDetailPage({ params }: MachineDetailPagePro
       </div>
       <Footer />
     </main>
+    </UnitPreferenceProvider>
   );
 }

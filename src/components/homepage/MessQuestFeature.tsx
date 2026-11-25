@@ -1,9 +1,51 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { Play, ArrowRight } from 'lucide-react';
+import { motion, useReducedMotion } from 'framer-motion';
+import AccentLine from '../ui/AccentLine';
+
+const INDUSTRIAL_EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
 export default function MessQuestFeature() {
+  const shouldReduceMotion = useReducedMotion();
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (shouldReduceMotion) {
+      video.pause();
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, [shouldReduceMotion]);
+
+  const fadeUp = (delay = 0, y = 24) =>
+    shouldReduceMotion
+      ? {}
+      : {
+          initial: { opacity: 0, y },
+          whileInView: { opacity: 1, y: 0 },
+          viewport: { once: true, amount: 0.15 },
+          transition: { duration: 0.85, delay, ease: INDUSTRIAL_EASE },
+        };
+
   return (
     <section
       className="relative min-h-[90vh] sm:min-h-screen w-full bg-[#0A0A08] text-white flex flex-col justify-center py-24 sm:py-32 px-6 sm:px-12 overflow-hidden font-normal"
@@ -12,10 +54,13 @@ export default function MessQuestFeature() {
       {/* Full-bleed ambient video background using mess-quest.mp4 */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <video
-          autoPlay
+          ref={videoRef}
+          autoPlay={!shouldReduceMotion}
           loop
           muted
           playsInline
+          preload="metadata"
+          poster="/assets/videos/mess-quest-poster.jpg"
           aria-hidden="true"
           className="h-full w-full object-cover object-center scale-105"
           style={{ filter: 'brightness(0.62) contrast(1.1)' }}
@@ -30,31 +75,50 @@ export default function MessQuestFeature() {
       <div className="relative z-10 mx-auto max-w-7xl w-full">
         <div className="max-w-2xl">
           {/* Eyebrow */}
-          <div className="flex items-center gap-3 mb-5">
-            <span className="h-[1.5px] w-6 bg-alkota-orange" />
+          <motion.div {...fadeUp(0, 16)} className="flex items-center gap-3 mb-5">
+            <AccentLine widthClass="w-6" />
             <span className="text-xs uppercase tracking-[0.28em] text-alkota-orange font-mono">
               Alkota Original Series // Proof of Capability
             </span>
-          </div>
+          </motion.div>
 
           {/* Heading */}
-          <h2 className="font-extralight text-4xl sm:text-6xl lg:text-7xl uppercase tracking-tight text-white leading-[0.92] mb-6">
+          <motion.h2
+            {...fadeUp(0.1, 32)}
+            className="font-extralight text-4xl sm:text-6xl lg:text-7xl uppercase tracking-tight text-white leading-[0.92] mb-6"
+          >
             Welcome to<br />
             <span className="text-alkota-orange">Mess Quest.</span>
-          </h2>
+          </motion.h2>
 
           {/* Pull Statement */}
-          <p className="font-light text-xl sm:text-2xl text-white/90 leading-tight mb-4">
+          <motion.p
+            {...fadeUp(0.18, 20)}
+            className="font-light text-xl sm:text-2xl text-white/90 leading-tight mb-4"
+          >
             &ldquo;The dirtiest jobs. The toughest cleaning systems.&rdquo;
-          </p>
+          </motion.p>
 
           {/* Body Copy */}
-          <p className="text-base sm:text-lg text-[#CCC] leading-relaxed mb-10 max-w-xl font-normal">
+          <motion.p
+            {...fadeUp(0.24, 20)}
+            className="text-base sm:text-lg text-[#CCC] leading-relaxed mb-10 max-w-xl font-normal"
+          >
             Some cleaning jobs have to be seen to be believed. Follow Alkota into the industrial environments where heat, flow, pressure and engineering really matter.
-          </p>
+          </motion.p>
 
           {/* Action CTAs */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 font-normal">
+          <motion.div
+            {...(shouldReduceMotion
+              ? {}
+              : {
+                  initial: { opacity: 0, scale: 0.97 },
+                  whileInView: { opacity: 1, scale: 1 },
+                  viewport: { once: true, amount: 0.2 },
+                  transition: { duration: 0.75, delay: 0.3, ease: INDUSTRIAL_EASE },
+                })}
+            className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 font-normal"
+          >
             <Link
               href="/mess-quest"
               className="inline-flex items-center justify-center gap-3 bg-alkota-orange text-white px-8 py-4 text-xs uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all no-underline group shadow-2xl font-normal rounded-[4px] shadow-button hover:shadow-button-hover btn-tactile"
@@ -70,7 +134,7 @@ export default function MessQuestFeature() {
               <span>See the Equipment</span>
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

@@ -5,6 +5,7 @@ interface SeoProps {
   description?: string;
   image?: string;
   noIndex?: boolean;
+  canonical?: string;
 }
 
 export function generateSeo({
@@ -12,6 +13,7 @@ export function generateSeo({
   description = 'Alkota UK - Industrial Pressure Washers and Cleaning Equipment. Built for the toughest jobs.',
   image = '/og-image.jpg',
   noIndex = false,
+  canonical,
 }: SeoProps): Metadata {
   const siteName = 'Alkota UK';
   const fullTitle = `${title} | ${siteName}`;
@@ -19,6 +21,7 @@ export function generateSeo({
   return {
     title: fullTitle,
     description,
+    ...(canonical ? { alternates: { canonical } } : {}),
     openGraph: {
       title: fullTitle,
       description,

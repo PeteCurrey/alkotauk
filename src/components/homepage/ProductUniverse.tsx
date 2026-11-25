@@ -2,8 +2,9 @@
 
 import { useState, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 
 interface ProductFamily {
   id: string;
@@ -89,6 +90,7 @@ const FAMILIES: ProductFamily[] = [
 export default function ProductUniverse() {
   const [activeTab, setActiveTab] = useState<string>(FAMILIES[0].id);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const shouldReduceMotion = useReducedMotion();
   const activeFamily = FAMILIES.find((f) => f.id === activeTab) || FAMILIES[0];
 
   const handleScroll = (direction: 'left' | 'right') => {
@@ -133,13 +135,24 @@ export default function ProductUniverse() {
                   <button
                     key={family.id}
                     onClick={() => setActiveTab(family.id)}
-                    className={`whitespace-nowrap pb-1 text-xs uppercase tracking-[0.18em] transition-all cursor-pointer border-b-2 font-normal shrink-0 ${
+                    className={`relative whitespace-nowrap pb-2 text-xs uppercase tracking-[0.18em] transition-colors cursor-pointer font-normal shrink-0 ${
                       isActive
-                        ? 'border-alkota-orange text-alkota-black'
-                        : 'border-transparent text-[#999] hover:text-alkota-black'
+                        ? 'text-alkota-black'
+                        : 'text-[#999] hover:text-alkota-black'
                     }`}
                   >
                     {family.name}
+                    {isActive && (
+                      <motion.span
+                        layoutId="product-universe-tab-indicator"
+                        transition={
+                          shouldReduceMotion
+                            ? { duration: 0 }
+                            : { duration: 0.35, ease: [0.16, 1, 0.3, 1] }
+                        }
+                        className="absolute bottom-0 left-0 right-0 h-[2px] bg-alkota-orange"
+                      />
+                    )}
                   </button>
                 );
               })}
@@ -171,17 +184,18 @@ export default function ProductUniverse() {
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeFamily.id}
-                initial={{ opacity: 0, scale: 0.96 }}
+                initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, scale: 0.96 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.96 }}
-                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                className="w-full flex items-center justify-center"
+                exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.96 }}
+                transition={{ duration: shouldReduceMotion ? 0 : 0.35, ease: [0.16, 1, 0.3, 1] }}
+                className="relative w-full h-[360px] sm:h-[480px] flex items-center justify-center"
               >
-                <img
+                <Image
                   src={activeFamily.image}
                   alt={`Alkota ${activeFamily.name}`}
-                  className="w-full max-h-[520px] object-contain filter drop-shadow-[0_25px_45px_rgba(0,0,0,0.12)] transition-transform duration-700 hover:scale-[1.02]"
-                  loading="lazy"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 58vw"
+                  className="object-contain filter drop-shadow-[0_25px_45px_rgba(0,0,0,0.12)] transition-transform duration-700 hover:scale-[1.02]"
                 />
               </motion.div>
             </AnimatePresence>

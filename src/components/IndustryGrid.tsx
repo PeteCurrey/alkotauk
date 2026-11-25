@@ -2,8 +2,9 @@
 
 import { useState, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 
 interface IndustrySector {
   slug: string;
@@ -75,6 +76,7 @@ const SECTORS: IndustrySector[] = [
 export default function IndustryGrid() {
   const [activeSlug, setActiveSlug] = useState<string>(SECTORS[0].slug);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const shouldReduceMotion = useReducedMotion();
   const activeSector = SECTORS.find((s) => s.slug === activeSlug) || SECTORS[0];
 
   const handleScroll = (direction: 'left' | 'right') => {
@@ -94,16 +96,18 @@ export default function IndustryGrid() {
         <AnimatePresence mode="wait">
           <motion.div
             key={activeSector.slug}
-            initial={{ opacity: 0, scale: 1.04 }}
+            initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, scale: 1.04 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full h-full"
+            transition={{ duration: shouldReduceMotion ? 0 : 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="relative w-full h-full"
           >
-            <img
+            <Image
               src={activeSector.image}
               alt={activeSector.name}
-              className="w-full h-full object-cover object-center"
+              fill
+              sizes="100vw"
+              className="object-cover object-center"
               style={{ filter: 'brightness(0.68) contrast(1.08)' }}
             />
           </motion.div>
@@ -143,13 +147,24 @@ export default function IndustryGrid() {
                   <button
                     key={sector.slug}
                     onClick={() => setActiveSlug(sector.slug)}
-                    className={`whitespace-nowrap pb-1 text-xs uppercase tracking-[0.16em] transition-all cursor-pointer border-b-2 font-normal shrink-0 ${
+                    className={`relative whitespace-nowrap pb-2 text-xs uppercase tracking-[0.16em] transition-colors cursor-pointer font-normal shrink-0 ${
                       isActive
-                        ? 'border-alkota-orange text-white'
-                        : 'border-transparent text-[#888] hover:text-white'
+                        ? 'text-white'
+                        : 'text-[#888] hover:text-white'
                     }`}
                   >
                     {sector.name}
+                    {isActive && (
+                      <motion.span
+                        layoutId="industry-grid-tab-indicator"
+                        transition={
+                          shouldReduceMotion
+                            ? { duration: 0 }
+                            : { duration: 0.35, ease: [0.16, 1, 0.3, 1] }
+                        }
+                        className="absolute bottom-0 left-0 right-0 h-[2px] bg-alkota-orange"
+                      />
+                    )}
                   </button>
                 );
               })}

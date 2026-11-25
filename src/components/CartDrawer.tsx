@@ -4,13 +4,24 @@ import { X, ShoppingBag, Minus, Plus, Trash2, ArrowRight } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { createCartCheckoutSession } from '@/app/actions/stripe';
 
 export default function CartDrawer() {
   const { items, itemCount, subtotal, isOpen, closeCart, removeItem, updateQuantity } = useCart();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const shouldReduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeCart();
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [isOpen, closeCart]);
 
   const handleCheckout = async () => {
     if (items.length === 0) return;
@@ -27,22 +38,30 @@ export default function CartDrawer() {
     }
   };
 
-  if (!isOpen) return null;
-
   return (
-    <>
-      {/* Backdrop */}
-      <div
-        className="fixed inset-0 z-40 bg-alkota-black/80 backdrop-blur-sm"
-        onClick={closeCart}
-        aria-hidden="true"
-      />
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          {/* Backdrop */}
+          <motion.div
+            initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: shouldReduceMotion ? 0 : 0.2 }}
+            className="fixed inset-0 z-40 bg-alkota-black/80 backdrop-blur-sm"
+            onClick={closeCart}
+            aria-hidden="true"
+          />
 
-      {/* Drawer */}
-      <aside
-        className="fixed right-0 top-0 z-50 flex h-full w-full max-w-md flex-col bg-alkota-black border-l border-alkota-iron shadow-2xl"
-        aria-label="Shopping cart"
-      >
+          {/* Drawer */}
+          <motion.aside
+            initial={shouldReduceMotion ? { x: 0 } : { x: '100%' }}
+            animate={{ x: 0 }}
+            exit={shouldReduceMotion ? { opacity: 0 } : { x: '100%' }}
+            transition={{ duration: shouldReduceMotion ? 0 : 0.35, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed right-0 top-0 z-50 flex h-full w-full max-w-md flex-col bg-alkota-black border-l border-alkota-iron shadow-2xl"
+            aria-label="Shopping cart"
+          >
         {/* Header */}
         <div className="flex items-center justify-between border-b border-alkota-iron px-6 py-5">
           <div className="flex items-center gap-3">
@@ -173,7 +192,9 @@ export default function CartDrawer() {
             </Link>
           </div>
         )}
-      </aside>
-    </>
+          </motion.aside>
+        </>
+      )}
+    </AnimatePresence>
   );
 }

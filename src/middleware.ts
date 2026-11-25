@@ -2,10 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyToken, COOKIE_NAME } from './lib/auth';
 import { auth } from './auth';
 
-// ─── HARDCODED FALLBACKS ──────────────────────────────────────
-const FALLBACK_URL = 'https://xohftjaohhkwgxdnouoo.supabase.co';
-const FALLBACK_KEY =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhvaGZ0amFvaGhrd2d4ZG5vdW9vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDg2NzU5MywiZXhwIjoyMDkwNDQzNTkzfQ.65YGsr1ZbSgECaM0nUZ8-sJR7lezQPd7xWxwTDirZD4';
+
 
 // ─── DEALER PORTAL PUBLIC ROUTES ─────────────────────────────
 // These dealer/* paths do NOT require authentication
@@ -16,10 +13,11 @@ const DEALER_PUBLIC_PATHS = [
 ];
 
 async function getMaintenanceMode(): Promise<boolean> {
-  const supabaseUrl = (process.env.NEXT_PUBLIC_SUPABASE_URL || FALLBACK_URL)
-    .trim()
-    .replace(/\/$/, '');
-  const key = (process.env.SUPABASE_SERVICE_ROLE_KEY || FALLBACK_KEY).trim();
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim().replace(/\/$/, '');
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
+
+  // If env vars are not configured, skip maintenance check
+  if (!supabaseUrl || !key) return false;
 
   try {
     const url = `${supabaseUrl}/rest/v1/site_settings?select=value&key=eq.maintenance_mode&limit=1`;

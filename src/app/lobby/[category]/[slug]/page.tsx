@@ -11,6 +11,7 @@ import { getProductBySlug } from '@/lib/products';
 import ArticleTOC from '@/components/lobby/ArticleTOC';
 import ProvenanceBanner from '@/components/lobby/ProvenanceBanner';
 import ArticleMarkdown from '@/components/lobby/ArticleMarkdown';
+import ReadingProgress from '@/components/ui/ReadingProgress';
 import {
   ArrowLeft,
   ArrowRight,
@@ -147,6 +148,7 @@ export default async function LobbyArticlePage({ params }: Props) {
 
   return (
     <article className="bg-[#FAFAF8] text-[#1A1A18] font-normal">
+      <ReadingProgress />
       {/* Structured Data */}
       <script
         type="application/ld+json"

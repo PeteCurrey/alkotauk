@@ -586,9 +586,29 @@ export default function ServicePage() {
               <p className="text-sm text-[#555] font-normal leading-relaxed mb-4">
                 Do you own a 10- or 20-year-old Alkota machine? We maintain extensive historic build records, coil specifications, and replacement parts supersession data.
               </p>
-              <p className="text-sm text-[#555] font-normal leading-relaxed">
-                Even when an obsolete burner controller or valve is discontinued, our engineering team provides verified retrofit kits to keep your legacy Alkota unit in frontline industrial service.
+              <p className="text-sm text-[#555] font-normal leading-relaxed mb-6">
+                Even when an obsolete burner controller or valve is discontinued, our engineering team provides verified retrofit kits to keep your legacy Alkota unit in frontline industrial service. Every Schedule 80 heating coil is backed by Alkota&apos;s 7-Year Factory Coil Warranty (100% cover years 1–5, 50% pro-rated years 6–7).
               </p>
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  href="/support/manuals"
+                  className="inline-flex items-center gap-2 bg-white border border-[#D5D5D0] hover:border-alkota-orange px-4 py-2.5 font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-black transition-colors"
+                >
+                  Operating Manuals &amp; Schematics <ArrowRight className="w-3 h-3 text-alkota-orange" />
+                </Link>
+                <Link
+                  href="/support/training"
+                  className="inline-flex items-center gap-2 bg-white border border-[#D5D5D0] hover:border-alkota-orange px-4 py-2.5 font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-black transition-colors"
+                >
+                  Alkota Service School &amp; Training <ArrowRight className="w-3 h-3 text-alkota-orange" />
+                </Link>
+                <Link
+                  href="/support/warranty"
+                  className="inline-flex items-center gap-2 bg-white border border-[#D5D5D0] hover:border-alkota-orange px-4 py-2.5 font-ibm-plex-mono text-[10px] uppercase tracking-widest text-alkota-black transition-colors"
+                >
+                  7-Year Coil Warranty <ArrowRight className="w-3 h-3 text-alkota-orange" />
+                </Link>
+              </div>
             </div>
 
             <div className="lg:col-span-6 bg-white border border-[#E8E8E4] p-8">

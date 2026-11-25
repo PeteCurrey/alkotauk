@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { Menu, X, ChevronDown, ArrowRight, ArrowUpRight, Search, FileText, Phone, Wrench, ShieldCheck, Truck, Sparkles } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import Logo from './Logo';
 import SafeImage from './ui/SafeImage';
 
@@ -72,6 +72,7 @@ export default function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [hoveredMachineIdx, setHoveredMachineIdx] = useState<number>(0);
+  const shouldReduceMotion = useReducedMotion();
   const navRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -141,7 +142,7 @@ export default function Navigation() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.15 }}
+            transition={{ duration: shouldReduceMotion ? 0 : 0.15 }}
             onClick={() => setActiveMenu(null)}
             className="fixed inset-0 top-0 bg-black/40 backdrop-blur-[2px] z-40 hidden lg:block"
           />

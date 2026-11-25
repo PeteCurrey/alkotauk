@@ -8,6 +8,7 @@ export const metadata: Metadata = {
     description: 'Purpose-built hot water pressure washers, mobile trailers, and stationary wash plants tailored for UK commercial sectors.',
     url: 'https://alkota.co.uk/industries',
   },
+  alternates: { canonical: 'https://alkota.co.uk/industries' },
 };
 
 export default function IndustriesLayout({ children }: { children: React.ReactNode }) {

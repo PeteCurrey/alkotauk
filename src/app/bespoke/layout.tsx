@@ -8,6 +8,7 @@ export const metadata: Metadata = {
     description: 'Bespoke trailer rigs, stationary wash bays, and containerised cleaning installations engineered in South Dakota and built for UK industry.',
     url: 'https://alkota.co.uk/bespoke',
   },
+  alternates: { canonical: 'https://alkota.co.uk/bespoke' },
 };
 
 export default function BespokeLayout({ children }: { children: React.ReactNode }) {

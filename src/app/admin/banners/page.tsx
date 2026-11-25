@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { Plus } from 'lucide-react';
 import BannerRowActions from './BannerRowActions';
 
+export const dynamic = 'force-dynamic';
+
 const STYLE_COLOURS: Record<string, string> = {
   info: '#3B82F6', promo: '#FF6900', warning: '#F59E0B', urgent: '#EF4444',
 };

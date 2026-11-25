@@ -1,7 +1,9 @@
+'use client';
+
 /**
  * CategoryHeroGrid — category-aware hero metric grid for machine detail page.
- * Server component. Never renders 0, N/A, or — unless genuinely authoritative.
- * Adapts the up-to-4 displayed cells based on the machine's category and data.
+ * Never renders 0, N/A, or — unless genuinely authoritative.
+ * Adapts the up-to-4 displayed cells based on the machine's category and unit preference.
  */
 
 import { Product } from '@/lib/products';
@@ -17,7 +19,9 @@ import {
   categoryHasPressure,
   categoryHasFlow,
   SpecValue,
+  UnitSystem,
 } from '@/lib/spec-format';
+import { useUnitPreference } from '@/context/UnitPreferenceContext';
 
 interface HeroCell {
   label: string;
@@ -31,24 +35,24 @@ function resolveValue(sv: SpecValue): { value: string; secondary?: string } | nu
   return { value: sv.display, secondary: sv.secondary };
 }
 
-function buildCells(machine: Product): HeroCell[] {
+function buildCells(machine: Product, unit: UnitSystem): HeroCell[] {
   const cells: HeroCell[] = [];
   const cat = machine.category;
 
   // ── Pressure washers & steam cleaners ─────────────────────────────────────
   if (categoryHasPressure(cat)) {
-    const r = resolveValue(formatPressure(machine, 'metric'));
+    const r = resolveValue(formatPressure(machine, unit));
     if (r) cells.push({ label: 'Operating Pressure', ...r, large: true });
   }
 
   if (categoryHasFlow(cat)) {
-    const r = resolveValue(formatFlowRate(machine, 'metric'));
+    const r = resolveValue(formatFlowRate(machine, unit));
     if (r) cells.push({ label: 'Water Flow Rate', ...r, large: true });
   }
 
   // Temperature for hot-water / steam (not heaters — they use BTU)
   if (categoryHasHeating(cat) && cat !== 'water-heater' && cat !== 'space-heater') {
-    const sv = formatTemperature(machine, 'metric');
+    const sv = formatTemperature(machine, unit);
     if (sv.isSpecified && sv.raw !== 'ambient') {
       cells.push({ label: 'Max Water Temperature', value: sv.display, secondary: sv.secondary });
     }
@@ -56,7 +60,7 @@ function buildCells(machine: Product): HeroCell[] {
 
   // Drive unit for pressure washers
   if (categoryHasPressure(cat) || categoryHasFlow(cat)) {
-    const r = resolveValue(formatMotorPower(machine, 'metric'));
+    const r = resolveValue(formatMotorPower(machine, unit));
     if (r) cells.push({ label: 'Drive Unit', ...r });
   }
 
@@ -70,7 +74,7 @@ function buildCells(machine: Product): HeroCell[] {
 
     if (machine.heating_fuel) cells.push({ label: 'Heating Fuel', value: machine.heating_fuel });
 
-    const pwr = resolveValue(formatMotorPower(machine, 'metric'));
+    const pwr = resolveValue(formatMotorPower(machine, unit));
     if (pwr) cells.push({ label: 'Motor', ...pwr });
   }
 
@@ -84,7 +88,7 @@ function buildCells(machine: Product): HeroCell[] {
     const elec = resolveValue(formatElectrical(machine));
     if (elec) cells.push({ label: 'Electrical Supply', ...elec });
 
-    const pwr = resolveValue(formatMotorPower(machine, 'metric'));
+    const pwr = resolveValue(formatMotorPower(machine, unit));
     if (pwr) cells.push({ label: 'Drive Unit', ...pwr });
   }
 
@@ -95,7 +99,7 @@ function buildCells(machine: Product): HeroCell[] {
 
     if (machine.heating_fuel) cells.push({ label: 'Fuel Type', value: machine.heating_fuel });
 
-    const pwr = resolveValue(formatMotorPower(machine, 'metric'));
+    const pwr = resolveValue(formatMotorPower(machine, unit));
     if (pwr) cells.push({ label: 'Drive Unit', ...pwr });
   }
 
@@ -104,7 +108,7 @@ function buildCells(machine: Product): HeroCell[] {
     if (machine.mobility) cells.push({ label: 'Configuration', value: machine.mobility });
     if (machine.power_source) cells.push({ label: 'Power Source', value: machine.power_source });
     if (machine.heating_fuel) cells.push({ label: 'Heating Fuel', value: machine.heating_fuel });
-    const wt = resolveValue(formatWeight(machine, 'metric'));
+    const wt = resolveValue(formatWeight(machine, unit));
     if (wt) cells.push({ label: 'Gross Weight', ...wt });
   }
 
@@ -127,7 +131,8 @@ interface Props {
 }
 
 export default function CategoryHeroGrid({ machine }: Props) {
-  const cells = buildCells(machine);
+  const { unit } = useUnitPreference();
+  const cells = buildCells(machine, unit);
   if (cells.length === 0) return null;
 
   return (

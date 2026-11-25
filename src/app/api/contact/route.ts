@@ -197,55 +197,73 @@ export async function POST(req: Request) {
       ...canonicalEnquiryCols,
     };
 
-    const { data: savedEnquiry, error: dbError } = await supabaseAdmin
-      .from('enquiries')
-      .insert(payload)
-      .select()
-      .single();
+    // ── 4b. Persist to Supabase (non-fatal — form succeeds even if DB is unreachable) ───
+    let dbSaved = false;
+    try {
+      const { data: savedEnquiry, error: dbError } = await supabaseAdmin
+        .from('enquiries')
+        .insert(payload)
+        .select()
+        .single();
 
-    if (dbError) {
-      console.error('Failed to save enquiry to Supabase, attempting schema-safe fallback:', dbError);
-      const schemaSafePayload = {
-        type: payload.type,
-        name: payload.name,
-        email: payload.email,
-        company: payload.company,
-        phone: payload.phone,
-        subject: payload.subject,
-        message: payload.message,
-        status: 'new',
-        reference: payload.reference,
-        metadata: payload.metadata,
-      };
-      const { error: safeError } = await supabaseAdmin.from('enquiries').insert(schemaSafePayload);
-      if (safeError) {
-        console.error('Schema-safe fallback failed, attempting minimal insert:', safeError);
-        const minimalPayload = {
+      if (dbError) {
+        console.error('Failed to save enquiry (canonical), trying schema-safe fallback:', dbError);
+        const schemaSafePayload = {
+          type: payload.type,
           name: payload.name,
           email: payload.email,
           company: payload.company,
           phone: payload.phone,
           subject: payload.subject,
           message: payload.message,
-          type: payload.type,
           status: 'new',
+          reference: payload.reference,
+          metadata: payload.metadata,
         };
-        const { error: minimalError } = await supabaseAdmin.from('enquiries').insert(minimalPayload);
-        if (minimalError) {
-          console.error('Minimal enquiry insert error:', minimalError);
-          return NextResponse.json({ error: 'Database saving failed: ' + minimalError.message }, { status: 500 });
+        const { data: safeSaved, error: safeError } = await supabaseAdmin
+          .from('enquiries')
+          .insert(schemaSafePayload)
+          .select()
+          .single();
+
+        if (safeError) {
+          console.error('Schema-safe fallback failed, trying minimal insert:', safeError);
+          const minimalPayload = {
+            name: payload.name,
+            email: payload.email,
+            company: payload.company,
+            phone: payload.phone,
+            subject: payload.subject,
+            message: payload.message,
+            type: payload.type,
+            status: 'new',
+          };
+          const { error: minimalError } = await supabaseAdmin.from('enquiries').insert(minimalPayload);
+          if (minimalError) {
+            console.error('Minimal enquiry insert also failed:', minimalError);
+          } else {
+            dbSaved = true;
+          }
+        } else {
+          dbSaved = true;
+        }
+      } else {
+        dbSaved = true;
+        // Save normalised enquiry_machines relationship records
+        if (savedEnquiry?.id && canonicalMachineRows.length > 0) {
+          const childRows = canonicalMachineRows.map(m => ({
+            ...m,
+            enquiry_id: savedEnquiry.id,
+          }));
+          const { error: machinesErr } = await supabaseAdmin.from('enquiry_machines').insert(childRows);
+          if (machinesErr) {
+            console.warn('Note: enquiry_machines insert skipped (pending migration 028):', machinesErr.message);
+          }
         }
       }
-    } else if (savedEnquiry?.id && canonicalMachineRows.length > 0) {
-      // Save normalised enquiry_machines relationship records
-      const childRows = canonicalMachineRows.map(m => ({
-        ...m,
-        enquiry_id: savedEnquiry.id,
-      }));
-      const { error: machinesErr } = await supabaseAdmin.from('enquiry_machines').insert(childRows);
-      if (machinesErr) {
-        console.warn('Note: Could not insert enquiry_machines child records (pending migration 028):', machinesErr.message);
-      }
+    } catch (dbConnErr) {
+      // Supabase unreachable (e.g. missing env vars, network error) — still return success
+      console.error('Supabase connection error — enquiry will be delivered by email only:', dbConnErr);
     }
 
     // ── 5. Send Email Notifications (Resend API) ─────────────────────────────

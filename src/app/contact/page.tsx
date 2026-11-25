@@ -319,7 +319,7 @@ function ContactFormInner() {
                   value={formData.name}
                   onChange={e => setFormData({ ...formData, name: e.target.value })}
                   placeholder="e.g. John Henderson"
-                  className="w-full bg-alkota-black border border-alkota-iron p-4 text-white font-medium focus:border-alkota-orange focus:outline-none transition-colors text-sm placeholder:text-alkota-grey/50"
+                  className="w-full bg-white border border-[#D0D0CB] p-4 text-alkota-black font-medium focus:border-alkota-orange focus:outline-none transition-colors text-sm placeholder:text-[#999]"
                 />
               </div>
 
@@ -333,7 +333,7 @@ function ContactFormInner() {
                   value={formData.email}
                   onChange={e => setFormData({ ...formData, email: e.target.value })}
                   placeholder="e.g. j.henderson@industrialplant.co.uk"
-                  className="w-full bg-alkota-black border border-alkota-iron p-4 text-white font-medium focus:border-alkota-orange focus:outline-none transition-colors text-sm placeholder:text-alkota-grey/50"
+                  className="w-full bg-white border border-[#D0D0CB] p-4 text-alkota-black font-medium focus:border-alkota-orange focus:outline-none transition-colors text-sm placeholder:text-[#999]"
                 />
               </div>
             </div>
@@ -349,7 +349,7 @@ function ContactFormInner() {
                   value={formData.company}
                   onChange={e => setFormData({ ...formData, company: e.target.value })}
                   placeholder="e.g. Henderson Haulage & Logistics"
-                  className="w-full bg-alkota-black border border-alkota-iron p-4 text-white font-medium focus:border-alkota-orange focus:outline-none transition-colors text-sm placeholder:text-alkota-grey/50"
+                  className="w-full bg-white border border-[#D0D0CB] p-4 text-alkota-black font-medium focus:border-alkota-orange focus:outline-none transition-colors text-sm placeholder:text-[#999]"
                 />
               </div>
 
@@ -362,7 +362,7 @@ function ContactFormInner() {
                   value={formData.phone}
                   onChange={e => setFormData({ ...formData, phone: e.target.value })}
                   placeholder="e.g. +44 (0) 121 456 7890"
-                  className="w-full bg-alkota-black border border-alkota-iron p-4 text-white font-medium focus:border-alkota-orange focus:outline-none transition-colors text-sm placeholder:text-alkota-grey/50"
+                  className="w-full bg-white border border-[#D0D0CB] p-4 text-alkota-black font-medium focus:border-alkota-orange focus:outline-none transition-colors text-sm placeholder:text-[#999]"
                 />
               </div>
             </div>
@@ -379,7 +379,7 @@ function ContactFormInner() {
                   value={formData.postcode}
                   onChange={e => setFormData({ ...formData, postcode: e.target.value })}
                   placeholder="e.g. B1 1AA or Midlands"
-                  className="w-full bg-alkota-black border border-alkota-iron p-3 text-white font-medium focus:border-alkota-orange focus:outline-none transition-colors text-xs placeholder:text-alkota-grey/50"
+                  className="w-full bg-white border border-[#D0D0CB] p-3 text-alkota-black font-medium focus:border-alkota-orange focus:outline-none transition-colors text-xs placeholder:text-[#999]"
                 />
               </div>
 
@@ -391,7 +391,7 @@ function ContactFormInner() {
                 <select
                   value={formData.sitePower}
                   onChange={e => setFormData({ ...formData, sitePower: e.target.value })}
-                  className="w-full bg-alkota-black border border-alkota-iron p-3 text-white font-medium focus:border-alkota-orange focus:outline-none transition-colors text-xs"
+                  className="w-full bg-white border border-[#D0D0CB] p-3 text-alkota-black font-medium focus:border-alkota-orange focus:outline-none transition-colors text-xs"
                 >
                   <option value="not_sure">Not Sure / Needs Survey</option>
                   <option value="230v_single">230V Single-Phase (13A/16A)</option>
@@ -409,7 +409,7 @@ function ContactFormInner() {
                 <select
                   value={formData.timeline}
                   onChange={e => setFormData({ ...formData, timeline: e.target.value })}
-                  className="w-full bg-alkota-black border border-alkota-iron p-3 text-white font-medium focus:border-alkota-orange focus:outline-none transition-colors text-xs"
+                  className="w-full bg-white border border-[#D0D0CB] p-3 text-alkota-black font-medium focus:border-alkota-orange focus:outline-none transition-colors text-xs"
                 >
                   <option value="immediate">Immediate / Urgent (&lt;2 Weeks)</option>
                   <option value="1_month">Within 1 Month</option>
@@ -429,7 +429,7 @@ function ContactFormInner() {
                 value={formData.enquiry}
                 onChange={e => setFormData({ ...formData, enquiry: e.target.value })}
                 placeholder="e.g. Alkota 420X4 Quotation & Technical Review"
-                className="w-full bg-alkota-black border border-alkota-iron p-4 text-white font-medium focus:border-alkota-orange focus:outline-none transition-colors text-sm placeholder:text-alkota-grey/50"
+                className="w-full bg-white border border-[#D0D0CB] p-4 text-alkota-black font-medium focus:border-alkota-orange focus:outline-none transition-colors text-sm placeholder:text-[#999]"
               />
             </div>
 
@@ -444,7 +444,7 @@ function ContactFormInner() {
                 value={formData.message}
                 onChange={e => setFormData({ ...formData, message: e.target.value })}
                 placeholder="Please describe your cleaning environment, duty cycle (hours per day), water inlet capacity, or specific chemical/trailer requirements..."
-                className="w-full bg-alkota-black border border-alkota-iron p-4 text-white font-medium focus:border-alkota-orange focus:outline-none transition-colors text-sm placeholder:text-alkota-grey/50"
+                className="w-full bg-white border border-[#D0D0CB] p-4 text-alkota-black font-medium focus:border-alkota-orange focus:outline-none transition-colors text-sm placeholder:text-[#999]"
               />
             </div>
 
